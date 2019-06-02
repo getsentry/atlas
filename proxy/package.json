@@ -1,0 +1,25 @@
+{
+  "name": "atlas-proxy",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^0.19.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getsentry/atlas.git"
+  },
+  "author": "David Cramer <dcramer@gmail.com> (https://github.com/dcramer)",
+  "license": "Apache-2.0",
+  "volta": {
+    "node": "10.16.0",
+    "yarn": "1.16.0"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "atlas",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "cross-env NODE_ENV=production node server.js"
+  },
+  "keywords": [],
+  "author": "David Cramer <dcramer@gmail.com> (https://github.com/dcramer)",
+  "license": "Apache-2.0",
+  "description": "",
+  "dependencies": {
+    "@sentry/browser": "^5.4.0",
+    "@sentry/integrations": "^5.4.1",
+    "@sentry/node": "^5.4.0",
+    "@zeit/next-source-maps": "0.0.3",
+    "apollo-boost": "^0.3.1",
+    "apollo-link": "^1.2.11",
+    "cross-env": "^5.2.0",
+    "encoding": "^0.1.12",
+    "express": "^4.17.1",
+    "graphql": "^14.3.1",
+    "isomorphic-unfetch": "^3.0.0",
+    "js-cookie": "^2.2.0",
+    "next": "^8.1.0",
+    "next-cookies": "^1.1.2",
+    "orgchart.js": "0.0.4",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-apollo": "^2.5.6",
+    "react-dom": "^16.8.6",
+    "sentry-testkit": "^2.2.1",
+    "serverless-http": "^2.0.2"
+  },
+  "devDependencies": {
+    "prettier": "^1.17.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getsentry/atlas.git"
+  },
+  "volta": {
+    "node": "10.16.0",
+    "yarn": "1.16.0"
+  }
+}

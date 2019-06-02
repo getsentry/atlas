@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+# Perform an upgrade before booting up web/worker processes
+case "$1" in
+    atlas)
+        gosu atlas atlas migrate
+    ;;
+esac
+
+# Check if we're trying to execute a zeus bin
+if [ -f "/usr/src/atlas/bin/$1" ]; then
+    if [ "$(id -u)" = '0' ]; then
+        exec gosu atlas "$@"
+    fi
+fi
+
+exec "$@"

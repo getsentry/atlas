@@ -1,0 +1,31 @@
+{
+  "name": "atlas",
+  "version": "0.1.0",
+  "description": "## Install",
+  "main": "index.js",
+  "dependencies": {
+    "concurrently": "^4.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "concurrently \"npm:start-backend\" \"npm:start-frontend\" \"npm:start-proxy\"",
+    "start-backend": "atlas runserver",
+    "start-frontend": "cd frontend && npm run dev",
+    "start-proxy": "cd proxy && npm start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getsentry/atlas.git"
+  },
+  "author": "David Cramer <dcramer@gmail.com> (https://github.com/dcramer)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/getsentry/atlas/issues"
+  },
+  "homepage": "https://github.com/getsentry/atlas#readme",
+  "volta": {
+    "node": "10.16.0",
+    "yarn": "1.16.0"
+  }
+}

@@ -1,0 +1,21 @@
+exclude: '\.snap|node_modules$'
+repos:
+  - repo: https://github.com/ambv/black
+    rev: 19.3b0
+    hooks:
+      - id: black
+  - repo: git://github.com/pre-commit/pre-commit-hooks
+    rev: v1.4.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-xml
+      - id: check-yaml
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: debug-statements
+      - id: flake8
+      - id: fix-encoding-pragma
+        args: ["--remove"]
