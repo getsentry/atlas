@@ -17,6 +17,7 @@ class Profile(models.Model):
         on_delete=models.SET_NULL,
         related_name="reports",
     )
+    office = models.ForeignKey("backend.Office", null=True, on_delete=models.SET_NULL)
 
     class Meta:
         db_table = "profile"

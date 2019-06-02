@@ -1,5 +1,26 @@
 [
   {
+    "model": "backend.office",
+    "pk": "ce0a4c7a-6e31-477e-828b-9705a815c946",
+    "fields": {
+      "name": "SFO"
+    }
+  },
+  {
+    "model": "backend.office",
+    "pk": "6ad97058-3fab-440b-ba38-fe5108e2a7f6",
+    "fields": {
+      "name": "VIE"
+    }
+  },
+  {
+    "model": "backend.office",
+    "pk": "8f94acdb-a1fa-48fd-90cf-6d1ca8d46ae1",
+    "fields": {
+      "name": "YYZ"
+    }
+  },
+  {
     "model": "backend.user",
     "pk": "be12eae3-4d5f-40f8-bd98-fa1b25d6c20b",
     "fields": {
@@ -14,7 +35,8 @@
       "user": ["david@sentry.io"],
       "title": "Chief Executive Officer",
       "joined_at": "2012-10-01",
-      "dob": "1985-08-12"
+      "dob": "1985-08-12",
+      "office": ["SFO"]
     }
   },
   {
@@ -32,7 +54,8 @@
       "user": ["chris@sentry.io"],
       "title": "Chief Creative Officer",
       "joined_at": "2012-10-01",
-      "reports_to": ["david@sentry.io"]
+      "reports_to": ["david@sentry.io"],
+      "office": ["SFO"]
     }
   }
 ]

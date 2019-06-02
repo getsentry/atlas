@@ -10,11 +10,12 @@ class ProfileNode(DjangoObjectType):
     dob_month = graphene.Int(required=False)
     reports_to = graphene.Field("backend.schema.UserNode", required=False)
     joined_at = graphene.Date(required=False)
+    office = graphene.Field("backend.schema.OfficeNode", required=False)
 
     class Meta:
         model = Profile
         name = "Profile"
-        only_fields = ("reports_to", "title", "joined_at")
+        only_fields = ("reports_to", "title", "joined_at", "office")
 
     def resolve_dob_month(self, info):
         if not self.dob:

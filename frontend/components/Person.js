@@ -17,6 +17,9 @@ export const PERSON_QUERY = gql`
         dobDay
         title
         joinedAt
+        office {
+          name
+        }
         reportsTo {
           id
           name
@@ -47,18 +50,22 @@ export default class Person extends Component {
             <section>
               <h1>{thisPerson.name}</h1>
               <dl>
+                <dt>Start Date</dt>
+                <dd>{thisPerson.profile.joinedAt}</dd>
+                <dt>Reports To</dt>
+                <dd>
+                  <PersonLink user={thisPerson.profile.reportsTo} />
+                </dd>
+                <dt>Office</dt>
+                <dd>
+                  {thisPerson.profile.office && thisPerson.profile.office.name}
+                </dd>
                 <dt>Birthday</dt>
                 <dd>
                   {thisPerson.profile.dobMonth &&
                     `${thisPerson.profile.dobMonth}-${
                       thisPerson.profile.dobDay
                     }`}
-                </dd>
-                <dt>Start Date</dt>
-                <dd>{thisPerson.profile.joinedAt}</dd>
-                <dt>Reports To</dt>
-                <dd>
-                  <PersonLink user={thisPerson.profile.reportsTo} />
                 </dd>
               </dl>
             </section>

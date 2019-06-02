@@ -11,6 +11,7 @@ class Query(object):
         id=graphene.UUID(),
         query=graphene.String(),
         include_self=graphene.Boolean(),
+        office=graphene.UUID(),
         offset=graphene.Int(),
         limit=graphene.Int(),
     )
@@ -21,6 +22,7 @@ class Query(object):
         id: str = None,
         query: str = None,
         include_self: bool = False,
+        office: str = None,
         offset: int = 0,
         limit: int = 1000,
         **kwargs
@@ -33,6 +35,9 @@ class Query(object):
 
         if id:
             qs = qs.filter(id=id)
+
+        if office:
+            qs = qs.filter(profile__office=office)
 
         if query:
             qs = qs.filter(name__istartswith=query)
