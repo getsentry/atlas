@@ -2,6 +2,8 @@ import React from "react";
 import Head from "next/head";
 import Header from "./header";
 
+import colors from "../colors";
+
 const Layout = props => (
   <React.Fragment>
     <Head>
@@ -26,7 +28,33 @@ const Layout = props => (
       body {
         margin: 0;
         color: #333;
-        font-family: "Rubik", sans-serif;
+        font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+          "Segoe UI Emoji", "Segoe UI Symbol";
+      }
+      pre,
+      code {
+        font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier,
+          monospace;
+      }
+      a {
+        color: ${colors.primary};
+      }
+      h1 {
+        font-size: 2em;
+      }
+      h2 {
+        font-size: 1.5em;
+      }
+      h3 {
+        font-size: 1.125em;
+      }
+      h4 {
+        font-size: 1.075em;
+      }
+      h5,
+      h6 {
+        font-size: 1em;
       }
       .container {
         max-width: 65rem;
@@ -35,11 +63,10 @@ const Layout = props => (
         padding-right: 1rem;
       }
     `}</style>
-    <Header />
-
-    <main>
-      <div className="container">{props.children}</div>
-    </main>
+    <div className="container">
+      <Header />
+      <main>{props.children}</main>
+    </div>
   </React.Fragment>
 );
 

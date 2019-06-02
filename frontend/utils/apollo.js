@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import { getDataFromTree } from "react-apollo";
+import Cookie from "js-cookie";
 
 import { ApolloClient, InMemoryCache, HttpLink } from "apollo-boost";
 import { ApolloLink, concat } from "apollo-link";
@@ -16,7 +17,7 @@ if (!process.browser) {
 const getToken = () => {
   let token = null;
   if (typeof document !== "undefined") {
-    token = "Bearer " + cookie.get("token");
+    token = "Bearer " + Cookie.get("token");
   }
   return token;
 };

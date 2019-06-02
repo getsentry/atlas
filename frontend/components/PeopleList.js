@@ -21,13 +21,13 @@ export const peopleQueryVars = {
 export default function PeopleList() {
   return (
     <Query query={LIST_PEOPLE_QUERY} variables={peopleQueryVars}>
-      {({ loading, error, data: { users }, fetchMore }) => {
+      {({ loading, error, data, fetchMore }) => {
         if (error) return <ErrorMessage message="Error loading people." />;
         if (loading) return <div>Loading</div>;
+        const { users } = data;
         const areMorePeople = false;
         return (
           <section>
-            PEOPLE
             <ul>
               {users.map((p, index) => (
                 <li key={p.id}>
@@ -98,6 +98,7 @@ export default function PeopleList() {
 function loadMorePeople(users, fetchMore) {
   fetchMore({
     variables: {
+      ...peopleQueryVars,
       offset: users.length
     },
     updateQuery: (previousResult, { fetchMoreResult }) => {

@@ -26,6 +26,7 @@ class Query(object):
         **kwargs
     ):
         assert limit <= 1000
+        assert offset >= 0
 
         user = info.context.user
         qs = User.objects.all()
@@ -42,5 +43,6 @@ class Query(object):
         qs = optimize_queryset(qs, info, "users")
 
         qs = qs[offset:limit]
+        print(qs)
 
         return qs
