@@ -1,11 +1,13 @@
 import React from "react";
 import Head from "next/head";
 import { getDataFromTree } from "react-apollo";
-import Cookie from "js-cookie";
 
 import { ApolloClient, InMemoryCache, HttpLink } from "apollo-boost";
 import { ApolloLink, concat } from "apollo-link";
 import fetch from "isomorphic-unfetch";
+
+import config from "../config";
+import { getCookie } from "./cookie";
 
 let apolloClient = null;
 
@@ -17,7 +19,7 @@ if (!process.browser) {
 const getToken = () => {
   let token = null;
   if (typeof document !== "undefined") {
-    token = "Bearer " + Cookie.get("token");
+    token = "Bearer " + getCookie.get("token");
   }
   return token;
 };
@@ -35,7 +37,7 @@ function create(initialState) {
   });
 
   const httpLink = new HttpLink({
-    uri: "http://localhost:8080/graphql/", // Server URL (must be absolute)
+    uri: config.API, // Server URL (must be absolute)
     credentials: "same-origin" // Additional fetch() options like `credentials` or `headers`
   });
 
