@@ -1,0 +1,38 @@
+[
+  {
+    "model": "backend.user",
+    "pk": "be12eae3-4d5f-40f8-bd98-fa1b25d6c20b",
+    "fields": {
+      "name": "David Cramer",
+      "email": "david@sentry.io"
+    }
+  },
+  {
+    "model": "backend.profile",
+    "pk": "04bfe90e-c5a7-425a-8d6a-0bc28e3d50d8",
+    "fields": {
+      "user": ["david@sentry.io"],
+      "title": "Chief Executive Officer",
+      "joined_at": "2012-10-01",
+      "dob": "1985-08-12"
+    }
+  },
+  {
+    "model": "backend.user",
+    "pk": "886eda8b-3fdd-40fb-bb36-9d05cb2d615a",
+    "fields": {
+      "name": "Chris Jennings",
+      "email": "chris@sentry.io"
+    }
+  },
+  {
+    "model": "backend.profile",
+    "pk": "2b385f99-8ae7-46e9-bc49-4538947bba69",
+    "fields": {
+      "user": ["chris@sentry.io"],
+      "title": "Chief Creative Officer",
+      "joined_at": "2012-10-01",
+      "reports_to": ["david@sentry.io"]
+    }
+  }
+]

@@ -1,6 +1,6 @@
 # atlas
 
-## Install
+## Development
 
 You'll need a Postgres instance running with standard credentials. A basic docker service included and can be run with compose:
 
@@ -14,10 +14,16 @@ From there, activate a virtualenv using Python 3.7.x (this is automatic if you'r
 $ make
 ```
 
-Lastly, upgrade the database:
+Apply database migrations:
 
 ```shell
 $ atlas migrate
+```
+
+Load some fixture data:
+
+```shell
+$ atlas loaddata fixtures/founders.json
 ```
 
 ## Services

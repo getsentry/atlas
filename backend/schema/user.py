@@ -6,6 +6,7 @@ from backend.models import User
 
 class UserNode(DjangoObjectType):
     email = graphene.String(required=False)
+    profile = graphene.Field("backend.schema.ProfileNode")
 
     class Meta:
         model = User

@@ -43,6 +43,5 @@ class Query(object):
         qs = optimize_queryset(qs, info, "users")
 
         qs = qs[offset:limit]
-        print(qs)
 
         return qs

@@ -1,14 +1,17 @@
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
-import Link from "next/link";
 
 import ErrorMessage from "./ErrorMessage";
+import PersonLink from "./PersonLink";
 
 export const LIST_PEOPLE_QUERY = gql`
   query listPeople($offset: Int, $limit: Int) {
     users(offset: $offset, limit: $limit) {
       id
       name
+      profile {
+        title
+      }
     }
   }
 `;
@@ -31,14 +34,7 @@ export default function PeopleList() {
             <ul>
               {users.map((p, index) => (
                 <li key={p.id}>
-                  <div>
-                    <Link
-                      href={{ pathname: "/person", query: { id: p.id } }}
-                      as={`/people/${p.id}`}
-                    >
-                      <a>{p.name}</a>
-                    </Link>
-                  </div>
+                  <PersonLink user={p} />
                 </li>
               ))}
             </ul>
@@ -51,30 +47,12 @@ export default function PeopleList() {
               ""
             )}
             <style jsx>{`
-              section {
-                padding-bottom: 20px;
-              }
               li {
                 display: block;
-                margin-bottom: 10px;
-              }
-              div {
-                align-items: center;
-                display: flex;
-              }
-              a {
-                font-size: 14px;
-                margin-right: 10px;
-                text-decoration: none;
-                padding-bottom: 0;
-                border: 0;
-              }
-              span {
-                font-size: 14px;
-                margin-right: 5px;
+                margin-bottom: 1rem;
               }
               ul {
-                margin: 0;
+                margin: 1rem 0;
                 padding: 0;
               }
               button:before {

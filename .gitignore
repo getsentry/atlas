@@ -122,3 +122,6 @@ typings/
 
 # Optional eslint cache
 .eslintcache
+
+# Junk
+.DS_Store

@@ -17,6 +17,9 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    def get_by_natural_key(self, email):
+        return self.get(email=email)
+
     def create_user(self, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
@@ -39,13 +42,12 @@ class User(AbstractUser):
     username = None
     first_name = None
     last_name = None
+    date_joined = None
 
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     name = models.CharField(max_length=128, null=True)
     email = models.EmailField(_("email address"), unique=True)
     password = models.CharField(max_length=128, null=True)
-    dob = models.DateField(null=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
@@ -63,3 +65,6 @@ class User(AbstractUser):
 
     def get_short_name(self):
         return self.name
+
+    def natural_key(self):
+        return [self.email]

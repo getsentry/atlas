@@ -25,10 +25,10 @@ reset-db:
 	poetry run atlas migrate
 
 drop-db:
-	dropdb --if-exists atlas
+	dropdb --if-exists -h 127.0.0.1 -U postgres postgres
 
 create-db:
-	createdb -E utf-8 atlas
+	createdb -E utf-8 -h 127.0.0.1 -U postgres postgres
 
 build-docker-image:
 	docker build -t atlas .

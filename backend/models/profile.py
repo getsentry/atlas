@@ -4,12 +4,13 @@ from django.conf import settings
 from django.db import models
 
 
-class Member(models.Model):
+class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    organization = models.ForeignKey("backend.Organization", on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    dob = models.DateField(null=True)
     joined_at = models.DateField(null=True)
+    title = models.TextField(null=True)
     reports_to = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
@@ -18,5 +19,4 @@ class Member(models.Model):
     )
 
     class Meta:
-        db_table = "member"
-        unique_together = (("organization", "user"),)
+        db_table = "profile"
