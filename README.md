@@ -20,10 +20,12 @@ Apply database migrations:
 $ atlas migrate
 ```
 
-Load some fixture data:
+Lastly, grab the Google and Sentry credentials, and place them in .env. See the included `.env.example`:
 
 ```shell
-$ atlas loaddata fixtures/founders.json
+GOOGLE_CLIENT_SECRET=
+GOOGLE_CLIENT_ID=
+SENTRY_DSN=
 ```
 
 ## Services
