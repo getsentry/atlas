@@ -29,10 +29,14 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
             "client_secret": settings.GOOGLE_CLIENT_SECRET,
         },
     )
-    if resp.status_code != 200:
-        resp.raise_for_status()
-
     data = resp.json()
+    if resp.status_code != 200:
+        if "error_description" in data:
+            raise Exception(data["error_description"])
+        elif "error" in data:
+            raise Exception("Error exchanging token: {}".format(data["error"]))
+        else:
+            resp.raise_for_status()
 
     config = {
         "access_token": data["access_token"],
