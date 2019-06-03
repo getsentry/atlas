@@ -2,6 +2,8 @@
 
 ## Development
 
+**Make sure you disable Adblock as it seems to break Google Auth**
+
 You'll need a Postgres instance running with standard credentials. A basic docker service included and can be run with compose:
 
 ```shell
