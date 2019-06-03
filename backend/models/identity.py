@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from django.conf import settings
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 
@@ -9,6 +10,7 @@ class Identity(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     provider = models.CharField(max_length=32)
     external_id = models.CharField(max_length=32)
+    config = JSONField(default=dict)
 
     class Meta:
         db_table = "identity"

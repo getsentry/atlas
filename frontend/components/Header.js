@@ -16,7 +16,11 @@ const Header = ({ router: { pathname }, isAuthenticated, logout }) => {
           People
         </a>
       </Link>
-      {isAuthenticated && <a onClick={logout}>Sign Out</a>}
+      {isAuthenticated && (
+        <a onClick={logout} href="/logout">
+          Sign Out
+        </a>
+      )}
       <style jsx>{`
         header {
           margin-bottom: 1.5rem;
@@ -34,7 +38,7 @@ const Header = ({ router: { pathname }, isAuthenticated, logout }) => {
   );
 };
 const mapStateToProps = ({ auth }) => ({
-  isAuthenticated: !!auth.token
+  isAuthenticated: auth.authenticated
 });
 
 export default connect(

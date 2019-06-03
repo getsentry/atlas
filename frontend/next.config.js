@@ -3,7 +3,8 @@ const withSourceMaps = require("@zeit/next-source-maps");
 
 module.exports = withSourceMaps({
   env: {
-    SENTRY_DSN: process.env.SENTRY_DSN
+    SENTRY_DSN: process.env.SENTRY_DSN,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID
   },
   target: "serverless",
   webpack: (config, { isServer, buildId }) => {

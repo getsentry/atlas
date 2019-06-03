@@ -34,4 +34,4 @@ def parse_token(token: str) -> Optional[str]:
 
 
 def security_hash(user: User) -> str:
-    return sha1(user.password.encode("utf-8")).hexdigest()
+    return sha1((user.password or user.id).encode("utf-8")).hexdigest()

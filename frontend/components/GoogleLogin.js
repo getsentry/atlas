@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import Icon from "./icon";
-import ButtonContent from "./button-content";
-import loadScript from "./loadScript";
+import loadScript from "../utils/loadScript";
 
 export default class GoogleSignInButton extends Component {
   static propTypes = {
@@ -260,10 +258,9 @@ export default class GoogleSignInButton extends Component {
         className
       },
       [
-        icon && <Icon key={1} active={this.state.active} />,
-        <ButtonContent icon={icon} key={2}>
+        <button icon={icon} key={2}>
           {children || buttonText}
-        </ButtonContent>
+        </button>
       ]
     );
 

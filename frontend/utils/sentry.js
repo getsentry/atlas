@@ -8,7 +8,6 @@ module.exports = (release = process.env.SENTRY_RELEASE) => {
   const sentryOptions = {
     dsn: process.env.SENTRY_DSN,
     release,
-    maxBreadcrumbs: 50,
     attachStacktrace: true
   };
 

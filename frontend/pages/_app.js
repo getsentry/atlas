@@ -1,23 +1,70 @@
-import { Provider } from "react-redux";
-import App, { Container } from "next/app";
 import React from "react";
-import withRedux from "next-redux-wrapper";
+import { Provider } from "react-redux";
 import { ApolloProvider } from "react-apollo";
+import Router from "next/router";
+import App, { Container } from "next/app";
+import withRedux from "next-redux-wrapper";
 
 import config from "../config";
+import actions from "../redux/actions";
 import { initStore } from "../redux";
 import withApolloClient from "../utils/apollo";
 import loadScript from "../utils/loadScript";
+import sentry from "../utils/sentry";
+import { getCookie } from "../utils/cookie";
+
+const { Sentry, captureException } = sentry();
 
 class DefaultApp extends App {
-  static async getInitialProps({ Component, ctx }) {
-    return {
-      pageProps: {
-        ...(Component.getInitialProps
-          ? await Component.getInitialProps(ctx)
-          : {})
-      }
+  constructor() {
+    super(...arguments);
+    this.state = {
+      hasError: false,
+      errorEventId: undefined
     };
+  }
+
+  static async getInitialProps({ Component, ctx }) {
+    try {
+      return {
+        pageProps: {
+          ...(Component.getInitialProps
+            ? await Component.getInitialProps(ctx)
+            : {})
+        }
+      };
+    } catch (error) {
+      // Capture errors that happen during a page's getInitialProps.
+      // This will work on both client and server sides.
+      const errorEventId = captureException(error, ctx);
+      return {
+        hasError: true,
+        errorEventId
+      };
+    }
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    // If there was an error generated within getInitialProps, and we haven't
+    // yet seen an error, we add it to this.state here
+    return {
+      hasError: props.hasError || state.hasError || false,
+      errorEventId: props.errorEventId || state.errorEventId || undefined
+    };
+  }
+
+  static getDerivedStateFromError() {
+    // React Error Boundary here allows us to set state flagging the error (and
+    // later render a fallback UI).
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    const errorEventId = captureException(error, { errorInfo });
+
+    // Store the event id at this point as we don't have access to it within
+    // `getDerivedStateFromError`.
+    this.setState({ errorEventId });
   }
 
   componentDidMount() {
@@ -28,27 +75,35 @@ class DefaultApp extends App {
       "https://apis.google.com/js/api.js",
       src => {
         const gapi = window.gapi;
-        const params = {
-          client_id: config.GOOGLE_CLIENT_ID,
-          cookie_policy: "single_host_origin",
-          fetch_basic_profile: true,
-          ux_mode: "popup",
-          redirect_uri: document.location.origin,
-          scope: "profile email",
-          access_type: "offline"
-        };
-
         gapi.load("auth2", () => {
+          actions.loadGoogleAPI(gapi)(this.props.store.dispatch);
+
+          const params = {
+            hosted_domain: config.GOOGLE_DOMAIN,
+            client_id: config.GOOGLE_CLIENT_ID,
+            cookie_policy: "single_host_origin",
+            fetch_basic_profile: true,
+            ux_mode: "popup",
+            redirect_uri: "http://localhost:8080",
+            scope: "profile email",
+            access_type: "offline"
+          };
           if (!gapi.auth2.getAuthInstance()) {
             gapi.auth2
               .init(params)
               .then(res => {
-                if (isSignedIn && res.isSignedIn.get()) {
-                  // reauth(res.currentUser.get());
-                  // this.handleSigninSuccess(res.currentUser.get());
+                const curToken = getCookie("token");
+                if (curToken && res.isSignedIn && res.isSignedIn.get()) {
+                  // res.currentUser.get().getAuthResponse().id_token
+                  actions.reauth(curToken)(this.props.store.dispatch);
+                } else {
+                  actions.logout();
+                  Router.push("/login");
                 }
               })
               .catch(err => {
+                actions.logout();
+                Router.push("/login");
                 throw err;
               });
           }
@@ -58,11 +113,38 @@ class DefaultApp extends App {
   }
 
   render() {
+    if (this.state.error) {
+      return (
+        <section>
+          <h1>There was an error!</h1>
+          <p>
+            <a
+              href="#"
+              onClick={() =>
+                Sentry.showReportDialog({ eventId: this.state.errorEventId })
+              }
+            >
+              📣 Report this error
+            </a>
+          </p>
+          <p>
+            <a
+              href="#"
+              onClick={() => {
+                window.location.reload(true);
+              }}
+            >
+              Or, try reloading the page
+            </a>
+          </p>
+        </section>
+      );
+    }
     const { Component, pageProps, apolloClient, store } = this.props;
     return (
       <Container>
         <Provider store={store}>
-          <ApolloProvider client={apolloClient}>
+          <ApolloProvider store={store} client={apolloClient}>
             <Component {...pageProps} />
           </ApolloProvider>
         </Provider>
@@ -71,4 +153,5 @@ class DefaultApp extends App {
   }
 }
 
-export default withRedux(initStore)(withApolloClient(DefaultApp));
+// order matters here - withRedux needs to be on inner most child
+export default withApolloClient(withRedux(initStore)(DefaultApp));

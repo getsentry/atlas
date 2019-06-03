@@ -129,4 +129,7 @@ USE_TZ = True
 
 GRAPHENE = {"SCHEMA": "backend.root_schema.schema"}
 
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
+
 django_heroku.settings(locals())

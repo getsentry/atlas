@@ -1,6 +1,9 @@
 import { Component } from "react";
 import fetch from "isomorphic-unfetch";
-import Layout from "../components/layout";
+import { connect } from "react-redux";
+
+import actions from "../redux/actions";
+import Layout from "../components/Layout";
 import { login } from "../utils/auth";
 
 class Login extends Component {
@@ -65,32 +68,10 @@ class Login extends Component {
 
   render() {
     return (
-      <Layout>
+      <Layout noHeader noAuth>
         <div className="login">
-          <form onSubmit={this.handleSubmit}>
-            <label htmlFor="username">Enter username</label>
-
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={this.state.username}
-              onChange={this.handleChangeUsername}
-            />
-            <input
-              type="text"
-              id="password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleChangePassword}
-            />
-
-            <button type="submit">Login</button>
-
-            <p className={`error ${this.state.error && "show"}`}>
-              {this.state.error && `Error: ${this.state.error}`}
-            </p>
-          </form>
+          <p>You'll need to login to continue.</p>
+          <button onClick={this.props.login}>Login with Google</button>
         </div>
         <style jsx>{`
           .login {
@@ -127,4 +108,7 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default connect(
+  null,
+  actions
+)(Login);

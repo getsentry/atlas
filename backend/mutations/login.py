@@ -4,26 +4,43 @@ from typing import Optional
 
 import graphene
 import requests
+from django.conf import settings
 from django.contrib.auth import authenticate
 from django.db import IntegrityError, transaction
 
-from backend.models import Identity, User
+from backend.models import Identity, Profile, User
 from backend.schema import UserNode
 from backend.utils.auth import generate_token
 
 
 def urlsafe_b64decode(b64string):
-    padded = b64string + b"=" * (4 - len(b64string) % 4)
+    padded = b64string + "=" * (4 - len(b64string) % 4)
     return base64.urlsafe_b64decode(padded)
 
 
-def get_user_from_google_token(id_token: str = None) -> Optional[User]:
-    resp = requests.get(
-        "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={}".format(id_token)
+def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
+    resp = requests.post(
+        "https://www.googleapis.com/oauth2/v4/token",
+        json={
+            "grant_type": "authorization_code",
+            "code": auth_code,
+            "redirect_uri": "http://localhost:8080",
+            "client_id": settings.GOOGLE_CLIENT_ID,
+            "client_secret": settings.GOOGLE_CLIENT_SECRET,
+        },
     )
     if resp.status_code != 200:
-        raise Exception
+        resp.raise_for_status()
 
+    data = resp.json()
+
+    config = {
+        "access_token": data["access_token"],
+        "refresh_token": data["refresh_token"],
+        "scope": data["scope"],
+    }
+
+    id_token = data["id_token"]
     _, payload, _ = map(urlsafe_b64decode, id_token.split(".", 2))
     payload = json.loads(payload)
     # https://developers.google.com/identity/protocols/OpenIDConnect#server-flow
@@ -48,17 +65,23 @@ def get_user_from_google_token(id_token: str = None) -> Optional[User]:
             .first()
         )
         if identity:
+            identity.config = config
+            identity.save(update_fields=["config"])
             return identity.user
         try:
             with transaction.atomic():
-                user = User.objects.create(email=payload["email"], name=payload["name"])
+                user = User.objects.create_user(
+                    email=payload["email"], name=payload["name"]
+                )
+                Profile.objects.create(user=user)
                 identity = Identity.objects.create(
-                    user=user, provider="google", external_id=external_id
+                    user=user, provider="google", external_id=external_id, config=config
                 )
                 return user
-        except IntegrityError:
-            pass
-    return user
+        except IntegrityError as exc:
+            raise
+            if "duplicate key" not in str(exc):
+                raise
 
 
 class Login(graphene.Mutation):
@@ -69,7 +92,7 @@ class Login(graphene.Mutation):
     class Arguments:
         email = graphene.String(required=False)
         password = graphene.String(required=False)
-        google_token = graphene.String(required=False)
+        google_auth_code = graphene.String(required=False)
 
     ok = graphene.Boolean()
     errors = graphene.List(graphene.String)
@@ -77,10 +100,14 @@ class Login(graphene.Mutation):
     user = graphene.Field(UserNode)
 
     def mutate(
-        self, info, email: str = None, password: str = None, google_token: str = None
+        self,
+        info,
+        email: str = None,
+        password: str = None,
+        google_auth_code: str = None,
     ):
-        if google_token:
-            user = get_user_from_google_token(google_token)
+        if google_auth_code:
+            user = get_user_from_google_auth_code(google_auth_code)
         elif email and password:
             user = authenticate(email=email, password=password)
         else:

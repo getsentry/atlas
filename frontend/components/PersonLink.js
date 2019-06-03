@@ -13,7 +13,9 @@ export default function({ user }) {
           <a>{user.name}</a>
         </Link>
       </h4>
-      <small>{user.profile.title}</small>
+      {user.profile && user.profile.title && (
+        <small>{user.profile.title}</small>
+      )}
       <style jsx>{`
         h4 {
           margin-bottom: 0;
