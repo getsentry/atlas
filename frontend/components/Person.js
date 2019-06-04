@@ -48,7 +48,20 @@ export default class Person extends Component {
           const thisPerson = data.users[0];
           return (
             <section>
+              <style jsx>
+                {`
+                  h1 {
+                    margin-bottom: 0;
+                  }
+                  h4 {
+                    margin-top: 0;
+                    margin-bottom: 2rem;
+                    font-weight: 500;
+                  }
+                `}
+              </style>
               <h1>{thisPerson.name}</h1>
+              <h4>{thisPerson.profile.title}</h4>
               <dl>
                 <dt>Start Date</dt>
                 <dd>{thisPerson.profile.joinedAt || "n/a"}</dd>
