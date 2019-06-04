@@ -17,6 +17,7 @@ export const PERSON_QUERY = gql`
         dobDay
         title
         joinedAt
+        photoUrl
         office {
           name
         }
@@ -62,6 +63,7 @@ export default class Person extends Component {
               </style>
               <h1>{thisPerson.name}</h1>
               <h4>{thisPerson.profile.title}</h4>
+              <img src={thisPerson.profile.photoUrl} />
               <dl>
                 <dt>Start Date</dt>
                 <dd>{thisPerson.profile.joinedAt || "n/a"}</dd>
