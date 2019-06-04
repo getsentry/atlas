@@ -120,6 +120,8 @@ class Command(BaseCommand):
         # if the account is not active, suspend them
         if row["suspended"] and user.is_active:
             user_fields["is_active"] = False
+        elif not row["suspended"] and not user.is_active:
+            user_fields["is_active"] = True
 
         if row["name"]["fullName"] != user.name:
             user_fields["name"] = row["name"]["fullName"]

@@ -5,6 +5,7 @@ import Router from "next/router";
 import App, { Container } from "next/app";
 import withRedux from "next-redux-wrapper";
 
+import colors from "../colors";
 import config from "../config";
 import actions from "../redux/actions";
 import { initStore } from "../redux";
@@ -12,6 +13,8 @@ import withApolloClient from "../utils/apollo";
 import loadScript from "../utils/loadScript";
 import sentry from "../utils/sentry";
 import { getCookie } from "../utils/cookie";
+import GlobalLoader from "../components/GlobalLoader";
+import RootLoader from "../components/RootLoader";
 
 const { Sentry, captureException } = sentry();
 
@@ -20,6 +23,7 @@ class DefaultApp extends App {
     super(...arguments);
     this.state = {
       hasError: false,
+      loading: true,
       errorEventId: undefined
     };
   }
@@ -100,10 +104,12 @@ class DefaultApp extends App {
                   actions.logout();
                   Router.push("/login");
                 }
+                this.setState({ loading: false });
               })
               .catch(err => {
                 actions.logout();
                 Router.push("/login");
+                this.setState({ loading: false });
                 throw err;
               });
           }
@@ -140,9 +146,13 @@ class DefaultApp extends App {
         </section>
       );
     }
+    if (this.state.loading) {
+      return <RootLoader />;
+    }
     const { Component, pageProps, apolloClient, store } = this.props;
     return (
       <Container>
+        <GlobalLoader color={colors.primary} />
         <Provider store={store}>
           <ApolloProvider store={store} client={apolloClient}>
             <Component {...pageProps} />

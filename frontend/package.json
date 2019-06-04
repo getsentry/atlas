@@ -28,7 +28,7 @@
     "next": "^8.1.0",
     "next-cookies": "^1.1.2",
     "next-redux-wrapper": "^3.0.0-alpha.2",
-    "orgchart.js": "0.0.4",
+    "nprogress": "^0.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-apollo": "^2.5.6",

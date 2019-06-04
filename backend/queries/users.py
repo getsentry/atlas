@@ -21,7 +21,7 @@ class Query(object):
         info,
         id: str = None,
         query: str = None,
-        include_self: bool = False,
+        include_self: bool = True,
         office: str = None,
         offset: int = 0,
         limit: int = 1000,
