@@ -13,12 +13,9 @@ export const LIST_ALL_PEOPLE_QUERY = gql`
       name
       profile {
         title
+        photoUrl
         reportsTo {
           id
-          name
-          profile {
-            title
-          }
         }
       }
     }
@@ -48,7 +45,8 @@ const listToTree = list => {
 
 const Node = ({ node }) => {
   return (
-    <div className="node">
+    <div className="nodeItem">
+      <img src={node.profile.photoUrl} />
       <PersonLink user={node} />
     </div>
   );
@@ -74,12 +72,16 @@ export default () => (
         text-align: center;
       }
 
-      .reactOrgChart .orgNodeChildGroup .nodeCell .node {
+      .reactOrgChart .orgNodeChildGroup .nodeCell .nodeItem {
         border: solid 1px #ddd;
         border-radius: 3px;
         padding: 5px;
-        width: 150px;
+        width: 200px;
         display: inline-block;
+      }
+      .reactOrgChart .orgNodeChildGroup .nodeCell .nodeItem img {
+        display: inline-block;
+        width: 32px;
       }
 
       .reactOrgChart .orgNodeChildGroup .nodeGroupCell {
