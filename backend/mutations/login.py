@@ -83,6 +83,10 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
                 raise
             user = User.objects.get(email=payload["email"])
 
+        if not user.is_active:
+            user.is_active = True
+            user.save(update_fields=["is_active"])
+
         try:
             with transaction.atomic():
                 Profile.objects.create(user=user)

@@ -31,7 +31,7 @@ class Query(object):
         assert offset >= 0
 
         user = info.context.user
-        qs = User.objects.all()
+        qs = User.objects.filter(is_active=True)
 
         if id:
             qs = qs.filter(id=id)
@@ -46,6 +46,8 @@ class Query(object):
             qs = qs.exclude(id=user.id)
 
         qs = optimize_queryset(qs, info, "users")
+
+        qs.order_by("name")
 
         qs = qs[offset:limit]
 

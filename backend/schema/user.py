@@ -7,6 +7,7 @@ from backend.models import User
 class UserNode(DjangoObjectType):
     email = graphene.String(required=False)
     profile = graphene.Field("backend.schema.ProfileNode")
+    office = graphene.Field("backend.schema.OfficeNode")
 
     class Meta:
         model = User
