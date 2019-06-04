@@ -58,68 +58,6 @@ const Node = ({ node }) => {
 export default () => (
   <Layout>
     <h1>Org Chart</h1>
-    <style global jsx>{`
-      .reactOrgChart {
-        margin: 2px;
-        display: block;
-        zoom: 0.85;
-      }
-
-      .reactOrgChart .orgNodeChildGroup .node {
-        border: solid 1px #000000;
-        display: inline-block;
-        padding: 4px;
-        width: 100px;
-      }
-
-      .reactOrgChart .orgNodeChildGroup .nodeCell {
-        text-align: center;
-      }
-
-      .reactOrgChart .orgNodeChildGroup .nodeCell .nodeItem {
-        border: solid 1px #ddd;
-        border-radius: 3px;
-        padding: 5px;
-        width: 200px;
-        display: inline-block;
-      }
-      .reactOrgChart .orgNodeChildGroup .nodeCell .nodeItem img {
-        display: inline-block;
-        width: 32px;
-      }
-
-      .reactOrgChart .orgNodeChildGroup .nodeGroupCell {
-        vertical-align: top;
-      }
-
-      .reactOrgChart .orgNodeChildGroup .nodeGroupLineVerticalMiddle {
-        height: 25px;
-        width: 50%;
-        border-right: solid 1px #ddd;
-      }
-
-      .reactOrgChart .nodeLineBorderTop {
-        border-top: solid 1px #ddd;
-      }
-
-      .reactOrgChart table {
-        border-collapse: collapse;
-        border: none;
-        margin: 0 auto;
-      }
-
-      .reactOrgChart td {
-        padding: 0;
-      }
-
-      .reactOrgChart table.nodeLineTable {
-        width: 100%;
-      }
-
-      .reactOrgChart table td.nodeCell {
-        width: 50%;
-      }
-    `}</style>
     <Query query={LIST_ALL_PEOPLE_QUERY}>
       {({ loading, error, data, fetchMore }) => {
         if (error) return <ErrorMessage message="Error loading people." />;
