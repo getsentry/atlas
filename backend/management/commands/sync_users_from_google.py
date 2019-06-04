@@ -14,6 +14,10 @@ from backend.models import Identity, Office, Profile, User
 # &query=email, givenName, or familyName:the query's value*
 
 
+def get_identity():
+    return Identity.objects.filter(user__is_active=True).select_related("user").get()
+
+
 class Command(BaseCommand):
     help = "Synchronize users from Google"
 
@@ -102,25 +106,27 @@ class Command(BaseCommand):
         # 'organizations': [{'title': 'Chief Executive Officer', 'primary': True, 'customType': '', 'department': 'G&A', 'description': 'Executive'}]
         if row.get("organizations") and row["organizations"][0]:
             org = row["organizations"][0]
-            if org["title"] != profile.title:
-                profile_fields["title"] = org["title"]
+            if (org["title"] or None) != profile.title:
+                profile_fields["title"] = org["title"] or None
         else:
             profile_fields["title"] = None
 
         # 'relations': [{'value': 'david@sentry.io', 'type': 'manager'}]
         if row.get("relations"):
-            profile_fields["reports_to"] = None
+            reports_to = None
             for relation in row["relations"]:
-                if relation["type"] == "manager":
+                if relation["type"] == "manager" and relation["value"]:
                     reports_to = self.get_user(email=relation["value"])
                     if profile.reports_to_id != reports_to.id:
                         profile_fields["reports_to"] = reports_to
+            if reports_to is None and profile.reports_to_id:
+                profile_fields["reports_to"] = None
 
         # 'locations': [{'type': 'desk', 'area': 'desk', 'buildingId': 'SFO'}]
         if row.get("locations"):
             profile_fields["office"] = None
             for location in row["locations"]:
-                if location["type"] == "desk":
+                if location["type"] == "desk" and location["buildingId"]:
                     office = self.get_office(location["buildingId"])
                     if profile.office_id != office.id:
                         profile_fields["office"] = office
@@ -152,9 +158,7 @@ class Command(BaseCommand):
         self.office_cache = {}
         self.user_cache = {}
 
-        identity = (
-            Identity.objects.filter(user__is_active=True).select_related("user").get()
-        )
+        identity = get_identity()
 
         self.stdout.write(
             self.style.MIGRATE_HEADING(

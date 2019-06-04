@@ -45,6 +45,9 @@ class Query(object):
         if not include_self:
             qs = qs.exclude(id=user.id)
 
+        # exclude users without titles as they're mostly not real
+        qs = qs.exclude(profile__title__isnull=True)
+
         qs = optimize_queryset(qs, info, "users")
 
         qs = qs.order_by("name")[offset:limit]
