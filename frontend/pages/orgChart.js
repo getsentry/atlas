@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 
 import OrgChart from "../components/OrgChart";
 import Layout from "../components/Layout";
+import PersonLink from "../components/PersonLink";
 
 export const LIST_ALL_PEOPLE_QUERY = gql`
   query listAllPeople {
@@ -46,7 +47,11 @@ const listToTree = list => {
 };
 
 const Node = ({ node }) => {
-  return <div>{node.name}</div>;
+  return (
+    <div className="node">
+      <PersonLink user={node} />
+    </div>
+  );
 };
 
 export default () => (
@@ -69,8 +74,8 @@ export default () => (
         text-align: center;
       }
 
-      .reactOrgChart .orgNodeChildGroup .nodeCell div {
-        border: solid 3px red;
+      .reactOrgChart .orgNodeChildGroup .nodeCell .node {
+        border: solid 1px #ddd;
         border-radius: 3px;
         padding: 5px;
         width: 150px;
@@ -84,11 +89,11 @@ export default () => (
       .reactOrgChart .orgNodeChildGroup .nodeGroupLineVerticalMiddle {
         height: 25px;
         width: 50%;
-        border-right: solid 3px red;
+        border-right: solid 1px #ddd;
       }
 
       .reactOrgChart .nodeLineBorderTop {
-        border-top: solid 3px red;
+        border-top: solid 1px #ddd;
       }
 
       .reactOrgChart table {
