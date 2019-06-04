@@ -12,6 +12,9 @@ class Identity(models.Model):
     external_id = models.CharField(max_length=32)
     config = JSONField(default=dict)
     is_active = models.BooleanField(default=False)
+    access_token = models.TextField(null=True)
+    refresh_token = models.TextField(null=True)
+    is_admin = models.BooleanField(default=False)
 
     class Meta:
         db_table = "identity"

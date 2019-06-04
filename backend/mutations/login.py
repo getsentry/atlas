@@ -1,7 +1,6 @@
 import base64
 import json
 from typing import Optional
-from uuid import uuid4
 
 import graphene
 import requests
@@ -9,8 +8,9 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.db import IntegrityError, transaction
 
-from backend.models import Identity, Profile, User
+from backend.models import Identity, User
 from backend.schema import UserNode
+from backend.utils import google
 from backend.utils.auth import generate_token
 
 
@@ -39,11 +39,7 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
         else:
             resp.raise_for_status()
 
-    config = {
-        "access_token": data["access_token"],
-        "refresh_token": data["refresh_token"],
-        "scope": data["scope"],
-    }
+    config = {"scope": data["scope"]}
 
     id_token = data["id_token"]
     _, payload, _ = map(urlsafe_b64decode, id_token.split(".", 2))
@@ -63,6 +59,15 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
     # }
 
     external_id = str(payload["sub"])
+
+    # fetch gsuite details
+    req = requests.get(
+        "https://www.googleapis.com/admin/directory/v1/users/{}".format(external_id),
+        headers={"Authorization": "Bearer {}".format(data["access_token"])},
+    )
+    req.raise_for_status()
+    profile = req.json()
+
     for i in range(2):
         identity = (
             Identity.objects.filter(provider="google", external_id=external_id)
@@ -70,39 +75,40 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
             .first()
         )
         if identity:
+            # TODO(dcramer): we'd like to know if they're an admin here
             identity.config = config
             identity.is_active = True
-            identity.save(update_fields=["config"])
+            identity.is_admin = profile["isAdmin"]
+            identity.access_token = data["access_token"]
+            identity.refresh_token = data["refresh_token"]
+            identity.save(
+                update_fields=[
+                    "config",
+                    "is_active",
+                    "is_admin",
+                    "access_token",
+                    "refresh_token",
+                ]
+            )
+            google.sync_user(data=profile, identity=identity, user=identity.user)
             return identity.user
 
-        try:
-            with transaction.atomic():
-                user = User.objects.create_user(
-                    email=payload["email"], name=payload["name"]
-                )
-        except IntegrityError as exc:
-            if "duplicate key" not in str(exc):
-                raise
-            user = User.objects.get(email=payload["email"])
-
-        if not user.is_active:
-            user.is_active = True
-            user.save(update_fields=["is_active"])
-
-        if not user.password:
-            user.set_password(uuid4().hex)
-            user.save(update_fields=["password"])
+        user = google.create_user(email=payload["email"], name=payload["name"])
 
         try:
             with transaction.atomic():
-                Profile.objects.get_or_create(user=user)
                 identity = Identity.objects.create(
                     user=user,
                     provider="google",
                     external_id=external_id,
                     is_active=True,
+                    is_admin=profile["isAdmin"],
                     config=config,
+                    access_token=data["access_token"],
+                    refresh_token=data["refresh_token"],
                 )
+                google.sync_user(data=profile, user=user, identity=identity)
+
                 return user
         except IntegrityError as exc:
             if "duplicate key" not in str(exc):
