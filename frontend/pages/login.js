@@ -70,7 +70,10 @@ class Login extends Component {
     return (
       <Layout noHeader noAuth>
         <div className="login">
-          <p>You'll need to login to continue.</p>
+          <p>
+            You'll need to login to continue. Make sure to disable Adblock as it
+            causes issues with Google Auth.
+          </p>
           <button onClick={this.props.login}>Login with Google</button>
         </div>
         <style jsx>{`
