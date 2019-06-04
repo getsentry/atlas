@@ -23,10 +23,14 @@ export default function({ user }) {
         article {
           display: flex;
           align-items: center;
+          overflow: hidden;
         }
         h4 {
           margin-bottom: 0;
           margin-top: 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         img {
           display: inline-block;
@@ -37,6 +41,13 @@ export default function({ user }) {
         aside {
           flex-grow: 1;
           display: inline-block;
+          overflow: hidden;
+        }
+        small {
+          display: block;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       `}</style>
     </article>

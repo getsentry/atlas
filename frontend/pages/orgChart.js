@@ -73,6 +73,7 @@ export default () => (
       .reactOrgChart {
         margin: 2px;
         display: block;
+        zoom: 0.85;
       }
 
       .reactOrgChart .orgNodeChildGroup .node {
