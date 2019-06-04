@@ -47,8 +47,6 @@ class Query(object):
 
         qs = optimize_queryset(qs, info, "users")
 
-        qs.order_by("name")
-
-        qs = qs[offset:limit]
+        qs = qs.order_by("name")[offset:limit]
 
         return qs
