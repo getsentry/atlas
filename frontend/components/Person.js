@@ -51,21 +51,28 @@ export default class Person extends Component {
               <h1>{thisPerson.name}</h1>
               <dl>
                 <dt>Start Date</dt>
-                <dd>{thisPerson.profile.joinedAt}</dd>
+                <dd>{thisPerson.profile.joinedAt || "n/a"}</dd>
                 <dt>Reports To</dt>
                 <dd>
-                  <PersonLink user={thisPerson.profile.reportsTo} />
+                  {thisPerson.profile.reportsTo ? (
+                    <PersonLink user={thisPerson.profile.reportsTo} />
+                  ) : (
+                    "n/a"
+                  )}
                 </dd>
                 <dt>Office</dt>
                 <dd>
-                  {thisPerson.profile.office && thisPerson.profile.office.name}
+                  {thisPerson.profile.office
+                    ? thisPerson.profile.office.name
+                    : "n/a"}
                 </dd>
                 <dt>Birthday</dt>
                 <dd>
-                  {thisPerson.profile.dobMonth &&
-                    `${thisPerson.profile.dobMonth}-${
-                      thisPerson.profile.dobDay
-                    }`}
+                  {thisPerson.profile.dobMonth
+                    ? `${thisPerson.profile.dobMonth}-${
+                        thisPerson.profile.dobDay
+                      }`
+                    : "n/a"}
                 </dd>
               </dl>
             </section>
