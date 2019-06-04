@@ -72,18 +72,25 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
             identity.config = config
             identity.save(update_fields=["config"])
             return identity.user
+
         try:
             with transaction.atomic():
                 user = User.objects.create_user(
                     email=payload["email"], name=payload["name"]
                 )
+        except IntegrityError as exc:
+            if "duplicate key" not in str(exc):
+                raise
+            user = User.objects.get(email=payload["email"])
+
+        try:
+            with transaction.atomic():
                 Profile.objects.create(user=user)
                 identity = Identity.objects.create(
                     user=user, provider="google", external_id=external_id, config=config
                 )
                 return user
         except IntegrityError as exc:
-            raise
             if "duplicate key" not in str(exc):
                 raise
 
