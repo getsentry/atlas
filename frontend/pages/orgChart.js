@@ -30,10 +30,12 @@ const listToTree = list => {
     roots = [],
     i;
   for (i = 0; i < list.length; i += 1) {
+    if (!list[i].profile.title) continue;
     map[list[i].id] = i; // initialize the map
     list[i].children = []; // initialize the children
   }
   for (i = 0; i < list.length; i += 1) {
+    if (!list[i].profile.title) continue;
     node = list[i];
     if (node.profile && node.profile.reportsTo) {
       // if you have dangling branches check that map[node.parentId] exists
