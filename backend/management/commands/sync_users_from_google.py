@@ -1,6 +1,7 @@
 from datetime import date
 
 import requests
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
@@ -14,8 +15,31 @@ from backend.models import Identity, Office, Profile, User
 # &query=email, givenName, or familyName:the query's value*
 
 
+def refresh_token(identity):
+    req = requests.post(
+        "https://accounts.google.com/o/oauth2/token",
+        json={
+            "grant_type": "refresh_token",
+            "client_id": settings.GOOGLE_CLIENT_ID,
+            "client_secret": settings.GOOGLE_CLIENT_SECRET,
+            "refresh_token": identity.config["refresh_token"],
+        },
+    )
+    data = req.json()
+    identity.config.update({"access_token": data["access_token"]})
+    identity.save(update_fields=["config"])
+    return identity
+
+
 def get_identity():
-    return Identity.objects.filter(user__is_active=True).select_related("user").get()
+    identity = (
+        Identity.objects.filter(user__is_active=True).select_related("user").first()
+    )
+    if not identity:
+        raise Exception("Unable to find an identity to pull data with")
+    # TODO(dcramer): we should only refresh this once its expired
+    refresh_token(identity)
+    return identity
 
 
 class Command(BaseCommand):
@@ -94,7 +118,7 @@ class Command(BaseCommand):
         profile_fields = {}
 
         # if the account is not active, suspend them
-        if row["suspended"]:
+        if row["suspended"] and user.is_active:
             user_fields["is_active"] = False
 
         if row["name"]["fullName"] != user.name:
@@ -108,7 +132,7 @@ class Command(BaseCommand):
             org = row["organizations"][0]
             if (org["title"] or None) != profile.title:
                 profile_fields["title"] = org["title"] or None
-        else:
+        elif profile.title:
             profile_fields["title"] = None
 
         # 'relations': [{'value': 'david@sentry.io', 'type': 'manager'}]

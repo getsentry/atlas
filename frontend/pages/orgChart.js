@@ -27,6 +27,14 @@ const listToTree = list => {
     node,
     roots = [],
     i;
+  //   list.sort((a, b) => {
+  //     if (!!a.reportsTo && !!b.reportsTo) {
+  //       return 0;
+  //     } else if (!!a.reportsTo) {
+  //       return 1;
+  //     }
+  //     return -1;
+  //   });
   for (i = 0; i < list.length; i += 1) {
     map[list[i].id] = i; // initialize the map
     list[i].children = []; // initialize the children
@@ -36,17 +44,23 @@ const listToTree = list => {
     if (node.profile && node.profile.reportsTo) {
       // if you have dangling branches check that map[node.parentId] exists
       list[map[node.profile.reportsTo.id]].children.push(node);
+      // some inefficiencies as we have now sorted twice..
+      list[map[node.profile.reportsTo.id]].children.sort((a, b) => {
+        return b.name - a.name;
+      });
     } else {
       roots.push(node);
     }
   }
+  roots.sort((a, b) => {
+    return b.name - a.name;
+  });
   return roots;
 };
 
 const Node = ({ node }) => {
   return (
     <div className="nodeItem">
-      <img src={node.profile.photoUrl} />
       <PersonLink user={node} />
     </div>
   );
@@ -121,14 +135,6 @@ export default () => (
         if (error) return <ErrorMessage message="Error loading people." />;
         if (loading) return <div>Loading</div>;
         const { users } = data;
-        users.sort((a, b) => {
-          if (!!a.reportsTo && !!b.reportsTo) {
-            return 0;
-          } else if (!!a.reportsTo) {
-            return 1;
-          }
-          return -1;
-        });
         const dataSource = listToTree(users);
         return <OrgChart tree={dataSource} NodeComponent={Node} />;
       }}

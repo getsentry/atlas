@@ -70,6 +70,7 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
         )
         if identity:
             identity.config = config
+            identity.is_active = True
             identity.save(update_fields=["config"])
             return identity.user
 
@@ -91,7 +92,11 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
             with transaction.atomic():
                 Profile.objects.create(user=user)
                 identity = Identity.objects.create(
-                    user=user, provider="google", external_id=external_id, config=config
+                    user=user,
+                    provider="google",
+                    external_id=external_id,
+                    is_active=True,
+                    config=config,
                 )
                 return user
         except IntegrityError as exc:

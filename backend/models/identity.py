@@ -11,6 +11,7 @@ class Identity(models.Model):
     provider = models.CharField(max_length=32)
     external_id = models.CharField(max_length=32)
     config = JSONField(default=dict)
+    is_active = models.BooleanField(default=False)
 
     class Meta:
         db_table = "identity"
