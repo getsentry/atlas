@@ -30,7 +30,17 @@ GOOGLE_CLIENT_ID=
 SENTRY_DSN=
 ```
 
+## Mock Data
+
+You can load an example data set of Sentry's team with the following command:
+
+```shell
+$ atlas loaddata fixtures/team.json
+```
+
 ## Syncing People
+
+**You will need domain permission to sync data**
 
 Once you've authenticated with your Google Auth, you can sync the directory with the following command:
 
