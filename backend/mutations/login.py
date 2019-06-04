@@ -1,6 +1,7 @@
 import base64
 import json
 from typing import Optional
+from uuid import uuid4
 
 import graphene
 import requests
@@ -88,9 +89,13 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
             user.is_active = True
             user.save(update_fields=["is_active"])
 
+        if not user.password:
+            user.set_password(uuid4().hex)
+            user.save(update_fields=["password"])
+
         try:
             with transaction.atomic():
-                Profile.objects.create(user=user)
+                Profile.objects.get_or_create(user=user)
                 identity = Identity.objects.create(
                     user=user,
                     provider="google",
