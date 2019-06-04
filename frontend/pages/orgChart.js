@@ -55,6 +55,7 @@ export default () => (
     <style global jsx>{`
       .reactOrgChart {
         margin: 2px;
+        display: block;
       }
 
       .reactOrgChart .orgNodeChildGroup .node {
@@ -65,12 +66,15 @@ export default () => (
       }
 
       .reactOrgChart .orgNodeChildGroup .nodeCell {
+        text-align: center;
+      }
+
+      .reactOrgChart .orgNodeChildGroup .nodeCell div {
         border: solid 3px red;
         border-radius: 3px;
         padding: 5px;
         width: 150px;
         display: inline-block;
-        text-align: center;
       }
 
       .reactOrgChart .orgNodeChildGroup .nodeGroupCell {

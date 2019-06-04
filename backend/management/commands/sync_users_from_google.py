@@ -124,12 +124,14 @@ class Command(BaseCommand):
 
         # 'locations': [{'type': 'desk', 'area': 'desk', 'buildingId': 'SFO'}]
         if row.get("locations"):
-            profile_fields["office"] = None
+            office = None
             for location in row["locations"]:
                 if location["type"] == "desk" and location["buildingId"]:
                     office = self.get_office(location["buildingId"])
                     if profile.office_id != office.id:
                         profile_fields["office"] = office
+            if office is None and profile.office_id:
+                profile_fields["office"] = None
 
         # 'customSchemas': {'Profile': {'Date_of_Hire': '2015-10-01', 'Date_of_Birth': '1985-08-12'}
         if row.get("customSchemas") and "Profile" in row["customSchemas"]:
