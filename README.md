@@ -30,6 +30,14 @@ GOOGLE_CLIENT_ID=
 SENTRY_DSN=
 ```
 
+## Syncing People
+
+Once you've authenticated with your Google Auth, you can sync the directory with the following command:
+
+```shell
+$ atlas sync_users_from_google sentry.io
+```
+
 ## Services
 
 Atlas is made up of two key services.
