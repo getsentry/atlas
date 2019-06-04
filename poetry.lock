@@ -244,13 +244,12 @@ description = "GraphQL Framework for Python"
 name = "graphene"
 optional = false
 python-versions = "*"
-version = "2.1.3"
+version = "2.1.5"
 
 [package.dependencies]
-aniso8601 = ">=3,<4"
+aniso8601 = ">=3,<=6.0"
 graphql-core = ">=2.1,<3"
 graphql-relay = ">=0.4.5,<1"
-promise = ">=2.1,<3"
 six = ">=1.10.0,<2"
 
 [[package]]
@@ -720,7 +719,7 @@ factory-boy = ["6f25cc4761ac109efd503f096e2ad99421b1159f01a29dbb917359dcd68e08ca
 faker = ["228419b0a788a7ac867ebfafdd438461559ab1a0975edb607300852d9acaa78d", "52a3dcc6a565b15fe1c95090321756d5a8a7c1caf5ab3df2f573ed70936ff518"]
 flake8 = ["6a35f5b8761f45c5513e3405f110a86bea57982c3b75b766ce7b65217abe1670", "c01f8a3963b3571a8e6bd7a4063359aff90749e160778e03817cd9b71c9e07d2"]
 google-auth = ["0f7c6a64927d34c1a474da92cfc59e552a5d3b940d3266606c6a28b72888b9e4", "20705f6803fd2c4d1cc2dcb0df09d4dfcb9a7d51fd59e94a3a28231fd93119ed"]
-graphene = ["b8ec446d17fa68721636eaad3d6adc1a378cb6323e219814c8f98c9928fc9642", "faa26573b598b22ffd274e2fd7a4c52efa405dcca96e01a62239482246248aa3"]
+graphene = ["6d6a68c7b3b40325bf9af8a3dca22639f5a57eededf4449c1db198d7eb117af7", "8eee7e2ae9c22d01cf85a43f8c1aeb776a478bc2e20e0ca8d5fb17ba4b9f4767"]
 graphene-django = ["3afd81d47c8b702650e05cc1179fac1cfceae991d241bb164d51f28bed9ec95c", "760a18068feb5457e2ec00d2447c09b2fbac2a6b8c32cc8be2abce3752107ad3"]
 graphql-core = ["889e869be5574d02af77baf1f30b5db9ca2959f1c9f5be7b2863ead5a3ec6181", "9462e22e32c7f03b667373ec0a84d95fba10e8ce2ead08f29fbddc63b671b0c1"]
 graphql-relay = ["2716b7245d97091af21abf096fabafac576905096d21ba7118fba722596f65db"]

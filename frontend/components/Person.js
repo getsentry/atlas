@@ -12,7 +12,16 @@ export const PERSON_QUERY = gql`
       id
       name
       email
+      reports {
+        id
+        name
+        profile {
+          title
+          photoUrl
+        }
+      }
       profile {
+        department
         dobMonth
         dobDay
         title
@@ -26,6 +35,7 @@ export const PERSON_QUERY = gql`
           name
           profile {
             title
+            photoUrl
           }
         }
       }
@@ -65,6 +75,8 @@ export default class Person extends Component {
               <h4>{thisPerson.profile.title}</h4>
               <img src={thisPerson.profile.photoUrl} />
               <dl>
+                <dt>Department</dt>
+                <dd>{thisPerson.profile.department || "n/a"}</dd>
                 <dt>Start Date</dt>
                 <dd>{thisPerson.profile.joinedAt || "n/a"}</dd>
                 <dt>Reports To</dt>
@@ -90,6 +102,14 @@ export default class Person extends Component {
                     : "n/a"}
                 </dd>
               </dl>
+              <h3>Reports</h3>
+              <ul>
+                {thisPerson.reports.map(p => (
+                  <li key={p.id}>
+                    <PersonLink user={p} />
+                  </li>
+                ))}
+              </ul>
             </section>
           );
         }}

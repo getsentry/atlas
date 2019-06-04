@@ -1,8 +1,17 @@
 import graphene
+from django.db.models import Count
 
 from backend.models import User
 from backend.schema import UserNode
 from backend.utils.graphene import optimize_queryset
+
+
+def fix_users_query(queryset, selected_fields, **kwargs):
+    if "reports" in selected_fields:
+        queryset = queryset.prefetch_related("reports", "reports__user")
+    if "numReports" in selected_fields:
+        queryset = queryset.annotate(num_reports=Count("reports"))
+    return queryset
 
 
 class Query(object):
@@ -51,7 +60,7 @@ class Query(object):
         # exclude users without titles as they're mostly not real
         qs = qs.exclude(profile__title__isnull=True)
 
-        qs = optimize_queryset(qs, info, "users")
+        qs = optimize_queryset(qs, info, "users", fix_users_query)
 
         qs = qs.order_by("name")[offset:limit]
 

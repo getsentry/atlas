@@ -1,11 +1,30 @@
 import pytest
 
-from backend.models import User
+from backend.models import Profile, User
 
 
 @pytest.fixture
-def other_user():
-    return User.objects.create(name="Fizz Buzz", email="fizz.buzz@example.com")
+def other_user(default_user):
+    user = User.objects.create(name="Fizz Buzz", email="fizz.buzz@example.com")
+    Profile.objects.create(user=user, reports_to=default_user, title="Dummy")
+    return user
+
+
+def test_users_shows_reports(gql_client, default_user, other_user):
+    executed = gql_client.execute(
+        """{users(id:"%s") {id, email, reports { id }, numReports }}"""
+        % (str(default_user.id)),
+        user=default_user,
+    )
+    assert len(executed["data"]["users"]) == 1
+    assert executed["data"]["users"] == [
+        {
+            "id": str(default_user.id),
+            "email": default_user.email,
+            "reports": [{"id": str(other_user.id)}],
+            "numReports": 1,
+        }
+    ]
 
 
 def test_users_shows_self_email(gql_client, default_user):

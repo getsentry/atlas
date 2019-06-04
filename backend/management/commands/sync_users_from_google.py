@@ -134,8 +134,13 @@ class Command(BaseCommand):
             org = row["organizations"][0]
             if (org["title"] or None) != profile.title:
                 profile_fields["title"] = org["title"] or None
-        elif profile.title:
-            profile_fields["title"] = None
+            if (org["department"] or None) != profile.department:
+                profile_fields["department"] = org["department"] or None
+        else:
+            if profile.title:
+                profile_fields["title"] = None
+            if profile.department:
+                profile_fields["department"] = None
 
         # 'relations': [{'value': 'david@sentry.io', 'type': 'manager'}]
         if row.get("relations"):

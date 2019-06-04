@@ -41,4 +41,6 @@ def default_user(db):
     )
     user.set_password("phish.reel.big")
     user.save()
+
+    factories.ProfileFactory.create(user=user, title="Dummy")
     return user

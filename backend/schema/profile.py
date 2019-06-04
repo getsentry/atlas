@@ -15,7 +15,14 @@ class ProfileNode(DjangoObjectType):
     class Meta:
         model = Profile
         name = "Profile"
-        only_fields = ("reports_to", "title", "joined_at", "office", "photo_url")
+        only_fields = (
+            "reports_to",
+            "title",
+            "joined_at",
+            "office",
+            "photo_url",
+            "department",
+        )
 
     def resolve_dob_month(self, info):
         if not self.dob:
