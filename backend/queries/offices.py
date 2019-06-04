@@ -1,28 +1,24 @@
 import graphene
 
-from backend.models import User
-from backend.schema import UserNode
+from backend.models import Office
+from backend.schema import OfficeNode
 from backend.utils.graphene import optimize_queryset
 
 
 class Query(object):
-    users = graphene.List(
-        UserNode,
+    offices = graphene.List(
+        OfficeNode,
         id=graphene.UUID(),
         query=graphene.String(),
-        include_self=graphene.Boolean(),
-        office=graphene.UUID(),
         offset=graphene.Int(),
         limit=graphene.Int(),
     )
 
-    def resolve_users(
+    def resolve_offices(
         self,
         info,
         id: str = None,
         query: str = None,
-        include_self: bool = False,
-        office: str = None,
         offset: int = 0,
         limit: int = 1000,
         **kwargs
@@ -32,26 +28,17 @@ class Query(object):
 
         current_user = info.context.user
         if not current_user.is_authenticated:
-            return User.objects.none()
+            return Office.objects.none()
 
-        qs = User.objects.filter(is_active=True)
+        qs = Office.objects.all()
 
         if id:
             qs = qs.filter(id=id)
 
-        if office:
-            qs = qs.filter(profile__office=office)
-
         if query:
             qs = qs.filter(name__istartswith=query)
 
-        if not include_self:
-            qs = qs.exclude(id=current_user.id)
-
-        # exclude users without titles as they're mostly not real
-        qs = qs.exclude(profile__title__isnull=True)
-
-        qs = optimize_queryset(qs, info, "users")
+        qs = optimize_queryset(qs, info, "offices")
 
         qs = qs.order_by("name")[offset:limit]
 

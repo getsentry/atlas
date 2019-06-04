@@ -1,9 +1,9 @@
 import Layout from "../components/Layout";
-import PeopleList from "../components/PeopleList";
+import OfficeList from "../components/OfficeList";
 
 export default () => (
   <Layout>
-    <h1>People</h1>
-    <PeopleList />
+    <h1>Offices</h1>
+    <OfficeList />
   </Layout>
 );

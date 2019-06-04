@@ -1,4 +1,6 @@
 import { connect } from "react-redux";
+import Link from "next/link";
+
 import initialize from "../utils/initialize";
 import Layout from "../components/Layout";
 
@@ -9,6 +11,27 @@ const Index = () => (
     <p>
       We could probably put the newest hires here? Anniversaries? Birthdays?
     </p>
+    <h2>Explore</h2>
+    <p>
+      Here are some pages CKJ needs to figure out where to place links to...
+    </p>
+    <ul>
+      <li>
+        <Link prefetch href="/people">
+          <a>/people</a>
+        </Link>
+      </li>
+      <li>
+        <Link prefetch href="/offices">
+          <a>/offices</a>
+        </Link>
+      </li>
+      <li>
+        <Link prefetch href="/orgChart">
+          <a>/orgChart</a>
+        </Link>
+      </li>
+    </ul>
   </Layout>
 );
 

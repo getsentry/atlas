@@ -19,7 +19,7 @@ if (!process.browser) {
 const getToken = () => {
   let token = null;
   if (typeof document !== "undefined") {
-    token = "Bearer " + getCookie("token");
+    token = "Token " + getCookie("token");
   }
   return token;
 };

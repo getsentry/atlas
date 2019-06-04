@@ -36,7 +36,7 @@ export default function PeopleList() {
         return (
           <section>
             <ul>
-              {users.map((p, index) => (
+              {users.map(p => (
                 <li key={p.id}>
                   <PersonLink user={p} />
                 </li>
