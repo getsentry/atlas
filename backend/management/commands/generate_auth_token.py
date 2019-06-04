@@ -2,9 +2,9 @@ from datetime import timedelta
 
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from kollect.utils.auth import generate_token
 
 from backend.models import User
+from backend.utils.auth import generate_token
 
 
 class Command(BaseCommand):
