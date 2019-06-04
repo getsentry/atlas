@@ -24,7 +24,7 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
         json={
             "grant_type": "authorization_code",
             "code": auth_code,
-            "redirect_uri": "http://localhost:8080",
+            "redirect_uri": settings.GOOGLE_REDIRECT_URI,
             "client_id": settings.GOOGLE_CLIENT_ID,
             "client_secret": settings.GOOGLE_CLIENT_SECRET,
         },

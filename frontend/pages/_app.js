@@ -84,8 +84,8 @@ class DefaultApp extends App {
             cookie_policy: "single_host_origin",
             fetch_basic_profile: true,
             ux_mode: "popup",
-            redirect_uri: "http://localhost:8080",
-            scope: "profile email",
+            redirect_uri: config.GOOGLE_REDIRECT_URI,
+            scope: config.GOOGLE_SCOPES,
             access_type: "offline"
           };
           if (!gapi.auth2.getAuthInstance()) {
