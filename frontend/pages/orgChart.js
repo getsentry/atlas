@@ -2,6 +2,7 @@ import React from "react";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
+import ErrorMessage from "../components/ErrorMessage";
 import OrgChart from "../components/OrgChart";
 import Layout from "../components/Layout";
 import PersonLink from "../components/PersonLink";
