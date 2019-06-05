@@ -93,7 +93,7 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
             google.sync_user(data=profile, identity=identity, user=identity.user)
             return identity.user
 
-        user = google.create_user(email=payload["email"], name=payload["name"])
+        user = google.get_user(email=payload["email"], name=payload["name"])
 
         try:
             with transaction.atomic():
