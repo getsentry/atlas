@@ -1,5 +1,12 @@
 # atlas
 
+Atlas is an internal portal, offering a variety of features helping bring visibility within your organization.
+
+It's built on top of G Suite by Google, and currently features:
+
+- A synced employee directory
+- An automatically generated organization chart
+
 ## Development
 
 **Make sure you disable Adblock as it seems to break Google Auth**
