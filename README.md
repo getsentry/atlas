@@ -71,7 +71,7 @@ $ npm start
 
 From there you can access the UI at http://localhost:8080. This will expose the backend at `/graphql/` and the UI at `/`.
 
-## Backend
+### Backend
 
 The backend is a GraphQL implementation powered by Graphene. The exposed endpoint is `/graphql/`.
 
@@ -110,7 +110,7 @@ Here's a helpful app which lets you bind an auth header:
 
 https://github.com/skevy/graphiql-app
 
-## Frontend
+### Frontend
 
 The frontend service is built on top of next.js. It contains all user interface logic as well as various business flows.
 
