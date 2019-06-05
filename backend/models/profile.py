@@ -9,7 +9,7 @@ class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     dob = models.DateField(null=True)
-    joined_at = models.DateField(null=True)
+    date_started = models.DateField(null=True)
     title = models.TextField(null=True)
     reports_to = models.ForeignKey(
         settings.AUTH_USER_MODEL,

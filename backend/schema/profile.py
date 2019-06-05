@@ -9,8 +9,8 @@ class ProfileNode(DjangoObjectType):
     dob_day = graphene.Int(required=False)
     dob_month = graphene.Int(required=False)
     reports_to = graphene.Field("backend.schema.UserNode", required=False)
-    joined_at = graphene.Date(required=False)
     office = graphene.Field("backend.schema.OfficeNode", required=False)
+    date_started = graphene.Date(required=False)
 
     class Meta:
         model = Profile
@@ -18,7 +18,7 @@ class ProfileNode(DjangoObjectType):
         only_fields = (
             "reports_to",
             "title",
-            "joined_at",
+            "date_started",
             "office",
             "photo_url",
             "department",

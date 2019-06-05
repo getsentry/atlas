@@ -14,6 +14,14 @@ def fix_users_query(queryset, selected_fields, **kwargs):
     return queryset
 
 
+class UserOrderBy(graphene.Enum):
+    class Meta:
+        name = "UserOrderBy"
+
+    name = "name"
+    dateStarted = "dateStarted"
+
+
 class Query(object):
     users = graphene.List(
         UserNode,
@@ -23,6 +31,7 @@ class Query(object):
         office=graphene.UUID(),
         offset=graphene.Int(),
         limit=graphene.Int(),
+        order_by=graphene.Argument(UserOrderBy),
     )
 
     def resolve_users(
@@ -34,6 +43,7 @@ class Query(object):
         office: str = None,
         offset: int = 0,
         limit: int = 1000,
+        order_by: str = None,
         **kwargs
     ):
         assert limit <= 1000
@@ -62,6 +72,11 @@ class Query(object):
 
         qs = optimize_queryset(qs, info, "users", fix_users_query)
 
-        qs = qs.order_by("name")[offset:limit]
+        if order_by == "name":
+            qs = qs.order_by("name")
+        elif order_by == "dateStarted":
+            qs = qs.order_by("-profile__date_started")
+
+        qs = qs[offset:limit]
 
         return qs

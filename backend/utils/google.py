@@ -166,8 +166,8 @@ def sync_user(  # NOQA
     if data.get("customSchemas") and "Profile" in data["customSchemas"]:
         custom_profile = data["customSchemas"]["Profile"]
         date_of_hire = to_date(custom_profile["Date_of_Hire"])
-        if date_of_hire != profile.joined_at:
-            profile_fields["joined_at"] = date_of_hire
+        if date_of_hire != profile.date_started:
+            profile_fields["date_started"] = date_of_hire
         date_of_birth = to_date(custom_profile["Date_of_Birth"])
         if date_of_birth != profile.dob:
             profile_fields["dob"] = date_of_birth

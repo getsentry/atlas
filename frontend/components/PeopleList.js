@@ -5,8 +5,8 @@ import ErrorMessage from "./ErrorMessage";
 import PersonLink from "./PersonLink";
 
 export const LIST_PEOPLE_QUERY = gql`
-  query listPeople($offset: Int, $limit: Int) {
-    users(offset: $offset, limit: $limit) {
+  query listPeople($offset: Int, $limit: Int, $orderBy: UserOrderBy) {
+    users(offset: $offset, limit: $limit, orderBy: $orderBy) {
       id
       name
       profile {
@@ -22,7 +22,8 @@ export const LIST_PEOPLE_QUERY = gql`
 
 export const peopleQueryVars = {
   offset: 0,
-  limit: 100
+  limit: 100,
+  orderBy: "name"
 };
 
 export default function PeopleList() {

@@ -1,3 +1,5 @@
+from datetime import date
+
 import pytest
 
 from backend.models import Profile, User
@@ -6,7 +8,9 @@ from backend.models import Profile, User
 @pytest.fixture
 def other_user(default_user):
     user = User.objects.create(name="Fizz Buzz", email="fizz.buzz@example.com")
-    Profile.objects.create(user=user, reports_to=default_user, title="Dummy")
+    Profile.objects.create(
+        user=user, reports_to=default_user, title="Dummy", date_started=date.today()
+    )
     return user
 
 
@@ -60,3 +64,14 @@ def test_users_query_no_results(gql_client, default_user):
         """{users(query:"Phish", includeSelf:true) {id}}""", user=default_user
     )
     assert executed["data"]["users"] == []
+
+
+def test_users_by_start_date(gql_client, default_user, other_user):
+    executed = gql_client.execute(
+        """{users(orderBy:dateStarted) {id}}""", user=default_user
+    )
+    assert len(executed["data"]["users"]) == 2
+    assert executed["data"]["users"] == [
+        {"id": str(other_user.id)},
+        {"id": str(default_user.id)},
+    ]
