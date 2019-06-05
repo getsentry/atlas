@@ -1,5 +1,6 @@
 import graphene
 from django.db.models import Count
+from graphql.error import GraphQLError
 
 from backend.models import User
 from backend.schema import UserNode
@@ -51,7 +52,7 @@ class Query(object):
 
         current_user = info.context.user
         if not current_user.is_authenticated:
-            return User.objects.none()
+            raise GraphQLError("You must be authenticated")
 
         qs = User.objects.filter(is_active=True)
 
@@ -75,7 +76,9 @@ class Query(object):
         if order_by == "name":
             qs = qs.order_by("name")
         elif order_by == "dateStarted":
-            qs = qs.order_by("-profile__date_started")
+            qs = qs.filter(profile__date_started__isnull=False).order_by(
+                "-profile__date_started"
+            )
 
         qs = qs[offset:limit]
 

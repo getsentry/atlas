@@ -1,4 +1,5 @@
 import graphene
+from graphql.error import GraphQLError
 
 from backend.models import Office
 from backend.schema import OfficeNode
@@ -28,7 +29,7 @@ class Query(object):
 
         current_user = info.context.user
         if not current_user.is_authenticated:
-            return Office.objects.none()
+            raise GraphQLError("You must be authenticated")
 
         qs = Office.objects.all()
 
