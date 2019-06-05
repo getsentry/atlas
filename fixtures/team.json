@@ -894,7 +894,7 @@
     "fields": {
       "user": ["maya@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "L&D",
       "reports_to": ["saloni@sentry.io"],
       "office": ["SFO"],
@@ -908,7 +908,7 @@
     "fields": {
       "user": ["kamil@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["armin@sentry.io"],
       "office": ["VIE"],
@@ -922,7 +922,7 @@
     "fields": {
       "user": ["billy@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["zpropersi@sentry.io"],
       "office": ["SFO"],
@@ -936,7 +936,7 @@
     "fields": {
       "user": ["megan@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["adhiraj@sentry.io"],
       "office": ["SFO"],
@@ -950,7 +950,7 @@
     "fields": {
       "user": ["saloni@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "VP, People",
       "reports_to": ["todd@sentry.io"],
       "office": ["SFO"],
@@ -964,7 +964,7 @@
     "fields": {
       "user": ["brett@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": null,
       "reports_to": null,
       "office": null,
@@ -978,7 +978,7 @@
     "fields": {
       "user": ["brianna@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Staff Accountant",
       "reports_to": ["todd@sentry.io"],
       "office": ["SFO"],
@@ -992,7 +992,7 @@
     "fields": {
       "user": ["dfuller@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["zpropersi@sentry.io"],
       "office": ["SFO"],
@@ -1006,7 +1006,7 @@
     "fields": {
       "user": ["aleal@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["zpropersi@sentry.io"],
       "office": ["SFO"],
@@ -1020,7 +1020,7 @@
     "fields": {
       "user": ["zara@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Office Administrator",
       "reports_to": ["saloni@sentry.io"],
       "office": ["SFO"],
@@ -1034,7 +1034,7 @@
     "fields": {
       "user": ["dgriesser@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["armin@sentry.io"],
       "office": ["VIE"],
@@ -1048,7 +1048,7 @@
     "fields": {
       "user": ["daniel.molina@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Business Development Representative",
       "reports_to": ["justin@sentry.io"],
       "office": ["SFO"],
@@ -1062,7 +1062,7 @@
     "fields": {
       "user": ["bruno@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["armin@sentry.io"],
       "office": ["VIE"],
@@ -1076,7 +1076,7 @@
     "fields": {
       "user": ["elizabeth@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Head of Business Development",
       "reports_to": ["todd@sentry.io"],
       "office": ["SFO"],
@@ -1090,7 +1090,7 @@
     "fields": {
       "user": ["hannah@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Illustrator",
       "reports_to": ["cameron@sentry.io"],
       "office": ["SFO"],
@@ -1104,7 +1104,7 @@
     "fields": {
       "user": ["vu@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Sales Engineer",
       "reports_to": ["neil@sentry.io"],
       "office": ["SFO"],
@@ -1118,7 +1118,7 @@
     "fields": {
       "user": ["wcapozzoli@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Sales Engineer",
       "reports_to": ["neil@sentry.io"],
       "office": ["SFO"],
@@ -1132,7 +1132,7 @@
     "fields": {
       "user": ["chris.clark@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Product Designer",
       "reports_to": ["chris@sentry.io"],
       "office": ["SFO"],
@@ -1146,7 +1146,7 @@
     "fields": {
       "user": ["zpropersi@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Engineering Manager",
       "reports_to": ["ben@sentry.io"],
       "office": ["SFO"],
@@ -1160,7 +1160,7 @@
     "fields": {
       "user": ["ben@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "VP, Engineering",
       "reports_to": ["david@sentry.io"],
       "office": ["SFO"],
@@ -1174,7 +1174,7 @@
     "fields": {
       "user": ["rjewett@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Account Executive",
       "reports_to": ["derek@sentry.io"],
       "office": ["SFO"],
@@ -1188,7 +1188,7 @@
     "fields": {
       "user": ["rick@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Sales Operations Manager",
       "reports_to": ["derek@sentry.io"],
       "office": ["SFO"],
@@ -1202,7 +1202,7 @@
     "fields": {
       "user": ["jtcunning@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Engineering Manager",
       "reports_to": ["vlad@sentry.io"],
       "office": ["SFO"],
@@ -1216,7 +1216,7 @@
     "fields": {
       "user": ["markus@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["armin@sentry.io"],
       "office": ["VIE"],
@@ -1230,7 +1230,7 @@
     "fields": {
       "user": ["derek@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "VP, Sales",
       "reports_to": ["david@sentry.io"],
       "office": ["SFO"],
@@ -1244,7 +1244,7 @@
     "fields": {
       "user": ["lyn@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["zpropersi@sentry.io"],
       "office": ["SFO"],
@@ -1258,7 +1258,7 @@
     "fields": {
       "user": ["jordan@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Business Development Representative",
       "reports_to": ["justin@sentry.io"],
       "office": ["SFO"],
@@ -1272,7 +1272,7 @@
     "fields": {
       "user": ["anton@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["jtcunning@sentry.io"],
       "office": ["VIE"],
@@ -1286,7 +1286,7 @@
     "fields": {
       "user": ["sydney@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["mike@sentry.io"],
       "office": ["SFO"],
@@ -1300,7 +1300,7 @@
     "fields": {
       "user": ["todd@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Chief Financial Officer",
       "reports_to": ["david@sentry.io"],
       "office": ["SFO"],
@@ -1314,7 +1314,7 @@
     "fields": {
       "user": ["adhiraj@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Engineering Manager",
       "reports_to": ["ben@sentry.io"],
       "office": ["SFO"],
@@ -1328,7 +1328,7 @@
     "fields": {
       "user": ["theresa@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "HR",
       "reports_to": ["saloni@sentry.io"],
       "office": ["SFO"],
@@ -1342,7 +1342,7 @@
     "fields": {
       "user": ["mark@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["zpropersi@sentry.io"],
       "office": ["YYZ"],
@@ -1356,7 +1356,7 @@
     "fields": {
       "user": ["rvasquez@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["mike@sentry.io"],
       "office": ["SFO"],
@@ -1370,7 +1370,7 @@
     "fields": {
       "user": ["vlad@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "VP, Infrastructure",
       "reports_to": ["david@sentry.io"],
       "office": ["SFO"],
@@ -1384,7 +1384,7 @@
     "fields": {
       "user": ["armin@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Principal Software Engineer",
       "reports_to": ["vlad@sentry.io"],
       "office": ["VIE"],
@@ -1398,7 +1398,7 @@
     "fields": {
       "user": ["justin@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Sales Manager",
       "reports_to": ["derek@sentry.io"],
       "office": ["SFO"],
@@ -1412,7 +1412,7 @@
     "fields": {
       "user": ["hanna@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Recruiter",
       "reports_to": ["saloni@sentry.io"],
       "office": ["SFO"],
@@ -1426,7 +1426,7 @@
     "fields": {
       "user": ["neil@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Sales Engineer",
       "reports_to": ["derek@sentry.io"],
       "office": ["SFO"],
@@ -1440,7 +1440,7 @@
     "fields": {
       "user": ["lauryn@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["zpropersi@sentry.io"],
       "office": ["SFO"],
@@ -1454,7 +1454,7 @@
     "fields": {
       "user": ["evan.purkhiser@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["zpropersi@sentry.io"],
       "office": ["SFO"],
@@ -1468,7 +1468,7 @@
     "fields": {
       "user": ["eralston@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["jtcunning@sentry.io"],
       "office": ["SFO"],
@@ -1482,7 +1482,7 @@
     "fields": {
       "user": ["jan.auer@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["armin@sentry.io"],
       "office": ["VIE"],
@@ -1496,7 +1496,7 @@
     "fields": {
       "user": ["jacquelynn@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Account Executive",
       "reports_to": ["derek@sentry.io"],
       "office": ["SFO"],
@@ -1510,7 +1510,7 @@
     "fields": {
       "user": ["mike@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["vlad@sentry.io"],
       "office": ["SFO"],
@@ -1524,7 +1524,7 @@
     "fields": {
       "user": ["meredith@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["adhiraj@sentry.io"],
       "office": ["SFO"],
@@ -1538,7 +1538,7 @@
     "fields": {
       "user": ["jason@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["jtcunning@sentry.io"],
       "office": ["YYZ"],
@@ -1552,7 +1552,7 @@
     "fields": {
       "user": ["axin@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Sales Development Representative",
       "reports_to": ["justin@sentry.io"],
       "office": ["SFO"],
@@ -1566,7 +1566,7 @@
     "fields": {
       "user": ["matte@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["adhiraj@sentry.io"],
       "office": ["SFO"],
@@ -1580,7 +1580,7 @@
     "fields": {
       "user": ["tgodfrey@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Sales Development Representative",
       "reports_to": ["justin@sentry.io"],
       "office": ["SFO"],
@@ -1594,7 +1594,7 @@
     "fields": {
       "user": ["chris@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Chief Creative Officer",
       "reports_to": ["david@sentry.io"],
       "office": ["SFO"],
@@ -1608,7 +1608,7 @@
     "fields": {
       "user": ["azbikowski@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["vlad@sentry.io"],
       "office": ["SFO"],
@@ -1622,7 +1622,7 @@
     "fields": {
       "user": ["don@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Account Executive",
       "reports_to": ["derek@sentry.io"],
       "office": ["SFO"],
@@ -1636,7 +1636,7 @@
     "fields": {
       "user": ["matt@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Principal Software Engineer",
       "reports_to": ["vlad@sentry.io"],
       "office": ["SFO"],
@@ -1650,7 +1650,7 @@
     "fields": {
       "user": ["kathrin@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Office Administrator",
       "reports_to": ["saloni@sentry.io"],
       "office": ["VIE"],
@@ -1664,7 +1664,7 @@
     "fields": {
       "user": ["ted@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["ted@sentry.io"],
       "office": ["SFO"],
@@ -1678,7 +1678,7 @@
     "fields": {
       "user": ["amy@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Executive Assistant",
       "reports_to": ["david@sentry.io"],
       "office": ["SFO"],
@@ -1692,7 +1692,7 @@
     "fields": {
       "user": ["cameron@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Creative Director",
       "reports_to": ["chris@sentry.io"],
       "office": ["SFO"],
@@ -1706,7 +1706,7 @@
     "fields": {
       "user": ["radu@sentry.io"],
       "dob": null,
-      "joined_at": null,
+      "date_started": null,
       "title": "Software Engineer",
       "reports_to": ["armin@sentry.io"],
       "office": ["VIE"],
@@ -1720,7 +1720,7 @@
     "fields": {
       "user": ["david@sentry.io"],
       "dob": "1985-08-12",
-      "joined_at": "2015-10-01",
+      "date_started": "2015-10-01",
       "title": "Chief Executive Officer",
       "reports_to": null,
       "office": ["SFO"],
