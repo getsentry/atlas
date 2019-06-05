@@ -18,7 +18,7 @@ const Index = () => (
     <h2>Newest Sentries</h2>
     <Query
       query={LIST_PEOPLE_QUERY}
-      variables={{ limit: 10, orderBy: "dateStarted" }}
+      variables={{ limit: 5, orderBy: "dateStarted" }}
     >
       {({ loading, error, data }) => {
         if (error) return <ErrorMessage message="Error loading people." />;
@@ -27,11 +27,11 @@ const Index = () => (
 
         return (
           <ul>
-            {users.map(p => {
+            {users.map(p => (
               <li key={p.id}>
                 <PersonLink user={p} />
-              </li>;
-            })}
+              </li>
+            ))}
           </ul>
         );
       }}
