@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.models import AnonymousUser
 from django.utils.functional import SimpleLazyObject
 
@@ -17,10 +19,11 @@ def get_user(header):
     try:
         user = User.objects.get(id=payload["uid"])
     except (TypeError, KeyError, User.DoesNotExist):
-        print("cant find user")
+        logging.error("auth.invalid-uid")
         return AnonymousUser()
 
     if security_hash(user) != payload["sh"]:
+        logging.error("auth.invalid-security-hash")
         return AnonymousUser()
 
     return user
