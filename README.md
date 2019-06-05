@@ -52,7 +52,7 @@ $ atlas loaddata fixtures/team.json
 Once you've authenticated with your Google Auth, you can sync the directory with the following command:
 
 ```shell
-$ atlas sync_users_from_google sentry.io
+$ atlas sync_google sentry.io
 ```
 
 ## Services
