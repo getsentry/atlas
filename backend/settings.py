@@ -8,9 +8,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+import logging
 import os
 
-import django_heroku
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -132,6 +132,10 @@ GRAPHENE = {"SCHEMA": "backend.root_schema.schema"}
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
 
-GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI") or "http://localhost:8080"
+if not GOOGLE_CLIENT_ID:
+    logging.warning("You have not configured GOOGLE_CLIENT_ID.")
+if not GOOGLE_CLIENT_SECRET:
+    logging.warning("You have not configured GOOGLE_CLIENT_SECRET.")
 
-django_heroku.settings(locals())
+
+GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI") or "http://localhost:8080"

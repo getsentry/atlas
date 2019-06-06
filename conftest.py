@@ -2,10 +2,16 @@ from uuid import UUID
 
 import graphene.test
 import pytest
+from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 
 from backend import factories
 from backend.root_schema import schema
+
+
+def pytest_configure(config):
+    settings.GOOGLE_CLIENT_ID = "google-client-id"
+    settings.GOOGLE_CLIENT_SECRET = "google-client-secret"
 
 
 class Context(object):
