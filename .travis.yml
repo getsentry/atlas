@@ -22,4 +22,4 @@ install:
 script:
   - git --version
   - PATH=$HOME/.poetry/bin:$PATH PATH=node_modules/.bin:$PATH pre-commit run -a -v
-  - PATH=$HOME/.poetry/bin:$PATH poetry run py.test -v --cov . --cov-report="xml:.artifacts/coverage.xml" --junit-xml=".artifacts/pytest.junit.xml"
+  - cd backend && PATH=$HOME/.poetry/bin:$PATH poetry run py.test -v --cov . --cov-report="xml:.artifacts/coverage.xml" --junit-xml=".artifacts/pytest.junit.xml"

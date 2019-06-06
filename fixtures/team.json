@@ -1,6 +1,6 @@
 [
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -14,7 +14,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -28,7 +28,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -42,7 +42,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -56,7 +56,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -70,7 +70,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -84,7 +84,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -98,7 +98,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -112,7 +112,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -126,7 +126,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -140,7 +140,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -154,7 +154,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -168,7 +168,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -182,7 +182,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -196,7 +196,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -210,7 +210,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -224,7 +224,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -238,7 +238,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -252,7 +252,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -266,7 +266,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -280,7 +280,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -294,7 +294,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -308,7 +308,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -322,7 +322,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -336,7 +336,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -350,7 +350,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -364,7 +364,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -378,7 +378,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -392,7 +392,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -406,7 +406,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -420,7 +420,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -434,7 +434,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -448,7 +448,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -462,7 +462,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -476,7 +476,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -490,7 +490,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -504,7 +504,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -518,7 +518,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -532,7 +532,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -546,7 +546,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -560,7 +560,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -574,7 +574,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -588,7 +588,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -602,7 +602,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -616,7 +616,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -630,7 +630,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -644,7 +644,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -658,7 +658,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -672,7 +672,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -686,7 +686,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -700,7 +700,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -714,7 +714,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -728,7 +728,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -742,7 +742,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -756,7 +756,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -770,7 +770,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -784,7 +784,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -798,7 +798,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -812,7 +812,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -826,7 +826,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -840,7 +840,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -854,7 +854,7 @@
     }
   },
   {
-    "model": "backend.user",
+    "model": "atlas.user",
     "fields": {
       "password": "",
       "last_login": null,
@@ -868,28 +868,28 @@
     }
   },
   {
-    "model": "backend.office",
+    "model": "atlas.office",
     "fields": {
       "name": "SFO",
       "location": null
     }
   },
   {
-    "model": "backend.office",
+    "model": "atlas.office",
     "fields": {
       "name": "VIE",
       "location": null
     }
   },
   {
-    "model": "backend.office",
+    "model": "atlas.office",
     "fields": {
       "name": "YYZ",
       "location": null
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "0fda0f27-0671-44c1-913e-e427b8cd22a2",
     "fields": {
       "user": ["maya@sentry.io"],
@@ -903,7 +903,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "1278a54d-6a4a-46b3-9387-a9d053964661",
     "fields": {
       "user": ["kamil@sentry.io"],
@@ -917,7 +917,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "16e3504a-8c76-4bc6-a1ea-2ad501c4118f",
     "fields": {
       "user": ["billy@sentry.io"],
@@ -931,7 +931,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "17367af6-bc35-45f8-9de5-6435864033ab",
     "fields": {
       "user": ["megan@sentry.io"],
@@ -945,7 +945,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "1e95d030-08cf-45b5-b6c1-56180905325c",
     "fields": {
       "user": ["saloni@sentry.io"],
@@ -959,7 +959,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "215c612b-2743-4fdf-b4d7-1928ab40beb7",
     "fields": {
       "user": ["brett@sentry.io"],
@@ -973,7 +973,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "292f3103-89c8-4834-9913-acbb205a6526",
     "fields": {
       "user": ["brianna@sentry.io"],
@@ -987,7 +987,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "2aa6e5f3-d22c-4a97-9bfc-a60a852cae6b",
     "fields": {
       "user": ["dfuller@sentry.io"],
@@ -1001,7 +1001,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "2aede3a6-e565-4c40-94ef-c2a161131f3a",
     "fields": {
       "user": ["aleal@sentry.io"],
@@ -1015,7 +1015,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "2b91174e-6fe6-4827-83ae-7017c4b01250",
     "fields": {
       "user": ["zara@sentry.io"],
@@ -1029,7 +1029,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "2c94df44-2037-4f85-99e8-35a91f83fcd2",
     "fields": {
       "user": ["dgriesser@sentry.io"],
@@ -1043,7 +1043,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "2cc12d28-5e41-41a0-9a62-bccd697768a8",
     "fields": {
       "user": ["daniel.molina@sentry.io"],
@@ -1057,7 +1057,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "33177c4c-0745-4433-a2b5-1952297c527d",
     "fields": {
       "user": ["bruno@sentry.io"],
@@ -1071,7 +1071,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "39d4a7bc-2655-4b39-bdea-d7e3463dc596",
     "fields": {
       "user": ["elizabeth@sentry.io"],
@@ -1085,7 +1085,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "39f3c9a0-0b6a-421d-8c74-020f1b5a3266",
     "fields": {
       "user": ["hannah@sentry.io"],
@@ -1099,7 +1099,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "3ac1e7ed-b414-41d6-a684-e257dbcec6ac",
     "fields": {
       "user": ["vu@sentry.io"],
@@ -1113,7 +1113,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "3cc83307-7175-472a-bbc2-906ece8a77fc",
     "fields": {
       "user": ["wcapozzoli@sentry.io"],
@@ -1127,7 +1127,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "440f95c5-0def-4765-90db-00e535c01e76",
     "fields": {
       "user": ["chris.clark@sentry.io"],
@@ -1141,7 +1141,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "45bd1b17-3a41-4187-b774-e75746445fbf",
     "fields": {
       "user": ["zpropersi@sentry.io"],
@@ -1155,7 +1155,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "4776afcc-e8bb-41ff-bfb3-9b3c2ee45af0",
     "fields": {
       "user": ["ben@sentry.io"],
@@ -1169,7 +1169,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "4933e022-0d31-4f7e-b3d4-719757c3e2c8",
     "fields": {
       "user": ["rjewett@sentry.io"],
@@ -1183,7 +1183,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "53dda6b3-0878-4399-bfad-e3f2dcf5c472",
     "fields": {
       "user": ["rick@sentry.io"],
@@ -1197,7 +1197,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "541256f2-ba10-427e-a40e-2ce0f01b391a",
     "fields": {
       "user": ["jtcunning@sentry.io"],
@@ -1211,7 +1211,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "5ec1d96f-72db-425a-aca1-077e7dc0a5c1",
     "fields": {
       "user": ["markus@sentry.io"],
@@ -1225,7 +1225,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "5f087684-4102-43db-8700-4a44983210c3",
     "fields": {
       "user": ["derek@sentry.io"],
@@ -1239,7 +1239,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "6200590c-a75f-47a6-b7bd-ed3b6d0ce921",
     "fields": {
       "user": ["lyn@sentry.io"],
@@ -1253,7 +1253,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "64d4319f-78cb-47ff-8d43-539174fc2e20",
     "fields": {
       "user": ["jordan@sentry.io"],
@@ -1267,7 +1267,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "64f90a4e-a657-4110-99e7-1422cd560095",
     "fields": {
       "user": ["anton@sentry.io"],
@@ -1281,7 +1281,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "676790e1-e3bd-40f7-b3c9-658238c748b7",
     "fields": {
       "user": ["sydney@sentry.io"],
@@ -1295,7 +1295,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "6918a6d1-4bfa-4fff-95ff-3556198b17cc",
     "fields": {
       "user": ["todd@sentry.io"],
@@ -1309,7 +1309,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "6c480ee7-6915-43cd-bc14-d5b119c1417c",
     "fields": {
       "user": ["adhiraj@sentry.io"],
@@ -1323,7 +1323,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "743229f3-eacd-4a8d-8276-87090e9860aa",
     "fields": {
       "user": ["theresa@sentry.io"],
@@ -1337,7 +1337,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "7d9468ff-1225-46ca-b9a1-b997837ed027",
     "fields": {
       "user": ["mark@sentry.io"],
@@ -1351,7 +1351,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "8279403f-6e0e-4f31-a3b7-1343933217b3",
     "fields": {
       "user": ["rvasquez@sentry.io"],
@@ -1365,7 +1365,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "8436bdbd-aa29-47d2-ac74-101d2d311e99",
     "fields": {
       "user": ["vlad@sentry.io"],
@@ -1379,7 +1379,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "889f4ad4-0250-4a23-8d84-3bb5804ed243",
     "fields": {
       "user": ["armin@sentry.io"],
@@ -1393,7 +1393,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "8c35b326-c011-4c83-ab50-5298a466a9b7",
     "fields": {
       "user": ["justin@sentry.io"],
@@ -1407,7 +1407,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "904b5828-42b6-447d-92d3-0e9735d37270",
     "fields": {
       "user": ["hanna@sentry.io"],
@@ -1421,7 +1421,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "9ceeb850-8761-4143-8b3f-2c86605ff068",
     "fields": {
       "user": ["neil@sentry.io"],
@@ -1435,7 +1435,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "9e584570-ed52-438b-9eb4-487a0ac8b10f",
     "fields": {
       "user": ["lauryn@sentry.io"],
@@ -1449,7 +1449,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "a21fad8b-93cb-4960-801e-c84d6d02c322",
     "fields": {
       "user": ["evan.purkhiser@sentry.io"],
@@ -1463,7 +1463,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "a54e6a4a-a65a-4135-b725-812827d9000c",
     "fields": {
       "user": ["eralston@sentry.io"],
@@ -1477,7 +1477,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "ad3e5e30-ac31-466b-98a8-72d1bd9c7e66",
     "fields": {
       "user": ["jan.auer@sentry.io"],
@@ -1491,7 +1491,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "b0cf8799-41ac-4feb-981e-8506acfe5375",
     "fields": {
       "user": ["jacquelynn@sentry.io"],
@@ -1505,7 +1505,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "b32661da-5526-4f6a-8850-cc496e9dbf7a",
     "fields": {
       "user": ["mike@sentry.io"],
@@ -1519,7 +1519,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "b93ee240-bc6b-45e2-87e2-dc06fff911aa",
     "fields": {
       "user": ["meredith@sentry.io"],
@@ -1533,7 +1533,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "c1d6fb49-7059-4d39-bc70-b5d7dd9cbab3",
     "fields": {
       "user": ["jason@sentry.io"],
@@ -1547,7 +1547,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "ccf60f02-7e42-4dde-8de6-3cef1a6b8310",
     "fields": {
       "user": ["axin@sentry.io"],
@@ -1561,7 +1561,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "d1632dda-d862-4771-bd74-5ce5818f13fc",
     "fields": {
       "user": ["matte@sentry.io"],
@@ -1575,7 +1575,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "d9afe401-91db-485c-ba1b-a9415cf29ba5",
     "fields": {
       "user": ["tgodfrey@sentry.io"],
@@ -1589,7 +1589,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "e2df587d-1d3f-4ac0-a34d-3d596f1cfe0f",
     "fields": {
       "user": ["chris@sentry.io"],
@@ -1603,7 +1603,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "e66493d0-503b-4876-a995-5df6a02f16ab",
     "fields": {
       "user": ["azbikowski@sentry.io"],
@@ -1617,7 +1617,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "ec73d886-f32e-447c-8c1e-df48127822f1",
     "fields": {
       "user": ["don@sentry.io"],
@@ -1631,7 +1631,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "f1465028-5655-4d7a-b83f-5b607c1b1894",
     "fields": {
       "user": ["matt@sentry.io"],
@@ -1645,7 +1645,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "f2f9eaa4-58b6-45f7-84d4-276930c2ea99",
     "fields": {
       "user": ["kathrin@sentry.io"],
@@ -1659,7 +1659,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "f9b93945-b33d-42e0-ae16-6ce05c3e6312",
     "fields": {
       "user": ["ted@sentry.io"],
@@ -1673,7 +1673,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "fa49d279-5145-4ead-80fd-7748aa79d0aa",
     "fields": {
       "user": ["amy@sentry.io"],
@@ -1687,7 +1687,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "fbfccac5-dce3-41e4-8185-14350dadbd4b",
     "fields": {
       "user": ["cameron@sentry.io"],
@@ -1701,7 +1701,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "fe2406fb-54f9-46ef-97c3-34132205d7fb",
     "fields": {
       "user": ["radu@sentry.io"],
@@ -1715,7 +1715,7 @@
     }
   },
   {
-    "model": "backend.profile",
+    "model": "atlas.profile",
     "pk": "fe3e20dd-2d13-4148-9658-4e2a2425bd36",
     "fields": {
       "user": ["david@sentry.io"],

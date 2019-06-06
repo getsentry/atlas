@@ -1,3 +1,6 @@
 Dockerfile
+cloudbuild.yaml
 .dockerignore
 .venv
+node_modules
+.git

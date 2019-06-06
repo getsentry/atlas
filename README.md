@@ -119,3 +119,31 @@ To launch the frontend service run the following:
 ```shell
 $ cd frontend && npm run dev
 ```
+
+## Repository Layout
+
+```
+atlas
+├── backend
+|   ├── atlas               // python backend service
+|   |   ├── models          // database schema
+|   |   ├── mutations       // registered mutations
+|   |   └── queries         // registered queries
+├── frontend
+|   ├── components          // standard react components
+|   ├── pages               // next.js pages
+|   └── redux               // redux support
+└── proxy
+```
+
+### Data Model
+
+- Most models contain a GUID (UUID) primary key.
+
+```
+atlas
+├── Office
+└── User
+    ├── Profile
+    └── Identity
+```
