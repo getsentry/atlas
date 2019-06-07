@@ -16,8 +16,3 @@ steps:
           ) &
         done
         wait
-images:
-  - "gcr.io/$PROJECT_ID/atlas-backend:$COMMIT_SHA"
-  - "gcr.io/$PROJECT_ID/atlas-backend:latest"
-  - "gcr.io/$PROJECT_ID/atlas-frontend:$COMMIT_SHA"
-  - "gcr.io/$PROJECT_ID/atlas-frontend:latest"

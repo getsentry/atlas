@@ -1,15 +1,19 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['pull', 'gcr.io/$PROJECT_ID/atlas-frontend']
+  entrypoint: 'bash'
+  args: [
+    '-c',
+    'docker pull us.gcr.io/$PROJECT_ID/$atlas-backend:latest || true',
+  ]
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
-    '--cache-from', 'gcr.io/$PROJECT_ID/atlas-frontend:latest',
+    '--cache-from', 'us.gcr.io/$PROJECT_ID/atlas-frontend:latest',
     '--build-arg', 'BUILD_REVISION=$COMMIT_SHA',
-    '-t', 'gcr.io/$PROJECT_ID/atlas-frontend:$COMMIT_SHA',
-    '-t', 'gcr.io/$PROJECT_ID/atlas-frontend:latest',
+    '-t', 'us.gcr.io/$PROJECT_ID/atlas-frontend:$COMMIT_SHA',
+    '-t', 'us.gcr.io/$PROJECT_ID/atlas-frontend:latest',
     '.'
   ]
 images:
-- 'gcr.io/$PROJECT_ID/atlas-frontend:$COMMIT_SHA'
-- 'gcr.io/$PROJECT_ID/atlas-frontend:latest'
+- 'us.gcr.io/$PROJECT_ID/atlas-frontend:$COMMIT_SHA'
+- 'us.gcr.io/$PROJECT_ID/atlas-frontend:latest'
