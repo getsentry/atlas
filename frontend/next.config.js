@@ -8,7 +8,7 @@ module.exports = withCSS(
       SENTRY_DSN: process.env.SENTRY_DSN,
       GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID
     },
-    target: "serverless",
+    target: "server",
     webpack: (config, { isServer, buildId }) => {
       config.plugins.push(
         new webpack.DefinePlugin({
