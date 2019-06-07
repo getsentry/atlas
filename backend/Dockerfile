@@ -16,16 +16,16 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 RUN set -ex \
-    && apt-get update && apt-get install -y --no-install-recommends \
-        build-essential \
-        ca-certificates \
-        curl \
-        gcc \
-        git \
-        gosu \
-        libffi-dev \
-        libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+  && apt-get update && apt-get install -y --no-install-recommends \
+  build-essential \
+  ca-certificates \
+  curl \
+  gcc \
+  git \
+  gosu \
+  libffi-dev \
+  libpq-dev \
+  && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/0.12.16/get-poetry.py | python \
   && poetry config settings.virtualenvs.create false
@@ -33,6 +33,8 @@ RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/0.12.16/get-poe
 RUN pip install "pip==$PIP_VERSION"
 
 COPY pyproject.toml poetry.lock /usr/src/app/
+# HACK(dcramer): we need the atlas module to be installable at this stage
+RUN mkdir atlas && touch atlas/__init__.py
 RUN poetry install --no-dev
 
 COPY . /usr/src/app/
