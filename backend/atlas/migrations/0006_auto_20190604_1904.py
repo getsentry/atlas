@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [(" atlas" "0005_identity_is_admin")]
+    dependencies = [("atlas", "0005_identity_is_admin")]
 
     operations = [
         migrations.AddField(

@@ -5,7 +5,7 @@ import pytest
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 
-from backend import factories
+from atlas import factories
 from atlas.root_schema import schema
 
 

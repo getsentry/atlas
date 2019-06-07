@@ -5,7 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [(" atlas" "0006_auto_20190604_1904")]
+    dependencies = [("atlas", "0006_auto_20190604_1904")]
 
     operations = [
         migrations.RenameField(

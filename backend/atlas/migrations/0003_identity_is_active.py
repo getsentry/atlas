@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [(" atlas" "0002_profile_photo_url")]
+    dependencies = [("atlas", "0002_profile_photo_url")]
 
     operations = [
         migrations.AddField(
