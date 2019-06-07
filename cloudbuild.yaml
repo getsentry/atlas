@@ -12,7 +12,12 @@ steps:
 
           echo "Building $d ... "
           (
-            gcloud builds submit $d --config=${config}
+            gcloud builds submit $d --substitutions=COMMIT_SHA=$COMMIT_SHA --config=${config}
           ) &
         done
         wait
+images:
+  - "gcr.io/$PROJECT_ID/atlas-backend:$COMMIT_SHA"
+  - "gcr.io/$PROJECT_ID/atlas-backend:latest"
+  - "gcr.io/$PROJECT_ID/atlas-frontend:$COMMIT_SHA"
+  - "gcr.io/$PROJECT_ID/atlas-frontend:latest"
