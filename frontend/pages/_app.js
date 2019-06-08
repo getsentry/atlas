@@ -100,16 +100,19 @@ class DefaultApp extends App {
                 if (curToken && res.isSignedIn && res.isSignedIn.get()) {
                   // res.currentUser.get().getAuthResponse().id_token
                   actions.reauth(curToken)(this.props.store.dispatch);
+                  this.setState({ loading: false });
                 } else {
                   actions.logout();
-                  Router.push("/login");
+                  Router.push("/login").then(() => {
+                    this.setState({ loading: false });
+                  });
                 }
-                this.setState({ loading: false });
               })
               .catch(err => {
                 actions.logout();
-                Router.push("/login");
-                this.setState({ loading: false });
+                Router.push("/login").then(() => {
+                  this.setState({ loading: false });
+                });
                 throw err;
               });
           }
