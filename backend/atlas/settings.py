@@ -139,3 +139,9 @@ if not GOOGLE_CLIENT_SECRET:
 
 
 GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI") or "http://localhost:8080"
+
+GOOGLE_FIELD_MAP = (
+    # "column" => "SchemaName/FieldName"
+    ("date_started", "Profile/Date_of_Hire"),
+    ("dob", "Profile/Date_of_Birth"),
+)

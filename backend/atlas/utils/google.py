@@ -163,14 +163,26 @@ def sync_user(  # NOQA
             profile_fields["office"] = None
 
     # 'customSchemas': {'Profile': {'Date_of_Hire': '2015-10-01', 'Date_of_Birth': '1985-08-12'}
-    if data.get("customSchemas") and "Profile" in data["customSchemas"]:
-        custom_profile = data["customSchemas"]["Profile"]
-        date_of_hire = to_date(custom_profile["Date_of_Hire"])
-        if date_of_hire != profile.date_started:
-            profile_fields["date_started"] = date_of_hire
-        date_of_birth = to_date(custom_profile["Date_of_Birth"])
-        if date_of_birth != profile.dob:
-            profile_fields["dob"] = date_of_birth
+    if data.get("customSchemas"):
+        schemas = data.get("customSchemas")
+        for attribute_name, field_path in settings.GOOGLE_FIELD_MAP:
+            cur_path = schemas
+            for bit in field_path.split("/"):
+                cur_path = cur_path[bit]
+            value = cur_path or None
+            if value and attribute_name in ("date_started", "dob"):
+                value = to_date(value)
+            if getattr(profile, attribute_name) != value:
+                profile_fields[attribute_name] = value
+
+        if data["customSchemas"] != profile.config:
+            profile_fields["config"] = data["customSchemas"]
+    else:
+        if profile.config:
+            profile_fields["config"] = {}
+        for attribute_name, _ in settings.GOOGLE_FIELD_MAP:
+            if getattr(profile, attribute_name):
+                profile_fields[attribute_name] = None
 
     if user_fields:
         User.objects.filter(id=user.id).update(**user_fields)

@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from django.conf import settings
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 
@@ -20,6 +21,7 @@ class Profile(models.Model):
     office = models.ForeignKey("atlas.Office", null=True, on_delete=models.SET_NULL)
     photo_url = models.URLField(null=True)
     department = models.TextField(null=True)
+    config = JSONField(default=dict)
 
     class Meta:
         db_table = "profile"
