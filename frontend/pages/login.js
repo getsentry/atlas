@@ -3,8 +3,10 @@ import fetch from "isomorphic-unfetch";
 import { connect } from "react-redux";
 
 import actions from "../redux/actions";
+import colors from "../colors";
 import Layout from "../components/Layout";
 import { login } from "../utils/auth";
+const GOOGLE_BLUE = "#4285F4";
 
 class Login extends Component {
   static getInitialProps({ req }) {
@@ -70,40 +72,56 @@ class Login extends Component {
     return (
       <Layout noHeader noAuth>
         <div className="login">
+          <h1>Atlas</h1>
+          <p>You'll need to sign in to continue.</p>
+          <button onClick={this.props.login}>
+            <span className="icon"></span>
+            <span className="text">Sign in with Google</span>
+          </button>
           <p>
-            You'll need to login to continue. Make sure to disable Adblock as it
-            causes issues with Google Auth.
+            <small>
+              Make sure to disable Adblock as it causes issues with Google Auth.
+            </small>
           </p>
-          <button onClick={this.props.login}>Login with Google</button>
         </div>
         <style jsx>{`
+          @font-face {
+            font-family: "Roboto";
+            font-weight: 500;
+            src: url("/static/fonts/Roboto-Medium.ttf") format("truetype");
+          }
           .login {
-            max-width: 340px;
+            max-width: 450px;
             margin: 0 auto;
             padding: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
           }
-          form {
+          button {
+            font-family: "Roboto";
+            border: 1px solid ${GOOGLE_BLUE};
+            background: ${GOOGLE_BLUE};
+            color: #fff;
+            padding: 0;
             display: flex;
-            flex-flow: column;
+            align-items: center;
+            border-radius: 2px;
+            cursor: pointer;
           }
-          label {
-            font-weight: 600;
+          button:active,
+          button:hover {
+            background: #3367D6;
           }
-          input {
+          button .icon {
+            width: 37px;
+            height: 36px;
             padding: 8px;
-            margin: 0.3rem 0 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            background: #fff url("/static/images/google-icon.svg") no-repeat center center;
+            background-size: 18px;
+            border-right: 1px solid ${GOOGLE_BLUE};
           }
-          .error {
-            margin: 0.5rem 0 0;
-            display: none;
-            color: brown;
-          }
-          .error.show {
-            display: block;
+          button .text {
+            height: 100%;
+            padding: 8px;
+            flex: 1;
           }
         `}</style>
       </Layout>

@@ -61,6 +61,13 @@ class Layout extends Component {
               "Segoe UI Emoji", "Segoe UI Symbol";
             font-size: 0.95rem;
           }
+          button,
+          input {
+            font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI",
+              Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+              "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 0.95rem;
+          }
           p {
             line-height: 1.8;
           }
