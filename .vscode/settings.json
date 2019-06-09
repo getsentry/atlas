@@ -27,5 +27,5 @@
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
   "python.formatting.provider": "black",
-  "python.pythonPath": "${workspaceFolder}/.venv"
+  "python.pythonPath": "${workspaceFolder}/backend/.venv"
 }
