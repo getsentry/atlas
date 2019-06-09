@@ -39,11 +39,13 @@ SENTRY_DSN=
 
 ## Mock Data
 
-You can load an example data set of Sentry's team with the following command:
+You can load some example mock data with a basic organization structure by running the following command:
 
 ```shell
-$ atlas loaddata fixtures/team.json
+$ atlas load_mocks
 ```
+
+Note: If you run this multiple times you will end up with multiple similar profiles, as they're not unique.
 
 ## Syncing People
 
