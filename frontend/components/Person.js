@@ -21,6 +21,7 @@ export const PERSON_QUERY = gql`
         }
       }
       profile {
+        handle
         department
         dobMonth
         dobDay

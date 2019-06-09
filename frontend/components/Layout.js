@@ -116,6 +116,56 @@ class Layout extends Component {
             padding-left: 1rem;
             padding-right: 1rem;
           }
+
+          label {
+            font-weight: 400;
+            display: inline-block;
+            margin-bottom: 5px;
+          }
+          button,
+          input,
+          optgroup,
+          select,
+          textarea {
+            margin: 0;
+          }
+          button,
+          input {
+            overflow: visible;
+          }
+          input[type="text"],
+          input[type="date"] {
+            width: 100%;
+            padding: 0.375rem 0.75rem;
+            line-height: 1.5;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color 0.1s ease-in-out,
+              box-shadow 0.1s ease-in-out;
+            background: #fff;
+            color: #495057;
+          }
+          button {
+            display: inline-block;
+            font-weight: 400;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            padding: 0.375rem 0.75rem;
+            line-height: 1.5;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            background: #fff;
+            color: #495057;
+            transition: color 0.1s ease-in-out,
+              background-color 0.1s ease-in-out, border-color 0.15s ease-in-out,
+              box-shadow 0.1s ease-in-out;
+          }
+          button:hover {
+            background: ${colors.primary};
+            border-color: ${colors.primary};
+            color: #fff;
+          }
         `}</style>
         {this.renderBody()}
       </React.Fragment>

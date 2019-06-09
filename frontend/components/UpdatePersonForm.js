@@ -5,22 +5,11 @@ import gql from "graphql-tag";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 
+import withApollo from "../utils/apollo";
 import { PERSON_QUERY } from "../components/Person";
 
-const FieldWrapper = ({ name, label, type }) => {
-  return (
-    <div>
-      <label>{label}</label>
-      <Field type={type} name={name} />
-      <ErrorMessage name={name} />
-    </div>
-  );
-};
-
 const RestrictedUserSchema = yup.object().shape({
-  profile: {
-    handle: yup.string()
-  }
+  handle: yup.string()
 });
 
 const FullUserSchema = yup.object().shape({
@@ -33,29 +22,31 @@ const FullUserSchema = yup.object().shape({
 });
 
 export const PERSON_MUTATION = gql`
-  mutation updatePerson($id: UUID!) {
-    updateUser(id: $id) {
-      id
-      name
-      email
-      reports {
+  mutation updatePerson(
+    $user: UUID!
+    $name: String
+    $handle: String
+    $title: String
+    $department: String
+    $dateOfBirth: Date
+    $dateStarted: Date
+  ) {
+    updateUser(
+      user: $user
+      name: $name
+      handle: $handle
+      title: $title
+      department: $department
+      dateOfBirth: $dateOfBirth
+      dateStarted: $dateStarted
+    ) {
+      ok
+      errors
+      user {
         id
         name
-        profile {
-          title
-          photoUrl
-        }
-      }
-      profile {
-        department
-        title
-        dateOfBirth
-        dateStarted
-        photoUrl
-        office {
-          name
-        }
-        reportsTo {
+        email
+        reports {
           id
           name
           profile {
@@ -63,12 +54,46 @@ export const PERSON_MUTATION = gql`
             photoUrl
           }
         }
+        profile {
+          handle
+          department
+          title
+          dateOfBirth
+          dateStarted
+          photoUrl
+          office {
+            name
+          }
+          reportsTo {
+            id
+            name
+            profile {
+              title
+              photoUrl
+            }
+          }
+        }
       }
     }
   }
 `;
 
-export default class UpdatePerson extends Component {
+const FieldWrapper = ({ name, label, type }) => {
+  return (
+    <div>
+      <label>{label}</label>
+      <Field type={type} name={name} />
+      <ErrorMessage name={name} />
+      <style jsx>{`
+        div {
+          margin-bottom: 1rem;
+        }
+      `}</style>
+    </div>
+  );
+};
+
+class UpdatePersonForm extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired
   };
@@ -108,7 +133,13 @@ export default class UpdatePerson extends Component {
                 validationSchema={FullUserSchema}
                 onSubmit={(values, { setSubmitting }) => {
                   setTimeout(() => {
-                    alert(JSON.stringify(values, null, 2));
+                    this.props.apolloClient.mutate({
+                      mutation: PERSON_MUTATION,
+                      variables: {
+                        user: this.props.id,
+                        ...values
+                      }
+                    });
                     setSubmitting(false);
                   }, 400);
                 }}
@@ -116,7 +147,11 @@ export default class UpdatePerson extends Component {
                 {({ isSubmitting }) => (
                   <Form>
                     <h2>Basics</h2>
-                    <FieldWrapper type="text" name="name" label="Name (Gven)" />
+                    <FieldWrapper
+                      type="text"
+                      name="name"
+                      label="Name (Given)"
+                    />
                     <FieldWrapper
                       type="text"
                       name="handle"
@@ -154,3 +189,5 @@ export default class UpdatePerson extends Component {
     );
   }
 }
+
+export default withApollo(UpdatePersonForm);

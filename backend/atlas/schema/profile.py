@@ -12,6 +12,7 @@ class ProfileNode(DjangoObjectType):
     reports_to = graphene.Field("atlas.schema.UserNode", required=False)
     office = graphene.Field("atlas.schema.OfficeNode", required=False)
     date_started = graphene.Date(required=False)
+    date_of_birth = graphene.Date(required=False)
 
     class Meta:
         model = Profile
@@ -25,6 +26,15 @@ class ProfileNode(DjangoObjectType):
             "photo_url",
             "department",
         )
+
+    def resolve_date_of_birth(self, info):
+        current_user = info.context.user
+        if not current_user.is_authenticated:
+            return None
+        if current_user.is_superuser:
+            return self.date_of_birth
+        if current_user.id == self.id:
+            return self.date_of_birth
 
     def resolve_dob_month(self, info):
         if not self.date_of_birth:

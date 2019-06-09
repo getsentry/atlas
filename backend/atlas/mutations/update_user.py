@@ -7,10 +7,10 @@ from atlas.schema import UserNode
 
 def is_chain_of_command(user, maybe_manager):
     cur_user = user
-    while cur_user.reports_to_id:
-        if cur_user.reports_to_id == maybe_manager.id:
+    while cur_user.profile.reports_to_id:
+        if cur_user.profile.reports_to_id == maybe_manager.id:
             return True
-        cur_user = cur_user.reports_to
+        cur_user = cur_user.profile.reports_to
     return False
 
 
@@ -77,10 +77,12 @@ class UpdateUser(graphene.Mutation):
                     updates[model][field] = value
 
             for model, values in updates.items():
-                if updates:
+                if values:
                     if model is User:
                         instance = user
                     elif model is Profile:
                         instance = profile
-                    instance.save(update_fields=values)
+                    for key, value in values.items():
+                        setattr(instance, key, value)
+                    instance.save(update_fields=values.keys())
         return UpdateUser(ok=True, user=user)
