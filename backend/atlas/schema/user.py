@@ -16,7 +16,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     class Meta:
         model = User
         name = "User"
-        only_fields = ("id", "email", "name")
+        only_fields = ("id", "email", "name", "is_superuser")
 
     def resolve_email(self, info):
         user = info.context.user

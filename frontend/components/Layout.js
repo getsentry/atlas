@@ -145,6 +145,9 @@ class Layout extends Component {
             background: #fff;
             color: #495057;
           }
+          input:disabled {
+            background: #ced4da;
+          }
           button {
             display: inline-block;
             font-weight: 400;

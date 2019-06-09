@@ -78,11 +78,11 @@ export const PERSON_MUTATION = gql`
   }
 `;
 
-const FieldWrapper = ({ name, label, type }) => {
+const FieldWrapper = ({ name, label, type, readonly }) => {
   return (
     <div>
       <label>{label}</label>
-      <Field type={type} name={name} />
+      <Field type={type} name={name} disabled={readonly} />
       <ErrorMessage name={name} />
       <style jsx>{`
         div {
@@ -107,6 +107,7 @@ class UpdatePersonForm extends Component {
           if (!data.users.length)
             return <ErrorMessage message="Couldn't find that person." />;
           const user = data.users[0];
+          const isRestricted = true;
           const initialValues = {
             name: user.name,
             handle: user.profile.handle,
@@ -151,6 +152,7 @@ class UpdatePersonForm extends Component {
                       type="text"
                       name="name"
                       label="Name (Given)"
+                      readonly={isRestricted}
                     />
                     <FieldWrapper
                       type="text"
@@ -161,19 +163,27 @@ class UpdatePersonForm extends Component {
                       type="date"
                       name="dateOfBirth"
                       label="Date of Birth"
+                      readonly={isRestricted}
                     />
 
                     <h2>Role</h2>
-                    <FieldWrapper type="text" name="title" label="Title" />
+                    <FieldWrapper
+                      type="text"
+                      name="title"
+                      label="Title"
+                      readonly={isRestricted}
+                    />
                     <FieldWrapper
                       type="text"
                       name="department"
                       label="Department"
+                      readonly={isRestricted}
                     />
                     <FieldWrapper
                       type="date"
                       name="dateStarted"
                       label="Start Date"
+                      readonly={isRestricted}
                     />
 
                     <button type="submit" disabled={isSubmitting}>
