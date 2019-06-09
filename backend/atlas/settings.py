@@ -137,4 +137,5 @@ GOOGLE_FIELD_MAP = (
     # "column" => "SchemaName/FieldName"
     ("date_started", "Profile/Date_of_Hire"),
     ("date_of_birth", "Profile/Date_of_Birth"),
+    ("handle", "Profile/Handle"),
 )

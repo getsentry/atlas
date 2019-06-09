@@ -6,9 +6,11 @@ import gql from "graphql-tag";
 import ErrorMessage from "./ErrorMessage";
 import PersonLink from "./PersonLink";
 
-export const PERSON_QUERY = gql`
-  query getPerson($id: UUID!) {
-    users(id: $id) {
+import { PERSON_QUERY } from "../components/Person";
+
+export const PERSON_MUTATION = gql`
+  mutation updatePerson($id: UUID!) {
+    updateUser(id: $id) {
       id
       name
       email
@@ -25,7 +27,7 @@ export const PERSON_QUERY = gql`
         dobMonth
         dobDay
         title
-        dateStarted
+        joinedAt
         photoUrl
         office {
           name
@@ -43,7 +45,7 @@ export const PERSON_QUERY = gql`
   }
 `;
 
-export default class Person extends Component {
+export default class UpdatePerson extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired
   };
@@ -72,44 +74,6 @@ export default class Person extends Component {
                 `}
               </style>
               <h1>{thisPerson.name}</h1>
-              <h4>{thisPerson.profile.title}</h4>
-              <img src={thisPerson.profile.photoUrl} />
-              <dl>
-                <dt>Department</dt>
-                <dd>{thisPerson.profile.department || "n/a"}</dd>
-                <dt>Start Date</dt>
-                <dd>{thisPerson.profile.dateStarted || "n/a"}</dd>
-                <dt>Reports To</dt>
-                <dd>
-                  {thisPerson.profile.reportsTo ? (
-                    <PersonLink user={thisPerson.profile.reportsTo} />
-                  ) : (
-                    "n/a"
-                  )}
-                </dd>
-                <dt>Office</dt>
-                <dd>
-                  {thisPerson.profile.office
-                    ? thisPerson.profile.office.name
-                    : "n/a"}
-                </dd>
-                <dt>Birthday</dt>
-                <dd>
-                  {thisPerson.profile.dobMonth
-                    ? `${thisPerson.profile.dobMonth}-${
-                        thisPerson.profile.dobDay
-                      }`
-                    : "n/a"}
-                </dd>
-              </dl>
-              <h3>Reports</h3>
-              <ul>
-                {thisPerson.reports.map(p => (
-                  <li key={p.id}>
-                    <PersonLink user={p} />
-                  </li>
-                ))}
-              </ul>
             </section>
           );
         }}

@@ -31,7 +31,14 @@ const Index = () => (
         if (error) return <ErrorMessage message="Error loading people." />;
         if (loading) return <div>Loading</div>;
         const { users } = data;
-
+        if (!users.length) {
+          return (
+            <p>
+              It looks like there's been no newly added teammates in the last
+              month.
+            </p>
+          );
+        }
         return (
           <ul>
             {users.map(p => (

@@ -5,6 +5,7 @@ from atlas.models import Profile
 
 
 class ProfileNode(DjangoObjectType):
+    handle = graphene.String(required=False)
     title = graphene.String(required=False)
     dob_day = graphene.Int(required=False)
     dob_month = graphene.Int(required=False)
@@ -16,6 +17,7 @@ class ProfileNode(DjangoObjectType):
         model = Profile
         name = "Profile"
         only_fields = (
+            "handle",
             "reports_to",
             "title",
             "date_started",
