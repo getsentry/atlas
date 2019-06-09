@@ -34,6 +34,13 @@ app.prepare().then(() => {
     return app.render(req, res, "/person", { ...req.params, ...req.query });
   });
 
+  server.get("/people/:id/update", (req, res) => {
+    return app.render(req, res, "/updatePerson", {
+      ...req.params,
+      ...req.query
+    });
+  });
+
   server.get("*", (req, res) => {
     return handle(req, res);
   });
