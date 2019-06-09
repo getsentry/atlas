@@ -1,12 +1,12 @@
 import logging
 
 import graphene
-from graphene_django.types import DjangoObjectType
+import graphene_django_optimizer as gql_optimizer
 
 from atlas.models import Profile, User
 
 
-class UserNode(DjangoObjectType):
+class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     email = graphene.String(required=False)
     profile = graphene.Field("atlas.schema.ProfileNode")
     office = graphene.Field("atlas.schema.OfficeNode")
@@ -24,6 +24,9 @@ class UserNode(DjangoObjectType):
             return self.email
         return None
 
+    # TODO(dcramer):
+    # if "numReports" in selected_fields:
+    #     queryset = queryset.annotate(num_reports=Count("reports"))
     def resolve_num_reports(self, info):
         if not self.id:
             return 0
@@ -32,6 +35,7 @@ class UserNode(DjangoObjectType):
         logging.warning("Uncached resolution for UserNode.num_reports")
         return Profile.objects.filter(reports_to=self.id).count()
 
+    @gql_optimizer.resolver_hints(prefetch_related=("reports", "reports__user"))
     def resolve_reports(self, info):
         if not self.id:
             return 0

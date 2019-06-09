@@ -249,6 +249,14 @@ six = ">=1.10.0"
 
 [[package]]
 category = "main"
+description = "Optimize database access inside graphene queries."
+name = "graphene-django-optimizer"
+optional = false
+python-versions = "*"
+version = "0.4.0"
+
+[[package]]
+category = "main"
 description = "GraphQL implementation for Python"
 name = "graphql-core"
 optional = false
@@ -695,7 +703,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "2d2e3dc01e7935f7e0677304bacac5fc3dc82f1730d1c14b5cb3a650e22cb170"
+content-hash = "f8834c26b189bd058b0e88dc6802bca57027d38a84655fc9ac490045847157df"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -723,6 +731,7 @@ flake8 = ["859996073f341f2670741b51ec1e67a01da142831aa1fdc6242dbf88dffbe661", "a
 google-auth = ["0f7c6a64927d34c1a474da92cfc59e552a5d3b940d3266606c6a28b72888b9e4", "20705f6803fd2c4d1cc2dcb0df09d4dfcb9a7d51fd59e94a3a28231fd93119ed"]
 graphene = ["6d6a68c7b3b40325bf9af8a3dca22639f5a57eededf4449c1db198d7eb117af7", "8eee7e2ae9c22d01cf85a43f8c1aeb776a478bc2e20e0ca8d5fb17ba4b9f4767"]
 graphene-django = ["3afd81d47c8b702650e05cc1179fac1cfceae991d241bb164d51f28bed9ec95c", "760a18068feb5457e2ec00d2447c09b2fbac2a6b8c32cc8be2abce3752107ad3"]
+graphene-django-optimizer = ["8d1d73514ec892e6307f90f8035db47cf6b75f3a0188d58848b1d7261f056e86", "9632998a7e3303ebe95a2df6dadcc1d4d137d5946e6c03a2680ce620b49408e2"]
 graphql-core = ["60ef8277b82aaad49e87154a0288a9542a82a63909568375712f826b1c280ef5", "6288fe97c32d2f868a2dfe62e766dc85d48c96c1d085294edf44714190f2e4f3"]
 graphql-relay = ["2716b7245d97091af21abf096fabafac576905096d21ba7118fba722596f65db"]
 gunicorn = ["aa8e0b40b4157b36a5df5e599f45c9c76d6af43845ba3b3b0efe2c70473c2471", "fa2662097c66f920f53f70621c6c58ca4a3c4d3434205e608e121b5b3b71f4f3"]

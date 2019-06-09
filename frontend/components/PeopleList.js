@@ -5,8 +5,24 @@ import ErrorMessage from "./ErrorMessage";
 import PersonLink from "./PersonLink";
 
 export const LIST_PEOPLE_QUERY = gql`
-  query listPeople($offset: Int, $limit: Int, $orderBy: UserOrderBy) {
-    users(offset: $offset, limit: $limit, orderBy: $orderBy) {
+  query listPeople(
+    $office: UUID
+    $dateStartedAfter: Date
+    $query: String
+    $includeSelf: Boolean
+    $orderBy: UserOrderBy
+    $offset: Int
+    $limit: Int
+  ) {
+    users(
+      office: $office
+      dateStartedAfter: $dateStartedAfter
+      query: $query
+      includeSelf: $includeSelf
+      orderBy: $orderBy
+      offset: $offset
+      limit: $limit
+    ) {
       id
       name
       profile {

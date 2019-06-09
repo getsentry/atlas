@@ -25,11 +25,11 @@ class ProfileNode(DjangoObjectType):
         )
 
     def resolve_dob_month(self, info):
-        if not self.dob:
+        if not self.date_of_birth:
             return None
-        return self.dob.month
+        return self.date_of_birth.month
 
     def resolve_dob_day(self, info):
-        if not self.dob:
+        if not self.date_of_birth:
             return None
-        return self.dob.day
+        return self.date_of_birth.day

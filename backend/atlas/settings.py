@@ -35,23 +35,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "atlas",
-    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    # "django.contrib.staticfiles",
     "graphene_django",
+    "atlas",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "atlas.middleware.auth.JWSTokenAuthenticationMiddleware",
 ]
@@ -143,5 +136,5 @@ GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI") or "http://localhost
 GOOGLE_FIELD_MAP = (
     # "column" => "SchemaName/FieldName"
     ("date_started", "Profile/Date_of_Hire"),
-    ("dob", "Profile/Date_of_Birth"),
+    ("date_of_birth", "Profile/Date_of_Birth"),
 )

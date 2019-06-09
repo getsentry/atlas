@@ -170,7 +170,7 @@ def sync_user(  # NOQA
             for bit in field_path.split("/"):
                 cur_path = cur_path[bit]
             value = cur_path or None
-            if value and attribute_name in ("date_started", "dob"):
+            if value and attribute_name.startswith("date_"):
                 value = to_date(value)
             if getattr(profile, attribute_name) != value:
                 profile_fields[attribute_name] = value

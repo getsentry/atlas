@@ -1,9 +1,9 @@
 import graphene
+import graphene_django_optimizer as gql_optimizer
 from graphql.error import GraphQLError
 
 from atlas.models import Office
 from atlas.schema import OfficeNode
-from atlas.utils.graphene import optimize_queryset
 
 
 class Query(object):
@@ -39,8 +39,6 @@ class Query(object):
         if query:
             qs = qs.filter(name__istartswith=query)
 
-        qs = optimize_queryset(qs, info, "offices")
+        qs = qs.order_by("name")
 
-        qs = qs.order_by("name")[offset:limit]
-
-        return qs
+        return gql_optimizer.query(qs, info)[offset:limit]

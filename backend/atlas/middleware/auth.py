@@ -37,5 +37,6 @@ class JWSTokenAuthenticationMiddleware(object):
         header = request.META.get("HTTP_AUTHORIZATION")
         if header:
             request.user = SimpleLazyObject(lambda: get_user(header))
-
+        else:
+            request.user = AnonymousUser()
         return self.get_response(request)

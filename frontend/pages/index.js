@@ -1,5 +1,6 @@
 import { Query } from "react-apollo";
 import { connect } from "react-redux";
+import moment from "moment";
 import Link from "next/link";
 
 import initialize from "../utils/initialize";
@@ -18,7 +19,13 @@ const Index = () => (
     <h2>Newest Sentries</h2>
     <Query
       query={LIST_PEOPLE_QUERY}
-      variables={{ limit: 5, orderBy: "dateStarted" }}
+      variables={{
+        limit: 5,
+        dateStartedAfter: moment()
+          .subtract(1, "months")
+          .format("YYYY-MM-DD"),
+        orderBy: "dateStarted"
+      }}
     >
       {({ loading, error, data }) => {
         if (error) return <ErrorMessage message="Error loading people." />;
