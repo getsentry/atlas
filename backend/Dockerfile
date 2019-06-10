@@ -44,4 +44,4 @@ EXPOSE 8080
 
 ENTRYPOINT ["docker-entrypoint"]
 
-CMD ["web"]
+CMD ["atlas", "web"]
