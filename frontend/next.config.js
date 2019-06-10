@@ -18,8 +18,10 @@ module.exports = withCSS(
       config.plugins.push(
         new webpack.DefinePlugin({
           "process.env.SENTRY_RELEASE": JSON.stringify(buildId),
-          "process.env.SENTRY_DSN": JSON.stringify(process.env.SENTRY_DSN)
-          "process.env.SENTRY_ENVIRONMENT": JSON.stringify(process.env.SENTRY_ENVIRONMENT || "production")
+          "process.env.SENTRY_DSN": JSON.stringify(process.env.SENTRY_DSN),
+          "process.env.SENTRY_ENVIRONMENT": JSON.stringify(
+            process.env.SENTRY_ENVIRONMENT || "production"
+          )
         })
       );
 
