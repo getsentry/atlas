@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "index.js",
   "scripts": {
-    "dev": "node server.js",
+    "dev": "SENTRY_ENVIRONMENT=development node server.js",
     "build": "next build",
     "start": "cross-env NODE_ENV=production node server.js"
   },

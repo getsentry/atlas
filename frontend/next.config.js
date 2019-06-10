@@ -6,7 +6,6 @@ module.exports = withCSS(
   withSourceMaps({
     target: "server",
     publicRuntimeConfig: {
-      sentryDsn: process.env.SENTRY_DSN,
       googleScopes:
         "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/admin.directory.user",
       googleClientId: process.env.GOOGLE_CLIENT_ID,
@@ -20,6 +19,7 @@ module.exports = withCSS(
         new webpack.DefinePlugin({
           "process.env.SENTRY_RELEASE": JSON.stringify(buildId),
           "process.env.SENTRY_DSN": JSON.stringify(process.env.SENTRY_DSN)
+          "process.env.SENTRY_ENVIRONMENT": JSON.stringify(process.env.SENTRY_ENVIRONMENT || "production")
         })
       );
 

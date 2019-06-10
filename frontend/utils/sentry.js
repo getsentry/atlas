@@ -4,9 +4,13 @@ const Sentry = require("@sentry/node");
 const SentryIntegrations = require("@sentry/integrations");
 const Cookie = require("js-cookie");
 
-module.exports = (release = process.env.SENTRY_RELEASE) => {
+module.exports = (
+  release = process.env.SENTRY_RELEASE,
+  environment = process.env.SENTRY_ENVIRONMENT
+) => {
   const sentryOptions = {
     dsn: process.env.SENTRY_DSN,
+    environment,
     release,
     attachStacktrace: true
   };

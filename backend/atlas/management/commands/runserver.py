@@ -11,4 +11,3 @@ else:
 class Command(BaseCommand):
     def execute(self, *args, **options):
         settings.DEBUG = True
-        return super().execute(*args, **options)
