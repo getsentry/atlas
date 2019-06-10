@@ -130,7 +130,6 @@ if not GOOGLE_CLIENT_ID:
 if not GOOGLE_CLIENT_SECRET:
     logging.warning("You have not configured GOOGLE_CLIENT_SECRET.")
 
-
 GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI") or "http://localhost:8080"
 
 GOOGLE_FIELD_MAP = (
