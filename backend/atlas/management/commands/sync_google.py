@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from atlas.utils import google
@@ -7,7 +8,9 @@ class Command(BaseCommand):
     help = "Synchronize users from Google"
 
     def add_arguments(self, parser):
-        parser.add_argument("domain", type=str)
+        parser.add_argument(
+            "domain", type=str, default=settings.GOOGLE_DOMAIN, nargs="?"
+        )
 
     def handle(self, *args, **options):
         domain = options.get("domain")
