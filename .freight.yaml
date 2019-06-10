@@ -7,3 +7,5 @@ steps:
     name: frontend
   - image: us.gcr.io/internal-sentry/atlas-backend:{sha}
     name: backend
+  - image: us.gcr.io/internal-sentry/atlas-backend:{sha}
+    name: worker
