@@ -30,7 +30,8 @@ SECRET_KEY = "a weak ass secret key"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", False)
 
-ALLOWED_HOSTS = []
+# This should be handled by upstream proxy
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
