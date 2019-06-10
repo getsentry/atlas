@@ -37,7 +37,7 @@ function create(initialState) {
   });
 
   const httpLink = new HttpLink({
-    uri: config.API, // Server URL (must be absolute)
+    uri: config.apiEndpoint, // Server URL (must be absolute)
     credentials: "same-origin" // Additional fetch() options like `credentials` or `headers`
   });
 

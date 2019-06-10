@@ -5,18 +5,21 @@ const withCSS = require("@zeit/next-css");
 module.exports = withCSS(
   withSourceMaps({
     target: "server",
+    publicRuntimeConfig: {
+      sentryDsn: process.env.SENTRY_DSN,
+      googleScopes:
+        "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/admin.directory.user",
+      googleClientId: process.env.GOOGLE_CLIENT_ID,
+      googleRedirectUri:
+        process.env.GOOGLE_REDIRECT_URI || "http://localhost:8080",
+      googleDomain: process.env.GOOGLE_DOMAIN || "sentry.io",
+      apiEndpoint: "/graphql/"
+    },
     webpack: (config, { isServer, buildId }) => {
       config.plugins.push(
         new webpack.DefinePlugin({
           "process.env.SENTRY_RELEASE": JSON.stringify(buildId),
-          "process.env.SENTRY_DSN": JSON.stringify(process.env.SENTRY_DSN),
-          "process.env.GOOGLE_CLIENT_ID": JSON.stringify(
-            process.env.GOOGLE_CLIENT_ID
-          ),
-          "process.env.GOOGLE_REDIRECT_URI": JSON.stringify(
-            process.env.GOOGLE_REDIRECT_URI
-          ),
-          "process.env.GOOGLE_DOMAIN": JSON.stringify(process.env.GOOGLE_DOMAIN)
+          "process.env.SENTRY_DSN": JSON.stringify(process.env.SENTRY_DSN)
         })
       );
 

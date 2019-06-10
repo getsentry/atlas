@@ -83,13 +83,13 @@ class DefaultApp extends App {
           actions.loadGoogleAPI(gapi)(this.props.store.dispatch);
 
           const params = {
-            hosted_domain: config.GOOGLE_DOMAIN,
-            client_id: config.GOOGLE_CLIENT_ID,
+            hosted_domain: config.googleDomain,
+            client_id: config.googleClientId,
             cookie_policy: "single_host_origin",
             fetch_basic_profile: true,
             ux_mode: "popup",
-            redirect_uri: config.GOOGLE_REDIRECT_URI,
-            scope: config.GOOGLE_SCOPES,
+            redirect_uri: config.googleRedirectUri,
+            scope: config.googleScopes,
             access_type: "offline"
           };
           if (!gapi.auth2.getAuthInstance()) {

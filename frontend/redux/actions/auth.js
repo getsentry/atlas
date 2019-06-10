@@ -51,7 +51,7 @@ const login = () => {
     } = getState();
     auth2
       .grantOfflineAccess({
-        hd: config.GOOGLE_DOMAIN
+        hd: config.googleDomain
         // redirect_uri: "http://localhost:8080",
         // ux_mode: "popup"
       })
