@@ -1,0 +1,9 @@
+steps:
+- kind: KubernetesDeployment
+  selector:
+    label_selector: service=atlas
+  containers:
+  - image: us.gcr.io/internal-sentry/atlas-frontend:{sha}
+    name: frontend
+  - image: us.gcr.io/internal-sentry/atlas-backend:{sha}
+    name: backend

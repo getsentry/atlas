@@ -4,3 +4,4 @@ cloudbuild.yaml
 .venv
 node_modules
 .git
+.freight.yaml
