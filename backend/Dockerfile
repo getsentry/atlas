@@ -44,4 +44,4 @@ EXPOSE 8080
 
 ENTRYPOINT ["docker-entrypoint"]
 
-CMD ["gunicorn", "-b 0.0.0.0:8000", "atlas.wsgi", "--log-file -"]
+CMD ["web"]

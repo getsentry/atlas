@@ -9,23 +9,12 @@ class Command(BaseCommand):
     help = "Run worker processes including crontab"
 
     def add_arguments(self, parser):
-        parser.add_argument("--cron", dest="cron", action="store_true", default=True)
-        parser.add_argument(
-            "--no-cron", dest="cron", action="store_false", default=True
-        )
         parser.add_argument("--log-level", dest="log_level", default="INFO")
+        parser.add_argument("--host", dest="host", default="127.0.0.1")
+        parser.add_argument("--port", type=int, dest="port", default="8000")
 
-    def handle(self, cron=True, log_level="INFO", **options):
-        command = [
-            "celery",
-            "--app=atlas.celery:app",
-            "worker",
-            "--loglevel={}".format(log_level),
-            "--max-tasks-per-child=10000",
-        ]
-        if cron:
-            command.extend(["--beat"])
-
+    def handle(self, host, port, log_level, **options):
+        command = ["gunicorn", f"-b {host}:{port}", "atlas.wsgi", "--log-file -"]
         sys.exit(
             subprocess.call(
                 command,

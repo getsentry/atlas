@@ -5,7 +5,7 @@ set -e
 # Perform an upgrade before booting up web/worker processes
 case "$1" in
     atlas)
-        gosu app app migrate
+        gosu app atlas migrate
     ;;
 esac
 
