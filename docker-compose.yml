@@ -7,6 +7,12 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     ports:
       - 5432:5432
+  redis:
+    image: redis:5.0-alpine
+    volumes:
+      - redis_data:/data
+    ports:
+      - 6379:6379
   frontend:
     build: frontend
     # command: npm dev

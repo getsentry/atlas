@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import logging
 import os
 
+from datetime import timedelta
+
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -18,7 +20,6 @@ sentry_sdk.init(dsn=os.environ.get("SENTRY_DSN"), integrations=[DjangoIntegratio
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "graphene_django",
     "atlas",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -109,7 +111,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
@@ -119,6 +120,18 @@ USE_TZ = True
 #     os.path.abspath(os.path.dirname(__file__)), os.pardir, "media/"
 # )
 # MEDIA_URL = "/media/"
+
+CELERY_IMPORTS = ("atlas.tasks",)
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+CELERY_BEAT_SCHEDULE = {
+    "atlas-sync-google": {
+        "task": "atlas.tasks.sync_google",
+        "schedule": timedelta(hours=1),
+        "options": {"expires": 3600},
+    }
+}
 
 GRAPHENE = {"SCHEMA": "atlas.root_schema.schema"}
 
