@@ -22,5 +22,4 @@ class EnhancedGraphQLView(GraphQLView):
                         sentry_sdk.capture_exception(e)
                 else:
                     logger.error(error)
-                    sentry_sdk.capture_capture_exceptionmessage(error)
         return result
