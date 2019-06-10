@@ -1,6 +1,4 @@
 import os
-import subprocess
-import sys
 
 from django.core.management.base import BaseCommand
 
@@ -26,12 +24,4 @@ class Command(BaseCommand):
         if cron:
             command.extend(["--beat"])
 
-        sys.exit(
-            subprocess.call(
-                command,
-                cwd=os.getcwd(),
-                env=os.environ,
-                stdout=sys.stdout,
-                stderr=sys.stderr,
-            )
-        )
+        os.execvp(command[0], command)
