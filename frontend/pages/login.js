@@ -1,11 +1,11 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import fetch from "isomorphic-unfetch";
 import { connect } from "react-redux";
 
 import actions from "../redux/actions";
-import colors from "../colors";
 import Layout from "../components/Layout";
 import { login } from "../utils/auth";
+
 const GOOGLE_BLUE = "#4285F4";
 
 class Login extends Component {
@@ -73,7 +73,7 @@ class Login extends Component {
       <Layout noHeader noAuth>
         <div className="login">
           <h1>Atlas</h1>
-          <p>You'll need to sign in to continue.</p>
+          <p>{`You'll need to sign in to continue.`}</p>
           <button onClick={this.props.login}>
             <span className="icon" />
             <span className="text">Sign in with Google</span>

@@ -1,3 +1,4 @@
+import React from "react";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
@@ -41,22 +42,4 @@ export default function OfficeList() {
       }}
     </Query>
   );
-}
-
-function loadMorePeople(users, fetchMore) {
-  fetchMore({
-    variables: {
-      ...peopleQueryVars,
-      offset: users.length
-    },
-    updateQuery: (previousResult, { fetchMoreResult }) => {
-      if (!fetchMoreResult) {
-        return previousResult;
-      }
-      return Object.assign({}, previousResult, {
-        // Append the new results to the old one
-        users: [...previousResult.users, ...fetchMoreResult.users]
-      });
-    }
-  });
 }

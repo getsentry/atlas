@@ -1,3 +1,4 @@
+import React from "react";
 import { Query } from "react-apollo";
 import { connect } from "react-redux";
 import moment from "moment";
@@ -34,8 +35,8 @@ const Index = () => (
         if (!users.length) {
           return (
             <p>
-              It looks like there's been no newly added teammates in the last
-              month.
+              {`It looks like there's been no newly added teammates in the last
+              month.`}
             </p>
           );
         }

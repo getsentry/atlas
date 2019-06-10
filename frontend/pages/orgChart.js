@@ -60,7 +60,7 @@ export default () => (
   <Layout>
     <h1>Org Chart</h1>
     <Query query={LIST_ALL_PEOPLE_QUERY}>
-      {({ loading, error, data, fetchMore }) => {
+      {({ loading, error, data }) => {
         if (error) return <ErrorMessage message="Error loading people." />;
         if (loading) return <div>Loading</div>;
         const { users } = data;

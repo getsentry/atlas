@@ -19,3 +19,10 @@ repos:
       - id: flake8
       - id: fix-encoding-pragma
         args: ["--remove"]
+  - repo: git://github.com/getsentry/pre-commit-hooks
+    rev: f3237d2d65af81d435c49dee3593dc8f03d23c2d
+    hooks:
+      - id: prettier
+        entry: frontend/node_modules/.bin/prettier
+      - id: eslint
+        entry: frontend/node_modules/.bin/eslint

@@ -77,7 +77,7 @@ class DefaultApp extends App {
       "script",
       "google-login",
       "https://apis.google.com/js/api.js",
-      src => {
+      () => {
         const gapi = window.gapi;
         gapi.load("auth2", () => {
           actions.loadGoogleAPI(gapi)(this.props.store.dispatch);

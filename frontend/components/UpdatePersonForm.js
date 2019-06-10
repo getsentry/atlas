@@ -8,9 +8,9 @@ import * as yup from "yup";
 import withApollo from "../utils/apollo";
 import { PERSON_QUERY } from "../components/Person";
 
-const RestrictedUserSchema = yup.object().shape({
-  handle: yup.string()
-});
+// const RestrictedUserSchema = yup.object().shape({
+//   handle: yup.string()
+// });
 
 const FullUserSchema = yup.object().shape({
   name: yup.string().required("Required"),
@@ -101,7 +101,7 @@ class UpdatePersonForm extends Component {
   render() {
     return (
       <Query query={PERSON_QUERY} variables={{ id: this.props.id }}>
-        {({ loading, error, data }) => {
+        {({ loading, data }) => {
           //if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;
           if (!data.users.length)

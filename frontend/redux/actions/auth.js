@@ -44,11 +44,11 @@ const loadGoogleAPI = gapi => {
 
 // gets token from the api and stores it in the redux store and in cookie
 const login = () => {
-  const auth2 = gapi.auth2.getAuthInstance();
   return (dispatch, getState) => {
     const {
       auth: { gapi }
     } = getState();
+    const auth2 = gapi.auth2.getAuthInstance();
     auth2
       .grantOfflineAccess({
         hd: config.googleDomain
@@ -65,7 +65,7 @@ const login = () => {
           })
           .then(response => {
             const {
-              login: { ok, user, token }
+              login: { ok, token }
             } = response.data;
             if (ok) {
               setCookie("token", token);
