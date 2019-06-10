@@ -75,7 +75,7 @@ class Login extends Component {
           <h1>Atlas</h1>
           <p>You'll need to sign in to continue.</p>
           <button onClick={this.props.login}>
-            <span className="icon"></span>
+            <span className="icon" />
             <span className="text">Sign in with Google</span>
           </button>
           <p>
@@ -108,13 +108,14 @@ class Login extends Component {
           }
           button:active,
           button:hover {
-            background: #3367D6;
+            background: #3367d6;
           }
           button .icon {
-            width: 37px;
-            height: 36px;
+            width: 36px;
+            height: 38px;
             padding: 8px;
-            background: #fff url("/static/images/google-icon.svg") no-repeat center center;
+            background: #fff url("/static/images/google-icon.svg") no-repeat
+              center center;
             background-size: 18px;
             border-right: 1px solid ${GOOGLE_BLUE};
           }
