@@ -72,29 +72,33 @@ export default class Person extends Component {
                   }
                 `}
               </style>
-              <h1>{thisPerson.name}</h1>
+              <h1>{thisPerson.profile.handle || thisPerson.name}</h1>
               <h4>{thisPerson.profile.title}</h4>
               {thisPerson.profile.photoUrl && (
                 <img src={thisPerson.profile.photoUrl} />
               )}
               <dl>
+                <dt>Name</dt>
+                <dd>{thisPerson.name}</dd>
+                <dt>Preferred Name</dt>
+                <dd>{thisPerson.profile.handle || ""}</dd>
                 <dt>Department</dt>
-                <dd>{thisPerson.profile.department || "n/a"}</dd>
+                <dd>{thisPerson.profile.department || ""}</dd>
                 <dt>Start Date</dt>
-                <dd>{thisPerson.profile.dateStarted || "n/a"}</dd>
+                <dd>{thisPerson.profile.dateStarted || ""}</dd>
                 <dt>Reports To</dt>
                 <dd>
                   {thisPerson.profile.reportsTo ? (
                     <PersonLink user={thisPerson.profile.reportsTo} />
                   ) : (
-                    "n/a"
+                    ""
                   )}
                 </dd>
                 <dt>Office</dt>
                 <dd>
                   {thisPerson.profile.office
                     ? thisPerson.profile.office.name
-                    : "n/a"}
+                    : ""}
                 </dd>
                 <dt>Birthday</dt>
                 <dd>
@@ -102,7 +106,7 @@ export default class Person extends Component {
                     ? `${thisPerson.profile.dobMonth}-${
                         thisPerson.profile.dobDay
                       }`
-                    : "n/a"}
+                    : ""}
                 </dd>
               </dl>
               <h3>Reports</h3>
