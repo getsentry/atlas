@@ -61,12 +61,15 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
     external_id = str(payload["sub"])
 
     # fetch gsuite details
+    # pretty sure this requires admin access
     req = requests.get(
         "https://www.googleapis.com/admin/directory/v1/users/{}".format(external_id),
         headers={"Authorization": "Bearer {}".format(data["access_token"])},
     )
-    req.raise_for_status()
-    profile = req.json()
+    if req.status_code == 200:
+        profile = req.json()
+    else:
+        profile = None
 
     for i in range(2):
         identity = (
@@ -78,7 +81,8 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
             # TODO(dcramer): we'd like to know if they're an admin here
             identity.config = config
             identity.is_active = True
-            identity.is_admin = profile["isAdmin"]
+            if profile:
+                identity.is_admin = profile["isAdmin"]
             identity.access_token = data["access_token"]
             identity.refresh_token = data["refresh_token"]
             identity.save(
@@ -90,7 +94,6 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
                     "refresh_token",
                 ]
             )
-            google.sync_user(data=profile, identity=identity, user=identity.user)
             return identity.user
 
         user = google.get_user(email=payload["email"], name=payload["name"])
@@ -102,12 +105,13 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
                     provider="google",
                     external_id=external_id,
                     is_active=True,
-                    is_admin=profile["isAdmin"],
+                    is_admin=profile["isAdmin"] if profile else False,
                     config=config,
                     access_token=data["access_token"],
                     refresh_token=data["refresh_token"],
                 )
-                google.sync_user(data=profile, user=user, identity=identity)
+                if profile:
+                    google.sync_user(data=profile, user=user, identity=identity)
 
                 return user
         except IntegrityError as exc:
