@@ -7,19 +7,6 @@ const DEV = process.env.NODE_ENV !== "production";
 const app = next({ dev: DEV });
 const handle = app.getRequestHandler();
 
-const sourcemapsForSentryOnly = token => (req, res, next) => {
-  // In production we only want to serve source maps for sentry
-  if (!DEV && !!token && req.headers["x-sentry-token"] !== token) {
-    res
-      .status(401)
-      .send(
-        "Authentication access token is required to access the source map."
-      );
-    return;
-  }
-  next();
-};
-
 app.prepare().then(() => {
   // The app.buildId is only available after app.prepare(), hence why we setup
   // here.
@@ -27,8 +14,6 @@ app.prepare().then(() => {
   const server = express();
 
   server.use(Sentry.Handlers.requestHandler());
-
-  server.get(/\.map$/, sourcemapsForSentryOnly(process.env.SENTRY_TOKEN));
 
   server.get("/people/:id", (req, res) => {
     return app.render(req, res, "/person", { ...req.params, ...req.query });
