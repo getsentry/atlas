@@ -1,4 +1,4 @@
-import itertools
+import random
 from datetime import date
 
 import factory
@@ -43,13 +43,13 @@ DEPARTMENT_TITLES = {
     "Design": ["Product Designer", "Illustrator"],
 }
 
-TITLES = ["Software Engineer", "Product Manager", "Customer Success Manager", ""]
-
 
 class ProfileFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
-    title = factory.Iterator(TITLES)
-    department = factory.LazyAttribute(lambda o: itertools.choice(DEPARTMENTS[o.title]))
+    title = factory.LazyAttribute(
+        lambda o: random.choice(DEPARTMENT_TITLES[o.department])
+    )
+    department = factory.LazyAttribute(lambda o: random.choice(DEPARTMENTS))
     date_started = factory.fuzzy.FuzzyDate(start_date=date(2010, 1, 1))
 
     class Meta:
