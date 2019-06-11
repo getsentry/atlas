@@ -80,7 +80,6 @@ export const withAuth = WrappedComponent => {
     };
 
     render() {
-      console.log("what");
       return <WrappedComponent {...this.props} />;
     }
   };

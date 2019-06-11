@@ -74,7 +74,9 @@ export default class Person extends Component {
               </style>
               <h1>{thisPerson.name}</h1>
               <h4>{thisPerson.profile.title}</h4>
-              <img src={thisPerson.profile.photoUrl} />
+              {thisPerson.profile.photoUrl && (
+                <img src={thisPerson.profile.photoUrl} />
+              )}
               <dl>
                 <dt>Department</dt>
                 <dd>{thisPerson.profile.department || "n/a"}</dd>

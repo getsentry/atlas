@@ -5,7 +5,7 @@ export default function({ user }) {
   if (!user) return <em>n/a</em>;
   return (
     <article>
-      <img src={user.profile.photoUrl} />
+      {user.profile.photoUrl && <img src={user.profile.photoUrl} />}
       <aside>
         <h4>
           <Link
@@ -15,9 +15,7 @@ export default function({ user }) {
             <a>{user.name}</a>
           </Link>
         </h4>
-        {user.profile && user.profile.title && (
-          <small>{user.profile.title}</small>
-        )}
+        {user.profile.title && <small>{user.profile.title}</small>}
       </aside>
       <style jsx>{`
         article {

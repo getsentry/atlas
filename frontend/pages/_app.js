@@ -11,12 +11,12 @@ import actions from "../redux/actions";
 import { initStore } from "../redux";
 import withApolloClient from "../utils/apollo";
 import loadScript from "../utils/loadScript";
-import sentry from "../utils/sentry";
+import initSentry from "../utils/sentry";
 import { getCookie } from "../utils/cookie";
 import GlobalLoader from "../components/GlobalLoader";
 import RootLoader from "../components/RootLoader";
 
-const { Sentry, captureException } = sentry();
+const Sentry = initSentry();
 
 class DefaultApp extends App {
   constructor() {
@@ -40,7 +40,8 @@ class DefaultApp extends App {
     } catch (error) {
       // Capture errors that happen during a page's getInitialProps.
       // This will work on both client and server sides.
-      const errorEventId = captureException(error, ctx);
+      error.ctx = ctx;
+      const errorEventId = Sentry.captureException(error);
       return {
         hasError: true,
         errorEventId
@@ -64,7 +65,8 @@ class DefaultApp extends App {
   }
 
   componentDidCatch(error, errorInfo) {
-    const errorEventId = captureException(error, { errorInfo });
+    error.ctx = { errorInfo };
+    const errorEventId = Sentry.captureException(error);
 
     // Store the event id at this point as we don't have access to it within
     // `getDerivedStateFromError`.

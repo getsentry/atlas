@@ -18,6 +18,12 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         name = "User"
         only_fields = ("id", "email", "name", "is_superuser")
 
+    def resolve_profile(self, info):
+        try:
+            return self.profile
+        except Profile.DoesNotExist:
+            return Profile()
+
     def resolve_email(self, info):
         user = info.context.user
         if user.is_authenticated and user.id == self.id:
@@ -35,15 +41,17 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         logging.warning("Uncached resolution for UserNode.num_reports")
         return Profile.objects.filter(reports_to=self.id).count()
 
-    @gql_optimizer.resolver_hints(prefetch_related=("reports", "reports__user"))
+    @gql_optimizer.resolver_hints(
+        prefetch_related=("reports", "reports__user", "reports__user__profile")
+    )
     def resolve_reports(self, info):
         if not self.id:
-            return 0
+            return []
         qs = self.reports.all()
         if (
             not hasattr(self, "_prefetched_objects_cache")
             or "reports" not in self._prefetched_objects_cache
         ):
             logging.warning("Uncached resolution for UserNode.reports")
-            qs = qs.select_related("user")
+            qs = qs.select_related("user", "user__profile")
         return [r.user for r in qs]
