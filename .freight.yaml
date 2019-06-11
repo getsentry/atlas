@@ -1,7 +1,7 @@
-sentry:
-  organization: sentry
-  project: atlas
-  repository: getsentry/atlas
+# sentry:
+#   organization: sentry
+#   project: atlas
+#   repository: getsentry/atlas
 
 steps:
   - kind: KubernetesDeployment
