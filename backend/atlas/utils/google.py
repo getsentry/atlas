@@ -55,6 +55,16 @@ def to_date(value):
     return date(*map(int, value.split("-")))
 
 
+def lookup_field(data, field_path):
+    cur_path = data
+    for bit in field_path.split("/"):
+        try:
+            cur_path = cur_path[bit]
+        except KeyError:
+            return None
+    return cur_path or None
+
+
 def get_user(email, name=None, user_cache=None):
     if user_cache is None:
         user_cache = {}
@@ -166,10 +176,7 @@ def sync_user(  # NOQA
     if data.get("customSchemas"):
         schemas = data.get("customSchemas")
         for attribute_name, field_path in settings.GOOGLE_FIELD_MAP:
-            cur_path = schemas
-            for bit in field_path.split("/"):
-                cur_path = cur_path[bit]
-            value = cur_path or None
+            value = lookup_field(schemas, field_path)
             if value and attribute_name.startswith("date_"):
                 value = to_date(value)
             if getattr(profile, attribute_name) != value:
