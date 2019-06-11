@@ -5,7 +5,7 @@ import nextCookie from "next-cookies";
 import { removeCookie, setCookie } from "./cookie";
 
 export const login = async ({ token }) => {
-  setCookie("token", token, { expires: 1 });
+  setCookie("token", token, { expires: 3600 * 24 * 30 });
   // localStorage.setItem('token', token)
   Router.push("/");
 };
