@@ -12,6 +12,7 @@ module.exports = withCSS(
       googleRedirectUri:
         process.env.GOOGLE_REDIRECT_URI || "http://localhost:8080",
       googleDomain: process.env.GOOGLE_DOMAIN || "sentry.io",
+      googleMapsKey: process.env.GOOGLE_MAPS_KEY || "",
       // has to be an absolute domain due to next.js
       // https://github.com/zeit/next.js/issues/1213
       apiEndpoint: process.env.API_ENDPOINT || "http://localhost:8080/graphql/"

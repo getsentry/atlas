@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
+import config from "../config";
 import ErrorMessage from "./ErrorMessage";
 import PersonLink from "./PersonLink";
 
@@ -45,6 +46,63 @@ export const PERSON_QUERY = gql`
 `;
 
 const Empty = () => <span>&mdash;</span>;
+
+class Map extends Component {
+  constructor(props) {
+    super(props);
+    this.mapRef = React.createRef();
+  }
+
+  onScriptLoad = () => {
+    const map = new window.google.maps.Map(
+      this.mapRef.current,
+      this.props.options
+    );
+    this.props.onMapLoad(map);
+  };
+
+  componentDidMount() {
+    if (!window.google) {
+      var s = document.createElement("script");
+      s.type = "text/javascript";
+      s.src = `https://maps.google.com/maps/api/js?key=${config.googleMapsKey}`;
+      var x = document.getElementsByTagName("script")[0];
+      x.parentNode.insertBefore(s, x);
+      // Below is important.
+      //We cannot access google.maps until it's finished loading
+      s.addEventListener("load", () => {
+        this.onScriptLoad();
+      });
+    } else {
+      this.onScriptLoad();
+    }
+  }
+
+  render() {
+    return <div style={{ width: 500, height: 500 }} ref={this.mapRef} />;
+  }
+}
+
+class OfficeLocation extends Component {
+  render() {
+    return (
+      <Map
+        id="myMap"
+        options={{
+          center: { lat: 41.0082, lng: 28.9784 },
+          zoom: 8
+        }}
+        onMapLoad={map => {
+          new window.google.maps.Marker({
+            position: { lat: 41.0082, lng: 28.9784 },
+            map: map,
+            title: "Hello Istanbul!"
+          });
+        }}
+      />
+    );
+  }
+}
 
 export default class Person extends Component {
   static propTypes = {
@@ -123,10 +181,12 @@ export default class Person extends Component {
                   dl dd {
                     margin-bottom: 5px;
                   }
-                  .clearfix::after {
-                    content: "";
-                    clear: both;
-                    display: table;
+                  .main {
+                    display: flex;
+                  }
+                  .about,
+                  .map {
+                    width: 50%;
                   }
                 `}
               </style>
@@ -142,50 +202,55 @@ export default class Person extends Component {
                 </div>
               </section>
               <section className="main">
-                <dl className="clearfix">
-                  <dt>Name</dt>
-                  <dd>{thisPerson.name}</dd>
-                  <dt>Preferred Name</dt>
-                  <dd>{thisPerson.profile.handle || <Empty />}</dd>
-                  <dt>Department</dt>
-                  <dd>{thisPerson.profile.department || <Empty />}</dd>
-                  <dt>Start Date</dt>
-                  <dd>{thisPerson.profile.dateStarted || <Empty />}</dd>
-                  <dt>Reports To</dt>
-                  <dd>
-                    {thisPerson.profile.reportsTo ? (
-                      <PersonLink user={thisPerson.profile.reportsTo} />
-                    ) : (
-                      <Empty />
-                    )}
-                  </dd>
-                  <dt>Office</dt>
-                  <dd>
-                    {thisPerson.profile.office ? (
-                      thisPerson.profile.office.name
-                    ) : (
-                      <Empty />
-                    )}
-                  </dd>
-                  <dt>Birthday</dt>
-                  <dd>
-                    {thisPerson.profile.dobMonth ? (
-                      `${thisPerson.profile.dobMonth}-${
-                        thisPerson.profile.dobDay
-                      }`
-                    ) : (
-                      <Empty />
-                    )}
-                  </dd>
-                </dl>
-                <h3>Reports</h3>
-                <ul>
-                  {thisPerson.reports.map(p => (
-                    <li key={p.id}>
-                      <PersonLink user={p} />
-                    </li>
-                  ))}
-                </ul>
+                <div className="about">
+                  <dl className="clearfix">
+                    <dt>Name</dt>
+                    <dd>{thisPerson.name}</dd>
+                    <dt>Preferred Name</dt>
+                    <dd>{thisPerson.profile.handle || <Empty />}</dd>
+                    <dt>Department</dt>
+                    <dd>{thisPerson.profile.department || <Empty />}</dd>
+                    <dt>Start Date</dt>
+                    <dd>{thisPerson.profile.dateStarted || <Empty />}</dd>
+                    <dt>Reports To</dt>
+                    <dd>
+                      {thisPerson.profile.reportsTo ? (
+                        <PersonLink user={thisPerson.profile.reportsTo} />
+                      ) : (
+                        <Empty />
+                      )}
+                    </dd>
+                    <dt>Office</dt>
+                    <dd>
+                      {thisPerson.profile.office ? (
+                        thisPerson.profile.office.name
+                      ) : (
+                        <Empty />
+                      )}
+                    </dd>
+                    <dt>Birthday</dt>
+                    <dd>
+                      {thisPerson.profile.dobMonth ? (
+                        `${thisPerson.profile.dobMonth}-${
+                          thisPerson.profile.dobDay
+                        }`
+                      ) : (
+                        <Empty />
+                      )}
+                    </dd>
+                  </dl>
+                  <h3>Reports</h3>
+                  <ul>
+                    {thisPerson.reports.map(p => (
+                      <li key={p.id}>
+                        <PersonLink user={p} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="map">
+                  <OfficeLocation />
+                </div>
               </section>
             </section>
           );

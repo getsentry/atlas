@@ -177,6 +177,11 @@ export default class Layout extends Component {
             border-color: ${colors.primary};
             color: #fff;
           }
+          .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+          }
         `}</style>
         {!this.props.noAuth ? (
           <AuthenticatedPage>{this.renderBody()}</AuthenticatedPage>
