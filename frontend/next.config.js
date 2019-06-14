@@ -12,7 +12,9 @@ module.exports = withCSS(
       googleRedirectUri:
         process.env.GOOGLE_REDIRECT_URI || "http://localhost:8080",
       googleDomain: process.env.GOOGLE_DOMAIN || "sentry.io",
-      apiEndpoint: "/graphql/"
+      // has to be an absolute domain due to next.js
+      // https://github.com/zeit/next.js/issues/1213
+      apiEndpoint: process.env.API_ENDPOINT || "http://localhost:8080/graphql/"
     },
     webpack: (config, { isServer, buildId }) => {
       config.plugins.push(

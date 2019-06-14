@@ -10,7 +10,7 @@ import Layout from "../components/Layout";
 import PersonLink from "../components/PersonLink";
 import { LIST_PEOPLE_QUERY } from "../components/PeopleList";
 
-const Index = () => (
+const Index = ({ user }) => (
   <Layout title="Home">
     <h1>Welcome to Atlas</h1>
     <p>Atlas is your map to Sentry.</p>
@@ -72,6 +72,12 @@ const Index = () => (
         </Link>
       </li>
     </ul>
+    {user && user.isSuperuser && (
+      <React.Fragment>
+        <h2>Admin Controls</h2>
+        TBD
+      </React.Fragment>
+    )}
   </Layout>
 );
 
@@ -79,4 +85,8 @@ Index.getInitialProps = function(ctx) {
   initialize(ctx);
 };
 
-export default connect(state => state)(Index);
+const mapStateToProps = ({ auth }) => ({
+  user: auth.user
+});
+
+export default connect(mapStateToProps)(Index);

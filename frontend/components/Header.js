@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import actions from "../redux/actions";
 import colors from "../colors";
 
-const Header = ({ router: { pathname }, isAuthenticated, logout }) => {
+const Header = ({ router: { pathname }, authenticated, logout }) => {
   return (
     <header>
       <Link prefetch href="/">
@@ -17,7 +17,7 @@ const Header = ({ router: { pathname }, isAuthenticated, logout }) => {
           People
         </a>
       </Link>
-      {isAuthenticated && (
+      {authenticated && (
         <a onClick={logout} href="/logout">
           Sign Out
         </a>
@@ -39,7 +39,7 @@ const Header = ({ router: { pathname }, isAuthenticated, logout }) => {
   );
 };
 const mapStateToProps = ({ auth }) => ({
-  isAuthenticated: auth.authenticated
+  authenticated: auth.authenticated
 });
 
 export default connect(

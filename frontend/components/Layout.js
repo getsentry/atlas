@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
-import { connect } from "react-redux";
 
-import actions from "../redux/actions";
-import ErrorMessage from "./ErrorMessage";
+import AuthenticatedPage from "./AuthenticatedPage";
 import Header from "./Header";
 import colors from "../colors";
 
-class Layout extends Component {
+export default class Layout extends Component {
   static propTypes = {
     title: PropTypes.string,
     noHeader: PropTypes.bool,
@@ -19,6 +17,15 @@ class Layout extends Component {
     noHeader: false,
     noAuth: false
   };
+
+  renderBody() {
+    return (
+      <div className="container">
+        {!this.props.noHeader && <Header />}
+        <main>{this.props.children}</main>
+      </div>
+    );
+  }
 
   render() {
     return (
@@ -170,37 +177,12 @@ class Layout extends Component {
             color: #fff;
           }
         `}</style>
-        {this.renderBody()}
+        {!this.props.noAuth ? (
+          <AuthenticatedPage>{this.renderBody()}</AuthenticatedPage>
+        ) : (
+          this.renderBody()
+        )}
       </React.Fragment>
     );
   }
-
-  renderBody() {
-    if (this.props.authLoading) {
-      return <div>Loading...</div>;
-    }
-    if (!this.props.noAuth && this.props.isAuthenticated === false) {
-      return (
-        <div className="container">
-          <ErrorMessage message="Not authenticated" />
-        </div>
-      );
-    }
-    return (
-      <div className="container">
-        {!this.props.noHeader && <Header />}
-        <main>{this.props.children}</main>
-      </div>
-    );
-  }
 }
-
-const mapStateToProps = ({ auth }) => ({
-  isAuthenticated: auth.authenticated,
-  authLoading: auth.authenticated === null
-});
-
-export default connect(
-  mapStateToProps,
-  actions
-)(Layout);

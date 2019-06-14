@@ -2,6 +2,7 @@ import { LOAD_GAPI, LOGIN, LOGOUT } from "../types";
 
 const initialState = {
   authenticated: null,
+  user: null,
   token: null,
   gapi: null
 };
@@ -9,11 +10,24 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case LOAD_GAPI:
-      return { gapi: action.payload };
+      return {
+        ...state,
+        gapi: action.payload
+      };
     case LOGIN:
-      return { token: action.payload, authenticated: true };
+      return {
+        ...state,
+        token: action.payload.token,
+        user: action.payload.user,
+        authenticated: true
+      };
     case LOGOUT:
-      return { token: null, authenticated: false };
+      return {
+        ...state,
+        token: null,
+        authenticated: false,
+        user: null
+      };
     default:
       return state;
   }

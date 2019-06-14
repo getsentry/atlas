@@ -16,7 +16,19 @@ export const LOGIN_MUTATION = gql`
         id
         email
         name
+        isSuperuser
       }
+    }
+  }
+`;
+
+export const CURRENT_USER_QUERY = gql`
+  query getCurrentUser {
+    me {
+      id
+      name
+      email
+      isSuperuser
     }
   }
 `;
@@ -65,11 +77,18 @@ const login = () => {
           })
           .then(response => {
             const {
-              login: { ok, token }
+              login: { ok, token, user }
             } = response.data;
             if (ok) {
               setCookie("token", token);
-              dispatch({ type: LOGIN, payload: token });
+              dispatch({
+                type: LOGIN,
+                payload: {
+                  token,
+                  user
+                }
+              });
+              // TODO(dcramer): this doesnt belong here
               Router.push("/");
             }
           });
@@ -83,7 +102,27 @@ const login = () => {
 // gets the token from the cookie and saves it in the store
 const reauth = token => {
   return dispatch => {
-    dispatch({ type: LOGIN, payload: token });
+    initApollo()
+      .query({
+        query: CURRENT_USER_QUERY
+      })
+      .then(response => {
+        const { me } = response.data;
+        if (me) {
+          dispatch({
+            type: LOGIN,
+            payload: {
+              token,
+              user: me
+            }
+          });
+        } else {
+          logout()(dispatch);
+        }
+      })
+      .catch(err => {
+        throw err;
+      });
   };
 };
 
@@ -91,7 +130,6 @@ const reauth = token => {
 const logout = () => {
   return dispatch => {
     removeCookie("token");
-    Router.push("/");
     dispatch({ type: LOGOUT });
   };
 };

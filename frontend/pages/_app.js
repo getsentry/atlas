@@ -1,20 +1,14 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { ApolloProvider } from "react-apollo";
-import Router from "next/router";
 import App, { Container } from "next/app";
 import withRedux from "next-redux-wrapper";
 
 import colors from "../colors";
-import config from "../config";
-import actions from "../redux/actions";
 import { initStore } from "../redux";
 import withApolloClient from "../utils/apollo";
-import loadScript from "../utils/loadScript";
 import initSentry from "../utils/sentry";
-import { getCookie } from "../utils/cookie";
 import GlobalLoader from "../components/GlobalLoader";
-import RootLoader from "../components/RootLoader";
 
 const Sentry = initSentry();
 
@@ -23,7 +17,6 @@ class DefaultApp extends App {
     super(...arguments);
     this.state = {
       hasError: false,
-      loading: true,
       errorEventId: undefined
     };
   }
@@ -50,9 +43,9 @@ class DefaultApp extends App {
   }
 
   static getDerivedStateFromProps(props, state) {
-    // If there was an error generated within getInitialProps, and we haven't
-    // yet seen an error, we add it to this.state here
     return {
+      // If there was an error generated within getInitialProps, and we haven't
+      // yet seen an error, we add it to this.state here
       hasError: props.hasError || state.hasError || false,
       errorEventId: props.errorEventId || state.errorEventId || undefined
     };
@@ -71,56 +64,6 @@ class DefaultApp extends App {
     // Store the event id at this point as we don't have access to it within
     // `getDerivedStateFromError`.
     this.setState({ errorEventId });
-  }
-
-  componentDidMount() {
-    loadScript(
-      document,
-      "script",
-      "google-login",
-      "https://apis.google.com/js/api.js",
-      () => {
-        const gapi = window.gapi;
-        gapi.load("auth2", () => {
-          actions.loadGoogleAPI(gapi)(this.props.store.dispatch);
-
-          const params = {
-            hosted_domain: config.googleDomain,
-            client_id: config.googleClientId,
-            cookie_policy: "single_host_origin",
-            fetch_basic_profile: true,
-            ux_mode: "popup",
-            redirect_uri: config.googleRedirectUri,
-            scope: config.googleScopes,
-            access_type: "offline"
-          };
-          if (!gapi.auth2.getAuthInstance()) {
-            gapi.auth2
-              .init(params)
-              .then(res => {
-                const curToken = getCookie("token");
-                if (curToken && res.isSignedIn && res.isSignedIn.get()) {
-                  // res.currentUser.get().getAuthResponse().id_token
-                  actions.reauth(curToken)(this.props.store.dispatch);
-                  this.setState({ loading: false });
-                } else {
-                  actions.logout();
-                  Router.push("/login").then(() => {
-                    this.setState({ loading: false });
-                  });
-                }
-              })
-              .catch(err => {
-                actions.logout();
-                Router.push("/login").then(() => {
-                  this.setState({ loading: false });
-                });
-                throw err;
-              });
-          }
-        });
-      }
-    );
   }
 
   render() {
@@ -150,9 +93,6 @@ class DefaultApp extends App {
           </p>
         </section>
       );
-    }
-    if (this.state.loading) {
-      return <RootLoader />;
     }
     const { Component, pageProps, apolloClient, store } = this.props;
     return (
