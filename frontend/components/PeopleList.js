@@ -3,7 +3,7 @@ import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
 import ErrorMessage from "./ErrorMessage";
-import PersonLink from "./PersonLink";
+import PersonList from "./PersonList";
 
 export const LIST_PEOPLE_QUERY = gql`
   query listPeople(
@@ -53,13 +53,7 @@ export default function PeopleList() {
         const areMorePeople = false;
         return (
           <section>
-            <ul>
-              {users.map(p => (
-                <li key={p.id}>
-                  <PersonLink user={p} />
-                </li>
-              ))}
-            </ul>
+            <PersonList people={users} />
             {areMorePeople ? (
               <button onClick={() => loadMorePeople(users, fetchMore)}>
                 {" "}

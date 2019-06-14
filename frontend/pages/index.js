@@ -8,7 +8,7 @@ import Link from "next/link";
 import initialize from "../utils/initialize";
 import ErrorMessage from "../components/ErrorMessage";
 import Layout from "../components/Layout";
-import PersonLink from "../components/PersonLink";
+import PersonList from "../components/PersonList";
 import { LIST_PEOPLE_QUERY } from "../components/PeopleList";
 import { initApollo } from "../utils/apollo";
 
@@ -62,15 +62,7 @@ const Index = ({ user }) => (
             </p>
           );
         }
-        return (
-          <ul>
-            {users.map(p => (
-              <li key={p.id}>
-                <PersonLink user={p} />
-              </li>
-            ))}
-          </ul>
-        );
+        return <PersonList people={users} />;
       }}
     </Query>
     <h2>Explore</h2>

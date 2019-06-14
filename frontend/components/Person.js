@@ -6,6 +6,7 @@ import gql from "graphql-tag";
 import config from "../config";
 import ErrorMessage from "./ErrorMessage";
 import PersonLink from "./PersonLink";
+import PersonList from "./PersonList";
 
 export const PERSON_QUERY = gql`
   query getPerson($id: UUID!) {
@@ -157,13 +158,6 @@ export default class Person extends Component {
                     flex-direction: column;
                     align-items: center;
                   }
-                  ul {
-                    list-style: none;
-                    padding-left: 0;
-                  }
-                  li {
-                    margin-bottom: 5px;
-                  }
                   dl {
                     padding-left: 140px;
                   }
@@ -240,13 +234,7 @@ export default class Person extends Component {
                     </dd>
                   </dl>
                   <h3>Reports</h3>
-                  <ul>
-                    {thisPerson.reports.map(p => (
-                      <li key={p.id}>
-                        <PersonLink user={p} />
-                      </li>
-                    ))}
-                  </ul>
+                  <PersonList people={thisPerson.reports} />
                 </div>
                 <div className="map">
                   <OfficeLocation />
