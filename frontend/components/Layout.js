@@ -61,6 +61,7 @@ export default class Layout extends Component {
             box-sizing: border-box;
           }
           body {
+            background: #eee;
             margin: 0;
             color: #333;
             font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI",

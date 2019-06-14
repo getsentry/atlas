@@ -5,7 +5,9 @@ export default function({ user }) {
   if (!user) return <em>n/a</em>;
   return (
     <article>
-      {user.profile.photoUrl && <img src={user.profile.photoUrl} />}
+      <div className="avatar">
+        {user.profile.photoUrl && <img src={user.profile.photoUrl} />}
+      </div>
       <aside>
         <h4>
           <Link
@@ -15,6 +17,7 @@ export default function({ user }) {
             <a>{user.name}</a>
           </Link>
         </h4>
+
         {user.profile.title && <small>{user.profile.title}</small>}
       </aside>
       <style jsx>{`
@@ -30,11 +33,16 @@ export default function({ user }) {
           overflow: hidden;
           text-overflow: ellipsis;
         }
-        img {
+        .avatar {
           display: inline-block;
           width: 32px;
           height: 32px;
           margin-right: 5px;
+        }
+        img {
+          display: block;
+          max-width: 100%;
+          max-height: 100%;
         }
         aside {
           flex-grow: 1;
