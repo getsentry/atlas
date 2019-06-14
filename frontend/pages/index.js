@@ -1,4 +1,5 @@
 import React from "react";
+import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import { connect } from "react-redux";
 import moment from "moment";
@@ -9,6 +10,27 @@ import ErrorMessage from "../components/ErrorMessage";
 import Layout from "../components/Layout";
 import PersonLink from "../components/PersonLink";
 import { LIST_PEOPLE_QUERY } from "../components/PeopleList";
+import { initApollo } from "../utils/apollo";
+
+export const SYNC_GOOGLE_MUTATION = gql`
+  mutation syncGoogle {
+    syncGoogle {
+      ok
+      errors
+    }
+  }
+`;
+
+const syncGoogle = () => {
+  window.alert("Forcing a Google sync");
+  initApollo()
+    .mutate({
+      mutation: SYNC_GOOGLE_MUTATION
+    })
+    .then(() => {
+      window.alert("Cool we did it");
+    });
+};
 
 const Index = ({ user }) => (
   <Layout title="Home">
@@ -75,7 +97,11 @@ const Index = ({ user }) => (
     {user && user.isSuperuser && (
       <React.Fragment>
         <h2>Admin Controls</h2>
-        TBD
+        <ul>
+          <li>
+            <a onClick={syncGoogle}>Force Google Sync</a>
+          </li>
+        </ul>
       </React.Fragment>
     )}
   </Layout>
