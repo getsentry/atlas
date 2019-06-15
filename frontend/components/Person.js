@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
+import moment from "moment";
 
 import config from "../config";
 import ErrorMessage from "./ErrorMessage";
@@ -119,6 +120,14 @@ export default class Person extends Component {
           if (!data.users.length)
             return <ErrorMessage message="Couldn't find that person." />;
           const thisPerson = data.users[0];
+          const dob = thisPerson.profile.dobMonth
+            ? moment(
+                `${new Date().getFullYear()}-${thisPerson.profile.dobMonth}-${
+                  thisPerson.profile.dobDay
+                }`,
+                "YYYY-MM-DD"
+              )
+            : null;
           return (
             <section className="profile">
               <style jsx>
@@ -205,7 +214,15 @@ export default class Person extends Component {
                     <dt>Department</dt>
                     <dd>{thisPerson.profile.department || <Empty />}</dd>
                     <dt>Start Date</dt>
-                    <dd>{thisPerson.profile.dateStarted || <Empty />}</dd>
+                    <dd>
+                      {thisPerson.profile.dateStarted ? (
+                        moment(thisPerson.profile.dateStarted).format(
+                          "MMMM Do YYYY"
+                        )
+                      ) : (
+                        <Empty />
+                      )}
+                    </dd>
                     <dt>Reports To</dt>
                     <dd>
                       {thisPerson.profile.reportsTo ? (
@@ -223,15 +240,7 @@ export default class Person extends Component {
                       )}
                     </dd>
                     <dt>Birthday</dt>
-                    <dd>
-                      {thisPerson.profile.dobMonth ? (
-                        `${thisPerson.profile.dobMonth}-${
-                          thisPerson.profile.dobDay
-                        }`
-                      ) : (
-                        <Empty />
-                      )}
-                    </dd>
+                    <dd>{dob ? dob.format("MMMM Do") : <Empty />}</dd>
                   </dl>
                   <h3>Reports</h3>
                   <PersonList people={thisPerson.reports} />
