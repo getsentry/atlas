@@ -253,10 +253,18 @@ export default class Person extends Component {
                     <dt>Birthday</dt>
                     <dd>{dob ? dob.format("MMMM Do") : <Empty />}</dd>
                   </dl>
-                  <h3>Reports</h3>
-                  <PersonList people={thisPerson.reports} />
-                  <h3>Peers</h3>
-                  <PersonList people={thisPerson.peers} />
+                  {thisPerson.reports.length && (
+                    <React.Fragment>
+                      <h3>Reports</h3>
+                      <PersonList people={thisPerson.reports} />
+                    </React.Fragment>
+                  )}
+                  {thisPerson.peers.length && (
+                    <React.Fragment>
+                      <h3>Peers</h3>
+                      <PersonList people={thisPerson.peers} />
+                    </React.Fragment>
+                  )}
                 </div>
                 <div className="map">
                   <OfficeLocation />
