@@ -12,6 +12,8 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     office = graphene.Field("atlas.schema.OfficeNode")
     reports = graphene.List(lambda: UserNode)
     num_reports = graphene.Int(required=False)
+    peers = graphene.List(lambda: UserNode)
+    num_peers = graphene.Int(required=False)
 
     class Meta:
         model = User
@@ -48,6 +50,37 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         if not self.id:
             return []
         qs = self.reports.all()
+        if (
+            not hasattr(self, "_prefetched_objects_cache")
+            or "reports" not in self._prefetched_objects_cache
+        ):
+            logging.warning("Uncached resolution for UserNode.reports")
+            qs = qs.select_related("user", "user__profile")
+        return [r.user for r in qs]
+
+    @gql_optimizer.resolver_hints(select_related=("profile"))
+    def resolve_num_peers(self, info):
+        if not self.id:
+            return 0
+        if not self.profile.reports_to_id:
+            return 0
+        if hasattr(self, "num_peers"):
+            return self.num_reports
+        logging.warning("Uncached resolution for UserNode.num_peers")
+        return Profile.objects.filter(reports_to=self.profile.reports_to_id).count()
+
+    @gql_optimizer.resolver_hints(
+        select_related=("profile"),
+        prefetch_related=(
+            "profile__reports_to__reports",
+            "profile__reports_to__reports__user",
+            "profile__reports_to__reports__user__profile",
+        ),
+    )
+    def resolve_peers(self, info):
+        if not self.id:
+            return []
+        qs = self.profile.reports_to.reports.all()
         if (
             not hasattr(self, "_prefetched_objects_cache")
             or "reports" not in self._prefetched_objects_cache

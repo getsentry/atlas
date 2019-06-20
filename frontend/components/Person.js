@@ -24,6 +24,14 @@ export const PERSON_QUERY = gql`
           photoUrl
         }
       }
+      peers {
+        id
+        name
+        profile {
+          title
+          photoUrl
+        }
+      }
       profile {
         handle
         department
@@ -247,6 +255,8 @@ export default class Person extends Component {
                   </dl>
                   <h3>Reports</h3>
                   <PersonList people={thisPerson.reports} />
+                  <h3>Peers</h3>
+                  <PersonList people={thisPerson.peers} />
                 </div>
                 <div className="map">
                   <OfficeLocation />

@@ -1,19 +1,11 @@
+from datetime import date
+
 import graphene
 import graphene_django_optimizer as gql_optimizer
-from datetime import date
-from django.db.models import Count
 from graphql.error import GraphQLError
 
 from atlas.models import User
 from atlas.schema import UserNode
-
-
-def fix_users_query(queryset, selected_fields, **kwargs):
-    if "reports" in selected_fields:
-        queryset = queryset.prefetch_related("reports", "reports__user")
-    if "numReports" in selected_fields:
-        queryset = queryset.annotate(num_reports=Count("reports"))
-    return queryset
 
 
 class UserOrderBy(graphene.Enum):
