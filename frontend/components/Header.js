@@ -50,14 +50,14 @@ const Header = props => {
     <header>
       <h1>
         <Link prefetch href="/">
-          Atlas
+          <a>Atlas</a>
         </Link>
       </h1>
       <Navigation {...props} />
       <style jsx>{`
         header {
           background: #fff;
-          margin: 0 -20px 1.5rem;
+          margin: 0 0 1.5rem;
           display: flex;
           line-height: 3em;
           padding: 0 10px;
@@ -66,6 +66,12 @@ const Header = props => {
           padding: 0 10px;
           align-self: center;
           flex-grow: 1;
+          color: #ccc;
+          letter-spacing: -2px;
+          text-transform: uppercase;
+        }
+        h1 a {
+          color: inherit;
         }
       `}</style>
     </header>
