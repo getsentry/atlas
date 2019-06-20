@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import moment from "moment";
+import Avatar from "react-avatar";
 
 import config from "../config";
 import ErrorMessage from "./ErrorMessage";
@@ -195,8 +196,10 @@ export default class Person extends Component {
               </style>
               <section className="meta">
                 <div className="photo">
-                  {thisPerson.profile.photoUrl && (
+                  {thisPerson.profile.photoUrl ? (
                     <img src={thisPerson.profile.photoUrl} />
+                  ) : (
+                    <Avatar name={thisPerson.name} size="128" />
                   )}
                 </div>
                 <div className="name">

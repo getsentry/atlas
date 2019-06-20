@@ -1,12 +1,17 @@
 import React from "react";
 import Link from "next/link";
+import Avatar from "react-avatar";
 
 export default function({ user }) {
   if (!user) return <em>n/a</em>;
   return (
     <article>
       <div className="avatar">
-        {user.profile.photoUrl && <img src={user.profile.photoUrl} />}
+        {user.profile.photoUrl ? (
+          <img src={user.profile.photoUrl} />
+        ) : (
+          <Avatar name={user.name} size="32" />
+        )}
       </div>
       <aside>
         <h4>
