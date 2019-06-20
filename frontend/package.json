@@ -12,6 +12,8 @@
   "license": "Apache-2.0",
   "description": "",
   "dependencies": {
+    "@material-ui/core": "^4.1.1",
+    "@material-ui/icons": "^4.2.0",
     "@sentry/browser": "^5.4.0",
     "@sentry/integrations": "^5.4.1",
     "@sentry/node": "^5.4.0",

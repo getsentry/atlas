@@ -5,13 +5,11 @@ import { withRouter } from "next/router";
 import { connect } from "react-redux";
 import actions from "../redux/actions";
 import colors from "../colors";
+import { ExitToApp } from "@material-ui/icons";
 
-const Header = ({ router: { pathname }, authenticated, logout }) => {
+const Navigation = ({ router: { pathname }, authenticated, logout }) => {
   return (
-    <header>
-      <Link prefetch href="/">
-        <a className={pathname === "/" ? "is-active" : ""}>Home</a>
-      </Link>
+    <section>
       <Link prefetch href="/people">
         <a className={pathname.indexOf("/people") === 0 ? "is-active" : ""}>
           People
@@ -19,20 +17,55 @@ const Header = ({ router: { pathname }, authenticated, logout }) => {
       </Link>
       {authenticated && (
         <a onClick={logout} href="/logout">
-          Sign Out
+          <ExitToApp />
         </a>
       )}
       <style jsx>{`
-        header {
-          margin-bottom: 1.5rem;
+        section {
+          height: 100%;
+          padding: 0 10px;
         }
         a {
-          font-size: 1.2em;
-          margin-right: 15px;
+          height: 100%;
+          font-size: 1.1em;
+          display: inline-block;
+          padding: 0 10px;
           text-decoration: none;
+          align-self: center;
+          border: 6px solid #fff;
+          border-width: 6px 0;
+          color: ${colors.primaryLight};
         }
         .is-active {
-          border-bottom: 4px solid ${colors.primary};
+          color: ${colors.primary};
+          border-bottom: 6px solid ${colors.primaryLight};
+        }
+      `}</style>
+    </section>
+  );
+};
+
+const Header = props => {
+  return (
+    <header>
+      <h1>
+        <Link prefetch href="/">
+          Atlas
+        </Link>
+      </h1>
+      <Navigation {...props} />
+      <style jsx>{`
+        header {
+          background: #fff;
+          margin: 0 -20px 1.5rem;
+          display: flex;
+          line-height: 3em;
+          padding: 0 10px;
+        }
+        h1 {
+          padding: 0 10px;
+          align-self: center;
+          flex-grow: 1;
         }
       `}</style>
     </header>
