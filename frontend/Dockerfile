@@ -1,5 +1,7 @@
 FROM node:10
 
+ENV NODE_ENV=production
+
 # Setting working directory. All the path will be relative to WORKDIR
 WORKDIR /usr/src/app
 
