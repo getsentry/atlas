@@ -4,13 +4,15 @@
   "description": "## Install",
   "main": "index.js",
   "dependencies": {
-    "concurrently": "^4.1.0"
+    "concurrently": "^4.1.0",
+    "react-redux": "^5.1.1",
+    "redux": "^4.0.1"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "concurrently \"npm:start-backend\" \"npm:start-frontend\" \"npm:start-proxy\"",
+    "start": "concurrently \"npm:start-backend\" \"npm:start-frontend\"",
     "start-backend": "atlas runserver",
-    "start-frontend": "cd frontend && npm run dev",
+    "start-frontend": "cd frontend && npm start",
     "start-proxy": "cd proxy && npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

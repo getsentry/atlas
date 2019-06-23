@@ -15,6 +15,30 @@
   "files.trimFinalNewlines": false,
   "files.insertFinalNewline": true,
 
+  "[json]": {
+    "editor.detectIndentation": false,
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
+  },
+
+  "[javascript]": {
+    "editor.detectIndentation": false,
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
+  },
+
+  "[css]": {
+    "editor.detectIndentation": false,
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
+  },
+
+  "[html]": {
+    "editor.detectIndentation": false,
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
+  },
+
   "[python]": {
     "editor.detectIndentation": false,
     "editor.tabSize": 4,

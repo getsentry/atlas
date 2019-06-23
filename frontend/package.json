@@ -1,89 +1,64 @@
 {
-  "name": "atlas",
+  "name": "frontend",
   "version": "0.1.0",
-  "main": "index.js",
-  "scripts": {
-    "dev": "NODE_ENV=development SENTRY_ENVIRONMENT=development node server.js",
-    "build": "next build",
-    "start": "cross-env NODE_ENV=production node server.js"
-  },
-  "keywords": [],
-  "author": "David Cramer <dcramer@gmail.com> (https://github.com/dcramer)",
-  "license": "Apache-2.0",
-  "description": "",
+  "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.1.1",
-    "@material-ui/icons": "^4.2.0",
-    "@sentry/browser": "^5.4.0",
-    "@sentry/integrations": "^5.4.1",
-    "@sentry/node": "^5.4.0",
-    "@zeit/next-css": "^1.0.1",
-    "@zeit/next-source-maps": "0.0.3",
-    "apollo-boost": "^0.3.1",
-    "apollo-link": "^1.2.11",
-    "babel-eslint": "^10.0.1",
-    "cross-env": "^5.2.0",
-    "encoding": "^0.1.12",
-    "eslint": "^5.16.0",
-    "eslint-plugin-react": "^7.13.0",
-    "express": "^4.17.1",
+    "@emotion/core": "^10.0.10",
+    "@emotion/styled": "^10.0.12",
+    "@material-ui/core": "^4.1.2",
+    "@material-ui/icons": "^4.2.1",
+    "@sentry/browser": "^5.4.3",
+    "apollo-boost": "^0.4.3",
+    "apollo-link": "^1.2.12",
+    "babel-plugin-idx": "^2.4.0",
     "formik": "^1.5.7",
     "graphql": "^14.3.1",
     "graphql-tag": "^2.10.1",
-    "isomorphic-unfetch": "^3.0.0",
+    "idx": "^2.5.6",
     "js-cookie": "^2.2.0",
+    "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "next": "^8.1.0",
-    "next-cookies": "^1.1.2",
-    "next-redux-wrapper": "^3.0.0-alpha.2",
-    "nprogress": "^0.2.0",
-    "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-apollo": "^2.5.6",
+    "react-apollo": "^2.5.8",
     "react-avatar": "^3.6.0",
     "react-dom": "^16.8.6",
     "react-draggable": "^3.3.0",
-    "react-redux": "^7.0.3",
-    "redux": "^4.0.1",
+    "react-loadable": "^5.5.0",
+    "react-redux": "^5.1.1",
+    "react-router": "^3.2.1",
+    "react-scripts": "3.0.1",
+    "redux": "^3.7.2",
     "redux-thunk": "^2.3.0",
-    "sentry-testkit": "^2.2.1",
-    "serverless-http": "^2.0.2",
+    "serve": "^11.0.2",
     "yup": "^0.27.0"
   },
-  "devDependencies": {
-    "prettier": "^1.17.1"
+  "scripts": {
+    "start": "PORT=8080 react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/getsentry/atlas.git"
-  },
+  "proxy": "http://localhost:8000",
   "eslintConfig": {
-    "parser": "babel-eslint",
-    "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended"
-    ],
-    "env": {
-      "browser": true,
-      "es6": true,
-      "commonjs": true
-    },
+    "extends": "react-app",
     "globals": {
-      "process": true
-    },
-    "settings": {
-      "react": {
-        "version": "16.8.6"
-      }
-    },
-    "rules": {
-      "no-console": 0,
-      "react/display-name": 0,
-      "react/prop-types": 0
+      "AtlasConfig": true
     }
   },
-  "volta": {
-    "node": "10.16.0",
-    "yarn": "1.16.0"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2",
+    "react-app-rewired": "^2.1.3"
   }
 }

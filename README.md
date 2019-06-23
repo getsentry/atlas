@@ -34,6 +34,7 @@ Lastly, grab the Google and Sentry credentials, and place them in .env. See the 
 ```shell
 GOOGLE_CLIENT_SECRET=
 GOOGLE_CLIENT_ID=
+GOOGLE_MAPS_KEY=
 SENTRY_DSN=
 ```
 
