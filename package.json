@@ -4,9 +4,7 @@
   "description": "## Install",
   "main": "index.js",
   "dependencies": {
-    "concurrently": "^4.1.0",
-    "react-redux": "^5.1.1",
-    "redux": "^4.0.1"
+    "concurrently": "^4.1.0"
   },
   "devDependencies": {},
   "scripts": {
