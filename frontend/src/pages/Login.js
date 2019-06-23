@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import styled from "@emotion/styled";
 
@@ -53,6 +54,10 @@ class Login extends Component {
     };
   }
 
+  static contextTypes = {
+    router: PropTypes.object
+  };
+
   static getDerivedStateFromProps(props, state) {
     return {
       loading: state.loading && props.gapi === null
@@ -61,6 +66,16 @@ class Login extends Component {
 
   componentDidMount() {
     this.props.loadSession();
+  }
+
+  componentDidUpdate() {
+    if (this.props.authenticated) {
+      let nextUri = this.context.router.location.query.next || "/";
+      if (nextUri.indexOf("/") !== 0) nextUri = "";
+      this.context.router.push({
+        pathname: nextUri
+      });
+    }
   }
 
   render() {
@@ -93,7 +108,8 @@ class Login extends Component {
 
 export default connect(
   ({ auth }) => ({
-    gapi: auth.gapi
+    gapi: auth.gapi,
+    authenticated: auth.authenticated
   }),
   { loadSession: actions.loadSession, login: actions.login }
 )(Login);
