@@ -17,7 +17,7 @@ class AuthenticatedPage extends Component {
 
   static getDerivedStateFromProps(props, state) {
     return {
-      loading: state.loading && props.authenticated === null
+      loading: !props.authenticated
     };
   }
 
@@ -32,8 +32,8 @@ class AuthenticatedPage extends Component {
     }
   }
 
-  componentDidUpdate(nextProps) {
-    if (nextProps.authenticated === false) {
+  componentDidUpdate() {
+    if (this.props.authenticated === false) {
       this.context.router.push({
         pathname: "/login",
         query: { next: this.buildUrl() }

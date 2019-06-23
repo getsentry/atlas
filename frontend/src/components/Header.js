@@ -34,9 +34,9 @@ const Navigation = ({ authenticated, logout }) => {
     <NavigationContainer>
       <Link to="/people">People</Link>
       {authenticated && (
-        <a onClick={logout}>
+        <button onClick={logout}>
           <ExitToApp />
-        </a>
+        </button>
       )}
     </NavigationContainer>
   );

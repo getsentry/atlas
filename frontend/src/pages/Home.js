@@ -90,7 +90,7 @@ class Home extends Component {
             <h2>Admin Controls</h2>
             <ul>
               <li>
-                <a onClick={syncGoogle}>Force Google Sync</a>
+                <button onClick={syncGoogle}>Force Google Sync</button>
               </li>
             </ul>
           </Box>
