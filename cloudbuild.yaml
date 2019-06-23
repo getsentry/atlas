@@ -2,7 +2,7 @@ steps:
   - name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
     args:
-      - "-c"
+      - "-ceu"
       - |
         for d in */; do
           config="${d}cloudbuild.yaml"
