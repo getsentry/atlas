@@ -19,7 +19,7 @@ module.exports = function override(config, env) {
         apiEndpoint: process.env.API_ENDPOINT || "http://localhost:8080/graphql/",
         environment: process.env.NODE_ENV || "development",
         sentryDsn: process.env.SENTRY_DSN,
-        version: env.buildId
+        version: process.env.BUILD_REVISION || ""
       })
     })
   );
