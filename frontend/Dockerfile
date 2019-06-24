@@ -13,5 +13,7 @@ RUN npm install
 # Copying source files
 COPY . .
 
+RUN npm run build
+
 # Build and run the app
-CMD npm run build && serve -l 3000 build
+CMD serve -l 3000 build
