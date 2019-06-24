@@ -12,7 +12,6 @@ steps:
     '--build-arg', 'BUILD_REVISION=$COMMIT_SHA',
     '--build-arg', 'SENTRY_DSN=$SENTRY_DSN',
     '--build-arg', 'GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID',
-    '--build-arg', 'GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET',
     '--build-arg', 'GOOGLE_MAPS_KEY=$GOOGLE_MAPS_KEY',
     '--build-arg', 'GOOGLE_REDIRECT_URI=$GOOGLE_REDIRECT_URI',
     '--build-arg', 'GOOGLE_DOMAIN=$GOOGLE_DOMAIN',
