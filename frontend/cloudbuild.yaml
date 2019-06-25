@@ -23,3 +23,5 @@ steps:
 images:
 - 'us.gcr.io/$PROJECT_ID/atlas-frontend:$COMMIT_SHA'
 - 'us.gcr.io/$PROJECT_ID/atlas-frontend:latest'
+options:
+    substitution_option: 'ALLOW_LOOSE'
