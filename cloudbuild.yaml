@@ -12,7 +12,9 @@ steps:
 
           echo "Building $d ... "
           (
-            gcloud builds submit $d --substitutions=COMMIT_SHA=$COMMIT_SHA --config=${config}
+            gcloud builds submit $d \
+              --substitutions=COMMIT_SHA=$COMMIT_SHA,SENTRY_DSN=${_SENTRY_DSN},GOOGLE_CLIENT_ID=${_GOOGLE_CLIENT_ID},GOOGLE_MAPS_KEY=${_GOOGLE_MAPS_KEY},GOOGLE_REDIRECT_URI=${_GOOGLE_REDIRECT_URI},GOOGLE_DOMAIN=${_GOOGLE_DOMAIN},API_ENDPOINT=${_API_ENDPOINT} \
+              --config=${config}
           ) &
         done
         wait
