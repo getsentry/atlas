@@ -15,13 +15,7 @@ steps:
             gcloud builds submit $d \
               --config=${config} \
               --substitutions=\
-                COMMIT_SHA=$COMMIT_SHA,\
-                _SENTRY_DSN=${_SENTRY_DSN},\
-                _GOOGLE_CLIENT_ID=${_GOOGLE_CLIENT_ID},\
-                _GOOGLE_MAPS_KEY=${_GOOGLE_MAPS_KEY},\
-                _GOOGLE_REDIRECT_URI=${_GOOGLE_REDIRECT_URI},\
-                _GOOGLE_DOMAIN=${_GOOGLE_DOMAIN},\
-                _API_ENDPOINT=${_API_ENDPOINT}
+                COMMIT_SHA=$COMMIT_SHA
           ) &
         done
         wait
