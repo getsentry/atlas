@@ -7,25 +7,28 @@ import actions from "../actions";
 import colors from "../colors";
 import { ExitToApp } from "@material-ui/icons";
 
+import Container from "./Container";
+
 const NavigationContainer = styled.nav`
   height: 100%;
   padding: 0 10px;
+  display: flex;
+  align-items: center;
+  align-self: center;
 
   a {
     height: 100%;
     font-size: 1.1em;
     display: inline-block;
     padding: 0 10px;
+    line-height: 1;
     text-decoration: none;
-    align-self: center;
-    border: 6px solid #fff;
-    border-width: 6px 0;
-    color: ${colors.primaryLight};
+    cursor: pointer;
+    color: ${colors.gray200};
   }
 
   .is-active {
-    color: ${colors.primary};
-    border-bottom: 6px solid ${colors.primaryLight};
+    color: ${colors.white};
   }
 `;
 
@@ -34,17 +37,19 @@ const Navigation = ({ authenticated, logout }) => {
     <NavigationContainer>
       <Link to="/people">People</Link>
       {authenticated && (
-        <button onClick={logout}>
+        <a href onClick={logout}>
           <ExitToApp />
-        </button>
+        </a>
       )}
     </NavigationContainer>
   );
 };
 
 const HeaderContainer = styled.header`
-  background: #fff;
-  margin: 0 0 1.5rem;
+  background: ${colors.indigo};
+`;
+
+const HeaderContent = styled.header`
   display: flex;
   line-height: 3em;
   padding: 0 10px;
@@ -53,7 +58,7 @@ const HeaderContainer = styled.header`
     padding: 0 10px;
     align-self: center;
     flex-grow: 1;
-    color: #ccc;
+    color: ${colors.white};
     letter-spacing: -2px;
     text-transform: uppercase;
   }
@@ -66,10 +71,14 @@ const HeaderContainer = styled.header`
 const Header = props => {
   return (
     <HeaderContainer>
-      <h1>
-        <Link to="/">Atlas</Link>
-      </h1>
-      <Navigation {...props} />
+      <Container>
+        <HeaderContent>
+          <h1>
+            <Link to="/">Atlas</Link>
+          </h1>
+          <Navigation {...props} />
+        </HeaderContent>
+      </Container>
     </HeaderContainer>
   );
 };

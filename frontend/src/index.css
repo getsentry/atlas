@@ -32,7 +32,7 @@
 body {
   background: #eee;
   margin: 0;
-  color: #333;
+  color: #1f2d3d;
   font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";
@@ -53,8 +53,7 @@ small {
 }
 pre,
 code {
-  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier,
-    monospace;
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
 }
 a {
   color: #6c5fc7;
