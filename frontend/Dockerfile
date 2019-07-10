@@ -1,6 +1,6 @@
 FROM node:10
 
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
+ENV PATH /usr/src/app/bin:/usr/src/app/node_modules/.bin:$PATH
 ENV NODE_ENV production
 
 ARG BUILD_REVISION
