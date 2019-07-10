@@ -24,13 +24,16 @@
   font-weight: 500;
   src: url("./fonts/Roboto-Medium.ttf") format("truetype");
 }
-*,
-*::before,
-*::after {
+html {
   box-sizing: border-box;
 }
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
 body {
-  background: #eee;
+  background: #6e00ff;
   margin: 0;
   color: #1f2d3d;
   font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -47,6 +50,15 @@ input {
 }
 p {
   line-height: 1.8;
+}
+dl,
+p,
+table,
+form,
+ul,
+ol {
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 small {
   font-size: 85%;
@@ -65,16 +77,14 @@ h3,
 h4,
 h5,
 h6 {
+  margin-top: 0;
   margin-bottom: 1rem;
 }
 h1 {
   font-size: 2em;
-  margin-bottom: 0;
-  margin-top: 0;
 }
 h2 {
   font-size: 1.5em;
-  margin-top: 3rem;
 }
 h3 {
   font-size: 1.125em;

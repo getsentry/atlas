@@ -7,18 +7,17 @@ import actions from "../actions";
 import colors from "../colors";
 import { ExitToApp } from "@material-ui/icons";
 
-import Container from "./Container";
+import LeftFrame from "./LeftFrame";
 
 const NavigationContainer = styled.nav`
   height: 100%;
-  padding: 0 10px;
+  padding: 0 1rem;
   display: flex;
   align-items: center;
   align-self: center;
 
   a {
-    height: 100%;
-    font-size: 1.1em;
+    font-size: 1em;
     display: inline-block;
     padding: 0 10px;
     line-height: 1;
@@ -46,16 +45,20 @@ const Navigation = ({ authenticated, logout }) => {
 };
 
 const HeaderContainer = styled.header`
-  background: ${colors.indigo};
+  background: ${colors.primary};
+  border-bottom: 1px solid hsla(0, 0%, 100%, 0.1) !important;
+  margin: 0 0.5rem 1.5rem;
 `;
 
 const HeaderContent = styled.header`
   display: flex;
-  line-height: 3em;
-  padding: 0 10px;
+  height: 3rem;
+  padding: 0 1rem;
+  align-items: center;
 
   h1 {
     padding: 0 10px;
+    margin: 0;
     align-self: center;
     flex-grow: 1;
     color: ${colors.white};
@@ -71,14 +74,14 @@ const HeaderContent = styled.header`
 const Header = props => {
   return (
     <HeaderContainer>
-      <Container>
-        <HeaderContent>
+      <HeaderContent>
+        <LeftFrame>
           <h1>
             <Link to="/">Atlas</Link>
           </h1>
-          <Navigation {...props} />
-        </HeaderContent>
-      </Container>
+        </LeftFrame>
+        <Navigation {...props} />
+      </HeaderContent>
     </HeaderContainer>
   );
 };

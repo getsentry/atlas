@@ -23,7 +23,11 @@ const $cyan = "#4bd6e5";
 
 export default {
   primary: $indigo,
-  primaryLight: "#AE70FF",
+  primary100: "#F3EBFF",
+  primary200: "#E8D6FF",
+  primary300: "#D1ADFF",
+  primary400: "#C599FF",
+  primary500: "#AE70FF",
 
   white: $white,
 

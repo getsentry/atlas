@@ -58,7 +58,6 @@ const Node = ({ node }) => {
 
 export default () => (
   <Layout>
-    <h1>Org Chart</h1>
     <Query query={LIST_ALL_PEOPLE_QUERY}>
       {({ loading, error, data }) => {
         if (error) throw error;

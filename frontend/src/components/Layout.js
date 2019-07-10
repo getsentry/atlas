@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import AuthenticatedPage from "./AuthenticatedPage";
-import Content from "./Content";
 import Header from "./Header";
 
 export default class Layout extends Component {
@@ -21,7 +20,7 @@ export default class Layout extends Component {
     return (
       <React.Fragment>
         {!this.props.noHeader && <Header />}
-        <Content>{this.props.children}</Content>
+        {this.props.children}
       </React.Fragment>
     );
   }

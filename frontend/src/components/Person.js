@@ -6,7 +6,10 @@ import moment from "moment";
 import Avatar from "react-avatar";
 import styled from "@emotion/styled";
 
+import colors from "../colors";
 import config from "../config";
+import LeftFrame from "./LeftFrame";
+import Content from "./Content";
 import ErrorMessage from "./ErrorMessage";
 import PersonLink from "./PersonLink";
 import PersonList from "./PersonList";
@@ -60,6 +63,16 @@ export const PERSON_QUERY = gql`
 const Empty = () => <span>&mdash;</span>;
 
 class Map extends Component {
+  static propTypes = {
+    width: PropTypes.number,
+    height: PropTypes.number
+  };
+
+  static defaultProps = {
+    width: 500,
+    height: 500
+  };
+
   constructor(props) {
     super(props);
     this.mapRef = React.createRef();
@@ -88,7 +101,12 @@ class Map extends Component {
   }
 
   render() {
-    return <div style={{ width: 500, height: 500 }} ref={this.mapRef} />;
+    return (
+      <div
+        style={{ width: this.props.width, height: this.props.height }}
+        ref={this.mapRef}
+      />
+    );
   }
 }
 
@@ -96,24 +114,28 @@ class OfficeLocation extends Component {
   render() {
     return (
       <Map
-        id="myMap"
         options={{
           center: { lat: 41.0082, lng: 28.9784 },
-          zoom: 8
+          zoom: this.props.zoom || 8,
+          disableDefaultUI: this.props.withUI || true
         }}
         onMapLoad={map => {
           new window.google.maps.Marker({
             position: { lat: 41.0082, lng: 28.9784 },
-            map: map,
-            title: "Hello Istanbul!"
+            map: map
           });
         }}
+        {...this.props}
       />
     );
   }
 }
 
 const PersonContainer = styled.article`
+  background: ${colors.indigo};
+  display: flex;
+  flex-grow: 1;
+
   h1 {
     margin: 0;
   }
@@ -121,35 +143,53 @@ const PersonContainer = styled.article`
     margin: 0;
     font-weight: 500;
   }
-  .meta,
+  .meta {
+    padding: 1rem;
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    color: ${colors.white};
+  }
   .main {
+    flex-grow: 1;
     background: #fff;
     border-radius: 4px;
-    padding: 20px;
+    padding: 1rem;
     margin-bottom: 2rem;
+    margin-right: 2rem;
   }
   .meta {
     display: flex;
-    align-items: flex-end;
-  }
-  .meta .photo {
-    display: flex;
-    width: 128px;
-    height: 128px;
     justify-content: center;
     align-items: center;
-    margin-right: 20px;
+    flex-direction: column;
   }
-  .meta .photo img {
+  .meta .photo {
+    width: 128px;
+    height: 128px;
+    display: block;
+    margin-bottom: 1rem;
+    border-radius: 128px;
+  }
+  .meta .photo img,
+  .meta .photo .sb-avatar,
+  .meta .photo .sb-avatar > div {
     max-width: 100%;
     max-height: 100%;
+    border-radius: 128px;
+  }
+  .meta h1 {
+    font-size: 1.4em;
+  }
+  .meta h4 {
+    font-weight: normal;
+    font-size: 1em;
   }
   .meta .name {
-    flex: 1;
-    flex-direction: column;
-    align-items: center;
+    margin-bottom: 1rem;
   }
   dl {
+    margin: 0 0 1.5rem;
     padding-left: 140px;
   }
   dl dt {
@@ -165,9 +205,6 @@ const PersonContainer = styled.article`
   }
   dl dd {
     margin-bottom: 5px;
-  }
-  .main {
-    display: flex;
   }
   .about,
   .map {
@@ -199,72 +236,77 @@ export default class Person extends Component {
             : null;
           return (
             <PersonContainer>
-              <section className="meta">
-                <div className="photo">
-                  {thisPerson.profile.photoUrl ? (
-                    <img src={thisPerson.profile.photoUrl} />
-                  ) : (
-                    <Avatar name={thisPerson.name} size="128" />
-                  )}
-                </div>
-                <div className="name">
-                  <h1>{thisPerson.profile.handle || thisPerson.name}</h1>
-                  <h4>{thisPerson.profile.title}</h4>
-                </div>
-              </section>
-              <section className="main">
-                <div className="about">
-                  <dl className="clearfix">
-                    <dt>Name</dt>
-                    <dd>{thisPerson.name}</dd>
-                    <dt>Preferred Name</dt>
-                    <dd>{thisPerson.profile.handle || <Empty />}</dd>
-                    <dt>Department</dt>
-                    <dd>{thisPerson.profile.department || <Empty />}</dd>
-                    <dt>Start Date</dt>
-                    <dd>
-                      {thisPerson.profile.dateStarted ? (
-                        moment(thisPerson.profile.dateStarted).format("MMMM Do YYYY")
-                      ) : (
-                        <Empty />
-                      )}
-                    </dd>
-                    <dt>Reports To</dt>
-                    <dd>
-                      {thisPerson.profile.reportsTo ? (
-                        <PersonLink user={thisPerson.profile.reportsTo} />
-                      ) : (
-                        <Empty />
-                      )}
-                    </dd>
-                    <dt>Office</dt>
-                    <dd>
-                      {thisPerson.profile.office ? (
-                        thisPerson.profile.office.name
-                      ) : (
-                        <Empty />
-                      )}
-                    </dd>
-                    <dt>Birthday</dt>
-                    <dd>{dob ? dob.format("MMMM Do") : <Empty />}</dd>
-                  </dl>
-                  {!!thisPerson.reports.length && (
-                    <React.Fragment>
-                      <h3>Reports</h3>
-                      <PersonList people={thisPerson.reports} />
-                    </React.Fragment>
-                  )}
-                  {!!thisPerson.peers.length && (
-                    <React.Fragment>
-                      <h3>Peers</h3>
-                      <PersonList people={thisPerson.peers} />
-                    </React.Fragment>
-                  )}
-                </div>
-                <div className="map">
-                  <OfficeLocation />
-                </div>
-              </section>
+              <LeftFrame>
+                <section className="meta">
+                  <div className="photo">
+                    {thisPerson.profile.photoUrl ? (
+                      <img src={thisPerson.profile.photoUrl} />
+                    ) : (
+                      <Avatar name={thisPerson.name} size="128" />
+                    )}
+                  </div>
+                  <div className="name">
+                    <h1>{thisPerson.profile.handle || thisPerson.name}</h1>
+                    <h4>{thisPerson.profile.title}</h4>
+                  </div>
+                  <OfficeLocation width={230} height={230} zoom={12} />
+                </section>
+              </LeftFrame>
+              <Content>
+                <section className="main">
+                  <div className="about">
+                    <dl className="clearfix">
+                      <dt>Name</dt>
+                      <dd>{thisPerson.name}</dd>
+                      <dt>Preferred Name</dt>
+                      <dd>{thisPerson.profile.handle || <Empty />}</dd>
+                      <dt>Department</dt>
+                      <dd>{thisPerson.profile.department || <Empty />}</dd>
+                      <dt>Start Date</dt>
+                      <dd>
+                        {thisPerson.profile.dateStarted ? (
+                          moment(thisPerson.profile.dateStarted).format("MMMM Do YYYY")
+                        ) : (
+                          <Empty />
+                        )}
+                      </dd>
+                      <dt>Reports To</dt>
+                      <dd>
+                        {thisPerson.profile.reportsTo ? (
+                          <PersonLink user={thisPerson.profile.reportsTo} />
+                        ) : (
+                          <Empty />
+                        )}
+                      </dd>
+                      <dt>Office</dt>
+                      <dd>
+                        {thisPerson.profile.office ? (
+                          thisPerson.profile.office.name
+                        ) : (
+                          <Empty />
+                        )}
+                      </dd>
+                      <dt>Birthday</dt>
+                      <dd>{dob ? dob.format("MMMM Do") : <Empty />}</dd>
+                    </dl>
+                    {!!thisPerson.reports.length && (
+                      <React.Fragment>
+                        <h3>Reports</h3>
+                        <PersonList people={thisPerson.reports} />
+                      </React.Fragment>
+                    )}
+                    {!!thisPerson.peers.length && (
+                      <React.Fragment>
+                        <h3>Peers</h3>
+                        <PersonList people={thisPerson.peers} />
+                      </React.Fragment>
+                    )}
+                  </div>
+                  <div className="map">
+                    <OfficeLocation width={400} height={400} zoom={8} withUI />
+                  </div>
+                </section>
+              </Content>
             </PersonContainer>
           );
         }}
