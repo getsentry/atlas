@@ -137,6 +137,7 @@ const PersonContainer = styled.article`
   background: ${colors.indigo};
   display: flex;
   flex-grow: 1;
+  padding: 0 1rem;
 
   h1 {
     margin: 0;
@@ -146,11 +147,13 @@ const PersonContainer = styled.article`
     font-weight: 500;
   }
   .meta {
-    padding: 1rem;
-    text-align: center;
-    justify-content: center;
+    margin-right: 1.5rem;
     margin-bottom: 1.5rem;
     color: ${colors.white};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
   .main {
     flex-grow: 1;
@@ -159,12 +162,6 @@ const PersonContainer = styled.article`
     padding: 1rem;
     margin-bottom: 2rem;
     margin-right: 2rem;
-  }
-  .meta {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
   }
   .meta .name,
   .meta .contact,
@@ -264,7 +261,7 @@ export default class Person extends Component {
                       <Email /> {thisPerson.email}
                     </a>
                   </div>
-                  <OfficeLocation width={230} height={230} zoom={12} />
+                  <OfficeLocation width={250} height={250} zoom={12} />
                 </section>
               </LeftFrame>
               <Content>
