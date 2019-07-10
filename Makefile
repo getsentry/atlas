@@ -37,5 +37,5 @@ build-docker-images:
 run-docker-images:
 	docker rm atlas-backend || exit 0
 	docker rm atlas-frontend || exit 0
-	docker run --init -d -p 8000:8000/tcp --name atlas-backend atlas-backend
-	docker run --init -d -p 3000:3000/tcp --name atlas-frontend atlas-frontend
+	docker run --rm --init -d -p 8000:8000/tcp --name atlas-backend atlas-backend
+	docker run --rm --init -d -p 3000:3000/tcp --name atlas-frontend atlas-frontend
