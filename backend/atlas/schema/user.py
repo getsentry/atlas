@@ -28,7 +28,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
 
     def resolve_email(self, info):
         user = info.context.user
-        if user.is_authenticated and user.id == self.id:
+        if user.is_authenticated:
             return self.email
         return None
 

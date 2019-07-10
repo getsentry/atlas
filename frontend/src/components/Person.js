@@ -6,6 +6,8 @@ import moment from "moment";
 import Avatar from "react-avatar";
 import styled from "@emotion/styled";
 
+import { Email } from "@material-ui/icons";
+
 import colors from "../colors";
 import config from "../config";
 import LeftFrame from "./LeftFrame";
@@ -164,11 +166,15 @@ const PersonContainer = styled.article`
     align-items: center;
     flex-direction: column;
   }
+  .meta .name,
+  .meta .contact,
+  .meta .photo {
+    margin-bottom: 1rem;
+  }
   .meta .photo {
     width: 128px;
     height: 128px;
     display: block;
-    margin-bottom: 1rem;
     border-radius: 128px;
   }
   .meta .photo img,
@@ -185,8 +191,12 @@ const PersonContainer = styled.article`
     font-weight: normal;
     font-size: 1em;
   }
-  .meta .name {
-    margin-bottom: 1rem;
+  .meta a {
+    color: #fff;
+  }
+  .meta svg {
+    font-size: 1em;
+    vertical-align: middle;
   }
   dl {
     margin: 0 0 1.5rem;
@@ -248,6 +258,11 @@ export default class Person extends Component {
                   <div className="name">
                     <h1>{thisPerson.profile.handle || thisPerson.name}</h1>
                     <h4>{thisPerson.profile.title}</h4>
+                  </div>
+                  <div className="contact">
+                    <a href={`mailto:${thisPerson.email}`}>
+                      <Email /> {thisPerson.email}
+                    </a>
                   </div>
                   <OfficeLocation width={230} height={230} zoom={12} />
                 </section>
