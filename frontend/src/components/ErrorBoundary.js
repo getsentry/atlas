@@ -62,6 +62,9 @@ export default class ErrorBoundary extends Component {
         case errors.NetworkError:
           return <NetworkError error={error} />;
         default:
+          if (error.networkError) {
+            return <NetworkError error={error} />;
+          }
           return <InternalError error={error} />;
       }
     } else {
