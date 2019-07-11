@@ -93,12 +93,12 @@ class Login extends Component {
           <Card>
             <h1>Atlas</h1>
             <p>{`You'll need to sign in to continue.`}</p>
-            <form>
+            <div className="block">
               <Button onClick={this.props.login}>
                 <span className="icon" />
                 <span className="text">Sign in with Google</span>
               </Button>
-            </form>
+            </div>
             <p>
               <small>
                 Make sure to disable Adblock as it causes issues with Google Auth.
