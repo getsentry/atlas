@@ -5,6 +5,7 @@ import styled from "@emotion/styled";
 
 import actions from "../actions";
 import Layout from "../components/Layout";
+import Card from "../components/Card";
 import PageLoader from "../components/PageLoader";
 
 import GoogleIcon from "../images/google-icon.svg";
@@ -12,7 +13,7 @@ import GoogleIcon from "../images/google-icon.svg";
 const GOOGLE_BLUE = "#4285F4";
 
 const LoginContainer = styled.div`
-  max-width: 450px;
+  max-width: 500px;
   margin: 0 auto;
   padding: 1rem;
 `;
@@ -89,17 +90,21 @@ class Login extends Component {
     return (
       <Layout noHeader noAuth>
         <LoginContainer>
-          <h1>Atlas</h1>
-          <p>{`You'll need to sign in to continue.`}</p>
-          <Button onClick={this.props.login}>
-            <span className="icon" />
-            <span className="text">Sign in with Google</span>
-          </Button>
-          <p>
-            <small>
-              Make sure to disable Adblock as it causes issues with Google Auth.
-            </small>
-          </p>
+          <Card>
+            <h1>Atlas</h1>
+            <p>{`You'll need to sign in to continue.`}</p>
+            <form>
+              <Button onClick={this.props.login}>
+                <span className="icon" />
+                <span className="text">Sign in with Google</span>
+              </Button>
+            </form>
+            <p>
+              <small>
+                Make sure to disable Adblock as it causes issues with Google Auth.
+              </small>
+            </p>
+          </Card>
         </LoginContainer>
       </Layout>
     );
