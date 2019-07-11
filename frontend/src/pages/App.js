@@ -2,12 +2,12 @@ import React, { Component } from "react";
 
 import config, { requiredKeys } from "../config";
 
-import Box from "../components/Box";
+import Card from "../components/Card";
 import ErrorBoundary from "../components/ErrorBoundary";
 
 function MissingConfiguration({ keys }) {
   return (
-    <Box style={{ margin: "2rem auto", padding: "1rem", maxWidth: 600 }}>
+    <Card style={{ margin: "2rem auto", padding: "1rem", maxWidth: 600 }}>
       <h1>Missing Configuration</h1>
       <p>You are missing configuration for the following required parameters:</p>
       <ul>
@@ -15,7 +15,7 @@ function MissingConfiguration({ keys }) {
           <li key={k}>{k}</li>
         ))}
       </ul>
-    </Box>
+    </Card>
   );
 }
 

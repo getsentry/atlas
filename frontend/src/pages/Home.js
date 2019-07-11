@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import gql from "graphql-tag";
 import moment from "moment";
 
-import Box from "../components/Box";
+import Card from "../components/Card";
 import ErrorMessage from "../components/ErrorMessage";
 import Layout from "../components/Layout";
 import PersonList from "../components/PersonList";
@@ -37,12 +37,12 @@ class Home extends Component {
     const { user } = this.props;
     return (
       <Layout title="Home">
-        <Box>
+        <Card>
           <h1>Welcome to Atlas</h1>
           <p>Atlas is your map to Sentry.</p>
           <p>We could probably put the newest hires here? Anniversaries? Birthdays?</p>
-        </Box>
-        <Box>
+        </Card>
+        <Card>
           <h2>Newest Sentries</h2>
           <Query
             query={LIST_PEOPLE_QUERY}
@@ -69,8 +69,8 @@ class Home extends Component {
               return <PersonList people={users} />;
             }}
           </Query>
-        </Box>
-        <Box>
+        </Card>
+        <Card>
           <h2>Explore</h2>
           <p>Here are some pages CKJ needs to figure out where to place links to...</p>
           <ul>
@@ -84,16 +84,16 @@ class Home extends Component {
               <Link to="/orgChart">/orgChart</Link>
             </li>
           </ul>
-        </Box>
+        </Card>
         {user && user.isSuperuser && (
-          <Box>
+          <Card>
             <h2>Admin Controls</h2>
             <ul>
               <li>
                 <button onClick={syncGoogle}>Force Google Sync</button>
               </li>
             </ul>
-          </Box>
+          </Card>
         )}
       </Layout>
     );

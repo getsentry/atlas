@@ -1,14 +1,14 @@
 import React from "react";
 
-import Box from "../components/Box";
+import Card from "../components/Card";
 import Layout from "../components/Layout";
 import OfficeList from "../components/OfficeList";
 
 export default () => (
   <Layout>
-    <Box>
+    <Card>
       <h1>Offices</h1>
       <OfficeList />
-    </Box>
+    </Card>
   </Layout>
 );
