@@ -81,12 +81,40 @@ class Home extends Component {
                   }}
                 </Query>
               </Card>
+              <Card>
+                <h2>Birthdays</h2>
+                <Query
+                  query={LIST_PEOPLE_QUERY}
+                  variables={{
+                    limit: 5,
+                    birthdayAfter: moment()
+                      .subtract(14, "days")
+                      .format("YYYY-MM-DD"),
+                    birthdayBefore: moment()
+                      .add(14, "days")
+                      .format("YYYY-MM-DD"),
+                    orderBy: "birthday"
+                  }}
+                >
+                  {({ loading, error, data }) => {
+                    if (error) return <ErrorMessage message="Error loading people." />;
+                    if (loading) return <div>Loading</div>;
+                    const { users } = data;
+                    if (!users.length) {
+                      return (
+                        <p>{`It looks like there's no recent or upcoming birthdays.`}</p>
+                      );
+                    }
+                    return <PersonList people={users} />;
+                  }}
+                </Query>
+              </Card>
             </Box>
             <Box width={1 / 2} px={3}>
               <Card>
                 <h2>Explore</h2>
                 <p>
-                  Here are some pages CKJ needs to figure out where to place links to...
+                  Here are some pages we need to figure out where to place links to...
                 </p>
                 <ul>
                   <li>
@@ -100,11 +128,7 @@ class Home extends Component {
                   </li>
                 </ul>
               </Card>
-            </Box>
-          </Flex>
-          <Flex>
-            {user && user.isSuperuser && (
-              <Box width={1 / 2} px={3}>
+              {user && user.isSuperuser && (
                 <Card>
                   <h2>Admin Controls</h2>
                   <ul>
@@ -113,8 +137,8 @@ class Home extends Component {
                     </li>
                   </ul>
                 </Card>
-              </Box>
-            )}
+              )}
+            </Box>
           </Flex>
         </Content>
       </Layout>

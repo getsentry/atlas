@@ -45,11 +45,13 @@ def test_users_hide_self(gql_client, default_user):
     assert executed["data"]["users"] == []
 
 
-def test_users_hides_others_email(gql_client, default_user, other_user):
+def test_users_shows_others_email(gql_client, default_user, other_user):
     executed = gql_client.execute(
         """{users(query:"Fizz", includeSelf:true) {id, email}}""", user=default_user
     )
-    assert executed["data"]["users"] == [{"id": str(other_user.id), "email": None}]
+    assert executed["data"]["users"] == [
+        {"id": str(other_user.id), "email": other_user.email}
+    ]
 
 
 def test_users_query_with_results(gql_client, default_user):
@@ -75,3 +77,42 @@ def test_users_by_start_date(gql_client, default_user, other_user):
         {"id": str(other_user.id)},
         {"id": str(default_user.id)},
     ]
+
+
+def test_users_query_start_date(gql_client, default_user, other_user):
+    executed = gql_client.execute(
+        """{users(dateStartedBefore:"2010-04-27") {id}}""", user=default_user
+    )
+    assert not executed.get("errors")
+    assert len(executed["data"]["users"]) == 1
+    assert executed["data"]["users"] == [{"id": str(default_user.id)}]
+
+    executed = gql_client.execute(
+        """{users(dateStartedAfter:"2010-04-27") {id}}""", user=default_user
+    )
+    assert not executed.get("errors")
+    assert len(executed["data"]["users"]) == 1
+    assert executed["data"]["users"] == [{"id": str(other_user.id)}]
+
+
+def test_users_by_birthday(gql_client, default_user, other_user):
+    executed = gql_client.execute(
+        """{users(orderBy:birthday) {id}}""", user=default_user
+    )
+    assert len(executed["data"]["users"]) == 1
+    assert executed["data"]["users"] == [{"id": str(default_user.id)}]
+
+
+def test_users_query_birthday(gql_client, default_user):
+    executed = gql_client.execute(
+        """{users(birthdayBefore:"2010-08-13") {id}}""", user=default_user
+    )
+    assert not executed.get("errors")
+    assert len(executed["data"]["users"]) == 1
+    assert executed["data"]["users"] == [{"id": str(default_user.id)}]
+
+    executed = gql_client.execute(
+        """{users(birthdayAfter:"2010-08-13") {id}}""", user=default_user
+    )
+    assert not executed.get("errors")
+    assert len(executed["data"]["users"]) == 0

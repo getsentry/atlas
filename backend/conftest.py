@@ -1,3 +1,4 @@
+from datetime import date
 from uuid import UUID
 
 import graphene.test
@@ -48,5 +49,10 @@ def default_user(db):
     user.set_password("phish.reel.big")
     user.save()
 
-    factories.ProfileFactory.create(user=user, title="Dummy")
+    factories.ProfileFactory.create(
+        user=user,
+        title="Dummy",
+        date_started=date(2010, 4, 26),
+        date_of_birth=date(1990, 8, 12),
+    )
     return user

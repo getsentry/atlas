@@ -142,7 +142,7 @@ GRAPHENE = {"SCHEMA": "atlas.root_schema.schema"}
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
 GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI") or "http://localhost:8080"
-GOOGLE_DOMAIN = os.environ.get("GOOGLE_DOMAIN")
+GOOGLE_DOMAIN = os.environ.get("GOOGLE_DOMAIN") or "sentry.io"
 GOOGLE_FIELD_MAP = (
     # "column" => "SchemaName/FieldName"
     ("date_started", "Profile/Date_of_Hire"),

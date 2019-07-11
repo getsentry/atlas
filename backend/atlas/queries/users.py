@@ -2,6 +2,7 @@ from datetime import date
 
 import graphene
 import graphene_django_optimizer as gql_optimizer
+from django.db.models import Q
 from graphql.error import GraphQLError
 
 from atlas.models import User
@@ -14,6 +15,7 @@ class UserOrderBy(graphene.Enum):
 
     name = "name"
     dateStarted = "dateStarted"
+    birthday = "birthday"
 
 
 class Query(object):
@@ -23,7 +25,10 @@ class Query(object):
         query=graphene.String(),
         include_self=graphene.Boolean(),
         office=graphene.UUID(),
+        date_started_before=graphene.types.datetime.Date(),
         date_started_after=graphene.types.datetime.Date(),
+        birthday_after=graphene.types.datetime.Date(),
+        birthday_before=graphene.types.datetime.Date(),
         order_by=graphene.Argument(UserOrderBy),
         offset=graphene.Int(),
         limit=graphene.Int(),
@@ -37,7 +42,10 @@ class Query(object):
         include_self: bool = True,
         office: str = None,
         offset: int = 0,
+        date_started_before: date = None,
         date_started_after: date = None,
+        birthday_before: date = None,
+        birthday_after: date = None,
         limit: int = 1000,
         order_by: str = None,
         **kwargs
@@ -63,8 +71,29 @@ class Query(object):
         if not include_self:
             qs = qs.exclude(id=current_user.id)
 
+        if date_started_before:
+            qs = qs.filter(profile__date_started__lt=date_started_before)
+
         if date_started_after:
             qs = qs.filter(profile__date_started__gt=date_started_after)
+
+        if birthday_before:
+            qs = qs.filter(
+                Q(profile__date_of_birth__month__lt=birthday_before.month)
+                | Q(
+                    profile__date_of_birth__month=birthday_before.month,
+                    profile__date_of_birth__day__lt=birthday_before.day,
+                )
+            )
+
+        if birthday_after:
+            qs = qs.filter(
+                Q(profile__date_of_birth__month__gt=birthday_after.month)
+                | Q(
+                    profile__date_of_birth__month=birthday_after.month,
+                    profile__date_of_birth__day__gt=birthday_after.day,
+                )
+            )
 
         # exclude users without titles as they're mostly not real
         qs = qs.exclude(profile__title__isnull=True)
@@ -74,6 +103,10 @@ class Query(object):
         elif order_by == "dateStarted":
             qs = qs.filter(profile__date_started__isnull=False).order_by(
                 "-profile__date_started"
+            )
+        elif order_by == "birthday":
+            qs = qs.filter(profile__date_of_birth__isnull=False).order_by(
+                "profile__date_of_birth__month", "profile__date_of_birth__day"
             )
 
         return gql_optimizer.query(qs, info)[offset:limit]
