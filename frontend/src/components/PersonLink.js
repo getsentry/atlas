@@ -52,7 +52,7 @@ export default function({ user }) {
       </div>
       <aside>
         <h4>
-          <Link to={`/people/${user.id}`}>{user.name}</Link>
+          <Link to={`/people/${user.email}`}>{user.name}</Link>
         </h4>
 
         {user.profile.title && <small>{user.profile.title}</small>}

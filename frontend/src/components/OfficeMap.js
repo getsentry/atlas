@@ -5,7 +5,7 @@ import Map from "./Map";
 export default class OfficeMap extends Component {
   render() {
     const { office } = this.props;
-    if (!office.lat || !office.lng) return null;
+    if (!office || !office.lat || !office.lng) return null;
     return (
       <Map
         options={{

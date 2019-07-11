@@ -7,7 +7,7 @@ export default class extends Component {
   render() {
     return (
       <Layout>
-        <Person id={this.props.params.id} />
+        <Person email={this.props.params.email} />
       </Layout>
     );
   }

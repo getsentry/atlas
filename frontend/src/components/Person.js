@@ -19,8 +19,8 @@ import Card from "./Card";
 import OfficeMap from "./OfficeMap";
 
 export const PERSON_QUERY = gql`
-  query getPerson($id: UUID!) {
-    users(id: $id) {
+  query getPerson($email: String) {
+    users(email: $email) {
       id
       name
       email
@@ -159,12 +159,12 @@ const PersonContainer = styled.article`
 
 export default class Person extends Component {
   static propTypes = {
-    id: PropTypes.string.isRequired
+    email: PropTypes.string.isRequired
   };
 
   render() {
     return (
-      <Query query={PERSON_QUERY} variables={{ id: this.props.id }}>
+      <Query query={PERSON_QUERY} variables={{ email: this.props.email }}>
         {({ loading, error, data }) => {
           if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;
@@ -229,7 +229,7 @@ export default class Person extends Component {
                         <Box px={3}>
                           <IconLink
                             icon={<Settings />}
-                            to={`/people/${this.props.id}/update`}
+                            to={`/people/${this.props.email}/update`}
                             style={{ fontSize: "0.9em" }}
                           >
                             Edit

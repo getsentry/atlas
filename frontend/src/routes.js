@@ -30,8 +30,8 @@ export default (
     <Route path="/offices/:id/update" component={UpdateOffice} />
     <Route path="/orgChart" component={OrgChart} />
     <Route path="/people" component={People} />
-    <Route path="/people/:id" component={Profile} />
-    <Route path="/people/:id/update" component={UpdateProfile} />
+    <Route path="/people/:email" component={Profile} />
+    <Route path="/people/:email/update" component={UpdateProfile} />
     <Route path="*" component={NotFoundError} />
   </Route>
 );

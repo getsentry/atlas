@@ -32,6 +32,7 @@ export const LIST_PEOPLE_QUERY = gql`
     ) {
       id
       name
+      email
       profile {
         title
         photoUrl

@@ -22,6 +22,7 @@ class Query(object):
     users = graphene.List(
         UserNode,
         id=graphene.UUID(),
+        email=graphene.String(),
         query=graphene.String(),
         include_self=graphene.Boolean(),
         office=graphene.UUID(),
@@ -38,6 +39,7 @@ class Query(object):
         self,
         info,
         id: str = None,
+        email: str = None,
         query: str = None,
         include_self: bool = True,
         office: str = None,
@@ -61,6 +63,9 @@ class Query(object):
 
         if id:
             qs = qs.filter(id=id)
+
+        if email:
+            qs = qs.filter(email__iexact=email)
 
         if office:
             qs = qs.filter(profile__office=office)
