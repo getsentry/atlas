@@ -65,7 +65,7 @@ const Navigation = ({ authenticated, logout, user }) => {
         </Box>
         <Box pl={2}>
           {authenticated && (
-            <Link to={`/people/${user.id}`} className="profile">
+            <Link to={`/people/${user.email}`} className="profile">
               <div className="avatar">
                 {user.profile.photoUrl ? (
                   <img src={user.profile.photoUrl} alt="" />
