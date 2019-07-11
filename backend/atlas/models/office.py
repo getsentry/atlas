@@ -12,6 +12,8 @@ class Office(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     name = models.CharField(max_length=64, unique=True)
     location = models.TextField(null=True)
+    lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+    lng = models.DecimalField(max_digits=9, decimal_places=6, null=True)
 
     objects = OfficeManager()
 

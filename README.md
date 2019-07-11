@@ -7,6 +7,13 @@ It's built on top of G Suite by Google, and currently features:
 - A synced employee directory
 - An automatically generated organization chart
 
+## API Keys
+
+You'll need two sets of credentials from Google:
+
+1. An API key with access to both the Maps JavaScript API and the Geocoding API
+2. An OAuth application configured
+
 ## Development
 
 **Make sure you disable Adblock as it seems to break Google Auth**

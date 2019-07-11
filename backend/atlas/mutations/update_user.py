@@ -69,6 +69,7 @@ class UpdateUser(graphene.Mutation):
             return UpdateUser(ok=False, errors=["Cannot edit this user"])
 
         profile, _ = Profile.objects.get_or_create(user=user)
+        user.profile = profile
 
         with transaction.atomic():
             updates = {}

@@ -61,6 +61,7 @@ const Navigation = ({ authenticated, logout, user }) => {
       <Flex style={{ height: "100%" }} width={1} alignItems="center">
         <Box pr={2} flex="1">
           <Link to="/people">People</Link>
+          <Link to="/offices">Offices</Link>
         </Box>
         <Box pl={2}>
           {authenticated && (

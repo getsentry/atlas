@@ -1,22 +1,33 @@
-from decimal import Decimal
+# XXX: Adapted from Upstream which wasnt in our version
 
-import graphene
-from graphql.language.ast import FloatValue, IntValue
+from decimal import Decimal as _Decimal
+
+from graphene import Scalar
+from graphql.language import ast
 
 
-class DecimalField(graphene.Scalar):
-    class Meta:
-        name = "Decimal"
-
-    @staticmethod
-    def coerce_decimal(value):
-        return Decimal(str(value))
-
-    serialize = coerce_decimal
-    parse_value = coerce_decimal
+class Decimal(Scalar):
+    """
+    The `Decimal` scalar type represents a python Decimal.
+    """
 
     @staticmethod
-    def parse_literal(ast):
-        if isinstance(ast, IntValue) or isinstance(ast, FloatValue):
-            num = Decimal(str(ast.value))
-            return num
+    def serialize(dec):
+        if isinstance(dec, str):
+            dec = _Decimal(dec)
+        assert isinstance(dec, _Decimal), 'Received not compatible Decimal "{}"'.format(
+            repr(dec)
+        )
+        return str(dec)
+
+    @classmethod
+    def parse_literal(cls, node):
+        if isinstance(node, ast.StringValue):
+            return cls.parse_value(node.value)
+
+    @staticmethod
+    def parse_value(value):
+        try:
+            return _Decimal(value)
+        except ValueError:
+            return None

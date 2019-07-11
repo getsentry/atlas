@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "@emotion/styled";
@@ -36,7 +37,9 @@ export default function OfficeList() {
           <OfficeListContainer>
             <ul>
               {offices.map(o => (
-                <li key={o.id}>{o.name}</li>
+                <li key={o.id}>
+                  <Link to={`/offices/${o.id}`}>{o.name}</Link>
+                </li>
               ))}
             </ul>
           </OfficeListContainer>

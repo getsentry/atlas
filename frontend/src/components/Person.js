@@ -9,13 +9,13 @@ import { Email, Phone, Settings } from "@material-ui/icons";
 import { Flex, Box } from "@rebass/grid/emotion";
 
 import colors from "../colors";
-import config from "../config";
 import Content from "./Content";
 import ErrorMessage from "./ErrorMessage";
 import IconLink from "./IconLink";
 import PersonLink from "./PersonLink";
 import PersonList from "./PersonList";
 import Card from "./Card";
+import OfficeMap from "./OfficeMap";
 
 export const PERSON_QUERY = gql`
   query getPerson($id: UUID!) {
@@ -50,6 +50,9 @@ export const PERSON_QUERY = gql`
         primaryPhone
         office {
           name
+          location
+          lat
+          lng
         }
         reportsTo {
           id
@@ -70,76 +73,6 @@ const ProfileHeader = styled.div`
   color: ${colors.white};
   margin-bottom: 1.5rem;
 `;
-
-class Map extends Component {
-  static propTypes = {
-    width: PropTypes.number,
-    height: PropTypes.number
-  };
-
-  static defaultProps = {
-    width: 500,
-    height: 500
-  };
-
-  constructor(props) {
-    super(props);
-    this.mapRef = React.createRef();
-  }
-
-  onScriptLoad = () => {
-    const map = new window.google.maps.Map(this.mapRef.current, this.props.options);
-    this.props.onMapLoad(map);
-  };
-
-  componentDidMount() {
-    if (!window.google) {
-      var s = document.createElement("script");
-      s.type = "text/javascript";
-      s.src = `https://maps.google.com/maps/api/js?key=${config.googleMapsKey}`;
-      var x = document.getElementsByTagName("script")[0];
-      x.parentNode.insertBefore(s, x);
-      // Below is important.
-      //We cannot access google.maps until it's finished loading
-      s.addEventListener("load", () => {
-        this.onScriptLoad();
-      });
-    } else {
-      this.onScriptLoad();
-    }
-  }
-
-  render() {
-    return (
-      <div
-        className="block"
-        style={{ width: this.props.width, height: this.props.height }}
-        ref={this.mapRef}
-      />
-    );
-  }
-}
-
-class OfficeLocation extends Component {
-  render() {
-    return (
-      <Map
-        options={{
-          center: { lat: 41.0082, lng: 28.9784 },
-          zoom: this.props.zoom || 8,
-          disableDefaultUI: this.props.withUI ? false : true
-        }}
-        onMapLoad={map => {
-          new window.google.maps.Marker({
-            position: { lat: 41.0082, lng: 28.9784 },
-            map: map
-          });
-        }}
-        {...this.props}
-      />
-    );
-  }
-}
 
 const PersonContainer = styled.article`
   h1 {
@@ -276,7 +209,12 @@ export default class Person extends Component {
                         </div>
                       </div>
                       <div className="map">
-                        <OfficeLocation width="100%" height={200} zoom={12} />
+                        <OfficeMap
+                          width="100%"
+                          height={200}
+                          zoom={12}
+                          office={thisPerson.profile.office}
+                        />
                       </div>
                     </section>
                   </Box>
@@ -292,7 +230,7 @@ export default class Person extends Component {
                             to={`/people/${this.props.id}/update`}
                             style={{ fontSize: "0.9em" }}
                           >
-                            Edit Profile
+                            Edit
                           </IconLink>
                         </Box>
                       </Flex>
@@ -339,7 +277,13 @@ export default class Person extends Component {
                           </dl>
                         </Card>
                         <Card>
-                          <OfficeLocation width="100%" height={400} zoom={8} withUI />
+                          <OfficeMap
+                            width="100%"
+                            height={400}
+                            zoom={8}
+                            withUI
+                            office={thisPerson.profile.office}
+                          />
                         </Card>
                       </Box>
                       <Box width={1 / 3} px={3}>

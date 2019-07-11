@@ -5,10 +5,12 @@ import { Route, IndexRoute } from "react-router";
 import App from "./pages/App";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Office from "./pages/Office";
 import Offices from "./pages/Offices";
 import OrgChart from "./pages/OrgChart";
 import People from "./pages/People";
 import Profile from "./pages/Profile";
+import UpdateOffice from "./pages/UpdateOffice";
 import UpdateProfile from "./pages/UpdateProfile";
 
 import NotFoundError from "./components/NotFoundError";
@@ -24,6 +26,8 @@ export default (
     <IndexRoute component={Home} />
     <Route path="/login" component={Login} />
     <Route path="/offices" component={Offices} />
+    <Route path="/offices/:id" component={Office} />
+    <Route path="/offices/:id/update" component={UpdateOffice} />
     <Route path="/orgChart" component={OrgChart} />
     <Route path="/people" component={People} />
     <Route path="/people/:id" component={Profile} />
