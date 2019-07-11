@@ -17,6 +17,9 @@ export const LOGIN_MUTATION = gql`
         email
         name
         isSuperuser
+        profile {
+          photoUrl
+        }
       }
     }
   }
@@ -29,6 +32,9 @@ export const CURRENT_USER_QUERY = gql`
       name
       email
       isSuperuser
+      profile {
+        photoUrl
+      }
     }
   }
 `;

@@ -5,12 +5,11 @@ import gql from "graphql-tag";
 import moment from "moment";
 import Avatar from "react-avatar";
 import styled from "@emotion/styled";
-
 import { Email } from "@material-ui/icons";
+import { Flex, Box } from "@rebass/grid/emotion";
 
 import colors from "../colors";
 import config from "../config";
-import LeftFrame from "./LeftFrame";
 import Content from "./Content";
 import ErrorMessage from "./ErrorMessage";
 import PersonLink from "./PersonLink";
@@ -134,11 +133,6 @@ class OfficeLocation extends Component {
 }
 
 const PersonContainer = styled.article`
-  background: ${colors.indigo};
-  display: flex;
-  flex-grow: 1;
-  padding: 0 1rem;
-
   h1 {
     margin: 0;
   }
@@ -147,8 +141,6 @@ const PersonContainer = styled.article`
     font-weight: 500;
   }
   .meta {
-    margin-right: 1.5rem;
-    margin-bottom: 1.5rem;
     color: ${colors.white};
     display: flex;
     justify-content: center;
@@ -160,13 +152,16 @@ const PersonContainer = styled.article`
     background: #fff;
     border-radius: 4px;
     padding: 1rem;
-    margin-bottom: 2rem;
-    margin-right: 2rem;
   }
   .meta .name,
   .meta .contact,
-  .meta .photo {
+  .meta .photo,
+  .meta .map {
     margin-bottom: 1rem;
+  }
+  .meta .map {
+    width: 100%;
+    margin-top: 1rem;
   }
   .meta .photo {
     width: 128px;
@@ -243,81 +238,89 @@ export default class Person extends Component {
             : null;
           return (
             <PersonContainer>
-              <LeftFrame>
-                <section className="meta">
-                  <div className="photo">
-                    {thisPerson.profile.photoUrl ? (
-                      <img src={thisPerson.profile.photoUrl} />
-                    ) : (
-                      <Avatar name={thisPerson.name} size="128" />
-                    )}
-                  </div>
-                  <div className="name">
-                    <h1>{thisPerson.profile.handle || thisPerson.name}</h1>
-                    <h4>{thisPerson.profile.title}</h4>
-                  </div>
-                  <div className="contact">
-                    <a href={`mailto:${thisPerson.email}`}>
-                      <Email /> {thisPerson.email}
-                    </a>
-                  </div>
-                  <OfficeLocation width={250} height={250} zoom={12} />
-                </section>
-              </LeftFrame>
               <Content>
-                <section className="main">
-                  <div className="about">
-                    <dl className="clearfix">
-                      <dt>Name</dt>
-                      <dd>{thisPerson.name}</dd>
-                      <dt>Preferred Name</dt>
-                      <dd>{thisPerson.profile.handle || <Empty />}</dd>
-                      <dt>Department</dt>
-                      <dd>{thisPerson.profile.department || <Empty />}</dd>
-                      <dt>Start Date</dt>
-                      <dd>
-                        {thisPerson.profile.dateStarted ? (
-                          moment(thisPerson.profile.dateStarted).format("MMMM Do YYYY")
+                <Flex style={{ height: "100%" }}>
+                  <Box width={300} px={3}>
+                    <section className="meta">
+                      <div className="photo">
+                        {thisPerson.profile.photoUrl ? (
+                          <img src={thisPerson.profile.photoUrl} />
                         ) : (
-                          <Empty />
+                          <Avatar name={thisPerson.name} size="128" />
                         )}
-                      </dd>
-                      <dt>Reports To</dt>
-                      <dd>
-                        {thisPerson.profile.reportsTo ? (
-                          <PersonLink user={thisPerson.profile.reportsTo} />
-                        ) : (
-                          <Empty />
+                      </div>
+                      <div className="name">
+                        <h1>{thisPerson.profile.handle || thisPerson.name}</h1>
+                        <h4>{thisPerson.profile.title}</h4>
+                      </div>
+                      <div className="contact">
+                        <a href={`mailto:${thisPerson.email}`}>
+                          <Email /> {thisPerson.email}
+                        </a>
+                      </div>
+                      <div className="map">
+                        <OfficeLocation width="100%" height={200} zoom={12} />
+                      </div>
+                    </section>
+                  </Box>
+                  <Box px={3} flex="1">
+                    <section className="main">
+                      <div className="about">
+                        <dl className="clearfix">
+                          <dt>Name</dt>
+                          <dd>{thisPerson.name}</dd>
+                          <dt>Preferred Name</dt>
+                          <dd>{thisPerson.profile.handle || <Empty />}</dd>
+                          <dt>Department</dt>
+                          <dd>{thisPerson.profile.department || <Empty />}</dd>
+                          <dt>Start Date</dt>
+                          <dd>
+                            {thisPerson.profile.dateStarted ? (
+                              moment(thisPerson.profile.dateStarted).format(
+                                "MMMM Do YYYY"
+                              )
+                            ) : (
+                              <Empty />
+                            )}
+                          </dd>
+                          <dt>Reports To</dt>
+                          <dd>
+                            {thisPerson.profile.reportsTo ? (
+                              <PersonLink user={thisPerson.profile.reportsTo} />
+                            ) : (
+                              <Empty />
+                            )}
+                          </dd>
+                          <dt>Office</dt>
+                          <dd>
+                            {thisPerson.profile.office ? (
+                              thisPerson.profile.office.name
+                            ) : (
+                              <Empty />
+                            )}
+                          </dd>
+                          <dt>Birthday</dt>
+                          <dd>{dob ? dob.format("MMMM Do") : <Empty />}</dd>
+                        </dl>
+                        {!!thisPerson.reports.length && (
+                          <React.Fragment>
+                            <h3>Reports</h3>
+                            <PersonList people={thisPerson.reports} />
+                          </React.Fragment>
                         )}
-                      </dd>
-                      <dt>Office</dt>
-                      <dd>
-                        {thisPerson.profile.office ? (
-                          thisPerson.profile.office.name
-                        ) : (
-                          <Empty />
+                        {!!thisPerson.peers.length && (
+                          <React.Fragment>
+                            <h3>Peers</h3>
+                            <PersonList people={thisPerson.peers} />
+                          </React.Fragment>
                         )}
-                      </dd>
-                      <dt>Birthday</dt>
-                      <dd>{dob ? dob.format("MMMM Do") : <Empty />}</dd>
-                    </dl>
-                    {!!thisPerson.reports.length && (
-                      <React.Fragment>
-                        <h3>Reports</h3>
-                        <PersonList people={thisPerson.reports} />
-                      </React.Fragment>
-                    )}
-                    {!!thisPerson.peers.length && (
-                      <React.Fragment>
-                        <h3>Peers</h3>
-                        <PersonList people={thisPerson.peers} />
-                      </React.Fragment>
-                    )}
-                  </div>
-                  <div className="map">
-                    <OfficeLocation width={400} height={400} zoom={8} withUI />
-                  </div>
-                </section>
+                      </div>
+                      <div className="map">
+                        <OfficeLocation width={400} height={400} zoom={8} withUI />
+                      </div>
+                    </section>
+                  </Box>
+                </Flex>
               </Content>
             </PersonContainer>
           );
