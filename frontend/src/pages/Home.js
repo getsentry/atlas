@@ -6,6 +6,7 @@ import { Flex, Box } from "@rebass/grid/emotion";
 import gql from "graphql-tag";
 import moment from "moment";
 
+import Button from "../components/Button";
 import Card from "../components/Card";
 import Content from "../components/Content";
 import ErrorMessage from "../components/ErrorMessage";
@@ -77,7 +78,7 @@ class Home extends Component {
                         </p>
                       );
                     }
-                    return <PersonList people={users} />;
+                    return <PersonList people={users} withStartDate />;
                   }}
                 </Query>
               </Card>
@@ -105,7 +106,7 @@ class Home extends Component {
                         <p>{`It looks like there's no recent or upcoming birthdays.`}</p>
                       );
                     }
-                    return <PersonList people={users} />;
+                    return <PersonList people={users} withBirthday />;
                   }}
                 </Query>
               </Card>
@@ -133,7 +134,7 @@ class Home extends Component {
                   <h2>Admin Controls</h2>
                   <ul>
                     <li>
-                      <button onClick={syncGoogle}>Force Google Sync</button>
+                      <Button onClick={syncGoogle}>Force Google Sync</Button>
                     </li>
                   </ul>
                 </Card>

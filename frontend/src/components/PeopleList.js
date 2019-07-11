@@ -8,7 +8,10 @@ import PersonList from "./PersonList";
 export const LIST_PEOPLE_QUERY = gql`
   query listPeople(
     $office: UUID
+    $dateStartedBefore: Date
     $dateStartedAfter: Date
+    $birthdayBefore: Date
+    $birthdayAfter: Date
     $query: String
     $includeSelf: Boolean
     $orderBy: UserOrderBy
@@ -17,7 +20,10 @@ export const LIST_PEOPLE_QUERY = gql`
   ) {
     users(
       office: $office
+      dateStartedBefore: $dateStartedBefore
       dateStartedAfter: $dateStartedAfter
+      birthdayBefore: $birthdayBefore
+      birthdayAfter: $birthdayAfter
       query: $query
       includeSelf: $includeSelf
       orderBy: $orderBy
@@ -29,6 +35,9 @@ export const LIST_PEOPLE_QUERY = gql`
       profile {
         title
         photoUrl
+        dobMonth
+        dobDay
+        dateStarted
         reportsTo {
           id
         }

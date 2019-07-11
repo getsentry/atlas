@@ -12,8 +12,9 @@ export default styled.button`
   line-height: 1.5;
   border-radius: 0.25rem;
   cursor: pointer;
-  background: ${colors.primary500};
-  color: ${colors.white};
+  background: ${colors.white};
+  color: ${colors.primary};
+  border-color: ${colors.primary};
   transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.1s ease-in-out;
 

@@ -105,6 +105,12 @@ def test_users_by_birthday(gql_client, default_user, other_user):
 
 def test_users_query_birthday(gql_client, default_user):
     executed = gql_client.execute(
+        """{users(birthdayBefore:"2010-08-10") {id}}""", user=default_user
+    )
+    assert not executed.get("errors")
+    assert len(executed["data"]["users"]) == 0
+
+    executed = gql_client.execute(
         """{users(birthdayBefore:"2010-08-13") {id}}""", user=default_user
     )
     assert not executed.get("errors")
@@ -116,3 +122,10 @@ def test_users_query_birthday(gql_client, default_user):
     )
     assert not executed.get("errors")
     assert len(executed["data"]["users"]) == 0
+
+    executed = gql_client.execute(
+        """{users(birthdayAfter:"2010-08-10") {id}}""", user=default_user
+    )
+    assert not executed.get("errors")
+    assert len(executed["data"]["users"]) == 1
+    assert executed["data"]["users"] == [{"id": str(default_user.id)}]
