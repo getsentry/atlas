@@ -64,7 +64,7 @@ const Navigation = ({ authenticated, logout, user }) => {
         </Box>
         <Box pl={2}>
           {authenticated && (
-            <a onClick={logout} className="profile">
+            <Link to={`/people/${user.id}`} className="profile">
               <div className="avatar">
                 {user.profile.photoUrl ? (
                   <img src={user.profile.photoUrl} alt="" />
@@ -73,7 +73,7 @@ const Navigation = ({ authenticated, logout, user }) => {
                 )}
               </div>
               {user.name}
-            </a>
+            </Link>
           )}
         </Box>
       </Flex>
