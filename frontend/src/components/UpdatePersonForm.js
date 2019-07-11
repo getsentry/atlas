@@ -23,8 +23,8 @@ const UserSchema = yup.object().shape({
 });
 
 export const PERSON_QUERY = gql`
-  query getPersonForUpdate($id: UUID!) {
-    users(id: $id) {
+  query getPersonForUpdate($email: String!) {
+    users(email: $email) {
       id
       name
       email
@@ -104,7 +104,7 @@ export const PERSON_MUTATION = gql`
 
 class UpdatePersonForm extends Component {
   static propTypes = {
-    id: PropTypes.string.isRequired
+    email: PropTypes.string.isRequired
   };
 
   static contextTypes = { router: PropTypes.object.isRequired };
@@ -112,7 +112,7 @@ class UpdatePersonForm extends Component {
   render() {
     let currentUser = this.props.user;
     return (
-      <Query query={PERSON_QUERY} variables={{ id: this.props.id }}>
+      <Query query={PERSON_QUERY} variables={{ email: this.props.email }}>
         {({ loading, data }) => {
           //if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;
@@ -143,7 +143,7 @@ class UpdatePersonForm extends Component {
                     .mutate({
                       mutation: PERSON_MUTATION,
                       variables: {
-                        user: this.props.id,
+                        user: user.id,
                         ...values
                       }
                     })

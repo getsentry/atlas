@@ -9,7 +9,7 @@ export default class extends Component {
     return (
       <Layout>
         <Content>
-          <UpdatePersonForm id={this.props.params.id} />
+          <UpdatePersonForm email={this.props.params.email} />
         </Content>
       </Layout>
     );
