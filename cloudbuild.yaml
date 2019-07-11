@@ -7,6 +7,7 @@ steps:
         for d in */; do
           config="${d}cloudbuild.yaml"
           if [[ ! -f "${config}" ]]; then
+            echo "No cloudbuild.yaml found in $d"
             continue
           fi
 
