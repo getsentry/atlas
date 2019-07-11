@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 
 const ContentContainer = styled.main`
-  margin: 0 0.5rem 1.5rem;
+  margin: 0 0.75rem 1.5rem;
   flex-grow: 1;
 `;
 

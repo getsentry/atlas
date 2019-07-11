@@ -3,7 +3,6 @@ import { Link } from "react-router";
 import styled from "@emotion/styled";
 import { Flex, Box } from "@rebass/grid/emotion";
 import { connect } from "react-redux";
-import { ExitToApp } from "@material-ui/icons";
 
 import actions from "../actions";
 import colors from "../colors";
@@ -85,7 +84,7 @@ const Navigation = ({ authenticated, logout, user }) => {
 const HeaderContainer = styled.header`
   background: ${colors.primary};
   border-bottom: 1px solid hsla(0, 0%, 100%, 0.1) !important;
-  margin: 0 0.5rem 1.5rem;
+  margin: 0 0.75rem 1.5rem;
   height: 5rem;
 
   h1 {
