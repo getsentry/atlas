@@ -1,13 +1,21 @@
 const $white = "#FFF";
 const $gray100 = "#FAFBFE";
 const $gray200 = "#EFF2F7";
+// eslint-disable-next-line
 const $gray300 = "#E5E9F2";
+// eslint-disable-next-line
 const $gray400 = "#E0E6ED";
+// eslint-disable-next-line
 const $gray500 = "#D3DCE6";
+// eslint-disable-next-line
 const $gray600 = "#C0CCDA";
+// eslint-disable-next-line
 const $gray700 = "#8492A6";
+// eslint-disable-next-line
 const $gray800 = "#3C4858";
+// eslint-disable-next-line
 const $gray900 = "#273444";
+// eslint-disable-next-line
 const $black = "#1F2D3D";
 
 const $blue = "#2684FF";

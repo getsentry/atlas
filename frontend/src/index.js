@@ -8,7 +8,7 @@ import { ApolloProvider } from "react-apollo";
 import routes from "./routes";
 import store from "./store";
 import * as serviceWorker from "./serviceWorker";
-import * as config from "./config";
+import config from "./config";
 import apolloClient from "./utils/apollo";
 
 import "./index.css";
