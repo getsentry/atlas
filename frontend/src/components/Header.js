@@ -64,7 +64,7 @@ const Navigation = ({ authenticated, logout, user }) => {
         </Box>
         <Box pl={2}>
           {authenticated && (
-            <a href onClick={logout} className="profile">
+            <a onClick={logout} className="profile">
               <div className="avatar">
                 {user.profile.photoUrl ? (
                   <img src={user.profile.photoUrl} alt="" />
