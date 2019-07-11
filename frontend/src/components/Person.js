@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
@@ -49,6 +50,7 @@ export const PERSON_QUERY = gql`
         photoUrl
         primaryPhone
         office {
+          id
           name
           location
           lat
@@ -267,7 +269,9 @@ export default class Person extends Component {
                             <dt>Office</dt>
                             <dd>
                               {thisPerson.profile.office ? (
-                                thisPerson.profile.office.name
+                                <Link to={`/offices/${thisPerson.profile.office.id}`}>
+                                  {thisPerson.profile.office.name}
+                                </Link>
                               ) : (
                                 <Empty />
                               )}
@@ -275,15 +279,6 @@ export default class Person extends Component {
                             <dt>Birthday</dt>
                             <dd>{dob ? dob.format("MMMM Do") : <Empty />}</dd>
                           </dl>
-                        </Card>
-                        <Card>
-                          <OfficeMap
-                            width="100%"
-                            height={400}
-                            zoom={8}
-                            withUI
-                            office={thisPerson.profile.office}
-                          />
                         </Card>
                       </Box>
                       <Box width={1 / 3} px={3}>
