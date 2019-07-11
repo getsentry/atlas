@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import moment from "moment";
 import Avatar from "react-avatar";
 import styled from "@emotion/styled";
-import { Email } from "@material-ui/icons";
+import { Email, Phone } from "@material-ui/icons";
 import { Flex, Box } from "@rebass/grid/emotion";
 
 import colors from "../colors";
@@ -14,6 +14,7 @@ import Content from "./Content";
 import ErrorMessage from "./ErrorMessage";
 import PersonLink from "./PersonLink";
 import PersonList from "./PersonList";
+import Card from "./Card";
 
 export const PERSON_QUERY = gql`
   query getPerson($id: UUID!) {
@@ -104,6 +105,7 @@ class Map extends Component {
   render() {
     return (
       <div
+        className="block"
         style={{ width: this.props.width, height: this.props.height }}
         ref={this.mapRef}
       />
@@ -118,7 +120,7 @@ class OfficeLocation extends Component {
         options={{
           center: { lat: 41.0082, lng: 28.9784 },
           zoom: this.props.zoom || 8,
-          disableDefaultUI: this.props.withUI || true
+          disableDefaultUI: this.props.withUI ? false : true
         }}
         onMapLoad={map => {
           new window.google.maps.Marker({
@@ -147,16 +149,11 @@ const PersonContainer = styled.article`
     align-items: center;
     flex-direction: column;
   }
-  .main {
-    flex-grow: 1;
-    background: #fff;
-    border-radius: 4px;
-    padding: 1rem;
-  }
   .meta .name,
   .meta .contact,
   .meta .photo,
   .meta .map {
+    text-align: center;
     margin-bottom: 1rem;
   }
   .meta .map {
@@ -208,10 +205,6 @@ const PersonContainer = styled.article`
   dl dd {
     margin-bottom: 5px;
   }
-  .about,
-  .map {
-    width: 50%;
-  }
 `;
 
 export default class Person extends Component {
@@ -254,71 +247,80 @@ export default class Person extends Component {
                         <h4>{thisPerson.profile.title}</h4>
                       </div>
                       <div className="contact">
-                        <a href={`mailto:${thisPerson.email}`}>
-                          <Email /> {thisPerson.email}
-                        </a>
+                        <div>
+                          <a href={`mailto:${thisPerson.email}`}>
+                            <Email /> {thisPerson.email}
+                          </a>
+                        </div>
+                        <div>
+                          <Phone /> n/a
+                        </div>
                       </div>
                       <div className="map">
                         <OfficeLocation width="100%" height={200} zoom={12} />
                       </div>
                     </section>
                   </Box>
-                  <Box px={3} flex="1">
-                    <section className="main">
-                      <div className="about">
-                        <dl className="clearfix">
-                          <dt>Name</dt>
-                          <dd>{thisPerson.name}</dd>
-                          <dt>Preferred Name</dt>
-                          <dd>{thisPerson.profile.handle || <Empty />}</dd>
-                          <dt>Department</dt>
-                          <dd>{thisPerson.profile.department || <Empty />}</dd>
-                          <dt>Start Date</dt>
-                          <dd>
-                            {thisPerson.profile.dateStarted ? (
-                              moment(thisPerson.profile.dateStarted).format(
-                                "MMMM Do YYYY"
-                              )
-                            ) : (
-                              <Empty />
-                            )}
-                          </dd>
-                          <dt>Reports To</dt>
-                          <dd>
-                            {thisPerson.profile.reportsTo ? (
-                              <PersonLink user={thisPerson.profile.reportsTo} />
-                            ) : (
-                              <Empty />
-                            )}
-                          </dd>
-                          <dt>Office</dt>
-                          <dd>
-                            {thisPerson.profile.office ? (
-                              thisPerson.profile.office.name
-                            ) : (
-                              <Empty />
-                            )}
-                          </dd>
-                          <dt>Birthday</dt>
-                          <dd>{dob ? dob.format("MMMM Do") : <Empty />}</dd>
-                        </dl>
+                  <Box flex="1">
+                    <Flex>
+                      <Box width={2 / 3} px={3}>
+                        <Card>
+                          <dl className="clearfix">
+                            <dt>Name</dt>
+                            <dd>{thisPerson.name}</dd>
+                            <dt>Preferred Name</dt>
+                            <dd>{thisPerson.profile.handle || <Empty />}</dd>
+                            <dt>Department</dt>
+                            <dd>{thisPerson.profile.department || <Empty />}</dd>
+                            <dt>Start Date</dt>
+                            <dd>
+                              {thisPerson.profile.dateStarted ? (
+                                moment(thisPerson.profile.dateStarted).format(
+                                  "MMMM Do YYYY"
+                                )
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
+                            <dt>Reports To</dt>
+                            <dd>
+                              {thisPerson.profile.reportsTo ? (
+                                <PersonLink user={thisPerson.profile.reportsTo} />
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
+                            <dt>Office</dt>
+                            <dd>
+                              {thisPerson.profile.office ? (
+                                thisPerson.profile.office.name
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
+                            <dt>Birthday</dt>
+                            <dd>{dob ? dob.format("MMMM Do") : <Empty />}</dd>
+                          </dl>
+                        </Card>
+                        <Card>
+                          <OfficeLocation width="100%" height={400} zoom={8} withUI />
+                        </Card>
+                      </Box>
+                      <Box width={1 / 3} px={3}>
                         {!!thisPerson.reports.length && (
-                          <React.Fragment>
+                          <Card>
                             <h3>Reports</h3>
                             <PersonList people={thisPerson.reports} />
-                          </React.Fragment>
+                          </Card>
                         )}
                         {!!thisPerson.peers.length && (
-                          <React.Fragment>
+                          <Card>
                             <h3>Peers</h3>
                             <PersonList people={thisPerson.peers} />
-                          </React.Fragment>
+                          </Card>
                         )}
-                      </div>
-                      <div className="map">
-                        <OfficeLocation width={400} height={400} zoom={8} withUI />
-                      </div>
-                    </section>
+                      </Box>
+                    </Flex>
                   </Box>
                 </Flex>
               </Content>

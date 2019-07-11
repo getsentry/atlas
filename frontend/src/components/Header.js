@@ -59,10 +59,10 @@ const Navigation = ({ authenticated, logout, user }) => {
   return (
     <NavigationContainer>
       <Flex style={{ height: "100%" }} width={1} alignItems="center">
-        <Box px={2} flex="1">
+        <Box pr={2} flex="1">
           <Link to="/people">People</Link>
         </Box>
-        <Box px={2}>
+        <Box pl={2}>
           {authenticated && (
             <a href onClick={logout} className="profile">
               <div className="avatar">
