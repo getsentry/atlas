@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import config from "../config";
 import Modal from "./Modal";
 
 export default class InternalError extends Component {
@@ -28,8 +29,7 @@ export default class InternalError extends Component {
             .
           </li>
           <li>
-            If you think this is a bug,{" "}
-            <a href="http://github.com/getsentry/zeus/issues">create an issue</a> with
+            If you think this is a bug, <a href={config.repoUrl}>create an issue</a> with
             more details.
           </li>
         </ul>
@@ -40,7 +40,7 @@ export default class InternalError extends Component {
             paddingTop: 20
           }}
         >
-          <p>{"The exception Zeus reported was:"}</p>
+          <p>{"The exception reported was:"}</p>
           <pre>{error.stack}</pre>
         </div>
       </Modal>

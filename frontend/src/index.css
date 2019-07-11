@@ -68,6 +68,11 @@ pre,
 code {
   font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
 }
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
 a {
   color: #6c5fc7;
   text-decoration: none;
@@ -121,6 +126,9 @@ input {
   overflow: visible;
 }
 input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="number"],
 input[type="date"] {
   width: 100%;
   padding: 0.375rem 0.75rem;
@@ -158,4 +166,7 @@ button:hover {
   content: "";
   clear: both;
   display: table;
+}
+.MuiSvgIcon-root {
+  vertical-align: middle;
 }

@@ -13,22 +13,23 @@ services:
       - redis_data:/data
     ports:
       - 6379:6379
-  frontend:
-    build: frontend
-    # command: npm dev
-    # volumes:
-    #   - frontend:/usr/src/app/frontend
-    ports:
-      - 3000:3000
-  backend:
-    build: backend
-    # command: python /usr/src/app/bin/atlas runserver 0.0.0.0:8000
-    # volumes:
-    #   - backend:/usr/src/app/backend
-    ports:
-      - 8000:8000
-    depends_on:
-      - db
+  # frontend:
+  #   build: frontend
+  #   # command: npm dev
+  #   # volumes:
+  #   #   - frontend:/usr/src/app/frontend
+  #   ports:
+  #     - 3000:3000
+  # backend:
+  #   build: backend
+  #   # command: python /usr/src/app/bin/atlas runserver 0.0.0.0:8000
+  #   # volumes:
+  #   #   - backend:/usr/src/app/backend
+  #   ports:
+  #     - 8000:8000
+  #   depends_on:
+  #     - db
 
 volumes:
   postgres_data:
+  redis_data:

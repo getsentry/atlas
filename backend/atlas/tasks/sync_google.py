@@ -1,6 +1,7 @@
 from celery import shared_task
 from django.conf import settings
 
+from atlas.models import User
 from atlas.utils import google
 
 
@@ -11,3 +12,10 @@ def sync_google(domain=None):
 
     identity = google.get_admin_identity()
     google.sync_domain(identity, domain)
+
+
+@shared_task(name="atlas.tasks.update_profile")
+def update_profile(user_id, updates):
+    user = User.objects.get(id=user_id)
+    identity = google.get_admin_identity()
+    google.update_profile(identity, user, updates)

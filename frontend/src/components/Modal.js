@@ -10,7 +10,7 @@ export default class Modal extends Component {
   };
 
   static defaultProps = {
-    maxWidth: 600
+    maxWidth: 800
   };
 
   render() {

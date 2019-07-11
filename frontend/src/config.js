@@ -14,6 +14,7 @@ function defaultKeys() {
 }
 
 export default {
+  repoUrl: "http://github.com/getsentry/atlas/issues",
   ...defaultKeys(),
   ...(process.env.ATLAS_CONFIG || window.ATLAS_CONFIG || {})
 };

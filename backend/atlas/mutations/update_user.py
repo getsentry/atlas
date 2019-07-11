@@ -2,7 +2,8 @@ import graphene
 from django.db import transaction
 
 from atlas.models import Profile, User
-from atlas.schema import UserNode
+from atlas.schema import PhoneNumberField, UserNode
+from atlas.tasks.sync_google import update_profile
 
 
 def is_chain_of_command(user, maybe_manager):
@@ -14,7 +15,16 @@ def is_chain_of_command(user, maybe_manager):
     return False
 
 
-FIELD_MODEL_MAP = {"name": User, "handle": Profile}
+FIELD_MODEL_MAP = {
+    "name": User,
+    "handle": Profile,
+    "date_of_birth": Profile,
+    "date_started": Profile,
+    "department": Profile,
+    "title": Profile,
+    "reports_to": Profile,
+    "primary_phone": Profile,
+}
 
 RESTRICTED_FIELDS = frozenset(
     ["name", "date_of_birth", "date_started", "title", "department", "reports_to"]
@@ -24,13 +34,14 @@ RESTRICTED_FIELDS = frozenset(
 class UpdateUser(graphene.Mutation):
     class Arguments:
         user = graphene.UUID(required=True)
-        name = graphene.String(required=False)
+        # name = graphene.String(required=False)
         handle = graphene.String(required=False)
         date_of_birth = graphene.Date(required=False)
         date_started = graphene.Date(required=False)
         title = graphene.String(required=False)
         department = graphene.String(required=False)
         reports_to = graphene.String(required=False)
+        primary_phone = PhoneNumberField(required=False)
 
     ok = graphene.Boolean()
     errors = graphene.List(graphene.String)
@@ -60,7 +71,8 @@ class UpdateUser(graphene.Mutation):
         profile, _ = Profile.objects.get_or_create(user=user)
 
         with transaction.atomic():
-            updates = {User: {}, Profile: {}}
+            updates = {}
+            model_updates = {User: {}, Profile: {}}
             for field, value in fields.items():
                 if is_restricted and field in RESTRICTED_FIELDS:
                     continue
@@ -74,9 +86,10 @@ class UpdateUser(graphene.Mutation):
                     raise NotImplementedError
 
                 if cur_attr != value:
-                    updates[model][field] = value
+                    model_updates[model][field] = value
+                    updates[field] = value
 
-            for model, values in updates.items():
+            for model, values in model_updates.items():
                 if values:
                     if model is User:
                         instance = user
@@ -85,4 +98,7 @@ class UpdateUser(graphene.Mutation):
                     for key, value in values.items():
                         setattr(instance, key, value)
                     instance.save(update_fields=values.keys())
+
+            if updates:
+                update_profile.delay(user_id=user.id, updates=updates)
         return UpdateUser(ok=True, user=user)

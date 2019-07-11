@@ -6,6 +6,7 @@ export default styled.div`
   margin: 0 0 1.5rem;
   overflow: visible;
   border-radius: 4px;
+  padding-bottom: ${props => (props.withPadding ? "1rem" : 0)};
 
   ::after {
     content: "";

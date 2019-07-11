@@ -5,13 +5,14 @@ import gql from "graphql-tag";
 import moment from "moment";
 import Avatar from "react-avatar";
 import styled from "@emotion/styled";
-import { Email, Phone } from "@material-ui/icons";
+import { Email, Phone, Settings } from "@material-ui/icons";
 import { Flex, Box } from "@rebass/grid/emotion";
 
 import colors from "../colors";
 import config from "../config";
 import Content from "./Content";
 import ErrorMessage from "./ErrorMessage";
+import IconLink from "./IconLink";
 import PersonLink from "./PersonLink";
 import PersonList from "./PersonList";
 import Card from "./Card";
@@ -46,6 +47,7 @@ export const PERSON_QUERY = gql`
         title
         dateStarted
         photoUrl
+        primaryPhone
         office {
           name
         }
@@ -63,6 +65,11 @@ export const PERSON_QUERY = gql`
 `;
 
 const Empty = () => <span>&mdash;</span>;
+
+const ProfileHeader = styled.div`
+  color: ${colors.white};
+  margin-bottom: 1.5rem;
+`;
 
 class Map extends Component {
   static propTypes = {
@@ -156,6 +163,9 @@ const PersonContainer = styled.article`
     text-align: center;
     margin-bottom: 1rem;
   }
+  .meta .contact > div {
+    margin-bottom: 0.5rem;
+  }
   .meta .map {
     width: 100%;
     margin-top: 1rem;
@@ -175,6 +185,11 @@ const PersonContainer = styled.article`
   }
   .meta h1 {
     font-size: 1.4em;
+    margin-bottom: 0;
+  }
+  .meta h2 {
+    font-size: 1.3em;
+    margin-bottom: 0;
   }
   .meta h4 {
     font-weight: normal;
@@ -243,7 +258,11 @@ export default class Person extends Component {
                         )}
                       </div>
                       <div className="name">
-                        <h1>{thisPerson.profile.handle || thisPerson.name}</h1>
+                        <h1>{thisPerson.name}</h1>
+                        {thisPerson.profile.handle &&
+                          thisPerson.profile.handle != thisPerson.name && (
+                            <h2>"{thisPerson.profile.handle}"</h2>
+                          )}
                         <h4>{thisPerson.profile.title}</h4>
                       </div>
                       <div className="contact">
@@ -253,7 +272,7 @@ export default class Person extends Component {
                           </a>
                         </div>
                         <div>
-                          <Phone /> n/a
+                          <Phone /> {thisPerson.profile.primaryPhone || "n/a"}
                         </div>
                       </div>
                       <div className="map">
@@ -262,6 +281,23 @@ export default class Person extends Component {
                     </section>
                   </Box>
                   <Box flex="1">
+                    <ProfileHeader>
+                      <Flex alignItems="center">
+                        <Box px={3} flex="1">
+                          <h1>Profile</h1>
+                        </Box>
+                        <Box px={3}>
+                          <IconLink
+                            icon={<Settings />}
+                            to={`/people/${this.props.id}/update`}
+                            style={{ fontSize: "0.9em" }}
+                          >
+                            Edit Profile
+                          </IconLink>
+                        </Box>
+                      </Flex>
+                    </ProfileHeader>
+
                     <Flex>
                       <Box width={2 / 3} px={3}>
                         <Card>

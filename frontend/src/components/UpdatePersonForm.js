@@ -1,42 +1,73 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import * as yup from "yup";
 
-import { PERSON_QUERY } from "../components/Person";
+import Button from "../components/Button";
+import Card from "../components/Card";
+import FieldWrapper from "../components/FieldWrapper";
 import apolloClient from "../utils/apollo";
 
-// const RestrictedUserSchema = yup.object().shape({
-//   handle: yup.string()
-// });
-
-const FullUserSchema = yup.object().shape({
+const UserSchema = yup.object().shape({
   name: yup.string().required("Required"),
-  handle: yup.string(),
-  title: yup.string(),
-  department: yup.string(),
-  dateStarted: yup.date(),
-  dateOfBirth: yup.date()
+  email: yup.string().required("Required"),
+  handle: yup.string().nullable(),
+  title: yup.string().nullable(),
+  department: yup.string().nullable(),
+  primaryPhone: yup.string().nullable(),
+  dateStarted: yup.date().nullable(),
+  dateOfBirth: yup.date().nullable()
 });
+
+export const PERSON_QUERY = gql`
+  query getPersonForUpdate($id: UUID!) {
+    users(id: $id) {
+      id
+      name
+      email
+      profile {
+        handle
+        department
+        title
+        dateOfBirth
+        dateStarted
+        photoUrl
+        primaryPhone
+        office {
+          name
+        }
+        reportsTo {
+          id
+          name
+          profile {
+            title
+            photoUrl
+          }
+        }
+      }
+    }
+  }
+`;
 
 export const PERSON_MUTATION = gql`
   mutation updatePerson(
     $user: UUID!
-    $name: String
     $handle: String
     $title: String
     $department: String
+    $primaryPhone: PhoneNumber
     $dateOfBirth: Date
     $dateStarted: Date
   ) {
     updateUser(
       user: $user
-      name: $name
       handle: $handle
       title: $title
       department: $department
+      primaryPhone: $primaryPhone
       dateOfBirth: $dateOfBirth
       dateStarted: $dateStarted
     ) {
@@ -46,14 +77,6 @@ export const PERSON_MUTATION = gql`
         id
         name
         email
-        reports {
-          id
-          name
-          profile {
-            title
-            photoUrl
-          }
-        }
         profile {
           handle
           department
@@ -61,6 +84,7 @@ export const PERSON_MUTATION = gql`
           dateOfBirth
           dateStarted
           photoUrl
+          primaryPhone
           office {
             name
           }
@@ -78,22 +102,15 @@ export const PERSON_MUTATION = gql`
   }
 `;
 
-const FieldWrapper = ({ name, label, type, readonly }) => {
-  return (
-    <div style={{ marginBottom: "1rem" }}>
-      <label>{label}</label>
-      <Field type={type} name={name} disabled={readonly} />
-      <ErrorMessage name={name} />
-    </div>
-  );
-};
-
 class UpdatePersonForm extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired
   };
 
+  static contextTypes = { router: PropTypes.object.isRequired };
+
   render() {
+    let currentUser = this.props.user;
     return (
       <Query query={PERSON_QUERY} variables={{ id: this.props.id }}>
         {({ loading, data }) => {
@@ -102,74 +119,111 @@ class UpdatePersonForm extends Component {
           if (!data.users.length)
             return <ErrorMessage message="Couldn't find that person." />;
           const user = data.users[0];
-          const isRestricted = true;
+          const isRestricted = !currentUser.isSuperuser;
           const initialValues = {
             name: user.name,
+            email: user.email,
             handle: user.profile.handle,
             title: user.profile.title,
             department: user.profile.department,
             dateOfBirth: user.profile.dateOfBirth,
-            dateStarted: user.profile.dateStarted
+            dateStarted: user.profile.dateStarted,
+            primaryPhone: user.profile.primaryPhone
           };
           return (
             <section>
-              <h1 style={{ marginBottom: 0 }}>Update Profile</h1>
+              <Card>
+                <h1>{user.name}</h1>
+              </Card>
               <Formik
                 initialValues={initialValues}
-                validationSchema={FullUserSchema}
-                onSubmit={(values, { setSubmitting }) => {
-                  setTimeout(() => {
-                    apolloClient.mutate({
+                validationSchema={UserSchema}
+                onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
+                  apolloClient
+                    .mutate({
                       mutation: PERSON_MUTATION,
                       variables: {
                         user: this.props.id,
                         ...values
                       }
-                    });
-                    setSubmitting(false);
-                  }, 400);
+                    })
+                    .then(
+                      (...params) => {
+                        setSubmitting(false);
+                        this.context.router.push({
+                          pathname: `/people/${user.id}`
+                        });
+                      },
+                      err => {
+                        if (err.graphQLErrors && err.graphQLErrors.length) {
+                          // do something useful
+                          setStatus({ error: "" + err });
+                        } else {
+                          setStatus({ error: "" + err });
+                        }
+                        setSubmitting(false);
+                      }
+                    );
                 }}
               >
-                {({ isSubmitting }) => (
+                {({ isSubmitting, status }) => (
                   <Form>
-                    <h2 style={{ marginTop: "1rem" }}>Basics</h2>
-                    <FieldWrapper
-                      type="text"
-                      name="name"
-                      label="Name (Given)"
-                      readonly={isRestricted}
-                    />
-                    <FieldWrapper type="text" name="handle" label="Name (Preferred)" />
-                    <FieldWrapper
-                      type="date"
-                      name="dateOfBirth"
-                      label="Date of Birth"
-                      readonly={isRestricted}
-                    />
+                    {status && status.error && (
+                      <Card>
+                        <strong>{status.error}</strong>
+                      </Card>
+                    )}
+                    <Card>
+                      <h2>Basics</h2>
+                      <FieldWrapper
+                        type="text"
+                        name="name"
+                        label="Name (Given)"
+                        readonly
+                      />
+                      <FieldWrapper type="text" name="handle" label="Name (Preferred)" />
+                      <FieldWrapper type="email" name="email" label="Email" readonly />
+                      <FieldWrapper
+                        type="tel"
+                        name="primaryPhone"
+                        label="Phone Number"
+                        placeholder="+1-555-555-5555"
+                      />
+                      <FieldWrapper
+                        type="date"
+                        name="dateOfBirth"
+                        label="Date of Birth"
+                        readonly={isRestricted}
+                      />
+                    </Card>
 
-                    <h2 style={{ marginTop: "1rem" }}>Role</h2>
-                    <FieldWrapper
-                      type="text"
-                      name="title"
-                      label="Title"
-                      readonly={isRestricted}
-                    />
-                    <FieldWrapper
-                      type="text"
-                      name="department"
-                      label="Department"
-                      readonly={isRestricted}
-                    />
-                    <FieldWrapper
-                      type="date"
-                      name="dateStarted"
-                      label="Start Date"
-                      readonly={isRestricted}
-                    />
+                    <Card>
+                      <h2>Role</h2>
+                      <FieldWrapper
+                        type="text"
+                        name="title"
+                        label="Title"
+                        readonly={isRestricted}
+                      />
+                      <FieldWrapper
+                        type="text"
+                        name="department"
+                        label="Department"
+                        readonly={isRestricted}
+                      />
+                      <FieldWrapper
+                        type="date"
+                        name="dateStarted"
+                        label="Start Date"
+                        readonly={isRestricted}
+                      />
+                    </Card>
 
-                    <button type="submit" disabled={isSubmitting}>
-                      Submit
-                    </button>
+                    <Card withPadding>
+                      <Button type="submit" disabled={isSubmitting}>
+                        Submit
+                      </Button>
+                    </Card>
                   </Form>
                 )}
               </Formik>
@@ -181,4 +235,6 @@ class UpdatePersonForm extends Component {
   }
 }
 
-export default UpdatePersonForm;
+export default connect(({ auth }) => ({
+  user: auth.user
+}))(UpdatePersonForm);

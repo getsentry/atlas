@@ -3,6 +3,8 @@ from graphene_django.types import DjangoObjectType
 
 from atlas.models import Profile
 
+from .phonenumber import PhoneNumberField
+
 
 class ProfileNode(DjangoObjectType):
     handle = graphene.String(required=False)
@@ -13,6 +15,7 @@ class ProfileNode(DjangoObjectType):
     office = graphene.Field("atlas.schema.OfficeNode", required=False)
     date_started = graphene.Date(required=False)
     date_of_birth = graphene.Date(required=False)
+    primary_phone = PhoneNumberField(required=False)
 
     class Meta:
         model = Profile
@@ -25,7 +28,14 @@ class ProfileNode(DjangoObjectType):
             "office",
             "photo_url",
             "department",
+            "primary_phone",
         )
+
+    def resolve_primary_phone(self, info):
+        current_user = info.context.user
+        if not current_user.is_authenticated:
+            return None
+        return self.primary_phone
 
     def resolve_date_of_birth(self, info):
         current_user = info.context.user

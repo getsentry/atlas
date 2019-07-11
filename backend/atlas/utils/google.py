@@ -15,6 +15,15 @@ from atlas.models import Identity, Office, Profile, User
 # &query=email, givenName, or familyName:the query's value*
 
 
+def find(iterable, func):
+    if not iterable:
+        return None
+    for n in iterable:
+        if func(n):
+            return n
+    return None
+
+
 def refresh_token(identity):
     req = requests.post(
         "https://accounts.google.com/o/oauth2/token",
@@ -88,6 +97,67 @@ def get_office(name, office_cache=None):
     return office
 
 
+def update_profile(identity, user, data):
+    user_identity = Identity.objects.get(provider="google", user=user)
+    profile = user.profile
+
+    params = {}
+
+    if "office" in data:
+        params["locations"] = (
+            [
+                {
+                    "type": "desk",
+                    "area": "desk",
+                    "buildingId": Office.objects.get(id=data["office"]).name,
+                }
+            ]
+            if data["office"]
+            else []
+        )
+
+    if "title" in data or "department" in data:
+        params["organizations"] = [
+            {
+                "primary": True,
+                "title": data.get("title") or profile.title,
+                "department": data.get("department") or profile.department,
+            }
+        ]
+
+    if "reports_to" in data:
+        params["relations"] = [
+            {"type": "manager", "value": User.objects.get(data["reports_to"]).email}
+        ]
+
+    if "primary_phone" in data:
+        params["phones"] = [
+            {"type": "home", "primary": True, "value": data["primary_phone"]}
+        ]
+
+    for key, field_path in settings.GOOGLE_FIELD_MAP:
+        if key in data:
+            if isinstance(data[key], date):
+                value = data[key].strftime("%Y-%M-%D")
+            else:
+                value = data[key]
+
+            schema = params.setdefault("customSchemas", {})
+            field_bits = field_path.split("/")
+            for bit in field_bits[:-1]:
+                schema = schema.setdefault(bit, {})
+            schema[field_bits[-1]] = value
+
+    result = requests.put(
+        f"https://www.googleapis.com/admin/directory/v1/users/{user_identity.external_id}",
+        json=params,
+        headers={"Authorization": "Bearer {}".format(identity.access_token)},
+    )
+    result.raise_for_status()
+    data = result.json()
+    sync_user(data, user=user, identity=user_identity)
+
+
 def sync_user(  # NOQA
     data, user=None, identity=None, user_cache=None, office_cache=None
 ):
@@ -134,16 +204,18 @@ def sync_user(  # NOQA
     elif identity.access_token and not data["suspended"] and not identity.is_active:
         identity_fields["is_active"] = True
 
-    if data.get("thumbnailPhotoUrl") != profile.photo_url:
-        profile_fields["photo_url"] = data["thumbnailPhotoUrl"]
+    # TODO(dcramer): doesnt even work
+    # if data.get("thumbnailPhotoUrl") != profile.photo_url:
+    #     profile_fields["photo_url"] = data["thumbnailPhotoUrl"]
 
     # 'organizations': [{'title': 'Chief Executive Officer', 'primary': True, 'customType': '', 'department': 'G&A', 'description': 'Executive'}]
-    if data.get("organizations") and data["organizations"][0]:
-        org = data["organizations"][0]
-        if (org["title"] or None) != profile.title:
-            profile_fields["title"] = org["title"] or None
-        if (org["department"] or None) != profile.department:
-            profile_fields["department"] = org["department"] or None
+    # TODO(dcramer): this probably needs to handle multiple orgs
+    row = find(data.get("organizations"), lambda x: x["primary"])
+    if row:
+        if (row["title"] or None) != profile.title:
+            profile_fields["title"] = row["title"] or None
+        if (row["department"] or None) != profile.department:
+            profile_fields["department"] = row["department"] or None
     else:
         if profile.title:
             profile_fields["title"] = None
@@ -151,26 +223,28 @@ def sync_user(  # NOQA
             profile_fields["department"] = None
 
     # 'relations': [{'value': 'david@sentry.io', 'type': 'manager'}]
-    if data.get("relations"):
-        reports_to = None
-        for relation in data["relations"]:
-            if relation["type"] == "manager" and relation["value"]:
-                reports_to = get_user(email=relation["value"], user_cache=user_cache)
-                if profile.reports_to_id != reports_to.id:
-                    profile_fields["reports_to"] = reports_to
-        if reports_to is None and profile.reports_to_id:
-            profile_fields["reports_to"] = None
+    row = find(data.get("relations"), lambda x: x["type"] == "manager" and x["value"])
+    if row:
+        reports_to = get_user(email=row["value"], user_cache=user_cache)
+        if profile.reports_to_id != reports_to.id:
+            profile_fields["reports_to"] = reports_to
+    elif profile.reports_to_id:
+        profile_fields["reports_to"] = None
 
     # 'locations': [{'type': 'desk', 'area': 'desk', 'buildingId': 'SFO'}]
-    if data.get("locations"):
-        office = None
-        for location in data["locations"]:
-            if location["type"] == "desk" and location["buildingId"]:
-                office = get_office(location["buildingId"], office_cache=office_cache)
-                if profile.office_id != office.id:
-                    profile_fields["office"] = office
-        if office is None and profile.office_id:
-            profile_fields["office"] = None
+    row = find(data.get("locations"), lambda x: x["type"] == "desk" and x["buildingId"])
+    if row:
+        office = get_office(row["buildingId"], office_cache=office_cache)
+        if profile.office_id != office.id:
+            profile_fields["office"] = office
+    elif profile.office_id:
+        profile_fields["office"] = None
+
+    row = find(data.get("phones"), lambda x: x["primary"])
+    if row:
+        profile_fields["primary_phone"] = row["value"]
+    elif profile.primary_phone:
+        profile_fields["primary_phone"] = None
 
     # 'customSchemas': {'Profile': {'Date_of_Hire': '2015-10-01', 'Date_of_Birth': '1985-08-12'}
     if data.get("customSchemas"):

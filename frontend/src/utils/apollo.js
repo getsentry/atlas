@@ -6,6 +6,17 @@ import { getCookie } from "./cookie";
 
 let apolloClient = null;
 
+const defaultOptions = {
+  watchQuery: {
+    fetchPolicy: "no-cache",
+    errorPolicy: "ignore"
+  },
+  query: {
+    fetchPolicy: "no-cache",
+    errorPolicy: "all"
+  }
+};
+
 const getToken = () => {
   let token = null;
   if (typeof document !== "undefined") {
@@ -33,7 +44,8 @@ function create(initialState) {
 
   return new ApolloClient({
     link: concat(authMiddleware, httpLink),
-    cache: new InMemoryCache().restore(initialState || {})
+    cache: new InMemoryCache().restore(initialState || {}),
+    defaultOptions
   });
 }
 
