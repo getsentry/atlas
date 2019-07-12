@@ -41,22 +41,17 @@ const PersonContainer = styled.article`
   }
   .meta .name,
   .meta .contact,
-  .meta .photo,
-  .meta .map {
+  .meta .photo {
     text-align: center;
     margin-bottom: 1rem;
   }
   .meta .contact > div {
     margin-bottom: 0.5rem;
   }
-  .meta .map {
-    width: 100%;
-    margin-top: 1rem;
-  }
   .meta .photo {
-    width: 128px;
-    height: 128px;
-    border-radius: 128px;
+    width: 196px;
+    height: 196px;
+    border-radius: 50%;
   }
   .meta .photo img,
   .meta .photo .sb-avatar,
@@ -136,7 +131,7 @@ export default class Person extends Component {
                         {thisPerson.profile.photoUrl ? (
                           <img src={thisPerson.profile.photoUrl} />
                         ) : (
-                          <Avatar name={thisPerson.name} size="128" />
+                          <Avatar name={thisPerson.name} size="196" />
                         )}
                       </div>
                       <div className="name">
