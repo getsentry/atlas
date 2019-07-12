@@ -170,3 +170,19 @@ button:hover {
 .MuiSvgIcon-root {
   vertical-align: middle;
 }
+table {
+  width: 100%;
+  margin: -0.5rem -0.5rem 0.5rem;
+}
+td,
+th {
+  text-align: center;
+  padding: 0.5rem;
+}
+td:first-child,
+th:first-child {
+  text-align: left;
+}
+tr:nth-child(odd) td {
+  background: #f9f9f9;
+}

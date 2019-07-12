@@ -19,7 +19,9 @@ class Profile(models.Model):
         on_delete=models.SET_NULL,
         related_name="reports",
     )
-    office = models.ForeignKey("atlas.Office", null=True, on_delete=models.SET_NULL)
+    office = models.ForeignKey(
+        "atlas.Office", null=True, on_delete=models.SET_NULL, related_name="profiles"
+    )
     photo_url = models.URLField(null=True)
     department = models.TextField(null=True)
     primary_phone = models.TextField(null=True)

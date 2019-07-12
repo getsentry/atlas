@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import { Query } from "react-apollo";
+import { Flex, Box } from "@rebass/grid/emotion";
 import gql from "graphql-tag";
 import styled from "@emotion/styled";
 
@@ -11,6 +12,10 @@ export const LIST_OFFICES_QUERY = gql`
     offices {
       id
       name
+      location
+      lat
+      lng
+      numPeople
     }
   }
 `;
@@ -35,13 +40,24 @@ export default function OfficeList() {
         const { offices } = data;
         return (
           <OfficeListContainer>
-            <ul>
-              {offices.map(o => (
-                <li key={o.id}>
-                  <Link to={`/offices/${o.id}`}>{o.name}</Link>
-                </li>
-              ))}
-            </ul>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th width={100}>People</th>
+                </tr>
+              </thead>
+              <tbody>
+                {offices.map(o => (
+                  <tr key={o.id}>
+                    <td>
+                      <Link to={`/offices/${o.id}`}>{o.name}</Link>
+                    </td>
+                    <td>{o.numPeople.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </OfficeListContainer>
         );
       }}

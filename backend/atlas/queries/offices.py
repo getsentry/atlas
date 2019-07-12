@@ -39,6 +39,8 @@ class Query(object):
         if query:
             qs = qs.filter(name__istartswith=query)
 
+        qs = qs.exclude(name__istartswith="$$")
+
         qs = qs.order_by("name")
 
         return gql_optimizer.query(qs, info)[offset:limit]
