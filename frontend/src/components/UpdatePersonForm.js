@@ -151,7 +151,7 @@ class UpdatePersonForm extends Component {
                       (...params) => {
                         setSubmitting(false);
                         this.context.router.push({
-                          pathname: `/people/${user.id}`
+                          pathname: `/people/${user.email}`
                         });
                       },
                       err => {
