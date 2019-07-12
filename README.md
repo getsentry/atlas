@@ -139,11 +139,10 @@ atlas
 |   |   ├── models          // database schema
 |   |   ├── mutations       // registered mutations
 |   |   └── queries         // registered queries
-├── frontend
-|   ├── components          // standard react components
-|   ├── pages               // next.js pages
-|   └── redux               // redux support
-└── proxy
+└── frontend
+    ├── components          // standard react components
+    ├── pages               // next.js pages
+    └── redux               // redux support
 ```
 
 ### Data Model

@@ -10,7 +10,6 @@ setup-git:
 install-requirements:
 	cd backend && poetry install
 	cd frontend && npm install
-	cd proxy && npm install
 	npm install
 
 generate-requirements:
