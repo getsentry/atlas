@@ -58,7 +58,7 @@ class UpdateUser(graphene.Mutation):
             return UpdateUser(ok=False, errors=["Invalid user"])
 
         # three conditions where you can edit a user
-        # - the user is you (you can edit most fields)
+        # - the user is you (you can edit some fields)
         # - the user is in your chain of command (you're their boss)
         # - you're a superuser (IT, HR)
         is_restricted = not user.is_superuser and not is_chain_of_command(
