@@ -103,7 +103,7 @@ class Query(object):
         # exclude users without titles as they're mostly not real
         qs = qs.exclude(profile__title__isnull=True)
 
-        if order_by == "name":
+        if order_by == "name" or not order_by:
             qs = qs.order_by("name")
         elif order_by == "dateStarted":
             qs = qs.filter(profile__date_started__isnull=False).order_by(
