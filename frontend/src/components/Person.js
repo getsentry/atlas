@@ -56,7 +56,6 @@ const PersonContainer = styled.article`
   .meta .photo {
     width: 128px;
     height: 128px;
-    display: block;
     border-radius: 128px;
   }
   .meta .photo img,
@@ -64,7 +63,7 @@ const PersonContainer = styled.article`
   .meta .photo .sb-avatar > div {
     max-width: 100%;
     max-height: 100%;
-    border-radius: 128px;
+    border-radius: 50%;
   }
   .meta h1 {
     font-size: 1.4em;

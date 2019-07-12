@@ -23,10 +23,9 @@ const PersonCardContainer = styled(Card)`
     border-radius: 50%;
     margin-bottom: 0.25em;
   }
-  .sb-avatar__text {
-    border-radius: 50%;
-  }
-  img {
+  .avatar img,
+  .avatar .sb-avatar,
+  .avatar .sb-avatar > div {
     max-width: 100%;
     max-height: 100%;
     border-radius: 50%;
