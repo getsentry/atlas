@@ -5,7 +5,6 @@ import { Flex, Box } from "@rebass/grid/emotion";
 import { Settings } from "@material-ui/icons";
 
 import colors from "../colors";
-import Card from "../components/Card";
 import Content from "../components/Content";
 import ErrorMessage from "../components/ErrorMessage";
 import Layout from "../components/Layout";
@@ -13,6 +12,7 @@ import IconLink from "../components/IconLink";
 import OfficeMap from "../components/OfficeMap";
 import PersonCard from "../components/PersonCard";
 import { GET_OFFICE_QUERY, LIST_PEOPLE_QUERY } from "../queries";
+import SuperuserOnly from "../components/SuperuserOnly";
 
 const OfficeContainer = styled.article`
   h1 {
@@ -71,7 +71,7 @@ const OfficeHeader = styled.div`
   margin-bottom: 1.5rem;
 `;
 
-export default class extends Component {
+export default class Office extends Component {
   render() {
     return (
       <Layout>
@@ -113,13 +113,15 @@ export default class extends Component {
                             <h1>People</h1>
                           </Box>
                           <Box px={3}>
-                            <IconLink
-                              icon={<Settings />}
-                              to={`/offices/${thisOffice.id}/update`}
-                              style={{ fontSize: "0.9em" }}
-                            >
-                              Edit
-                            </IconLink>
+                            <SuperuserOnly>
+                              <IconLink
+                                icon={<Settings />}
+                                to={`/offices/${thisOffice.id}/update`}
+                                style={{ fontSize: "0.9em" }}
+                              >
+                                Edit
+                              </IconLink>
+                            </SuperuserOnly>
                           </Box>
                         </Flex>
                       </OfficeHeader>

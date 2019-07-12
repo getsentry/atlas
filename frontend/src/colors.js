@@ -37,6 +37,7 @@ export default {
   primary400: "#C599FF",
   primary500: "#AE70FF",
 
+  black: $black,
   white: $white,
 
   secondary: $gray200,

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router";
 import { Query } from "react-apollo";
-import { connect } from "react-redux";
 import { Flex, Box } from "@rebass/grid/emotion";
 import gql from "graphql-tag";
 import moment from "moment";
@@ -14,6 +13,7 @@ import Layout from "../components/Layout";
 import PersonList from "../components/PersonList";
 import { LIST_PEOPLE_QUERY } from "../queries";
 import apolloClient from "../utils/apollo";
+import SuperuserOnly from "../components/SuperuserOnly";
 
 export const SYNC_GOOGLE_MUTATION = gql`
   mutation syncGoogle {
@@ -35,7 +35,7 @@ const syncGoogle = () => {
     });
 };
 
-class Home extends Component {
+export default class Home extends Component {
   render() {
     const { user } = this.props;
     return (
@@ -129,7 +129,7 @@ class Home extends Component {
                   </li>
                 </ul>
               </Card>
-              {user && user.isSuperuser && (
+              <SuperuserOnly>
                 <Card>
                   <h2>Admin Controls</h2>
                   <ul>
@@ -138,7 +138,7 @@ class Home extends Component {
                     </li>
                   </ul>
                 </Card>
-              )}
+              </SuperuserOnly>
             </Box>
           </Flex>
         </Content>
@@ -146,7 +146,3 @@ class Home extends Component {
     );
   }
 }
-
-export default connect(({ auth }) => ({
-  user: auth.user
-}))(Home);

@@ -186,3 +186,6 @@ th:first-child {
 tr:nth-child(odd) td {
   background: #f9f9f9;
 }
+tr td:first-child a {
+  font-weight: bold;
+}
