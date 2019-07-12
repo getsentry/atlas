@@ -63,6 +63,7 @@ export const GET_PERSON_QUERY = gql`
       reports {
         id
         name
+        email
         profile {
           title
           photoUrl
@@ -71,6 +72,7 @@ export const GET_PERSON_QUERY = gql`
       peers {
         id
         name
+        email
         profile {
           title
           photoUrl
