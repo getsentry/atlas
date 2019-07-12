@@ -37,7 +37,6 @@ const syncGoogle = () => {
 
 export default class Home extends Component {
   render() {
-    const { user } = this.props;
     return (
       <Layout title="Home">
         <Content>
