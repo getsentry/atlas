@@ -33,7 +33,6 @@ const PersonContainer = styled.article`
     font-weight: 500;
   }
   .meta {
-    color: ${colors.white};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,12 +40,17 @@ const PersonContainer = styled.article`
   }
   .meta .name,
   .meta .contact,
-  .meta .photo {
+  .meta .photo,
+  .meta .section {
     text-align: center;
     margin-bottom: 1rem;
   }
-  .meta .contact > div {
-    margin-bottom: 0.5rem;
+  .meta h1,
+  .meta h2,
+  .meta h4,
+  .meta .item {
+    color: ${colors.white};
+    margin-bottom: 0.25rem;
   }
   .meta .photo {
     width: 196px;
@@ -99,6 +103,20 @@ const PersonContainer = styled.article`
   }
 `;
 
+const AgeBadge = styled(({ className, dateStarted }) => {
+  return (
+    <Card withPadding className={className}>
+      {moment(dateStarted).fromNow(true)}
+    </Card>
+  );
+})`
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: -0.1px;
+  color: ${colors.black};
+  background: ${colors.yellow};
+`;
+
 export default class Person extends Component {
   static propTypes = {
     email: PropTypes.string.isRequired
@@ -134,7 +152,7 @@ export default class Person extends Component {
                           <Avatar name={thisPerson.name} size="196" />
                         )}
                       </div>
-                      <div className="name">
+                      <div className="section">
                         <h1>{thisPerson.name}</h1>
                         {thisPerson.profile.handle &&
                           thisPerson.profile.handle !== thisPerson.name && (
@@ -142,16 +160,19 @@ export default class Person extends Component {
                           )}
                         <h4>{thisPerson.profile.title}</h4>
                       </div>
-                      <div className="contact">
-                        <div>
+                      <div className="section">
+                        <div className="item">
                           <a href={`mailto:${thisPerson.email}`}>
                             <Email /> {thisPerson.email}
                           </a>
                         </div>
-                        <div>
+                        <div className="item">
                           <Phone /> {thisPerson.profile.primaryPhone || "n/a"}
                         </div>
                       </div>
+                      {!!thisPerson.profile.dateStarted && (
+                        <AgeBadge dateStarted={thisPerson.profile.dateStarted} />
+                      )}
                     </section>
                   </Box>
                   <Box flex="1">
