@@ -12,7 +12,7 @@ import Content from "../components/Content";
 import ErrorMessage from "../components/ErrorMessage";
 import Layout from "../components/Layout";
 import PersonList from "../components/PersonList";
-import { LIST_PEOPLE_QUERY } from "../components/PeopleList";
+import { LIST_PEOPLE_QUERY } from "../queries";
 import apolloClient from "../utils/apollo";
 
 export const SYNC_GOOGLE_MUTATION = gql`

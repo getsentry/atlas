@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import styled from "@emotion/styled";
 import { Flex, Box } from "@rebass/grid/emotion";
 import { Settings } from "@material-ui/icons";
@@ -12,18 +11,8 @@ import ErrorMessage from "../components/ErrorMessage";
 import Layout from "../components/Layout";
 import IconLink from "../components/IconLink";
 import OfficeMap from "../components/OfficeMap";
-
-export const OFFICE_QUERY = gql`
-  query getOffice($id: UUID!) {
-    offices(id: $id) {
-      id
-      name
-      location
-      lat
-      lng
-    }
-  }
-`;
+import PersonCard from "../components/PersonCard";
+import { GET_OFFICE_QUERY, LIST_PEOPLE_QUERY } from "../queries";
 
 const OfficeHeader = styled.div`
   color: ${colors.white};
@@ -34,12 +23,12 @@ export default class extends Component {
   render() {
     return (
       <Layout>
-        <Query query={OFFICE_QUERY} variables={{ id: this.props.params.id }}>
+        <Query query={GET_OFFICE_QUERY} variables={{ id: this.props.params.id }}>
           {({ loading, error, data }) => {
-            if (error) return <ErrorMessage message="Error loading person." />;
+            if (error) return <ErrorMessage message="Error loading office." />;
             if (loading) return <div>Loading</div>;
             if (!data.offices.length)
-              return <ErrorMessage message="Couldn't find that person." />;
+              return <ErrorMessage message="Couldn't find that office." />;
             const thisOffice = data.offices[0];
             return (
               <Content>
@@ -51,7 +40,7 @@ export default class extends Component {
                     <Box px={3}>
                       <IconLink
                         icon={<Settings />}
-                        to={`/offices/${this.props.params.id}/update`}
+                        to={`/offices/${thisOffice.id}/update`}
                         style={{ fontSize: "0.9em" }}
                       >
                         Edit
@@ -59,8 +48,8 @@ export default class extends Component {
                     </Box>
                   </Flex>
                 </OfficeHeader>
-                <Flex alignItems="center">
-                  <Box px={3} flex="1">
+                <Flex>
+                  <Box px={3} width={1 / 2}>
                     <Card>
                       {thisOffice.location && <p>{thisOffice.location}</p>}
                       <OfficeMap
@@ -70,6 +59,27 @@ export default class extends Component {
                         zoom={12}
                       />
                     </Card>
+                  </Box>
+                  <Box px={3} width={1 / 2}>
+                    <Query
+                      query={LIST_PEOPLE_QUERY}
+                      variables={{ office: thisOffice.id }}
+                    >
+                      {({ loading, error, data }) => {
+                        if (error)
+                          return <ErrorMessage message="Error loading people." />;
+                        if (loading) return <div>Loading</div>;
+                        return (
+                          <Flex flexWrap="wrap">
+                            {data.users.map(u => (
+                              <Box px={1} mx="auto" width={196}>
+                                <PersonCard user={u} key={u.id} />
+                              </Box>
+                            ))}
+                          </Flex>
+                        );
+                      }}
+                    </Query>
                   </Box>
                 </Flex>
               </Content>

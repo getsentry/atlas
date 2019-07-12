@@ -1,51 +1,9 @@
 import React from "react";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 
 import PageLoader from "./PageLoader";
 import PersonList from "./PersonList";
-
-export const LIST_PEOPLE_QUERY = gql`
-  query listPeople(
-    $office: UUID
-    $dateStartedBefore: Date
-    $dateStartedAfter: Date
-    $birthdayBefore: Date
-    $birthdayAfter: Date
-    $query: String
-    $includeSelf: Boolean
-    $orderBy: UserOrderBy
-    $offset: Int
-    $limit: Int
-  ) {
-    users(
-      office: $office
-      dateStartedBefore: $dateStartedBefore
-      dateStartedAfter: $dateStartedAfter
-      birthdayBefore: $birthdayBefore
-      birthdayAfter: $birthdayAfter
-      query: $query
-      includeSelf: $includeSelf
-      orderBy: $orderBy
-      offset: $offset
-      limit: $limit
-    ) {
-      id
-      name
-      email
-      profile {
-        title
-        photoUrl
-        dobMonth
-        dobDay
-        dateStarted
-        reportsTo {
-          id
-        }
-      }
-    }
-  }
-`;
+import { LIST_PEOPLE_QUERY } from "../queries";
 
 export const peopleQueryVars = {
   offset: 0,
