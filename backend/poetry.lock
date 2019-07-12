@@ -596,6 +596,18 @@ pytest = ">=3.1.0"
 
 [[package]]
 category = "dev"
+description = "py.test integration for responses"
+name = "pytest-responses"
+optional = false
+python-versions = "*"
+version = "0.4.0"
+
+[package.dependencies]
+pytest = ">=2.5"
+responses = "*"
+
+[[package]]
+category = "dev"
 description = "py.test plugin to abort hanging tests"
 name = "pytest-timeout"
 optional = false
@@ -690,6 +702,18 @@ certifi = ">=2017.4.17"
 chardet = ">=3.0.2,<3.1.0"
 idna = ">=2.5,<2.9"
 urllib3 = ">=1.21.1,<1.25.0 || >1.25.0,<1.25.1 || >1.25.1,<1.26"
+
+[[package]]
+category = "dev"
+description = "A utility library for mocking out the `requests` Python library."
+name = "responses"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "0.10.6"
+
+[package.dependencies]
+requests = ">=2.0"
+six = "*"
 
 [[package]]
 category = "main"
@@ -806,7 +830,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "b63c1a23952964d727049dc2deee03acd5c678ba32584c8cbfe1446b09c842cc"
+content-hash = "8b2e314b052ebd849a862ae522f9299f72b958d1058d7f81c09f820f9af103dc"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -867,6 +891,7 @@ pytest = ["6032845e68a17a96e8da3088037f899b56357769a724122056265ca2ea1890ee", "b
 pytest-cov = ["2b097cde81a302e1047331b48cadacf23577e431b61e9c6f49a1170bbe3d3da6", "e00ea4fdde970725482f1f35630d12f074e121a23801aabf2ae154ec6bdd343a"]
 pytest-django = ["11a9ab9fceb2f819a0e94ba4eab791f998542f4e29eb36500cb9464dd3b4c3b6", "581d699fbe955ba40c2da9c9cd3b49442d95e9d1a3f8c4d13ca5a29332467fea"]
 pytest-forked = ["5fe33fbd07d7b1302c95310803a5e5726a4ff7f19d5a542b7ce57c76fed8135f", "d352aaced2ebd54d42a65825722cb433004b4446ab5d2044851d9cc7a00c9e38"]
+pytest-responses = ["1943af2548687c2e1153722f1b2f4a7152d65006ac85508fec8132d3fd5d0c0d", "cef8c360273842700733c7849b75219f425edc3f8e22704114778bde3e08e3f7"]
 pytest-timeout = ["4a30ba76837a32c7b7cd5c84ee9933fde4b9022b0cd20ea7d4a577c2a1649fb1", "d49f618c6448c14168773b6cdda022764c63ea80d42274e3156787e8088d04c6"]
 pytest-xdist = ["b0bb4b0293ee8657b9eb3ff334a3b6aac4db74fd4a86b81e1982c879237a47eb", "f83a485293e81fd57c8a5a85a3f12473a532c5ca7dec518857cbb72766bb526c"]
 python-crontab = ["91ce4b245ee5e5c117aa0b21b485bc43f2d80df854a36e922b707643f50d7923"]
@@ -876,6 +901,7 @@ pyyaml = ["57acc1d8533cbe51f6662a55434f0dbecfa2b9eaf115bede8f6fd00115a0c0d3", "5
 redis = ["6946b5dca72e86103edc8033019cc3814c031232d339d5f4533b02ea85685175", "8ca418d2ddca1b1a850afa1680a7d2fd1f3322739271de4b704e0d4668449273"]
 relativetimebuilder = ["568608f415f168dbc1b4f57841dbec0d279e174d12524538d8584b129914b237", "7b5600a6572075400c2134b1524ab5ffa1e5c7d74db3be37da5eb9520627b024"]
 requests = ["11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4", "9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31"]
+responses = ["502d9c0c8008439cfcdef7e251f507fcfdd503b56e8c0c87c3c3e3393953f790", "97193c0183d63fba8cd3a041c75464e4b09ea0aff6328800d1546598567dde0b"]
 rsa = ["14ba45700ff1ec9eeb206a2ce76b32814958a98e372006c8fb76ba820211be66", "1a836406405730121ae9823e19c6e806c62bbad73f890574fff50efa4122c487"]
 rx = ["13a1d8d9e252625c173dc795471e614eadfe1cf40ffc684e08b8fff0d9748c23", "7357592bc7e881a95e0c2013b73326f704953301ab551fbc8133a6fadab84105"]
 sentry-sdk = ["7e42d54c877cca716932fa96ff4778d222b150e56c63032dea86f400179e425c", "f137cfb8bf709f69fa4634a7debd13284a3a590c374846285875be41d1fe87a8"]
