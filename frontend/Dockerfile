@@ -17,4 +17,4 @@ RUN npm run build
 
 ENTRYPOINT ["docker-entrypoint"]
 
-CMD serve -l 3000 build
+CMD server --port 3000

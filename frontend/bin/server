@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+const express = require("express");
+const path = require("path");
+const argv = require("yargs").argv;
+
+const port = argv.port || 3000;
+
+const app = express();
+
+app.use(express.static(path.join(__dirname, "..", "build")));
+
+app.get("/*", function(req, res) {
+  res.sendFile(path.join(__dirname, "..", "build", "index.html"));
+});
+
+console.log(`Listening on port ${port}`);
+
+app.listen(argv.port || 3000);
