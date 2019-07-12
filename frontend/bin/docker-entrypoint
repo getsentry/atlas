@@ -5,6 +5,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 set -e
 
 # build runtime configuration from environment
-generate-config ${DIR}/../build/config.js
+generate-config --filename=${DIR}/../build/config.js
 
 exec "$@"
