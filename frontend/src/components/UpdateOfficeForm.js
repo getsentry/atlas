@@ -185,7 +185,7 @@ export default class UpdateOfficeForm extends Component {
                       <Map
                         options={{
                           center: officeCoords,
-                          zoom: 12
+                          zoom: 15
                         }}
                         onMapLoad={map => {
                           this.setState(
