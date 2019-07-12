@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router";
 import Avatar from "react-avatar";
 import styled from "@emotion/styled";
 
