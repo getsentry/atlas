@@ -106,7 +106,7 @@ const PersonContainer = styled.article`
 const AgeBadge = styled(({ className, dateStarted }) => {
   return (
     <Card withPadding className={className}>
-      {moment(dateStarted).fromNow(true)}
+      {parseInt(moment().diff(moment(dateStarted), "years", true) * 100, 10) / 100} years
     </Card>
   );
 })`
