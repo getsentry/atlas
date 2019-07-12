@@ -12,6 +12,7 @@ export const LIST_ALL_PEOPLE_QUERY = gql`
     users(offset: 0, limit: 1000) {
       id
       name
+      email
       profile {
         title
         photoUrl
