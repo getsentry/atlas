@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
 import { Query } from "react-apollo";
-import { Flex, Box } from "@rebass/grid/emotion";
 import gql from "graphql-tag";
 import styled from "@emotion/styled";
 

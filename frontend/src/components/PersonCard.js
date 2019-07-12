@@ -21,7 +21,7 @@ const PersonCardContainer = styled(Card)`
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    margin-bottom: 0.25em;
+    margin-bottom: 0.5em;
   }
   .avatar img,
   .avatar .sb-avatar,
@@ -44,7 +44,7 @@ const PersonCardContainer = styled(Card)`
 export default function({ user }) {
   if (!user) return <em>n/a</em>;
   return (
-    <PersonCardContainer withPadding>
+    <PersonCardContainer withPadding to={`/people/${user.email}`}>
       <div className="avatar">
         {user.profile.photoUrl ? (
           <img src={user.profile.photoUrl} alt="" />
@@ -53,9 +53,7 @@ export default function({ user }) {
         )}
       </div>
       <aside>
-        <h4>
-          <Link to={`/people/${user.email}`}>{user.name}</Link>
-        </h4>
+        <h4>{user.name}</h4>
 
         {user.profile.title && <small>{user.profile.title}</small>}
       </aside>

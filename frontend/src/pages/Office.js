@@ -65,7 +65,7 @@ export default class extends Component {
                           return <ErrorMessage message="Error loading people." />;
                         if (loading) return <div>Loading</div>;
                         return (
-                          <Flex flexWrap="wrap">
+                          <Flex flexWrap="wrap" mx={-2}>
                             {data.users.map(u => (
                               <Box px={1} mx="auto" width={196}>
                                 <PersonCard user={u} key={u.id} />

@@ -10,8 +10,8 @@ export default () => (
     <Content>
       <Card>
         <h1>People</h1>
-        <PeopleList />
       </Card>
+      <PeopleList />
     </Content>
   </Layout>
 );

@@ -1,8 +1,9 @@
 import React from "react";
+import { Flex, Box } from "@rebass/grid/emotion";
 import { Query } from "react-apollo";
 
 import PageLoader from "./PageLoader";
-import PersonList from "./PersonList";
+import PersonCard from "./PersonCard";
 import { LIST_PEOPLE_QUERY } from "../queries";
 
 export const peopleQueryVars = {
@@ -21,7 +22,13 @@ export default function PeopleList() {
         const areMorePeople = false;
         return (
           <React.Fragment>
-            <PersonList people={users} />
+            <Flex flexWrap="wrap" mx={-2}>
+              {users.map(u => (
+                <Box px={1} mx="auto" width={196}>
+                  <PersonCard user={u} key={u.id} />
+                </Box>
+              ))}
+            </Flex>
             {areMorePeople ? (
               <button onClick={() => loadMorePeople(users, fetchMore)}>
                 {" "}
