@@ -68,6 +68,12 @@ class UpdateUser(graphene.Mutation):
         if user.id != current_user.id and not is_restricted:
             return UpdateUser(ok=False, errors=["Cannot edit this user"])
 
+        invalid_fields = [f for f in fields.keys() if f in RESTRICTED_FIELDS]
+        if invalid_fields:
+            return UpdateUser(
+                ok=False, errors=[f"Cannot update field: {f}" for f in invalid_fields]
+            )
+
         profile, _ = Profile.objects.get_or_create(user=user)
         user.profile = profile
 

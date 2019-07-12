@@ -11,9 +11,12 @@ import Card from "../components/Card";
 import FieldWrapper from "../components/FieldWrapper";
 import apolloClient from "../utils/apollo";
 
+const NON_EDITABLE_FIELDS = new Set(["name", "email"]);
+const RESTRICTED_FIELDS = new Set(["title", "department", "dateStarted", "dateOfBirth"]);
+
 const UserSchema = yup.object().shape({
-  name: yup.string().required("Required"),
-  email: yup.string().required("Required"),
+  // name: yup.string().required("Required"),
+  // email: yup.string().required("Required"),
   handle: yup.string().nullable(),
   title: yup.string().nullable(),
   department: yup.string().nullable(),
@@ -110,7 +113,15 @@ class UpdatePersonForm extends Component {
   static contextTypes = { router: PropTypes.object.isRequired };
 
   render() {
-    let currentUser = this.props.user;
+    const currentUser = this.props.user;
+    const isRestricted = !currentUser.isSuperuser;
+    const restrictedFields = new Set(["name", "email"]);
+    if (isRestricted) {
+      ["title", "department", "dateStarted", "dateOfBirth"].forEach(k =>
+        restrictedFields.add(k)
+      );
+    }
+
     return (
       <Query query={PERSON_QUERY} variables={{ email: this.props.email }}>
         {({ loading, data }) => {
@@ -119,7 +130,6 @@ class UpdatePersonForm extends Component {
           if (!data.users.length)
             return <ErrorMessage message="Couldn't find that person." />;
           const user = data.users[0];
-          const isRestricted = !currentUser.isSuperuser;
           const initialValues = {
             name: user.name,
             email: user.email,
@@ -139,13 +149,18 @@ class UpdatePersonForm extends Component {
                 initialValues={initialValues}
                 validationSchema={UserSchema}
                 onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
+                  let variables = {
+                    user: user.id
+                  };
+                  Object.keys(values).forEach(k => {
+                    if (!restrictedFields.has(k)) {
+                      variables[k] = values[k];
+                    }
+                  });
                   apolloClient
                     .mutate({
                       mutation: PERSON_MUTATION,
-                      variables: {
-                        user: user.id,
-                        ...values
-                      }
+                      variables
                     })
                     .then(
                       (...params) => {
@@ -179,21 +194,32 @@ class UpdatePersonForm extends Component {
                         type="text"
                         name="name"
                         label="Name (Given)"
-                        readonly
+                        readonly={restrictedFields.has("name")}
                       />
-                      <FieldWrapper type="text" name="handle" label="Name (Preferred)" />
-                      <FieldWrapper type="email" name="email" label="Email" readonly />
+                      <FieldWrapper
+                        type="text"
+                        name="handle"
+                        label="Name (Preferred)"
+                        readonly={restrictedFields.has("handle")}
+                      />
+                      <FieldWrapper
+                        type="email"
+                        name="email"
+                        label="Email"
+                        readonly={restrictedFields.has("email")}
+                      />
                       <FieldWrapper
                         type="tel"
                         name="primaryPhone"
                         label="Phone Number"
                         placeholder="+1-555-555-5555"
+                        readonly={restrictedFields.has("primaryPhone")}
                       />
                       <FieldWrapper
                         type="date"
                         name="dateOfBirth"
                         label="Date of Birth"
-                        readonly={isRestricted}
+                        readonly={restrictedFields.has("dateOfBirth")}
                       />
                     </Card>
 
@@ -203,19 +229,19 @@ class UpdatePersonForm extends Component {
                         type="text"
                         name="title"
                         label="Title"
-                        readonly={isRestricted}
+                        readonly={restrictedFields.has("title")}
                       />
                       <FieldWrapper
                         type="text"
                         name="department"
                         label="Department"
-                        readonly={isRestricted}
+                        readonly={restrictedFields.has("department")}
                       />
                       <FieldWrapper
                         type="date"
                         name="dateStarted"
                         label="Start Date"
-                        readonly={isRestricted}
+                        readonly={restrictedFields.has("dateStarted")}
                       />
                     </Card>
 
