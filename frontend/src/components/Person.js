@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Link } from "react-router";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import moment from "moment";
 import Avatar from "react-avatar";
 import styled from "@emotion/styled";
@@ -144,7 +143,7 @@ export default class Person extends Component {
                       <div className="name">
                         <h1>{thisPerson.name}</h1>
                         {thisPerson.profile.handle &&
-                          thisPerson.profile.handle != thisPerson.name && (
+                          thisPerson.profile.handle !== thisPerson.name && (
                             <h2>"{thisPerson.profile.handle}"</h2>
                           )}
                         <h4>{thisPerson.profile.title}</h4>
