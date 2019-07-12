@@ -69,7 +69,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         if hasattr(self, "num_peers"):
             return self.num_reports
         logging.warning("Uncached resolution for UserNode.num_peers")
-        return Profile.objects.filter(reports_to=self.profile.reports_to_id).count()
+        return Profile.objects.filter(reports_to=self.profile.reports_to_id).count() - 1
 
     @gql_optimizer.resolver_hints(
         select_related=("profile"),
@@ -93,4 +93,4 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         ):
             logging.warning("Uncached resolution for UserNode.peers")
             qs = qs.select_related("user", "user__profile")
-        return [r.user for r in qs]
+        return [r.user for r in qs if r.user_id != self.id]
