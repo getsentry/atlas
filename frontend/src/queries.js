@@ -97,6 +97,7 @@ export const GET_PERSON_QUERY = gql`
         reportsTo {
           id
           name
+          email
           profile {
             title
             photoUrl
