@@ -49,18 +49,13 @@ export default class extends Component {
                   </Flex>
                 </OfficeHeader>
                 <Flex>
-                  <Box px={3} width={1 / 2}>
-                    <Card>
-                      {thisOffice.location && <p>{thisOffice.location}</p>}
-                      <OfficeMap
-                        office={thisOffice}
-                        width="100%"
-                        height={400}
-                        zoom={12}
-                      />
-                    </Card>
+                  <Box px={3} width={300}>
+                    {thisOffice.location && (
+                      <Card withPadding>{thisOffice.location}</Card>
+                    )}
+                    <OfficeMap office={thisOffice} width="100%" height={200} zoom={15} />
                   </Box>
-                  <Box px={3} width={1 / 2}>
+                  <Box px={3} flex="1">
                     <Query
                       query={LIST_PEOPLE_QUERY}
                       variables={{ office: thisOffice.id }}

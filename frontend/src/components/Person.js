@@ -16,58 +16,7 @@ import IconLink from "./IconLink";
 import PersonLink from "./PersonLink";
 import PersonList from "./PersonList";
 import Card from "./Card";
-import OfficeMap from "./OfficeMap";
-
-export const PERSON_QUERY = gql`
-  query getPerson($email: String) {
-    users(email: $email) {
-      id
-      name
-      email
-      reports {
-        id
-        name
-        profile {
-          title
-          photoUrl
-        }
-      }
-      peers {
-        id
-        name
-        profile {
-          title
-          photoUrl
-        }
-      }
-      profile {
-        handle
-        department
-        dobMonth
-        dobDay
-        title
-        dateStarted
-        photoUrl
-        primaryPhone
-        office {
-          id
-          name
-          location
-          lat
-          lng
-        }
-        reportsTo {
-          id
-          name
-          profile {
-            title
-            photoUrl
-          }
-        }
-      }
-    }
-  }
-`;
+import { GET_PERSON_QUERY } from "../queries";
 
 const Empty = () => <span>&mdash;</span>;
 
@@ -164,7 +113,7 @@ export default class Person extends Component {
 
   render() {
     return (
-      <Query query={PERSON_QUERY} variables={{ email: this.props.email }}>
+      <Query query={GET_PERSON_QUERY} variables={{ email: this.props.email }}>
         {({ loading, error, data }) => {
           if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;
@@ -209,14 +158,6 @@ export default class Person extends Component {
                         <div>
                           <Phone /> {thisPerson.profile.primaryPhone || "n/a"}
                         </div>
-                      </div>
-                      <div className="map">
-                        <OfficeMap
-                          width="100%"
-                          height={200}
-                          zoom={12}
-                          office={thisPerson.profile.office}
-                        />
                       </div>
                     </section>
                   </Box>

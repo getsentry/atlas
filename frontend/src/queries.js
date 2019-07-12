@@ -53,3 +53,54 @@ export const LIST_PEOPLE_QUERY = gql`
     }
   }
 `;
+
+export const GET_PERSON_QUERY = gql`
+  query getPerson($email: String) {
+    users(email: $email) {
+      id
+      name
+      email
+      reports {
+        id
+        name
+        profile {
+          title
+          photoUrl
+        }
+      }
+      peers {
+        id
+        name
+        profile {
+          title
+          photoUrl
+        }
+      }
+      profile {
+        handle
+        department
+        dobMonth
+        dobDay
+        title
+        dateStarted
+        photoUrl
+        primaryPhone
+        office {
+          id
+          name
+          location
+          lat
+          lng
+        }
+        reportsTo {
+          id
+          name
+          profile {
+            title
+            photoUrl
+          }
+        }
+      }
+    }
+  }
+`;
