@@ -154,7 +154,7 @@ class UpdatePersonForm extends Component {
                   };
                   Object.keys(values).forEach(k => {
                     if (!restrictedFields.has(k)) {
-                      variables[k] = values[k];
+                      variables[k] = values[k] || null;
                     }
                   });
                   apolloClient
