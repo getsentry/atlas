@@ -66,3 +66,24 @@ def test_user_cannot_update_other_user(gql_client, default_user, default_superus
     resp = executed["data"]["updateUser"]
     assert resp["errors"]
     assert resp["ok"] is False
+
+
+def test_superuser_can_update_other_user(gql_client, default_user, default_superuser):
+    executed = gql_client.execute(
+        """
+    mutation {
+        updateUser(user:"%s" dateStarted:"2017-01-01") {
+            ok
+            errors
+        }
+    }"""
+        % (default_user.id,),
+        user=default_superuser,
+    )
+    assert not executed.get("errors")
+    resp = executed["data"]["updateUser"]
+    assert not resp["errors"]
+    assert resp["ok"] is True
+
+    user = User.objects.get(id=default_user.id)
+    assert user.profile.date_started == date(2017, 1, 1)

@@ -64,10 +64,14 @@ class UpdateUser(graphene.Mutation):
         is_restricted = not current_user.is_superuser and not is_chain_of_command(
             user, current_user
         )
-        if user.id != current_user.id and not is_restricted:
+        if user.id != current_user.id and is_restricted:
             return UpdateUser(ok=False, errors=["Cannot edit this user"])
 
-        invalid_fields = [f for f in fields.keys() if f in RESTRICTED_FIELDS]
+        invalid_fields = (
+            [f for f in fields.keys() if f in RESTRICTED_FIELDS]
+            if is_restricted
+            else []
+        )
         if invalid_fields:
             return UpdateUser(
                 ok=False, errors=[f"Cannot update field: {f}" for f in invalid_fields]
