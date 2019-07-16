@@ -1,5 +1,6 @@
 from collections import namedtuple
 from datetime import date
+from typing import Any, Optional, Tuple
 from uuid import uuid4
 
 import requests
@@ -15,7 +16,10 @@ from atlas.models import Identity, Office, Profile, User
 # &sortOrder=ascending or descending
 # &query=email, givenName, or familyName:the query's value*
 
-SyncResult = namedtuple("SyncResult", ["total_users", "created_users", "updated_users"])
+DomainSyncResult = namedtuple(
+    "DomainSyncResult", ["total_users", "created_users", "updated_users"]
+)
+UserSyncResult = namedtuple("UserSyncResult", ["user", "created", "updated"])
 
 
 def find(iterable, func):
@@ -27,7 +31,7 @@ def find(iterable, func):
     return None
 
 
-def refresh_token(identity):
+def refresh_token(identity: Identity) -> Identity:
     req = requests.post(
         "https://accounts.google.com/o/oauth2/token",
         json={
@@ -45,7 +49,7 @@ def refresh_token(identity):
     return identity
 
 
-def get_admin_identity():
+def get_admin_identity() -> Identity:
     identity = (
         Identity.objects.filter(
             user__is_active=True,
@@ -63,15 +67,11 @@ def get_admin_identity():
     return identity
 
 
-def to_date(value):
+def to_date(value: str) -> date:
     return date(*map(int, value.split("-")))
 
 
-def to_bool(value):
-    return True if value == "yes" else False
-
-
-def lookup_field(data, field_path):
+def lookup_field(data: dict, field_path: str) -> Optional[Any]:
     cur_path = data
     for bit in field_path.split("/"):
         try:
@@ -81,7 +81,9 @@ def lookup_field(data, field_path):
     return cur_path
 
 
-def get_user(email, name=None, user_cache=None):
+def get_user(
+    email: str, name: str = None, user_cache: dict = None
+) -> Tuple[User, bool]:
     if user_cache is None:
         user_cache = {}
     if email in user_cache:
@@ -96,7 +98,7 @@ def get_user(email, name=None, user_cache=None):
     return user, created
 
 
-def get_office(name, office_cache=None):
+def get_office(name: str, office_cache: dict = None) -> Office:
     if office_cache is None:
         office_cache = {}
     if name in office_cache:
@@ -106,8 +108,7 @@ def get_office(name, office_cache=None):
     return office
 
 
-def update_profile(identity, user, data):
-    user_identity = Identity.objects.get(provider="google", user=user)
+def generate_profile_updates(identity: Identity, user: User, data: dict) -> dict:
     profile = user.profile
 
     params = {}
@@ -149,7 +150,7 @@ def update_profile(identity, user, data):
             if isinstance(data[key], date):
                 value = data[key].strftime("%Y-%M-%D")
             elif isinstance(data[key], bool):
-                return "yes" if data[key] else "no"
+                value = "yes" if data[key] else "no"
             else:
                 value = data[key]
 
@@ -158,7 +159,13 @@ def update_profile(identity, user, data):
             for bit in field_bits[:-1]:
                 schema = schema.setdefault(bit, {})
             schema[field_bits[-1]] = value
+    return params
 
+
+def update_profile(identity: Identity, user: User, data: dict) -> UserSyncResult:
+    params = generate_profile_updates(identity, user, data)
+
+    user_identity = Identity.objects.get(provider="google", user=user)
     result = requests.put(
         f"https://www.googleapis.com/admin/directory/v1/users/{user_identity.external_id}",
         json=params,
@@ -166,12 +173,17 @@ def update_profile(identity, user, data):
     )
     result.raise_for_status()
     data = result.json()
-    sync_user(data, user=user, identity=user_identity)
+
+    return sync_user(data, user=user, identity=user_identity)
 
 
 def sync_user(  # NOQA
-    data, user=None, identity=None, user_cache=None, office_cache=None
-):
+    data: dict,
+    user: User = None,
+    identity: Identity = None,
+    user_cache: dict = None,
+    office_cache: dict = None,
+) -> UserSyncResult:
     if user_cache is None:
         user_cache = {}
     if office_cache is None:
@@ -290,10 +302,14 @@ def sync_user(  # NOQA
         Profile.objects.filter(id=profile.id).update(**profile_fields)
     if identity_fields:
         Identity.objects.filter(id=identity.id).update(**identity_fields)
-    return user, created, bool(user_fields or profile_fields or identity_fields)
+    return UserSyncResult(
+        user=user,
+        created=created,
+        updated=bool(user_fields or profile_fields or identity_fields),
+    )
 
 
-def sync_domain(identity, domain):
+def sync_domain(identity: Identity, domain: str) -> DomainSyncResult:
     office_cache = {}
     user_cache = {}
     total_users = 0
@@ -328,7 +344,7 @@ def sync_domain(identity, domain):
                     updated_users += 1
         page_token = data.get("nextPageToken")
         has_more = bool(page_token)
-    return SyncResult(
+    return DomainSyncResult(
         total_users=total_users,
         created_users=created_users,
         updated_users=updated_users,

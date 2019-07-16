@@ -59,6 +59,11 @@ def default_user(db):
 
 
 @pytest.fixture
+def default_identity(db, default_user):
+    return factories.IdentityFactory.create(user=default_user)
+
+
+@pytest.fixture
 def default_superuser(db):
     user = factories.UserFactory(
         id=UUID("559c76aa-ad6a-46a8-b32b-91d965e3f462"),
@@ -76,3 +81,8 @@ def default_superuser(db):
         date_of_birth=date(1990, 2, 13),
     )
     return user
+
+
+@pytest.fixture
+def default_superuser_identity(db, default_superuser):
+    return factories.IdentityFactory.create(user=default_superuser, admin=True)
