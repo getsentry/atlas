@@ -163,11 +163,19 @@ class UpdatePersonForm extends Component {
                       variables
                     })
                     .then(
-                      (...params) => {
+                      ({
+                        data: {
+                          updateUser: { ok, errors }
+                        }
+                      }) => {
                         setSubmitting(false);
-                        this.context.router.push({
-                          pathname: `/people/${user.email}`
-                        });
+                        if (!ok) {
+                          setStatus({ error: "" + errors[0] });
+                        } else {
+                          this.context.router.push({
+                            pathname: `/people/${user.email}`
+                          });
+                        }
                       },
                       err => {
                         if (err.graphQLErrors && err.graphQLErrors.length) {
@@ -184,7 +192,7 @@ class UpdatePersonForm extends Component {
                 {({ isSubmitting, status }) => (
                   <Form>
                     {status && status.error && (
-                      <Card>
+                      <Card withPadding>
                         <strong>{status.error}</strong>
                       </Card>
                     )}

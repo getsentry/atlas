@@ -61,10 +61,9 @@ class UpdateUser(graphene.Mutation):
         # - the user is you (you can edit some fields)
         # - the user is in your chain of command (you're their boss)
         # - you're a superuser (IT, HR)
-        is_restricted = not user.is_superuser and not is_chain_of_command(
+        is_restricted = not current_user.is_superuser and not is_chain_of_command(
             user, current_user
         )
-
         if user.id != current_user.id and not is_restricted:
             return UpdateUser(ok=False, errors=["Cannot edit this user"])
 

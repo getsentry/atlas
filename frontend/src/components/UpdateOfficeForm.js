@@ -142,11 +142,19 @@ export default class UpdateOfficeForm extends Component {
                       variables: payload
                     })
                     .then(
-                      (...params) => {
+                      ({
+                        data: {
+                          updateOffice: { ok, errors }
+                        }
+                      }) => {
                         setSubmitting(false);
-                        this.context.router.push({
-                          pathname: `/offices/${office.id}`
-                        });
+                        if (!ok) {
+                          setStatus({ error: "" + errors[0] });
+                        } else {
+                          this.context.router.push({
+                            pathname: `/offices/${office.id}`
+                          });
+                        }
                       },
                       err => {
                         if (err.graphQLErrors && err.graphQLErrors.length) {
@@ -164,7 +172,7 @@ export default class UpdateOfficeForm extends Component {
                   <Form>
                     <FormikEffect onChange={this.onChange} />
                     {status && status.error && (
-                      <Card>
+                      <Card withPadding>
                         <strong>{status.error}</strong>
                       </Card>
                     )}
