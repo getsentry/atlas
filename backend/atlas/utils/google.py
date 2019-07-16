@@ -15,7 +15,7 @@ from atlas.models import Identity, Office, Profile, User
 # &sortOrder=ascending or descending
 # &query=email, givenName, or familyName:the query's value*
 
-SyncResult = namedtuple("SyncResult", ["total_users"])
+SyncResult = namedtuple("SyncResult", ["total_users", "created_users", "updated_users"])
 
 
 def find(iterable, func):
@@ -85,13 +85,15 @@ def get_user(email, name=None, user_cache=None):
     if user_cache is None:
         user_cache = {}
     if email in user_cache:
-        return user_cache[email]
+        return user_cache[email], False
     try:
         user = User.objects.get(email=email)
+        created = False
     except User.DoesNotExist:
         user = User.objects.create_user(email=email, name=email.split("@", 1)[0])
+        created = True
     user_cache[email] = user
-    return user
+    return user, created
 
 
 def get_office(name, office_cache=None):
@@ -176,11 +178,13 @@ def sync_user(  # NOQA
         office_cache = {}
 
     if user is None:
-        user = get_user(
+        user, created = get_user(
             email=data["primaryEmail"],
             name=data["name"]["fullName"],
             user_cache=user_cache,
         )
+    else:
+        created = False
 
     if identity is None:
         identity, _ = Identity.objects.get_or_create(
@@ -234,7 +238,7 @@ def sync_user(  # NOQA
     # 'relations': [{'value': 'david@sentry.io', 'type': 'manager'}]
     row = find(data.get("relations"), lambda x: x["type"] == "manager" and x["value"])
     if row:
-        reports_to = get_user(email=row["value"], user_cache=user_cache)
+        reports_to, _ = get_user(email=row["value"], user_cache=user_cache)
         if profile.reports_to_id != reports_to.id:
             profile_fields["reports_to"] = reports_to
     elif profile.reports_to_id:
@@ -251,7 +255,8 @@ def sync_user(  # NOQA
 
     row = find(data.get("phones"), lambda x: x["primary"])
     if row:
-        profile_fields["primary_phone"] = row["value"]
+        if profile.primary_phone != row["value"]:
+            profile_fields["primary_phone"] = row["value"]
     elif profile.primary_phone:
         profile_fields["primary_phone"] = None
 
@@ -285,13 +290,15 @@ def sync_user(  # NOQA
         Profile.objects.filter(id=profile.id).update(**profile_fields)
     if identity_fields:
         Identity.objects.filter(id=identity.id).update(**identity_fields)
-    return user
+    return user, created, bool(user_fields or profile_fields or identity_fields)
 
 
 def sync_domain(identity, domain):
     office_cache = {}
     user_cache = {}
     total_users = 0
+    created_users = 0
+    updated_users = 0
 
     has_more = True
     page_token = None
@@ -312,7 +319,17 @@ def sync_domain(identity, domain):
         for row in data.get("users") or ():
             total_users += 1
             with transaction.atomic():
-                sync_user(row, user_cache=user_cache, office_cache=office_cache)
+                _, created, updated = sync_user(
+                    row, user_cache=user_cache, office_cache=office_cache
+                )
+                if created:
+                    created_users += 1
+                if updated:
+                    updated_users += 1
         page_token = data.get("nextPageToken")
         has_more = bool(page_token)
-    return SyncResult(total_users=total_users)
+    return SyncResult(
+        total_users=total_users,
+        created_users=created_users,
+        updated_users=updated_users,
+    )

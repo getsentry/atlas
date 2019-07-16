@@ -27,6 +27,8 @@ class Command(BaseCommand):
         result = google.sync_domain(identity, domain)
         self.stdout.write(
             self.style.MIGRATE_HEADING(
-                "{} users synchronized".format(result.total_users)
+                "{} users synchronized ({} created; {} updated)".format(
+                    result.total_users, result.created_users, result.updated_users
+                )
             )
         )
