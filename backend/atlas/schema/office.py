@@ -33,7 +33,7 @@ class OfficeNode(gql_optimizer.OptimizedDjangoObjectType):
         ):
             logging.warning("Uncached resolution for OfficeNode.num_people")
             qs = qs.select_related("user")
-        return sum([1 for r in qs if r.user.is_active and r.title])
+        return sum([1 for r in qs if r.user.is_active and r.is_human])
 
     @gql_optimizer.resolver_hints(prefetch_related=("profiles", "profiles__user"))
     def resolve_people(self, info):
@@ -46,4 +46,4 @@ class OfficeNode(gql_optimizer.OptimizedDjangoObjectType):
         ):
             logging.warning("Uncached resolution for OfficeNode.people")
             qs = qs.select_related("user")
-        return [r.user for r in qs if r.user.is_active and r.title]
+        return [r.user for r in qs if r.user.is_active and r.is_human]

@@ -12,7 +12,6 @@ import colors from "../colors";
 import Content from "./Content";
 import ErrorMessage from "./ErrorMessage";
 import IconLink from "./IconLink";
-import PersonLink from "./PersonLink";
 import PersonList from "./PersonList";
 import Card from "./Card";
 import { GET_PERSON_QUERY } from "../queries";
@@ -124,7 +123,10 @@ export default class Person extends Component {
 
   render() {
     return (
-      <Query query={GET_PERSON_QUERY} variables={{ email: this.props.email }}>
+      <Query
+        query={GET_PERSON_QUERY}
+        variables={{ email: this.props.email, humansOnly: false }}
+      >
         {({ loading, error, data }) => {
           if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;

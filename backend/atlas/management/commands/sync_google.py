@@ -24,4 +24,9 @@ class Command(BaseCommand):
             )
         )
 
-        google.sync_domain(identity, domain)
+        result = google.sync_domain(identity, domain)
+        self.stdout.write(
+            self.style.MIGRATE_HEADING(
+                "{} users synchronized".format(result.total_users)
+            )
+        )

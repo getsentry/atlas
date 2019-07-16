@@ -15,6 +15,7 @@ export const GET_OFFICE_QUERY = gql`
 export const LIST_PEOPLE_QUERY = gql`
   query listPeople(
     $office: UUID
+    $humansOnly: Boolean
     $dateStartedBefore: Date
     $dateStartedAfter: Date
     $birthdayBefore: Date
@@ -27,6 +28,7 @@ export const LIST_PEOPLE_QUERY = gql`
   ) {
     users(
       office: $office
+      humansOnly: $humansOnly
       dateStartedBefore: $dateStartedBefore
       dateStartedAfter: $dateStartedAfter
       birthdayBefore: $birthdayBefore
@@ -56,7 +58,7 @@ export const LIST_PEOPLE_QUERY = gql`
 
 export const GET_PERSON_QUERY = gql`
   query getPerson($email: String) {
-    users(email: $email) {
+    users(email: $email, humansOnly: false) {
       id
       name
       email
@@ -87,6 +89,7 @@ export const GET_PERSON_QUERY = gql`
         dateStarted
         photoUrl
         primaryPhone
+        isHuman
         office {
           id
           name

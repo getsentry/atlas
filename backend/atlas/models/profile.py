@@ -26,6 +26,7 @@ class Profile(models.Model):
     department = models.TextField(null=True)
     primary_phone = models.TextField(null=True)
     config = JSONField(default=dict)
+    is_human = models.BooleanField(default=True)
 
     class Meta:
         db_table = "profile"

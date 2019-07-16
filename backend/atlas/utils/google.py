@@ -1,3 +1,4 @@
+from collections import namedtuple
 from datetime import date
 from uuid import uuid4
 
@@ -13,6 +14,8 @@ from atlas.models import Identity, Office, Profile, User
 # &orderBy=email, givenName, or familyName
 # &sortOrder=ascending or descending
 # &query=email, givenName, or familyName:the query's value*
+
+SyncResult = namedtuple("SyncResult", ["total_users"])
 
 
 def find(iterable, func):
@@ -64,6 +67,10 @@ def to_date(value):
     return date(*map(int, value.split("-")))
 
 
+def to_bool(value):
+    return True if value == "yes" else False
+
+
 def lookup_field(data, field_path):
     cur_path = data
     for bit in field_path.split("/"):
@@ -71,7 +78,7 @@ def lookup_field(data, field_path):
             cur_path = cur_path[bit]
         except KeyError:
             return None
-    return cur_path or None
+    return cur_path
 
 
 def get_user(email, name=None, user_cache=None):
@@ -139,6 +146,8 @@ def update_profile(identity, user, data):
         if key in data:
             if isinstance(data[key], date):
                 value = data[key].strftime("%Y-%M-%D")
+            elif isinstance(data[key], bool):
+                return "yes" if data[key] else "no"
             else:
                 value = data[key]
 
@@ -253,6 +262,8 @@ def sync_user(  # NOQA
             value = lookup_field(schemas, field_path)
             if value and attribute_name.startswith("date_"):
                 value = to_date(value)
+            if attribute_name == "is_human":
+                value = bool(value)
             if getattr(profile, attribute_name) != value:
                 profile_fields[attribute_name] = value
 
@@ -262,7 +273,10 @@ def sync_user(  # NOQA
         if profile.config:
             profile_fields["config"] = {}
         for attribute_name, _ in settings.GOOGLE_FIELD_MAP:
-            if getattr(profile, attribute_name):
+            if (
+                attribute_name != "is_human"
+                and getattr(profile, attribute_name) is not None
+            ):
                 profile_fields[attribute_name] = None
 
     if user_fields:
@@ -277,6 +291,7 @@ def sync_user(  # NOQA
 def sync_domain(identity, domain):
     office_cache = {}
     user_cache = {}
+    total_users = 0
 
     has_more = True
     page_token = None
@@ -295,7 +310,9 @@ def sync_domain(identity, domain):
             raise Exception(data["error"])
 
         for row in data.get("users") or ():
+            total_users += 1
             with transaction.atomic():
                 sync_user(row, user_cache=user_cache, office_cache=office_cache)
         page_token = data.get("nextPageToken")
         has_more = bool(page_token)
+    return SyncResult(total_users=total_users)

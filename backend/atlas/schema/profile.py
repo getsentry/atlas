@@ -16,6 +16,7 @@ class ProfileNode(DjangoObjectType):
     date_started = graphene.Date(required=False)
     date_of_birth = graphene.Date(required=False)
     primary_phone = PhoneNumberField(required=False)
+    is_human = graphene.Boolean(required=False)
 
     class Meta:
         model = Profile
@@ -29,6 +30,7 @@ class ProfileNode(DjangoObjectType):
             "photo_url",
             "department",
             "primary_phone",
+            "is_human",
         )
 
     def resolve_primary_phone(self, info):

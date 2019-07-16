@@ -19,12 +19,13 @@ const UserSchema = yup.object().shape({
   department: yup.string().nullable(),
   primaryPhone: yup.string().nullable(),
   dateStarted: yup.date().nullable(),
-  dateOfBirth: yup.date().nullable()
+  dateOfBirth: yup.date().nullable(),
+  isHuman: yup.bool().nullable()
 });
 
 export const PERSON_QUERY = gql`
   query getPersonForUpdate($email: String!) {
-    users(email: $email) {
+    users(email: $email, humansOnly: false) {
       id
       name
       email
@@ -36,6 +37,7 @@ export const PERSON_QUERY = gql`
         dateStarted
         photoUrl
         primaryPhone
+        isHuman
         office {
           name
         }
@@ -69,6 +71,7 @@ export const PERSON_MUTATION = gql`
           dateStarted
           photoUrl
           primaryPhone
+          isHuman
           office {
             name
           }
@@ -102,6 +105,9 @@ class UpdatePersonForm extends Component {
         restrictedFields.add(k)
       );
     }
+    if (!currentUser.isSuperuser) {
+      restrictedFields.add("isHuman");
+    }
 
     return (
       <Query query={PERSON_QUERY} variables={{ email: this.props.email }}>
@@ -114,12 +120,13 @@ class UpdatePersonForm extends Component {
           const initialValues = {
             name: user.name,
             email: user.email,
-            handle: user.profile.handle,
-            title: user.profile.title,
-            department: user.profile.department,
-            dateOfBirth: user.profile.dateOfBirth,
-            dateStarted: user.profile.dateStarted,
-            primaryPhone: user.profile.primaryPhone
+            handle: user.profile.handle || "",
+            title: user.profile.title || "",
+            department: user.profile.department || "",
+            dateOfBirth: user.profile.dateOfBirth || "",
+            dateStarted: user.profile.dateStarted || "",
+            primaryPhone: user.profile.primaryPhone || "",
+            isHuman: user.profile.isHuman
           };
           return (
             <section>
@@ -232,6 +239,16 @@ class UpdatePersonForm extends Component {
                         name="dateStarted"
                         label="Start Date"
                         readonly={restrictedFields.has("dateStarted")}
+                      />
+                    </Card>
+
+                    <Card>
+                      <h2>Meta</h2>
+                      <FieldWrapper
+                        type="checkbox"
+                        name="isHuman"
+                        label="Human?"
+                        readonly={restrictedFields.has("isHuman")}
                       />
                     </Card>
 

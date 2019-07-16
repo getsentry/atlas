@@ -24,7 +24,8 @@ class Query(object):
         id=graphene.UUID(),
         email=graphene.String(),
         query=graphene.String(),
-        include_self=graphene.Boolean(),
+        include_self=graphene.Boolean(default_value=True),
+        humans_only=graphene.Boolean(default_value=True),
         office=graphene.UUID(),
         date_started_before=graphene.types.datetime.Date(),
         date_started_after=graphene.types.datetime.Date(),
@@ -42,6 +43,7 @@ class Query(object):
         email: str = None,
         query: str = None,
         include_self: bool = True,
+        humans_only: bool = True,
         office: str = None,
         offset: int = 0,
         date_started_before: date = None,
@@ -76,6 +78,9 @@ class Query(object):
         if not include_self:
             qs = qs.exclude(id=current_user.id)
 
+        if humans_only:
+            qs = qs.filter(profile__is_human=True)
+
         if date_started_before:
             qs = qs.filter(profile__date_started__lt=date_started_before)
 
@@ -99,9 +104,6 @@ class Query(object):
                     profile__date_of_birth__day__gt=birthday_after.day,
                 )
             )
-
-        # exclude users without titles as they're mostly not real
-        qs = qs.exclude(profile__title__isnull=True)
 
         if order_by == "name" or not order_by:
             qs = qs.order_by("name")

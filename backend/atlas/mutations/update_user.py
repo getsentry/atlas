@@ -24,11 +24,14 @@ FIELD_MODEL_MAP = {
     "title": Profile,
     "reports_to": Profile,
     "primary_phone": Profile,
+    "is_human": Profile,
 }
 
 RESTRICTED_FIELDS = frozenset(
     ["name", "date_of_birth", "date_started", "title", "department", "reports_to"]
 )
+
+SUPERUSER_ONLY_FIELDS = frozenset(["is_human"])
 
 
 class UserInput(graphene.InputObjectType):
@@ -40,6 +43,7 @@ class UserInput(graphene.InputObjectType):
     department = graphene.String(required=False)
     reports_to = graphene.String(required=False)
     primary_phone = Nullable(PhoneNumberField, required=False)
+    is_human = graphene.Boolean(required=False)
 
 
 class UpdateUser(graphene.Mutation):
@@ -74,6 +78,11 @@ class UpdateUser(graphene.Mutation):
         invalid_fields = (
             [f for f in data.keys() if f in RESTRICTED_FIELDS] if is_restricted else []
         )
+        invalid_fields.extend(
+            [f for f in data.keys() if f in SUPERUSER_ONLY_FIELDS]
+            if not current_user.is_superuser
+            else []
+        )
         if invalid_fields:
             return UpdateUser(
                 ok=False, errors=[f"Cannot update field: {f}" for f in invalid_fields]
@@ -90,6 +99,9 @@ class UpdateUser(graphene.Mutation):
                     value = None
 
                 if is_restricted and field in RESTRICTED_FIELDS:
+                    continue
+
+                if not current_user.is_superuser and field in SUPERUSER_ONLY_FIELDS:
                     continue
 
                 model = FIELD_MODEL_MAP[field]
