@@ -35,8 +35,8 @@ export const OFFICE_QUERY = gql`
 `;
 
 export const OFFICE_MUTATION = gql`
-  mutation updateOffice($office: UUID!, $location: String, $lat: Decimal, $lng: Decimal) {
-    updateOffice(office: $office, location: $location, lat: $lat, lng: $lng) {
+  mutation updateOffice($office: UUID!, $data: OfficeInput!) {
+    updateOffice(office: $office, data: $data) {
       ok
       errors
       office {
@@ -128,18 +128,20 @@ export default class UpdateOfficeForm extends Component {
                 initialValues={initialValues}
                 validationSchema={OfficeSchema}
                 onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
-                  const payload = {
-                    office: this.props.id,
+                  const data = {
                     ...values
                   };
                   if (this.state.hasAdjustedLatLng) {
-                    payload.lat = this.state.lat;
-                    payload.lng = this.state.lng;
+                    data.lat = this.state.lat;
+                    data.lng = this.state.lng;
                   }
                   apolloClient
                     .mutate({
                       mutation: OFFICE_MUTATION,
-                      variables: payload
+                      variables: {
+                        office: office.id,
+                        data
+                      }
                     })
                     .then(
                       ({

@@ -5,7 +5,7 @@ def test_requires_superuser(gql_client, default_user, default_office):
     executed = gql_client.execute(
         """
     mutation {
-        updateOffice(office:"%s" location:"132 Hawthorne St, San Francisco CA, 94103, USA") {
+        updateOffice(office:"%s" data:{location:"132 Hawthorne St, San Francisco CA, 94103, USA"}) {
             ok
             errors
             office {id, location}
@@ -26,7 +26,7 @@ def test_update_location(gql_client, default_superuser, default_office):
     executed = gql_client.execute(
         """
     mutation {
-        updateOffice(office:"%s" location:"%s") {
+        updateOffice(office:"%s" data:{location:"%s"}) {
             ok
             errors
             office {id, location}

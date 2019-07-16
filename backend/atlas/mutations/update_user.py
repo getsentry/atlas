@@ -2,7 +2,7 @@ import graphene
 from django.db import transaction
 
 from atlas.models import Profile, User
-from atlas.schema import PhoneNumberField, UserNode
+from atlas.schema import Nullable, PhoneNumberField, UserNode
 from atlas.tasks.sync_google import update_profile
 
 
@@ -31,23 +31,27 @@ RESTRICTED_FIELDS = frozenset(
 )
 
 
+class UserInput(graphene.InputObjectType):
+    name = graphene.String(required=False)
+    handle = graphene.String(required=False)
+    date_of_birth = Nullable(graphene.Date, required=False)
+    date_started = Nullable(graphene.Date, required=False)
+    title = graphene.String(required=False)
+    department = graphene.String(required=False)
+    reports_to = graphene.String(required=False)
+    primary_phone = Nullable(PhoneNumberField, required=False)
+
+
 class UpdateUser(graphene.Mutation):
     class Arguments:
         user = graphene.UUID(required=True)
-        # name = graphene.String(required=False)
-        handle = graphene.String(required=False)
-        date_of_birth = graphene.Date(required=False)
-        date_started = graphene.Date(required=False)
-        title = graphene.String(required=False)
-        department = graphene.String(required=False)
-        reports_to = graphene.String(required=False)
-        primary_phone = PhoneNumberField(required=False)
+        data = UserInput(required=True)
 
     ok = graphene.Boolean()
     errors = graphene.List(graphene.String)
     user = graphene.Field(UserNode)
 
-    def mutate(self, info, user: str, **fields):
+    def mutate(self, info, user: str, data: UserInput):
         current_user = info.context.user
         if not current_user.is_authenticated:
             return UpdateUser(ok=False, errors=["Authentication required"])
@@ -68,9 +72,7 @@ class UpdateUser(graphene.Mutation):
             return UpdateUser(ok=False, errors=["Cannot edit this user"])
 
         invalid_fields = (
-            [f for f in fields.keys() if f in RESTRICTED_FIELDS]
-            if is_restricted
-            else []
+            [f for f in data.keys() if f in RESTRICTED_FIELDS] if is_restricted else []
         )
         if invalid_fields:
             return UpdateUser(
@@ -83,7 +85,10 @@ class UpdateUser(graphene.Mutation):
         with transaction.atomic():
             updates = {}
             model_updates = {User: {}, Profile: {}}
-            for field, value in fields.items():
+            for field, value in data.items():
+                if value == "":
+                    value = None
+
                 if is_restricted and field in RESTRICTED_FIELDS:
                     continue
 

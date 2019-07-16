@@ -84,7 +84,7 @@ const PersonContainer = styled.article`
     vertical-align: middle;
   }
   dl {
-    margin: 0 0 1.5rem;
+    margin: 0 0 1rem;
     padding-left: 140px;
   }
   dl dt {
@@ -213,14 +213,6 @@ export default class Person extends Component {
                                 <Empty />
                               )}
                             </dd>
-                            <dt>Reports To</dt>
-                            <dd>
-                              {thisPerson.profile.reportsTo ? (
-                                <PersonLink user={thisPerson.profile.reportsTo} />
-                              ) : (
-                                <Empty />
-                              )}
-                            </dd>
                             <dt>Office</dt>
                             <dd>
                               {thisPerson.profile.office ? (
@@ -237,6 +229,12 @@ export default class Person extends Component {
                         </Card>
                       </Box>
                       <Box width={1 / 3} px={3}>
+                        {thisPerson.profile.reportsTo && (
+                          <Card>
+                            <h3>Manager</h3>
+                            <PersonList people={[thisPerson.profile.reportsTo]} />
+                          </Card>
+                        )}
                         {!!thisPerson.reports.length && (
                           <Card>
                             <h3>Reports</h3>

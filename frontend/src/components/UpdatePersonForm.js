@@ -11,9 +11,6 @@ import Card from "../components/Card";
 import FieldWrapper from "../components/FieldWrapper";
 import apolloClient from "../utils/apollo";
 
-const NON_EDITABLE_FIELDS = new Set(["name", "email"]);
-const RESTRICTED_FIELDS = new Set(["title", "department", "dateStarted", "dateOfBirth"]);
-
 const UserSchema = yup.object().shape({
   // name: yup.string().required("Required"),
   // email: yup.string().required("Required"),
@@ -56,24 +53,8 @@ export const PERSON_QUERY = gql`
 `;
 
 export const PERSON_MUTATION = gql`
-  mutation updatePerson(
-    $user: UUID!
-    $handle: String
-    $title: String
-    $department: String
-    $primaryPhone: PhoneNumber
-    $dateOfBirth: Date
-    $dateStarted: Date
-  ) {
-    updateUser(
-      user: $user
-      handle: $handle
-      title: $title
-      department: $department
-      primaryPhone: $primaryPhone
-      dateOfBirth: $dateOfBirth
-      dateStarted: $dateStarted
-    ) {
+  mutation updatePerson($user: UUID!, $data: UserInput!) {
+    updateUser(user: $user, data: $data) {
       ok
       errors
       user {
@@ -149,18 +130,19 @@ class UpdatePersonForm extends Component {
                 initialValues={initialValues}
                 validationSchema={UserSchema}
                 onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
-                  let variables = {
-                    user: user.id
-                  };
+                  let data = {};
                   Object.keys(values).forEach(k => {
                     if (!restrictedFields.has(k)) {
-                      variables[k] = values[k] || null;
+                      data[k] = values[k] || "";
                     }
                   });
                   apolloClient
                     .mutate({
                       mutation: PERSON_MUTATION,
-                      variables
+                      variables: {
+                        user: user.id,
+                        data
+                      }
                     })
                     .then(
                       ({
