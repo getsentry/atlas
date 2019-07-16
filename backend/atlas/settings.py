@@ -148,7 +148,7 @@ GOOGLE_FIELD_MAP = (
     ("date_started", "Profile/Date_of_Hire"),
     ("date_of_birth", "Profile/Date_of_Birth"),
     ("handle", "Profile/Handle"),
-    ("is_human", "System/IsHuman"),
+    ("is_human", "System/Is_Human"),
 )
 
 if not GOOGLE_CLIENT_ID:
