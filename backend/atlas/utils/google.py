@@ -290,10 +290,9 @@ def sync_user(  # NOQA
         if profile.config:
             profile_fields["config"] = {}
         for attribute_name, _ in settings.GOOGLE_FIELD_MAP:
-            if (
-                attribute_name != "is_human"
-                and getattr(profile, attribute_name) is not None
-            ):
+            if attribute_name == "is_human":
+                profile_fields[attribute_name] = False
+            elif getattr(profile, attribute_name) is not None:
                 profile_fields[attribute_name] = None
 
     if user_fields:
