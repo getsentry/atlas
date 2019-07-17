@@ -18,5 +18,8 @@ def test_generate_profile_updates_all_fields(responses, default_identity, defaul
                 "Handle": None,
             },
             "System": {"Is_Human": True},
-        }
+        },
+        "organizations": [{"department": "Design", "primary": True, "title": "Dummy"}],
+        "phones": [{"primary": True, "type": "home", "value": ""}],
+        "relations": [],
     }
