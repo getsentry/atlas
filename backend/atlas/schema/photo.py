@@ -15,4 +15,4 @@ class PhotoNode(DjangoObjectType):
     class Meta:
         model = Photo
         name = "Photo"
-        only_fields = ("width", "height", "mime_type")
+        fields = ("width", "height", "mime_type")

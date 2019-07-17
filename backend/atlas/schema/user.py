@@ -19,7 +19,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     class Meta:
         model = User
         name = "User"
-        only_fields = ("id", "email", "name", "is_superuser")
+        fields = ("id", "email", "name", "is_superuser")
 
     @gql_optimizer.resolver_hints(select_related=("profile"))
     def resolve_profile(self, info):

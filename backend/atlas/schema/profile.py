@@ -21,7 +21,7 @@ class ProfileNode(DjangoObjectType):
     class Meta:
         model = Profile
         name = "Profile"
-        only_fields = (
+        fields = (
             "handle",
             "reports_to",
             "title",
