@@ -1,7 +1,7 @@
 from base64 import urlsafe_b64decode
 from collections import namedtuple
 from datetime import date
-from typing import Any, Optional, Tuple
+from typing import Any, List, Optional, Tuple
 from uuid import uuid4
 
 import requests
@@ -182,7 +182,31 @@ def generate_profile_updates(identity: Identity, user: User, data: dict = None) 
     return params
 
 
-def update_profile(identity: Identity, user: User, data: dict) -> UserSyncResult:
+def update_all_profiles(
+    identity: Identity, users: List[str] = None
+) -> DomainSyncResult:
+    total_users = 0
+    created_users = 0
+    updated_users = 0
+
+    if users:
+        user_list = User.objects.filter(email__in=users)
+    else:
+        user_list = User.objects.all()
+
+    for user in user_list:
+        total_users += 1
+        updated_users += 1
+        update_profile(identity, user)
+
+    return DomainSyncResult(
+        total_users=total_users,
+        created_users=created_users,
+        updated_users=updated_users,
+    )
+
+
+def update_profile(identity: Identity, user: User, data: dict = None) -> UserSyncResult:
     params = generate_profile_updates(identity, user, data)
 
     user_identity = Identity.objects.get(provider="google", user=user)
@@ -360,7 +384,9 @@ def sync_user_photo(identity: Identity, user: User):
     return False
 
 
-def sync_domain(identity: Identity, domain: str) -> DomainSyncResult:
+def sync_domain(
+    identity: Identity, domain: str, users: List[str] = None
+) -> DomainSyncResult:
     office_cache = {}
     user_cache = {}
     total_users = 0
@@ -384,6 +410,8 @@ def sync_domain(identity: Identity, domain: str) -> DomainSyncResult:
             raise Exception(data["error"])
 
         for row in data.get("users") or ():
+            if users and row["primaryEmail"] not in users:
+                continue
             total_users += 1
             with transaction.atomic():
                 user, created, updated = sync_user(

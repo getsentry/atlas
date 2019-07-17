@@ -8,9 +8,9 @@ class Command(BaseCommand):
     help = "Synchronize users from Google"
 
     def add_arguments(self, parser):
-        parser.add_argument(
-            "domain", type=str, default=settings.GOOGLE_DOMAIN, nargs="?"
-        )
+        parser.add_argument("--domain", type=str, default=settings.GOOGLE_DOMAIN)
+        parser.add_argument("--push", action="store_true", default=False)
+        parser.add_argument("users", nargs="*", metavar="EMAIL")
 
     def handle(self, *args, **options):
         domain = options.get("domain")
@@ -24,7 +24,10 @@ class Command(BaseCommand):
             )
         )
 
-        result = google.sync_domain(identity, domain)
+        if options["push"]:
+            result = google.update_all_profiles(identity, users=options["users"])
+        else:
+            result = google.sync_domain(identity, domain, users=options["users"])
         self.stdout.write(
             self.style.MIGRATE_HEADING(
                 "{} users synchronized ({} created; {} updated)".format(
