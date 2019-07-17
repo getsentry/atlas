@@ -149,7 +149,7 @@ def generate_profile_updates(identity: Identity, user: User, data: dict) -> dict
     for key, field_path in settings.GOOGLE_FIELD_MAP:
         if key in data:
             if isinstance(data[key], date):
-                value = data[key].strftime("%Y-%M-%D")
+                value = data[key].isoformat()
             else:
                 value = data[key]
 

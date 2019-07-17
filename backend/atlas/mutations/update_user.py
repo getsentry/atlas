@@ -116,7 +116,7 @@ class UpdateUser(graphene.Mutation):
             if cur_attr != value:
                 model_updates[model][field] = value
                 if isinstance(value, date):
-                    value = value.strftime("%Y-%M-%D")
+                    value = value.isoformat()
                 updates[field] = value
 
         with transaction.atomic():
