@@ -1,6 +1,7 @@
 from base64 import urlsafe_b64decode
 from collections import namedtuple
 from datetime import date
+from decimal import Decimal
 from typing import Any, List, Optional, Tuple
 from uuid import uuid4
 
@@ -19,8 +20,18 @@ from atlas.models import Identity, Office, Photo, Profile, User
 # &query=email, givenName, or familyName:the query's value*
 
 DomainSyncResult = namedtuple(
-    "DomainSyncResult", ["total_users", "created_users", "updated_users"]
+    "DomainSyncResult",
+    [
+        "total_users",
+        "created_users",
+        "updated_users",
+        "total_buildings",
+        "created_buildings",
+        "updated_buildings",
+    ],
 )
+BatchSyncResult = namedtuple("BatchSyncResult", ["total", "created", "updated"])
+BuildingSyncResult = namedtuple("BuildingSyncResult", ["office", "created", "updated"])
 UserSyncResult = namedtuple("UserSyncResult", ["user", "created", "updated"])
 
 
@@ -136,7 +147,7 @@ def generate_profile_updates(identity: Identity, user: User, data: dict = None) 
                 {
                     "type": "desk",
                     "area": "desk",
-                    "buildingId": Office.objects.get(id=data["office"]).name,
+                    "buildingId": Office.objects.get(id=data["office"]).external_id,
                 }
             ]
             if data["office"]
@@ -386,15 +397,125 @@ def sync_user_photo(identity: Identity, user: User):
     return False
 
 
+def sync_building(  # NOQA
+    data: dict,
+    office: Office = None,
+    identity: Identity = None,
+    user_cache: dict = None,
+    office_cache: dict = None,
+) -> BuildingSyncResult:
+    fields = {"name": data["buildingName"], "description": data["description"]}
+
+    if data["coordinates"]["latitude"]:
+        fields["lat"] = Decimal(str(data["coordinates"]["latitude"]))
+    else:
+        fields["lat"] = None
+
+    if data["coordinates"]["longitude"]:
+        fields["lng"] = Decimal(str(data["coordinates"]["longitude"]))
+    else:
+        fields["lng"] = None
+
+    if data["address"]["addressLines"]:
+        fields["location"] = "\n".join(data["address"]["addressLines"])
+    else:
+        fields["location"] = None
+
+    if data["address"]["regionCode"]:
+        fields["region_code"] = data["address"]["regionCode"]
+    else:
+        fields["region_code"] = None
+
+    if data["address"]["postalCode"]:
+        fields["postal_code"] = data["address"]["postalCode"]
+    else:
+        fields["postal_code"] = None
+
+    office, created = Office.objects.get_or_create(
+        external_id=data["buildingId"], defaults=fields
+    )
+
+    updates = []
+    for k, v in fields.items():
+        if getattr(office, k) != v:
+            setattr(office, k, v)
+            updates.append(k)
+
+    if updates:
+        office.save(update_fields=updates)
+
+    return BuildingSyncResult(office=office, created=created, updated=bool(updates))
+
+
 def sync_domain(
-    identity: Identity, domain: str, users: List[str] = None
+    identity: Identity, domain: str, users: List[str] = None, offices: List[str] = None
 ) -> DomainSyncResult:
     office_cache = {}
     user_cache = {}
-    total_users = 0
-    created_users = 0
-    updated_users = 0
 
+    building_result = sync_buildings(
+        identity, domain, offices, office_cache=office_cache, user_cache=user_cache
+    )
+
+    user_result = sync_users(
+        identity, domain, users, office_cache=office_cache, user_cache=user_cache
+    )
+
+    return DomainSyncResult(
+        total_users=user_result.total,
+        updated_users=user_result.updated,
+        created_users=user_result.created,
+        total_buildings=building_result.total,
+        updated_buildings=building_result.updated,
+        created_buildings=building_result.created,
+    )
+
+
+def sync_buildings(
+    identity: Identity,
+    domain: str,
+    offices: List[str] = None,
+    user_cache: dict = None,
+    office_cache: dict = None,
+) -> BatchSyncResult:
+    total, created, updated = 0, 0, 0
+    has_more = True
+    page_token = None
+    while has_more:
+        results = requests.get(
+            "https://www.googleapis.com/admin/directory/v1/customer/my_customer/resources/buildings",
+            params={"pageToken": page_token},
+            headers={"Authorization": "Bearer {}".format(identity.access_token)},
+        )
+        data = results.json()
+        if data.get("error"):
+            raise Exception(data["error"])
+
+        for row in data.get("buildings") or ():
+            if offices and row["buildingId"] not in offices:
+                continue
+
+            total += 1
+            with transaction.atomic():
+                office, is_created, is_updated = sync_building(row)
+                if is_created:
+                    created += 1
+                if is_updated:
+                    updated += 1
+                office_cache[office.external_id] = office
+        page_token = data.get("nextPageToken")
+        has_more = bool(page_token)
+    return BatchSyncResult(total=total, created=created, updated=updated)
+
+
+def sync_users(
+    identity: Identity,
+    domain: str,
+    users: List[str] = None,
+    user_cache: dict = None,
+    office_cache: dict = None,
+) -> BatchSyncResult:
+    total, created, updated = 0, 0, 0
     has_more = True
     page_token = None
     while has_more:
@@ -414,21 +535,17 @@ def sync_domain(
         for row in data.get("users") or ():
             if users and row["primaryEmail"] not in users:
                 continue
-            total_users += 1
+            total += 1
             with transaction.atomic():
-                user, created, updated = sync_user(
+                user, is_created, is_updated = sync_user(
                     row, user_cache=user_cache, office_cache=office_cache
                 )
                 if sync_user_photo(identity, user):
-                    updated = True
-                if created:
-                    created_users += 1
-                if updated:
-                    updated_users += 1
+                    is_updated = True
+                if is_created:
+                    created += 1
+                if is_updated:
+                    updated += 1
         page_token = data.get("nextPageToken")
         has_more = bool(page_token)
-    return DomainSyncResult(
-        total_users=total_users,
-        created_users=created_users,
-        updated_users=updated_users,
-    )
+    return BatchSyncResult(total=total, created=created, updated=updated)

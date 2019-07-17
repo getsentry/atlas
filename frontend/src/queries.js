@@ -5,7 +5,11 @@ export const GET_OFFICE_QUERY = gql`
     offices(id: $id) {
       id
       name
+      externalId
+      description
       location
+      postalCode
+      regionCode
       lat
       lng
     }

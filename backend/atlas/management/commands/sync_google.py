@@ -28,10 +28,20 @@ class Command(BaseCommand):
             result = google.update_all_profiles(identity, users=options["users"])
         else:
             result = google.sync_domain(identity, domain, users=options["users"])
+        self.stdout.write(self.style.MIGRATE_HEADING("Done!"))
         self.stdout.write(
             self.style.MIGRATE_HEADING(
-                "{} users synchronized ({} created; {} updated)".format(
+                " -> users: {} ({} created; {} updated)".format(
                     result.total_users, result.created_users, result.updated_users
+                )
+            )
+        )
+        self.stdout.write(
+            self.style.MIGRATE_HEADING(
+                " -> buildings: {} ({} created; {} updated)".format(
+                    result.total_buildings,
+                    result.created_buildings,
+                    result.updated_buildings,
                 )
             )
         )

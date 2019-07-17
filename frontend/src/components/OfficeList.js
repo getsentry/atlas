@@ -14,6 +14,7 @@ export const LIST_OFFICES_QUERY = gql`
   query listOffices {
     offices {
       id
+      externalId
       name
       location
       lat
@@ -57,7 +58,10 @@ export default function OfficeList() {
                 {offices.map(o => (
                   <tr key={o.id}>
                     <td>
-                      <Link to={`/offices/${o.id}`}>{o.name}</Link>
+                      <div>
+                        <Link to={`/offices/${o.id}`}>{o.name}</Link>
+                      </div>
+                      <small>{o.location || ""}</small>
                     </td>
                     <td>{o.numPeople.toLocaleString()}</td>
                     <SuperuserOnly>

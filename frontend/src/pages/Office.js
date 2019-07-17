@@ -101,9 +101,16 @@ export default class Office extends Component {
                         <div className="name">
                           <h1>{thisOffice.name}</h1>
                         </div>
-                        {thisOffice.location && (
-                          <div className="contact">{thisOffice.location}</div>
-                        )}
+                        <div className="contact">
+                          {thisOffice.location && <div>{thisOffice.location}</div>}
+                          {thisOffice.postalCode ||
+                            (thisOffice.regionCode && (
+                              <div>
+                                {thisOffice.postalCode || ""}{" "}
+                                {thisOffice.regionCode || ""}
+                              </div>
+                            ))}
+                        </div>
                       </section>
                     </Box>
                     <Box px={3} flex="1">
