@@ -23,12 +23,15 @@ const OfficeSchema = yup.object().shape({
 });
 
 export const OFFICE_QUERY = gql`
-  query getOfficeForUpdate($id: UUID!) {
-    offices(id: $id) {
+  query getOfficeForUpdate($externalId: String!) {
+    offices(externalId: $externalId) {
       id
       externalId
       name
+      description
       location
+      postalCode
+      regionCode
       lat
       lng
     }
@@ -54,7 +57,7 @@ export const OFFICE_MUTATION = gql`
 
 export default class UpdateOfficeForm extends Component {
   static propTypes = {
-    id: PropTypes.string.isRequired
+    externalId: PropTypes.string.isRequired
   };
 
   static contextTypes = { router: PropTypes.object.isRequired };
@@ -105,7 +108,7 @@ export default class UpdateOfficeForm extends Component {
 
   render() {
     return (
-      <Query query={OFFICE_QUERY} variables={{ id: this.props.id }}>
+      <Query query={OFFICE_QUERY} variables={{ externalId: this.props.externalId }}>
         {({ loading, data }) => {
           //if (error) return <ErrorMessage message="Error loading office." />;
           if (loading) return <div>Loading</div>;
@@ -115,7 +118,10 @@ export default class UpdateOfficeForm extends Component {
           const initialValues = {
             name: office.name,
             externalId: office.externalId,
-            location: office.location
+            location: office.location,
+            description: office.description,
+            postalCode: office.postalCode,
+            regionCode: office.regionCode
           };
           let hasLocation = office.lat && office.lng;
           let officeCoords = hasLocation
@@ -157,7 +163,7 @@ export default class UpdateOfficeForm extends Component {
                           setStatus({ error: "" + errors[0] });
                         } else {
                           this.context.router.push({
-                            pathname: `/offices/${office.id}`
+                            pathname: `/offices/${office.externalId}`
                           });
                         }
                       },
@@ -189,17 +195,38 @@ export default class UpdateOfficeForm extends Component {
                         label="External ID"
                         readonly
                       />
-                      <FieldWrapper type="text" name="name" label="Name" />
+                      <FieldWrapper type="text" name="name" label="Name" readonly />
+                      <FieldWrapper
+                        type="textarea"
+                        name="description"
+                        label="Description"
+                        readonly
+                      />
                     </Card>
 
                     <Card>
                       <h2>Location</h2>
                       <FieldWrapper
-                        type="text"
+                        type="textarea"
                         name="location"
                         label="Location"
-                        placeholder="e.g. 1500 Cool Ln, San Francisco CA, 94107, USA"
+                        placeholder="e.g. 1500 Cool Ln, San Francisco CA"
                         onChange={this.updateLocation}
+                        readonly
+                      />
+                      <FieldWrapper
+                        type="text"
+                        name="postalCode"
+                        label="Postal Code"
+                        onChange={this.updateLocation}
+                        readonly
+                      />
+                      <FieldWrapper
+                        type="text"
+                        name="regionCode"
+                        label="Region Code"
+                        onChange={this.updateLocation}
+                        readonly
                       />
                       <Map
                         options={{

@@ -17,6 +17,8 @@ export default styled(
           {label}
         </option>
       ));
+    } else if (type === "textarea") {
+      fieldProps.component = "textarea";
     } else {
       fieldProps.type = type;
     }

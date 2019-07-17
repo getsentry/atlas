@@ -59,7 +59,7 @@ export default function OfficeList() {
                   <tr key={o.id}>
                     <td>
                       <div>
-                        <Link to={`/offices/${o.id}`}>{o.name}</Link>
+                        <Link to={`/offices/${o.externalId}`}>{o.name}</Link>
                       </div>
                       <small>{o.location || ""}</small>
                     </td>
@@ -68,7 +68,7 @@ export default function OfficeList() {
                       <td>
                         <IconLink
                           icon={<Settings />}
-                          to={`/offices/${o.id}/update`}
+                          to={`/offices/${o.externalId}/update`}
                           color={colors.black}
                           style={{ fontSize: "0.9em" }}
                         />

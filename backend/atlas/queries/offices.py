@@ -10,6 +10,7 @@ class Query(object):
     offices = graphene.List(
         OfficeNode,
         id=graphene.UUID(),
+        external_id=graphene.String(),
         query=graphene.String(),
         offset=graphene.Int(),
         limit=graphene.Int(),
@@ -19,6 +20,7 @@ class Query(object):
         self,
         info,
         id: str = None,
+        external_id: str = None,
         query: str = None,
         offset: int = 0,
         limit: int = 1000,
@@ -31,10 +33,13 @@ class Query(object):
         if not current_user.is_authenticated:
             raise GraphQLError("You must be authenticated")
 
-        qs = Office.objects.all()
+        qs = Office.objects.all().distinct()
 
         if id:
             qs = qs.filter(id=id)
+
+        if external_id:
+            qs = qs.filter(external_id=external_id)
 
         if query:
             qs = qs.filter(name__istartswith=query)

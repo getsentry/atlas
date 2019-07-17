@@ -78,7 +78,10 @@ export default class Office extends Component {
     return (
       <Layout>
         <OfficeContainer>
-          <Query query={GET_OFFICE_QUERY} variables={{ id: this.props.params.id }}>
+          <Query
+            query={GET_OFFICE_QUERY}
+            variables={{ externalId: this.props.params.externalId }}
+          >
             {({ loading, error, data }) => {
               if (error) return <ErrorMessage message="Error loading office." />;
               if (loading) return <div>Loading</div>;
@@ -137,7 +140,7 @@ export default class Office extends Component {
                             <SuperuserOnly>
                               <IconLink
                                 icon={<Settings />}
-                                to={`/offices/${thisOffice.id}/update`}
+                                to={`/offices/${thisOffice.externalId}/update`}
                                 style={{ fontSize: "0.9em" }}
                               >
                                 Edit

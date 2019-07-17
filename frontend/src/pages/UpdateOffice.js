@@ -9,7 +9,7 @@ export default class extends Component {
     return (
       <Layout>
         <Content>
-          <UpdateOfficeForm id={this.props.params.id} />
+          <UpdateOfficeForm externalId={this.props.params.externalId} />
         </Content>
       </Layout>
     );

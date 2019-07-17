@@ -26,8 +26,8 @@ export default (
     <IndexRoute component={Home} />
     <Route path="/login" component={Login} />
     <Route path="/offices" component={Offices} />
-    <Route path="/offices/:id" component={Office} />
-    <Route path="/offices/:id/update" component={UpdateOffice} />
+    <Route path="/offices/:externalId" component={Office} />
+    <Route path="/offices/:externalId/update" component={UpdateOffice} />
     <Route path="/orgChart" component={OrgChart} />
     <Route path="/people" component={People} />
     <Route path="/people/:email" component={Profile} />

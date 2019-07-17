@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const GET_OFFICE_QUERY = gql`
-  query getOffice($id: UUID!) {
-    offices(id: $id) {
+  query getOffice($id: UUID, $externalId: String) {
+    offices(id: $id, externalId: $externalId) {
       id
       name
       externalId
@@ -114,6 +114,7 @@ export const GET_PERSON_QUERY = gql`
       }
       office {
         id
+        externalId
         name
         location
         lat

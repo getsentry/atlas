@@ -181,7 +181,7 @@ export default class Person extends Component {
                             <dt>Office</dt>
                             <dd>
                               {thisPerson.office ? (
-                                <Link to={`/offices/${thisPerson.office.id}`}>
+                                <Link to={`/offices/${thisPerson.office.externalId}`}>
                                   {thisPerson.office.name}
                                 </Link>
                               ) : (
