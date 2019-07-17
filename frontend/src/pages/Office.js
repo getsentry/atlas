@@ -5,7 +5,9 @@ import { Flex, Box } from "@rebass/grid/emotion";
 import { Settings } from "@material-ui/icons";
 
 import colors from "../colors";
+import Card from "../components/Card";
 import Content from "../components/Content";
+import DefinitionList from "../components/DefinitionList";
 import ErrorMessage from "../components/ErrorMessage";
 import Layout from "../components/Layout";
 import IconLink from "../components/IconLink";
@@ -111,6 +113,18 @@ export default class Office extends Component {
                               </div>
                             ))}
                         </div>
+                        <Card>
+                          <DefinitionList prefixWidth={80}>
+                            <dt>ID</dt>
+                            <dd>{thisOffice.externalId}</dd>
+                            <dt>People</dt>
+                            <dd>{thisOffice.numPeople.toLocaleString()}</dd>
+                            <dt>Lat</dt>
+                            <dd>{thisOffice.lat}</dd>
+                            <dt>Lng</dt>
+                            <dd>{thisOffice.lng}</dd>
+                          </DefinitionList>
+                        </Card>
                       </section>
                     </Box>
                     <Box px={3} flex="1">

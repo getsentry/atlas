@@ -14,6 +14,8 @@ import ErrorMessage from "./ErrorMessage";
 import IconLink from "./IconLink";
 import PersonList from "./PersonList";
 import Card from "./Card";
+import DefinitionList from "./DefinitionList";
+
 import { GET_PERSON_QUERY } from "../queries";
 
 const Empty = () => <span>&mdash;</span>;
@@ -69,24 +71,6 @@ const PersonContainer = styled.article`
   .meta svg {
     font-size: 1em;
     vertical-align: middle;
-  }
-  dl {
-    margin: 0 0 1rem;
-    padding-left: 140px;
-  }
-  dl dt {
-    float: left;
-    clear: left;
-    margin-left: -140px;
-    width: 120px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 5px;
-    color: #999;
-  }
-  dl dd {
-    margin-bottom: 5px;
   }
 `;
 
@@ -179,7 +163,7 @@ export default class Person extends Component {
                     <Flex>
                       <Box width={2 / 3} px={3}>
                         <Card>
-                          <dl className="clearfix">
+                          <DefinitionList>
                             <dt>Name</dt>
                             <dd>{thisPerson.name}</dd>
                             <dt>Preferred Name</dt>
@@ -206,7 +190,7 @@ export default class Person extends Component {
                             </dd>
                             <dt>Birthday</dt>
                             <dd>{dob ? dob.format("MMMM Do") : <Empty />}</dd>
-                          </dl>
+                          </DefinitionList>
                         </Card>
                       </Box>
                       <Box width={1 / 3} px={3}>

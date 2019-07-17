@@ -12,6 +12,7 @@ export const GET_OFFICE_QUERY = gql`
       regionCode
       lat
       lng
+      numPeople
     }
   }
 `;
