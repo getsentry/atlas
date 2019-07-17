@@ -9,7 +9,7 @@ import PersonLink from "../components/PersonLink";
 
 export const LIST_ALL_PEOPLE_QUERY = gql`
   query listAllPeople {
-    users(offset: 0, limit: 1000) {
+    users(offset: 0, limit: 1000, titlesOnly: true) {
       id
       name
       email

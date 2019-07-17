@@ -26,6 +26,7 @@ class Query(object):
         query=graphene.String(),
         include_self=graphene.Boolean(default_value=True),
         humans_only=graphene.Boolean(default_value=True),
+        titles_only=graphene.Boolean(default_value=False),
         office=graphene.UUID(),
         reports_to=graphene.UUID(),
         date_started_before=graphene.types.datetime.Date(),
@@ -45,6 +46,7 @@ class Query(object):
         query: str = None,
         include_self: bool = True,
         humans_only: bool = True,
+        titles_only: bool = False,
         office: str = None,
         reports_to: str = None,
         offset: int = 0,
@@ -85,6 +87,9 @@ class Query(object):
 
         if humans_only:
             qs = qs.filter(profile__is_human=True)
+
+        if titles_only:
+            qs = qs.filter(profile__title__isnull=False)
 
         if date_started_before:
             qs = qs.filter(profile__date_started__lt=date_started_before)
