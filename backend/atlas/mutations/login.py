@@ -39,7 +39,7 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
         else:
             resp.raise_for_status()
 
-    config = {"scope": data["scope"]}
+    config = {}
 
     id_token = data["id_token"]
     _, payload, _ = map(urlsafe_b64decode, id_token.split(".", 2))
@@ -80,6 +80,7 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
         if identity:
             # TODO(dcramer): we'd like to know if they're an admin here
             identity.config = config
+            identity.scopes = data["scope"].split(" ")
             identity.is_active = True
             if profile:
                 identity.is_admin = profile["isAdmin"]
@@ -88,6 +89,7 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
             identity.save(
                 update_fields=[
                     "config",
+                    "scopes",
                     "is_active",
                     "is_admin",
                     "access_token",
@@ -106,6 +108,7 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
                     external_id=external_id,
                     is_active=True,
                     is_admin=profile["isAdmin"] if profile else False,
+                    scopes=data["scope"].split(" "),
                     config=config,
                     access_token=data["access_token"],
                     refresh_token=data["refresh_token"],

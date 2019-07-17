@@ -67,12 +67,18 @@ def refresh_token(identity: Identity) -> Identity:
 
 
 def get_admin_identity() -> Identity:
+    scopes_required = [
+        "https://www.googleapis.com/auth/admin.directory.user",
+        "https://www.googleapis.com/auth/admin.directory.resource.calendar",
+    ]
+
     identity = (
         Identity.objects.filter(
             user__is_active=True,
             is_active=True,
             access_token__isnull=False,
             is_admin=True,
+            scopes__contains=scopes_required,
         )
         .select_related("user")
         .first()
