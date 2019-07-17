@@ -91,31 +91,31 @@ class UpdateUser(graphene.Mutation):
         profile, _ = Profile.objects.get_or_create(user=user)
         user.profile = profile
 
+        updates = {}
+        model_updates = {User: {}, Profile: {}}
+        for field, value in data.items():
+            if value == "":
+                value = None
+
+            if is_restricted and field in RESTRICTED_FIELDS:
+                continue
+
+            if not current_user.is_superuser and field in SUPERUSER_ONLY_FIELDS:
+                continue
+
+            model = FIELD_MODEL_MAP[field]
+            if model is User:
+                cur_attr = getattr(user, field)
+            elif model is Profile:
+                cur_attr = getattr(profile, field)
+            else:
+                raise NotImplementedError
+
+            if cur_attr != value:
+                model_updates[model][field] = value
+                updates[field] = value
+
         with transaction.atomic():
-            updates = {}
-            model_updates = {User: {}, Profile: {}}
-            for field, value in data.items():
-                if value == "":
-                    value = None
-
-                if is_restricted and field in RESTRICTED_FIELDS:
-                    continue
-
-                if not current_user.is_superuser and field in SUPERUSER_ONLY_FIELDS:
-                    continue
-
-                model = FIELD_MODEL_MAP[field]
-                if model is User:
-                    cur_attr = getattr(user, field)
-                elif model is Profile:
-                    cur_attr = getattr(profile, field)
-                else:
-                    raise NotImplementedError
-
-                if cur_attr != value:
-                    model_updates[model][field] = value
-                    updates[field] = value
-
             for model, values in model_updates.items():
                 if values:
                     if model is User:
@@ -126,6 +126,7 @@ class UpdateUser(graphene.Mutation):
                         setattr(instance, key, value)
                     instance.save(update_fields=values.keys())
 
-            if updates:
-                update_profile.delay(user_id=user.id, updates=updates)
+        if updates:
+            update_profile.delay(user_id=user.id, updates=updates)
+
         return UpdateUser(ok=True, user=user)
