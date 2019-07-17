@@ -27,7 +27,6 @@ class ProfileNode(DjangoObjectType):
             "title",
             "date_started",
             "office",
-            "photo_url",
             "department",
             "primary_phone",
             "is_human",

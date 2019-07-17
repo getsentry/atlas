@@ -3,11 +3,11 @@ import { Link } from "react-router";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
 import moment from "moment";
-import Avatar from "react-avatar";
 import styled from "@emotion/styled";
 import { Email, Phone, Settings } from "@material-ui/icons";
 import { Flex, Box } from "@rebass/grid/emotion";
 
+import Avatar from "./Avatar";
 import colors from "../colors";
 import Content from "./Content";
 import ErrorMessage from "./ErrorMessage";
@@ -50,18 +50,6 @@ const PersonContainer = styled.article`
   .meta .item {
     color: ${colors.white};
     margin-bottom: 0.25rem;
-  }
-  .meta .photo {
-    width: 196px;
-    height: 196px;
-    border-radius: 50%;
-  }
-  .meta .photo img,
-  .meta .photo .sb-avatar,
-  .meta .photo .sb-avatar > div {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 50%;
   }
   .meta h1 {
     font-size: 1.4em;
@@ -148,11 +136,7 @@ export default class Person extends Component {
                   <Box width={300} px={3}>
                     <section className="meta">
                       <div className="photo">
-                        {thisPerson.profile.photoUrl ? (
-                          <img src={thisPerson.profile.photoUrl} />
-                        ) : (
-                          <Avatar name={thisPerson.name} size="196" />
-                        )}
+                        <Avatar user={thisPerson} size={196} />
                       </div>
                       <div className="section">
                         <h1>{thisPerson.name}</h1>

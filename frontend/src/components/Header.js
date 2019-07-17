@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 
 import actions from "../actions";
 import colors from "../colors";
-import Avatar from "react-avatar";
+import Avatar from "./Avatar";
 
 const NavigationContainer = styled.nav`
   height: 100%;
@@ -41,18 +41,6 @@ const NavigationContainer = styled.nav`
   .profile:hover {
     background: rgba(31, 45, 61, 0.35);
   }
-  .avatar {
-    display: inline-block;
-    width: 36px;
-    height: 36px;
-    border-radius: 36px;
-    margin-right: 0.5rem;
-  }
-  .avatar img {
-    border-radius: 50%;
-    width: 100%;
-    height: 100%;
-  }
 `;
 
 const Navigation = ({ authenticated, logout, user }) => {
@@ -66,13 +54,7 @@ const Navigation = ({ authenticated, logout, user }) => {
         <Box pl={2}>
           {authenticated && (
             <Link to={`/people/${user.email}`} className="profile">
-              <div className="avatar">
-                {user.profile.photoUrl ? (
-                  <img src={user.profile.photoUrl} alt="" />
-                ) : (
-                  <Avatar name={user.name} size="36" />
-                )}
-              </div>
+              <Avatar user={user} size={36} mr />
               {user.name}
             </Link>
           )}

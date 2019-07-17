@@ -17,8 +17,11 @@ export const LOGIN_MUTATION = gql`
         email
         name
         isSuperuser
-        profile {
-          photoUrl
+        photo {
+          data
+          width
+          height
+          mimeType
         }
       }
     }
@@ -32,8 +35,11 @@ export const CURRENT_USER_QUERY = gql`
       name
       email
       isSuperuser
-      profile {
-        photoUrl
+      photo {
+        data
+        width
+        height
+        mimeType
       }
     }
   }

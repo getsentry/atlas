@@ -42,9 +42,14 @@ export const LIST_PEOPLE_QUERY = gql`
       id
       name
       email
+      photo {
+        data
+        width
+        height
+        mimeType
+      }
       profile {
         title
-        photoUrl
         dobMonth
         dobDay
         dateStarted
@@ -66,19 +71,35 @@ export const GET_PERSON_QUERY = gql`
         id
         name
         email
+        photo {
+          data
+          width
+          height
+          mimeType
+        }
         profile {
           title
-          photoUrl
         }
       }
       peers {
         id
         name
         email
+        photo {
+          data
+          width
+          height
+          mimeType
+        }
         profile {
           title
-          photoUrl
         }
+      }
+      photo {
+        data
+        width
+        height
+        mimeType
       }
       profile {
         handle
@@ -87,7 +108,6 @@ export const GET_PERSON_QUERY = gql`
         dobDay
         title
         dateStarted
-        photoUrl
         primaryPhone
         isHuman
         office {
@@ -101,9 +121,14 @@ export const GET_PERSON_QUERY = gql`
           id
           name
           email
+          photo {
+            data
+            width
+            height
+            mimeType
+          }
           profile {
             title
-            photoUrl
           }
         }
       }

@@ -3,12 +3,13 @@ import logging
 import graphene
 import graphene_django_optimizer as gql_optimizer
 
-from atlas.models import Profile, User
+from atlas.models import Photo, Profile, User
 
 
 class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     email = graphene.String(required=False)
     profile = graphene.Field("atlas.schema.ProfileNode")
+    photo = graphene.Field("atlas.schema.PhotoNode")
     office = graphene.Field("atlas.schema.OfficeNode")
     reports = graphene.List(lambda: UserNode)
     num_reports = graphene.Int(required=False)
@@ -20,11 +21,21 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         name = "User"
         only_fields = ("id", "email", "name", "is_superuser")
 
+    @gql_optimizer.resolver_hints(select_related=("profile"))
     def resolve_profile(self, info):
         try:
             return self.profile
         except Profile.DoesNotExist:
             return Profile()
+
+    @gql_optimizer.resolver_hints(select_related=("photo"))
+    def resolve_photo(self, info):
+        if not self.id:
+            return Photo()
+        try:
+            return Photo.objects.get(user=self.id)
+        except Photo.DoesNotExist:
+            return Photo()
 
     def resolve_email(self, info):
         user = info.context.user

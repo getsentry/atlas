@@ -1,3 +1,4 @@
+from base64 import urlsafe_b64decode
 from collections import namedtuple
 from datetime import date
 from typing import Any, Optional, Tuple
@@ -7,7 +8,7 @@ import requests
 from django.conf import settings
 from django.db import transaction
 
-from atlas.models import Identity, Office, Profile, User
+from atlas.models import Identity, Office, Photo, Profile, User
 
 # GET https://www.googleapis.com/admin/directory/v1/users
 # ?domain=primary domain name&pageToken=token for next results page
@@ -164,13 +165,13 @@ def update_profile(identity: Identity, user: User, data: dict) -> UserSyncResult
     params = generate_profile_updates(identity, user, data)
 
     user_identity = Identity.objects.get(provider="google", user=user)
-    result = requests.patch(
+    response = requests.patch(
         f"https://www.googleapis.com/admin/directory/v1/users/{user_identity.external_id}",
         json=params,
         headers={"Authorization": "Bearer {}".format(identity.access_token)},
     )
-    data = result.json()
-    result.raise_for_status()
+    data = response.json()
+    response.raise_for_status()
 
     return sync_user(data, user=user, identity=user_identity)
 
@@ -226,10 +227,6 @@ def sync_user(  # NOQA
         identity_fields["is_active"] = False
     elif identity.access_token and not data["suspended"] and not identity.is_active:
         identity_fields["is_active"] = True
-
-    # TODO(dcramer): doesnt even work
-    # if data.get("thumbnailPhotoUrl") != profile.photo_url:
-    #     profile_fields["photo_url"] = data["thumbnailPhotoUrl"]
 
     # 'organizations': [{'title': 'Chief Executive Officer', 'primary': True, 'customType': '', 'department': 'G&A', 'description': 'Executive'}]
     # TODO(dcramer): this probably needs to handle multiple orgs
@@ -289,21 +286,57 @@ def sync_user(  # NOQA
             profile_fields["config"] = {}
         for attribute_name, _ in settings.GOOGLE_FIELD_MAP:
             if attribute_name == "is_human":
-                profile_fields[attribute_name] = True
+                if not profile.is_human:
+                    profile_fields[attribute_name] = True
             elif getattr(profile, attribute_name) is not None:
                 profile_fields[attribute_name] = None
 
-    if user_fields:
-        User.objects.filter(id=user.id).update(**user_fields)
-    if profile_fields:
-        Profile.objects.filter(id=profile.id).update(**profile_fields)
-    if identity_fields:
-        Identity.objects.filter(id=identity.id).update(**identity_fields)
+    with transaction.atomic():
+        if user_fields:
+            User.objects.filter(id=user.id).update(**user_fields)
+        if profile_fields:
+            Profile.objects.filter(id=profile.id).update(**profile_fields)
+        if identity_fields:
+            Identity.objects.filter(id=identity.id).update(**identity_fields)
+
     return UserSyncResult(
         user=user,
         created=created,
         updated=bool(user_fields or profile_fields or identity_fields),
     )
+
+
+def sync_user_photo(identity: Identity, user: User):
+    # GET https://www.googleapis.com/admin/directory/v1/users/liz@example.com/photos/thumbnail
+    user_identity = Identity.objects.get(provider="google", user=user)
+    response = requests.get(
+        f"https://www.googleapis.com/admin/directory/v1/users/{user_identity.external_id}/photos/thumbnail",
+        headers={"Authorization": "Bearer {}".format(identity.access_token)},
+    )
+    if response.status_code == 404:
+        Photo.objects.filter(user=user).delete()
+        return False
+
+    response.raise_for_status()
+    data = response.json()
+
+    values = {
+        "data": urlsafe_b64decode(data["photoData"]),
+        "width": data["width"],
+        "height": data["height"],
+        "mime_type": data["mimeType"],
+    }
+
+    photo, created = Photo.objects.get_or_create(user=user, defaults=values)
+    if not created:
+        updates = {}
+        for key, value in values.items():
+            if getattr(photo, key) != value:
+                updates[key] = value
+        if updates:
+            Photo.objects.filter(id=photo.id).update(**updates)
+            return True
+    return False
 
 
 def sync_domain(identity: Identity, domain: str) -> DomainSyncResult:
@@ -332,9 +365,11 @@ def sync_domain(identity: Identity, domain: str) -> DomainSyncResult:
         for row in data.get("users") or ():
             total_users += 1
             with transaction.atomic():
-                _, created, updated = sync_user(
+                user, created, updated = sync_user(
                     row, user_cache=user_cache, office_cache=office_cache
                 )
+                if sync_user_photo(identity, user):
+                    updated = True
                 if created:
                     created_users += 1
                 if updated:

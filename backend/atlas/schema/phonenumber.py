@@ -18,7 +18,6 @@ class PhoneNumberField(graphene.Scalar):
 
     @staticmethod
     def parse_literal(ast):
-        print(type(ast))
         if isinstance(ast, StringValue):
             return phonenumbers.format_number(
                 phonenumbers.parse(ast.value, None), FORMAT

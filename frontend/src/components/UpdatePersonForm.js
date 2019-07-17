@@ -29,13 +29,18 @@ export const PERSON_QUERY = gql`
       id
       name
       email
+      photo {
+        data
+        width
+        height
+        mimeType
+      }
       profile {
         handle
         department
         title
         dateOfBirth
         dateStarted
-        photoUrl
         primaryPhone
         isHuman
         office {
@@ -44,9 +49,14 @@ export const PERSON_QUERY = gql`
         reportsTo {
           id
           name
+          photo {
+            data
+            width
+            height
+            mimeType
+          }
           profile {
             title
-            photoUrl
           }
         }
       }
@@ -63,13 +73,18 @@ export const PERSON_MUTATION = gql`
         id
         name
         email
+        photo {
+          data
+          width
+          height
+          mimeType
+        }
         profile {
           handle
           department
           title
           dateOfBirth
           dateStarted
-          photoUrl
           primaryPhone
           isHuman
           office {
@@ -78,9 +93,14 @@ export const PERSON_MUTATION = gql`
           reportsTo {
             id
             name
+            photo {
+              data
+              width
+              height
+              mimeType
+            }
             profile {
               title
-              photoUrl
             }
           }
         }

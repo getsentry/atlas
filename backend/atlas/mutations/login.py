@@ -96,7 +96,7 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
             )
             return identity.user
 
-        user = google.get_user(email=payload["email"], name=payload["name"])
+        user, _ = google.get_user(email=payload["email"], name=payload["name"])
 
         try:
             with transaction.atomic():

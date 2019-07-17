@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router";
-import Avatar from "react-avatar";
 import styled from "@emotion/styled";
+
+import Avatar from "./Avatar";
 
 const PersonLinkContainer = styled.article`
   display: flex;
@@ -14,12 +15,6 @@ const PersonLinkContainer = styled.article`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-  .avatar {
-    display: inline-block;
-    width: 32px;
-    height: 32px;
-    margin-right: 5px;
   }
   img {
     display: block;
@@ -43,13 +38,7 @@ export default function({ user }) {
   if (!user) return <em>n/a</em>;
   return (
     <PersonLinkContainer>
-      <div className="avatar">
-        {user.profile.photoUrl ? (
-          <img src={user.profile.photoUrl} alt="" />
-        ) : (
-          <Avatar name={user.name} size="32" />
-        )}
-      </div>
+      <Avatar user={user} size={32} mr="5px" />
       <aside>
         <h4>
           <Link to={`/people/${user.email}`}>{user.name}</Link>

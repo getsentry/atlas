@@ -13,9 +13,14 @@ export const LIST_ALL_PEOPLE_QUERY = gql`
       id
       name
       email
+      photo {
+        data
+        width
+        height
+        mimeType
+      }
       profile {
         title
-        photoUrl
         reportsTo {
           id
         }

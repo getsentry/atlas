@@ -22,7 +22,6 @@ class Profile(models.Model):
     office = models.ForeignKey(
         "atlas.Office", null=True, on_delete=models.SET_NULL, related_name="profiles"
     )
-    photo_url = models.URLField(null=True)
     department = models.TextField(null=True)
     primary_phone = models.TextField(null=True)
     config = JSONField(default=dict)

@@ -1,7 +1,7 @@
 import React from "react";
-import Avatar from "react-avatar";
 import styled from "@emotion/styled";
 
+import Avatar from "./Avatar";
 import Card from "./Card";
 
 const PersonCardContainer = styled(Card)`
@@ -14,20 +14,6 @@ const PersonCardContainer = styled(Card)`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-  .avatar {
-    display: inline-block;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    margin-bottom: 0.5em;
-  }
-  .avatar img,
-  .avatar .sb-avatar,
-  .avatar .sb-avatar > div {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 50%;
   }
   aside {
     overflow: hidden;
@@ -45,11 +31,7 @@ export default function({ user }) {
   return (
     <PersonCardContainer withPadding to={`/people/${user.email}`}>
       <div className="avatar">
-        {user.profile.photoUrl ? (
-          <img src={user.profile.photoUrl} alt="" />
-        ) : (
-          <Avatar name={user.name} size="64" />
-        )}
+        <Avatar user={user} size={64} mr />
       </div>
       <aside>
         <h4>{user.name}</h4>
