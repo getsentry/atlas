@@ -54,6 +54,7 @@ def default_user(db):
         title="Dummy",
         date_started=date(2010, 4, 26),
         date_of_birth=date(1990, 8, 12),
+        department="Design",
     )
     return user
 
@@ -76,9 +77,10 @@ def default_superuser(db):
 
     factories.ProfileFactory.create(
         user=user,
-        title="Dummy",
+        title="Super Dummy",
         date_started=date(2010, 5, 26),
         date_of_birth=date(1990, 2, 13),
+        department="G&A",
     )
     return user
 
