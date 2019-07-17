@@ -100,13 +100,15 @@ def get_user(
     return user, created
 
 
-def get_office(name: str, office_cache: dict = None) -> Office:
+def get_office(external_id: str, office_cache: dict = None) -> Office:
     if office_cache is None:
         office_cache = {}
-    if name in office_cache:
-        return office_cache[name]
-    office, created = Office.objects.get_or_create(name=name)
-    office_cache[name] = office
+    if external_id in office_cache:
+        return office_cache[external_id]
+    office, created = Office.objects.get_or_create(
+        external_id=external_id, defaults={"name": external_id}
+    )
+    office_cache[external_id] = office
     return office
 
 

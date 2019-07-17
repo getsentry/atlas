@@ -26,6 +26,7 @@ export const OFFICE_QUERY = gql`
   query getOfficeForUpdate($id: UUID!) {
     offices(id: $id) {
       id
+      externalId
       name
       location
       lat
@@ -41,6 +42,7 @@ export const OFFICE_MUTATION = gql`
       errors
       office {
         id
+        externalId
         name
         location
         lat
@@ -112,6 +114,7 @@ export default class UpdateOfficeForm extends Component {
           const office = data.offices[0];
           const initialValues = {
             name: office.name,
+            externalId: office.externalId,
             location: office.location
           };
           let hasLocation = office.lat && office.lng;
@@ -180,7 +183,13 @@ export default class UpdateOfficeForm extends Component {
                     )}
                     <Card>
                       <h2>Basics</h2>
-                      <FieldWrapper type="text" name="name" label="Name" readonly />
+                      <FieldWrapper
+                        type="text"
+                        name="externalId"
+                        label="External ID"
+                        readonly
+                      />
+                      <FieldWrapper type="text" name="name" label="Name" />
                     </Card>
 
                     <Card>

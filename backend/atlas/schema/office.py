@@ -18,7 +18,7 @@ class OfficeNode(gql_optimizer.OptimizedDjangoObjectType):
     class Meta:
         model = Office
         name = "Office"
-        fields = ("id", "name", "location", "lat", "lng")
+        fields = ("id", "external_id", "name", "location", "lat", "lng")
 
     @gql_optimizer.resolver_hints(prefetch_related=("profiles", "profiles__user"))
     def resolve_num_people(self, info):

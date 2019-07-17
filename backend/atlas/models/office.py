@@ -10,6 +10,7 @@ class OfficeManager(models.Manager):
 
 class Office(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    external_id = models.CharField(max_length=64, unique=True)
     name = models.CharField(max_length=64, unique=True)
     location = models.TextField(null=True)
     lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
@@ -21,4 +22,4 @@ class Office(models.Model):
         db_table = "office"
 
     def natural_key(self):
-        return [self.name]
+        return [self.external_id]
