@@ -1,6 +1,6 @@
 import graphene
 
-from atlas.tasks.sync_google import sync_google
+from atlas.tasks import sync_google
 
 
 class SyncGoogle(graphene.Mutation):

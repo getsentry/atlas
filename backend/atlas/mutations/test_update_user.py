@@ -1,9 +1,11 @@
 from datetime import date
+from unittest.mock import patch
 
 from atlas.models import User
 
 
-def test_user_can_update_handle(gql_client, default_user):
+@patch("atlas.tasks.update_profile.delay")
+def test_user_can_update_handle(mock_task, gql_client, default_user):
     executed = gql_client.execute(
         """
     mutation {
@@ -24,6 +26,10 @@ def test_user_can_update_handle(gql_client, default_user):
         "id": str(default_user.id),
         "profile": {"handle": "Zoolander"},
     }
+
+    mock_task.assert_called_once_with(
+        user_id=default_user.id, updates={"handle": "Zoolander"}
+    )
 
     user = User.objects.get(id=default_user.id)
     assert user.profile.handle == "Zoolander"

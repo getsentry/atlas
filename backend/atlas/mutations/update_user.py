@@ -3,7 +3,7 @@ from django.db import transaction
 
 from atlas.models import Profile, User
 from atlas.schema import Nullable, PhoneNumberField, UserNode
-from atlas.tasks.sync_google import update_profile
+from atlas.tasks import update_profile
 
 
 def is_chain_of_command(user, maybe_manager):

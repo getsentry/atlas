@@ -149,8 +149,6 @@ def generate_profile_updates(identity: Identity, user: User, data: dict) -> dict
         if key in data:
             if isinstance(data[key], date):
                 value = data[key].strftime("%Y-%M-%D")
-            elif isinstance(data[key], bool):
-                value = "yes" if data[key] else "no"
             else:
                 value = data[key]
 
@@ -166,13 +164,13 @@ def update_profile(identity: Identity, user: User, data: dict) -> UserSyncResult
     params = generate_profile_updates(identity, user, data)
 
     user_identity = Identity.objects.get(provider="google", user=user)
-    result = requests.put(
+    result = requests.patch(
         f"https://www.googleapis.com/admin/directory/v1/users/{user_identity.external_id}",
         json=params,
         headers={"Authorization": "Bearer {}".format(identity.access_token)},
     )
-    result.raise_for_status()
     data = result.json()
+    result.raise_for_status()
 
     return sync_user(data, user=user, identity=user_identity)
 
