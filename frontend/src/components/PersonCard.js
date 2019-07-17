@@ -19,6 +19,7 @@ const PersonCardContainer = styled(Card)`
     overflow: hidden;
   }
   small {
+    height: 1.2em;
     display: block;
     white-space: nowrap;
     overflow: hidden;
@@ -30,13 +31,11 @@ export default function({ user }) {
   if (!user) return <em>n/a</em>;
   return (
     <PersonCardContainer withPadding to={`/people/${user.email}`}>
-      <div className="avatar">
-        <Avatar user={user} size={64} mr />
-      </div>
+      <Avatar user={user} size={64} mb />
       <aside>
         <h4>{user.name}</h4>
 
-        {user.profile.title && <small>{user.profile.title}</small>}
+        <small>{user.profile.title || ""}</small>
       </aside>
     </PersonCardContainer>
   );
