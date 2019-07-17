@@ -25,10 +25,10 @@ class UserInput(graphene.InputObjectType):
     date_started = Nullable(graphene.Date, required=False)
     title = graphene.String(required=False)
     department = graphene.String(required=False)
-    reports_to = graphene.UUID(required=False)
+    reports_to = Nullable(graphene.UUID, required=False)
     primary_phone = Nullable(PhoneNumberField, required=False)
     is_human = graphene.Boolean(required=False)
-    office = graphene.UUID(required=False)
+    office = Nullable(graphene.UUID, required=False)
     is_superuser = graphene.Boolean(required=False)
 
 
