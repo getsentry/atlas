@@ -121,11 +121,9 @@ export default class Person extends Component {
           if (!data.users.length)
             return <ErrorMessage message="Couldn't find that person." />;
           const thisPerson = data.users[0];
-          const dob = thisPerson.profile.dobMonth
+          const dob = thisPerson.dobMonth
             ? moment(
-                `${new Date().getFullYear()}-${thisPerson.profile.dobMonth}-${
-                  thisPerson.profile.dobDay
-                }`,
+                `${new Date().getFullYear()}-${thisPerson.dobMonth}-${thisPerson.dobDay}`,
                 "YYYY-MM-DD"
               )
             : null;
@@ -140,11 +138,10 @@ export default class Person extends Component {
                       </div>
                       <div className="section">
                         <h1>{thisPerson.name}</h1>
-                        {thisPerson.profile.handle &&
-                          thisPerson.profile.handle !== thisPerson.name && (
-                            <h2>"{thisPerson.profile.handle}"</h2>
-                          )}
-                        <h4>{thisPerson.profile.title}</h4>
+                        {thisPerson.handle && thisPerson.handle !== thisPerson.name && (
+                          <h2>"{thisPerson.handle}"</h2>
+                        )}
+                        <h4>{thisPerson.title}</h4>
                       </div>
                       <div className="section">
                         <div className="item">
@@ -153,11 +150,11 @@ export default class Person extends Component {
                           </a>
                         </div>
                         <div className="item">
-                          <Phone /> {thisPerson.profile.primaryPhone || "n/a"}
+                          <Phone /> {thisPerson.primaryPhone || "n/a"}
                         </div>
                       </div>
-                      {!!thisPerson.profile.dateStarted && (
-                        <AgeBadge dateStarted={thisPerson.profile.dateStarted} />
+                      {!!thisPerson.dateStarted && (
+                        <AgeBadge dateStarted={thisPerson.dateStarted} />
                       )}
                     </section>
                   </Box>
@@ -186,24 +183,22 @@ export default class Person extends Component {
                             <dt>Name</dt>
                             <dd>{thisPerson.name}</dd>
                             <dt>Preferred Name</dt>
-                            <dd>{thisPerson.profile.handle || <Empty />}</dd>
+                            <dd>{thisPerson.handle || <Empty />}</dd>
                             <dt>Department</dt>
-                            <dd>{thisPerson.profile.department || <Empty />}</dd>
+                            <dd>{thisPerson.department || <Empty />}</dd>
                             <dt>Start Date</dt>
                             <dd>
-                              {thisPerson.profile.dateStarted ? (
-                                moment(thisPerson.profile.dateStarted).format(
-                                  "MMMM Do YYYY"
-                                )
+                              {thisPerson.dateStarted ? (
+                                moment(thisPerson.dateStarted).format("MMMM Do YYYY")
                               ) : (
                                 <Empty />
                               )}
                             </dd>
                             <dt>Office</dt>
                             <dd>
-                              {thisPerson.profile.office ? (
-                                <Link to={`/offices/${thisPerson.profile.office.id}`}>
-                                  {thisPerson.profile.office.name}
+                              {thisPerson.office ? (
+                                <Link to={`/offices/${thisPerson.office.id}`}>
+                                  {thisPerson.office.name}
                                 </Link>
                               ) : (
                                 <Empty />
@@ -215,10 +210,10 @@ export default class Person extends Component {
                         </Card>
                       </Box>
                       <Box width={1 / 3} px={3}>
-                        {thisPerson.profile.reportsTo && (
+                        {thisPerson.reportsTo && (
                           <Card>
                             <h3>Manager</h3>
-                            <PersonList people={[thisPerson.profile.reportsTo]} />
+                            <PersonList people={[thisPerson.reportsTo]} />
                           </Card>
                         )}
                         {!!thisPerson.reports.length && (

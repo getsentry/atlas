@@ -26,19 +26,17 @@ export default ({ people, withBirthday, withStartDate }) => (
               <PersonLink user={p} />
             </Box>
             {withBirthday &&
-              (p.profile.dobMonth && (
+              (p.dobMonth && (
                 <Box>
                   {moment(
-                    `${new Date().getFullYear()}-${p.profile.dobMonth}-${
-                      p.profile.dobDay
-                    }`,
+                    `${new Date().getFullYear()}-${p.dobMonth}-${p.dobDay}`,
                     "YYYY-MM-DD"
                   ).format("MMMM Do")}
                 </Box>
               ))}
             {withStartDate &&
-              (p.profile.dateStarted && (
-                <Box>{moment(p.profile.dateStarted, "YYYY-MM-DD").format("MMMM Do")}</Box>
+              (p.dateStarted && (
+                <Box>{moment(p.dateStarted, "YYYY-MM-DD").format("MMMM Do")}</Box>
               ))}
           </Flex>
         </li>

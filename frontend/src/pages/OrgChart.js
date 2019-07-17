@@ -13,17 +13,15 @@ export const LIST_ALL_PEOPLE_QUERY = gql`
       id
       name
       email
+      title
       photo {
         data
         width
         height
         mimeType
       }
-      profile {
-        title
-        reportsTo {
-          id
-        }
+      reportsTo {
+        id
       }
     }
   }
@@ -40,10 +38,10 @@ const listToTree = list => {
   }
   for (i = 0; i < list.length; i += 1) {
     node = list[i];
-    if (node.profile && node.profile.reportsTo) {
+    if (node.reportsTo) {
       // if you have dangling branches check that map[node.parentId] exists
       try {
-        list[map[node.profile.reportsTo.id]].children.push(node);
+        list[map[node.reportsTo.id]].children.push(node);
       } catch (err) {
         console.error("failed to insert node into tree (missing parent)", node);
       }

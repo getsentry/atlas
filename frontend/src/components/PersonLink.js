@@ -44,7 +44,7 @@ export default function({ user }) {
           <Link to={`/people/${user.email}`}>{user.name}</Link>
         </h4>
 
-        {user.profile.title && <small>{user.profile.title}</small>}
+        {user.title && <small>{user.title}</small>}
       </aside>
     </PersonLinkContainer>
   );

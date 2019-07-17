@@ -1,10 +1,10 @@
 from datetime import date
 
 import graphene
-from django.db import transaction
+from django.db import models, transaction
 
 from atlas.constants import FIELD_MODEL_MAP, RESTRICTED_FIELDS, SUPERUSER_ONLY_FIELDS
-from atlas.models import Profile, User
+from atlas.models import Office, Profile, User
 from atlas.schema import Nullable, PhoneNumberField, UserNode
 from atlas.tasks import update_profile
 
@@ -25,9 +25,10 @@ class UserInput(graphene.InputObjectType):
     date_started = Nullable(graphene.Date, required=False)
     title = graphene.String(required=False)
     department = graphene.String(required=False)
-    reports_to = graphene.String(required=False)
+    reports_to = graphene.UUID(required=False)
     primary_phone = Nullable(PhoneNumberField, required=False)
     is_human = graphene.Boolean(required=False)
+    office = graphene.UUID(required=False)
 
 
 class UpdateUser(graphene.Mutation):
@@ -45,7 +46,7 @@ class UpdateUser(graphene.Mutation):
             return UpdateUser(ok=False, errors=["Authentication required"])
 
         try:
-            user = User.objects.get(id=user)
+            user = User.objects.select_related("profile").get(id=user)
         except User.DoesNotExist:
             return UpdateUser(ok=False, errors=["Invalid user"])
 
@@ -87,6 +88,11 @@ class UpdateUser(graphene.Mutation):
             if not current_user.is_superuser and field in SUPERUSER_ONLY_FIELDS:
                 continue
 
+            if field == "office" and value:
+                value = Office.objects.get(id=value)
+            elif field == "reports_to" and value:
+                value = User.objects.get(id=value)
+
             model = FIELD_MODEL_MAP[field]
             if model is User:
                 cur_attr = getattr(user, field)
@@ -99,6 +105,10 @@ class UpdateUser(graphene.Mutation):
                 model_updates[model][field] = value
                 if isinstance(value, date):
                     value = value.isoformat()
+
+                # track update for two-way sync
+                if isinstance(value, models.Model):
+                    value = value.pk
                 updates[field] = value
 
         with transaction.atomic():

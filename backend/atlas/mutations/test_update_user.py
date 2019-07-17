@@ -12,7 +12,7 @@ def test_user_can_update_handle(mock_task, gql_client, default_user):
         updateUser(user:"%s" data:{handle:"Zoolander"}) {
             ok
             errors
-            user {id, profile { handle } }
+            user {id, handle }
         }
     }"""
         % (default_user.id,),
@@ -22,10 +22,7 @@ def test_user_can_update_handle(mock_task, gql_client, default_user):
     resp = executed["data"]["updateUser"]
     assert not resp["errors"]
     assert resp["ok"] is True
-    assert resp["user"] == {
-        "id": str(default_user.id),
-        "profile": {"handle": "Zoolander"},
-    }
+    assert resp["user"] == {"id": str(default_user.id), "handle": "Zoolander"}
 
     mock_task.assert_called_once_with(
         user_id=default_user.id, updates={"handle": "Zoolander"}

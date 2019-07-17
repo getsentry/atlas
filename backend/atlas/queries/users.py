@@ -27,6 +27,7 @@ class Query(object):
         include_self=graphene.Boolean(default_value=True),
         humans_only=graphene.Boolean(default_value=True),
         office=graphene.UUID(),
+        reports_to=graphene.UUID(),
         date_started_before=graphene.types.datetime.Date(),
         date_started_after=graphene.types.datetime.Date(),
         birthday_after=graphene.types.datetime.Date(),
@@ -45,6 +46,7 @@ class Query(object):
         include_self: bool = True,
         humans_only: bool = True,
         office: str = None,
+        reports_to: str = None,
         offset: int = 0,
         date_started_before: date = None,
         date_started_after: date = None,
@@ -61,7 +63,7 @@ class Query(object):
         if not current_user.is_authenticated:
             raise GraphQLError("You must be authenticated")
 
-        qs = User.objects.filter(is_active=True)
+        qs = User.objects.filter(is_active=True).distinct()
 
         if id:
             qs = qs.filter(id=id)
@@ -71,6 +73,9 @@ class Query(object):
 
         if office:
             qs = qs.filter(profile__office=office)
+
+        if reports_to:
+            qs = qs.filter(profile__reports_to=reports_to)
 
         if query:
             qs = qs.filter(name__istartswith=query)

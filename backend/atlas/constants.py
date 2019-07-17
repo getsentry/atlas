@@ -10,10 +10,19 @@ FIELD_MODEL_MAP = {
     "reports_to": Profile,
     "primary_phone": Profile,
     "is_human": Profile,
+    "office": Profile,
 }
 
 RESTRICTED_FIELDS = frozenset(
-    ["name", "date_of_birth", "date_started", "title", "department", "reports_to"]
+    [
+        "name",
+        "date_of_birth",
+        "date_started",
+        "title",
+        "department",
+        "reports_to",
+        "office",
+    ]
 )
 
 SUPERUSER_ONLY_FIELDS = frozenset(["is_human"])

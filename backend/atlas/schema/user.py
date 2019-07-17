@@ -5,12 +5,41 @@ import graphene_django_optimizer as gql_optimizer
 
 from atlas.models import Photo, Profile, User
 
+from .phonenumber import PhoneNumberField
+
+
+def simple_profile_resolver(name):
+    @gql_optimizer.resolver_hints(select_related=("profile"))
+    def wrapped(self, info):
+        if not getattr(self, "_profile_cache", None):
+            logging.warning(f"Uncached resolution for UserNode.{name}")
+        try:
+            return getattr(self.profile, name)
+        except Profile.DoesNotExist:
+            return None
+
+    wrapped.__name__ = f"resolve_{name}"
+    return wrapped
+
 
 class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     email = graphene.String(required=False)
-    profile = graphene.Field("atlas.schema.ProfileNode")
     photo = graphene.Field("atlas.schema.PhotoNode")
+
+    # profile fields
+    handle = graphene.String(required=False)
+    title = graphene.String(required=False)
+    department = graphene.String(required=False)
+    dob_day = graphene.Int(required=False)
+    dob_month = graphene.Int(required=False)
+    date_started = graphene.Date(required=False)
+    date_of_birth = graphene.Date(required=False)
+    primary_phone = PhoneNumberField(required=False)
+    is_human = graphene.Boolean(required=False)
     office = graphene.Field("atlas.schema.OfficeNode")
+    reports_to = graphene.Field("atlas.schema.UserNode", required=False)
+
+    # computed
     reports = graphene.List(lambda: UserNode)
     num_reports = graphene.Int(required=False)
     peers = graphene.List(lambda: UserNode)
@@ -21,21 +50,28 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         name = "User"
         fields = ("id", "email", "name", "is_superuser")
 
-    @gql_optimizer.resolver_hints(select_related=("profile"))
-    def resolve_profile(self, info):
+    @gql_optimizer.resolver_hints(select_related=("profile__office"))
+    def resolve_office(self, info):
         try:
-            return self.profile
+            return self.profile.office
         except Profile.DoesNotExist:
-            return Profile()
+            return None
+
+    @gql_optimizer.resolver_hints(select_related=("profile__reports_to"))
+    def resolve_reports_to(self, info):
+        try:
+            return self.profile.reports_to
+        except Profile.DoesNotExist:
+            return None
 
     @gql_optimizer.resolver_hints(select_related=("photo"))
     def resolve_photo(self, info):
         if not self.id:
             return Photo()
         try:
-            return Photo.objects.get(user=self.id)
+            return self.photo
         except Photo.DoesNotExist:
-            return Photo()
+            return None
 
     def resolve_email(self, info):
         user = info.context.user
@@ -110,3 +146,38 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
             logging.warning("Uncached resolution for UserNode.peers")
             qs = qs.select_related("user", "user__profile")
         return [r.user for r in qs if r.user_id != self.id]
+
+    @gql_optimizer.resolver_hints(select_related=("profile"))
+    def resolve_primary_phone(self, info):
+        current_user = info.context.user
+        if not current_user.is_authenticated:
+            return None
+        return self.profile.primary_phone
+
+    @gql_optimizer.resolver_hints(select_related=("profile"))
+    def resolve_date_of_birth(self, info):
+        current_user = info.context.user
+        if not current_user.is_authenticated:
+            return None
+        # dob is considered sensitive (the year) as it discloses age
+        if current_user.is_superuser or current_user.id == self.id:
+            return self.profile.date_of_birth
+        return None
+
+    @gql_optimizer.resolver_hints(select_related=("profile"))
+    def resolve_dob_month(self, info):
+        if not self.profile.date_of_birth:
+            return None
+        return self.profile.date_of_birth.month
+
+    @gql_optimizer.resolver_hints(select_related=("profile"))
+    def resolve_dob_day(self, info):
+        if not self.profile.date_of_birth:
+            return None
+        return self.profile.date_of_birth.day
+
+    resolve_handle = simple_profile_resolver("handle")
+    resolve_title = simple_profile_resolver("title")
+    resolve_department = simple_profile_resolver("department")
+    resolve_date_started = simple_profile_resolver("date_started")
+    resolve_is_human = simple_profile_resolver("is_human")

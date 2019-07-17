@@ -35,7 +35,7 @@ export default function({ user }) {
       <aside>
         <h4>{user.name}</h4>
 
-        <small>{user.profile.title || ""}</small>
+        <small>{user.title || ""}</small>
       </aside>
     </PersonCardContainer>
   );

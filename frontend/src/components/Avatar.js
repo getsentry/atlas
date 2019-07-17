@@ -5,7 +5,7 @@ import { Avatar as ReactAvatar } from "react-avatar";
 export default styled(({ className, user, size }) => {
   return (
     <div className={className}>
-      {!!user.photo.data ? (
+      {user.photo && !!user.photo.data ? (
         <img
           src={`data:${user.photo.mimeType};base64,${user.photo.data}`}
           alt=""

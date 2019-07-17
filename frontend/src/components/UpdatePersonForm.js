@@ -17,6 +17,7 @@ const UserSchema = yup.object().shape({
   handle: yup.string().nullable(),
   title: yup.string().nullable(),
   department: yup.string().nullable(),
+  office: yup.string().nullable(),
   primaryPhone: yup.string().nullable(),
   dateStarted: yup.date().nullable(),
   dateOfBirth: yup.date().nullable(),
@@ -25,39 +26,40 @@ const UserSchema = yup.object().shape({
 
 export const PERSON_QUERY = gql`
   query getPersonForUpdate($email: String!) {
+    offices {
+      id
+      name
+    }
     users(email: $email, humansOnly: false) {
       id
       name
       email
+      handle
+      department
+      title
+      dateOfBirth
+      dateStarted
+      primaryPhone
+      isHuman
       photo {
         data
         width
         height
         mimeType
       }
-      profile {
-        handle
-        department
+      office {
+        id
+        name
+      }
+      reportsTo {
+        id
+        name
         title
-        dateOfBirth
-        dateStarted
-        primaryPhone
-        isHuman
-        office {
-          name
-        }
-        reportsTo {
-          id
-          name
-          photo {
-            data
-            width
-            height
-            mimeType
-          }
-          profile {
-            title
-          }
+        photo {
+          data
+          width
+          height
+          mimeType
         }
       }
     }
@@ -73,35 +75,32 @@ export const PERSON_MUTATION = gql`
         id
         name
         email
+        handle
+        department
+        title
+        dateOfBirth
+        dateStarted
+        primaryPhone
+        isHuman
         photo {
           data
           width
           height
           mimeType
         }
-        profile {
-          handle
-          department
+        office {
+          id
+          name
+        }
+        reportsTo {
+          id
+          name
           title
-          dateOfBirth
-          dateStarted
-          primaryPhone
-          isHuman
-          office {
-            name
-          }
-          reportsTo {
-            id
-            name
-            photo {
-              data
-              width
-              height
-              mimeType
-            }
-            profile {
-              title
-            }
+          photo {
+            data
+            width
+            height
+            mimeType
           }
         }
       }
@@ -121,7 +120,7 @@ class UpdatePersonForm extends Component {
     const isRestricted = !currentUser.isSuperuser;
     const restrictedFields = new Set(["name", "email"]);
     if (isRestricted) {
-      ["title", "department", "dateStarted", "dateOfBirth"].forEach(k =>
+      ["title", "department", "dateStarted", "dateOfBirth", "office"].forEach(k =>
         restrictedFields.add(k)
       );
     }
@@ -131,23 +130,24 @@ class UpdatePersonForm extends Component {
 
     return (
       <Query query={PERSON_QUERY} variables={{ email: this.props.email }}>
-        {({ loading, data }) => {
+        {({ loading, data: { offices, users } }) => {
           //if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;
-          if (!data.users.length)
-            return <ErrorMessage message="Couldn't find that person." />;
-          const user = data.users[0];
+          if (!users.length) return <ErrorMessage message="Couldn't find that person." />;
+          const user = users[0];
           const initialValues = {
             name: user.name,
             email: user.email,
-            handle: user.profile.handle || "",
-            title: user.profile.title || "",
-            department: user.profile.department || "",
-            dateOfBirth: user.profile.dateOfBirth || "",
-            dateStarted: user.profile.dateStarted || "",
-            primaryPhone: user.profile.primaryPhone || "",
-            isHuman: user.profile.isHuman
+            handle: user.handle || "",
+            title: user.title || "",
+            department: user.department || "",
+            dateOfBirth: user.dateOfBirth || "",
+            dateStarted: user.dateStarted || "",
+            primaryPhone: user.primaryPhone || "",
+            isHuman: user.isHuman,
+            office: user.office.id
           };
+          console.log(initialValues);
           return (
             <section>
               <Card>
@@ -206,7 +206,7 @@ class UpdatePersonForm extends Component {
                       </Card>
                     )}
                     <Card>
-                      <h2>Basics</h2>
+                      <h2>Personal</h2>
                       <FieldWrapper
                         type="text"
                         name="name"
@@ -253,6 +253,20 @@ class UpdatePersonForm extends Component {
                         name="department"
                         label="Department"
                         readonly={restrictedFields.has("department")}
+                      />
+                    </Card>
+
+                    <Card>
+                      <h2>Organization</h2>
+                      <FieldWrapper
+                        type="select"
+                        name="office"
+                        label="Office"
+                        readonly={restrictedFields.has("office")}
+                        options={[
+                          ["", "Select an office"],
+                          ...offices.map(o => [o.id, o.name])
+                        ]}
                       />
                       <FieldWrapper
                         type="date"

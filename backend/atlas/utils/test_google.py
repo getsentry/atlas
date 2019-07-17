@@ -20,6 +20,7 @@ def test_generate_profile_updates_all_fields(responses, default_identity, defaul
             "System": {"Is_Human": True},
         },
         "organizations": [{"department": "Design", "primary": True, "title": "Dummy"}],
+        "locations": [],
         "phones": [{"primary": True, "type": "home", "value": ""}],
         "relations": [],
     }
@@ -44,6 +45,7 @@ def test_generate_profile_updates_all_fields_with_all_fields(
             "System": {"Is_Human": True},
         },
         "organizations": [{"department": "Design", "primary": True, "title": "Dummy"}],
+        "locations": [{"area": "desk", "buildingId": "SFO", "type": "desk"}],
         "phones": [{"primary": True, "type": "home", "value": "+1 800-123-4567"}],
         "relations": [{"type": "manager", "value": default_superuser.email}],
     }
