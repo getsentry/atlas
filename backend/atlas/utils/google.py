@@ -1,7 +1,7 @@
 from base64 import urlsafe_b64decode
 from collections import namedtuple
 from datetime import date
-from decimal import Decimal
+from decimal import Context
 from typing import Any, List, Optional, Tuple
 from uuid import uuid4
 
@@ -25,12 +25,16 @@ DomainSyncResult = namedtuple(
         "total_users",
         "created_users",
         "updated_users",
+        "pruned_users",
         "total_buildings",
         "created_buildings",
         "updated_buildings",
+        "pruned_buildings",
     ],
 )
-BatchSyncResult = namedtuple("BatchSyncResult", ["total", "created", "updated"])
+BatchSyncResult = namedtuple(
+    "BatchSyncResult", ["total", "created", "updated", "pruned"]
+)
 BuildingSyncResult = namedtuple("BuildingSyncResult", ["office", "created", "updated"])
 UserSyncResult = namedtuple("UserSyncResult", ["user", "created", "updated"])
 
@@ -195,12 +199,8 @@ def generate_profile_updates(identity: Identity, user: User, data: dict = None) 
     return params
 
 
-def update_all_profiles(
-    identity: Identity, users: List[str] = None
-) -> DomainSyncResult:
-    total_users = 0
-    created_users = 0
-    updated_users = 0
+def update_all_profiles(identity: Identity, users: List[str] = None) -> BatchSyncResult:
+    total, created, updated = 0, 0, 0
 
     if users:
         user_list = User.objects.filter(email__in=users)
@@ -208,15 +208,11 @@ def update_all_profiles(
         user_list = User.objects.all()
 
     for user in user_list:
-        total_users += 1
-        updated_users += 1
+        total += 1
+        updated += 1
         update_profile(identity, user)
 
-    return DomainSyncResult(
-        total_users=total_users,
-        created_users=created_users,
-        updated_users=updated_users,
-    )
+    return BatchSyncResult(total=total, created=created, updated=updated, pruned=0)
 
 
 def update_profile(identity: Identity, user: User, data: dict = None) -> UserSyncResult:
@@ -245,6 +241,15 @@ def sync_user(  # NOQA
         user_cache = {}
     if office_cache is None:
         office_cache = {}
+
+    if identity is None:
+        try:
+            identity = Identity.objects.get(provider="google", external_id=data["id"])
+        except Identity.DoesNotExist:
+            pass
+
+    if identity and not user:
+        user = identity.user
 
     if user is None:
         user, created = get_user(
@@ -389,7 +394,10 @@ def sync_user_photo(identity: Identity, user: User):
     if not created:
         updates = {}
         for key, value in values.items():
-            if getattr(photo, key) != value:
+            cur_value = getattr(photo, key)
+            if key == "data":
+                cur_value = cur_value.tobytes()
+            if cur_value != value:
                 updates[key] = value
         if updates:
             Photo.objects.filter(id=photo.id).update(**updates)
@@ -407,12 +415,16 @@ def sync_building(  # NOQA
     fields = {"name": data["buildingName"], "description": data["description"]}
 
     if data["coordinates"]["latitude"]:
-        fields["lat"] = Decimal(str(data["coordinates"]["latitude"]))
+        fields["lat"] = Context(prec=9).create_decimal_from_float(
+            data["coordinates"]["latitude"]
+        )
     else:
         fields["lat"] = None
 
     if data["coordinates"]["longitude"]:
-        fields["lng"] = Decimal(str(data["coordinates"]["longitude"]))
+        fields["lng"] = Context(prec=9).create_decimal_from_float(
+            data["coordinates"]["longitude"]
+        )
     else:
         fields["lng"] = None
 
@@ -465,9 +477,11 @@ def sync_domain(
         total_users=user_result.total,
         updated_users=user_result.updated,
         created_users=user_result.created,
+        pruned_users=user_result.pruned,
         total_buildings=building_result.total,
         updated_buildings=building_result.updated,
         created_buildings=building_result.created,
+        pruned_buildings=building_result.pruned,
     )
 
 
@@ -479,6 +493,7 @@ def sync_buildings(
     office_cache: dict = None,
 ) -> BatchSyncResult:
     total, created, updated = 0, 0, 0
+    known = set()
     has_more = True
     page_token = None
     while has_more:
@@ -492,6 +507,7 @@ def sync_buildings(
             raise Exception(data["error"])
 
         for row in data.get("buildings") or ():
+            known.add(row["buildingId"])
             if offices and row["buildingId"] not in offices:
                 continue
 
@@ -505,7 +521,16 @@ def sync_buildings(
                 office_cache[office.external_id] = office
         page_token = data.get("nextPageToken")
         has_more = bool(page_token)
-    return BatchSyncResult(total=total, created=created, updated=updated)
+
+    # remove offices which are not found
+    office_ids = Office.objects.exclude(external_id__in=known).values_list(
+        "id", flat=True
+    )
+    Office.objects.filter(id__in=office_ids).delete()
+
+    return BatchSyncResult(
+        total=total, created=created, updated=updated, pruned=len(office_ids)
+    )
 
 
 def sync_users(
@@ -516,6 +541,7 @@ def sync_users(
     office_cache: dict = None,
 ) -> BatchSyncResult:
     total, created, updated = 0, 0, 0
+    known = set()
     has_more = True
     page_token = None
     while has_more:
@@ -533,6 +559,7 @@ def sync_users(
             raise Exception(data["error"])
 
         for row in data.get("users") or ():
+            known.add(row["id"])
             if users and row["primaryEmail"] not in users:
                 continue
             total += 1
@@ -548,4 +575,15 @@ def sync_users(
                     updated += 1
         page_token = data.get("nextPageToken")
         has_more = bool(page_token)
-    return BatchSyncResult(total=total, created=created, updated=updated)
+
+    # suspend accounts which are not found
+    user_ids = list(
+        User.objects.filter(identity__provider="google")
+        .exclude(identity__external_id__in=known)
+        .values_list("id", flat=True)
+    )
+    User.objects.filter(id__in=user_ids).update(is_active=False)
+
+    return BatchSyncResult(
+        total=total, created=created, updated=updated, pruned=len(user_ids)
+    )

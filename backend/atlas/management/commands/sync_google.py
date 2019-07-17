@@ -31,17 +31,21 @@ class Command(BaseCommand):
         self.stdout.write(self.style.MIGRATE_HEADING("Done!"))
         self.stdout.write(
             self.style.MIGRATE_HEADING(
-                " -> users: {} ({} created; {} updated)".format(
-                    result.total_users, result.created_users, result.updated_users
+                " -> buildings: {} ({} created; {} updated; {} pruned)".format(
+                    result.total_buildings,
+                    result.created_buildings,
+                    result.updated_buildings,
+                    result.pruned_buildings,
                 )
             )
         )
         self.stdout.write(
             self.style.MIGRATE_HEADING(
-                " -> buildings: {} ({} created; {} updated)".format(
-                    result.total_buildings,
-                    result.created_buildings,
-                    result.updated_buildings,
+                " -> users: {} ({} created; {} updated; {} pruned)".format(
+                    result.total_users,
+                    result.created_users,
+                    result.updated_users,
+                    result.pruned_users,
                 )
             )
         )
