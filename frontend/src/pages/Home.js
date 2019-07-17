@@ -109,6 +109,34 @@ export default class Home extends Component {
                   }}
                 </Query>
               </Card>
+              <Card>
+                <h2>Anniversaries</h2>
+                <Query
+                  query={LIST_PEOPLE_QUERY}
+                  variables={{
+                    limit: 5,
+                    anniversaryAfter: moment()
+                      .subtract(14, "days")
+                      .format("YYYY-MM-DD"),
+                    anniversaryBefore: moment()
+                      .add(14, "days")
+                      .format("YYYY-MM-DD"),
+                    orderBy: "anniversary"
+                  }}
+                >
+                  {({ loading, error, data }) => {
+                    if (error) return <ErrorMessage message="Error loading people." />;
+                    if (loading) return <div>Loading</div>;
+                    const { users } = data;
+                    if (!users.length) {
+                      return (
+                        <p>{`It looks like there's no recent or upcoming anniversaries.`}</p>
+                      );
+                    }
+                    return <PersonList people={users} withAnniversary />;
+                  }}
+                </Query>
+              </Card>
             </Box>
             <Box width={1 / 2} px={3}>
               <Card>

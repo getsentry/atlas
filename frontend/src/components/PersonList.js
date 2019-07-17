@@ -16,7 +16,12 @@ const PersonListContainer = styled.section`
   }
 `;
 
-export default ({ people, withBirthday, withStartDate }) => (
+function age(dateStarted) {
+  let years = Math.round(moment().diff(moment(dateStarted), "years", true));
+  return `${years} year${years !== 1 ? "s" : ""}`;
+}
+
+export default ({ people, withAnniversary, withBirthday, withStartDate }) => (
   <PersonListContainer>
     <ul>
       {people.map(p => (
@@ -25,6 +30,7 @@ export default ({ people, withBirthday, withStartDate }) => (
             <Box flex="1">
               <PersonLink user={p} />
             </Box>
+            {withAnniversary && <Box>{age(p.dateStarted)}</Box>}
             {withBirthday &&
               (p.dobMonth && (
                 <Box>

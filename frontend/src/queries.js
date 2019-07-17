@@ -18,6 +18,8 @@ export const LIST_PEOPLE_QUERY = gql`
     $humansOnly: Boolean
     $dateStartedBefore: Date
     $dateStartedAfter: Date
+    $anniversaryBefore: Date
+    $anniversaryAfter: Date
     $birthdayBefore: Date
     $birthdayAfter: Date
     $query: String
@@ -31,6 +33,8 @@ export const LIST_PEOPLE_QUERY = gql`
       humansOnly: $humansOnly
       dateStartedBefore: $dateStartedBefore
       dateStartedAfter: $dateStartedAfter
+      anniversaryBefore: $anniversaryBefore
+      anniversaryAfter: $anniversaryAfter
       birthdayBefore: $birthdayBefore
       birthdayAfter: $birthdayAfter
       query: $query

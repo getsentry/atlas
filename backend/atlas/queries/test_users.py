@@ -129,3 +129,31 @@ def test_users_query_birthday(gql_client, default_user):
     assert not executed.get("errors")
     assert len(executed["data"]["users"]) == 1
     assert executed["data"]["users"] == [{"id": str(default_user.id)}]
+
+
+def test_users_query_anniversary(gql_client, default_user):
+    executed = gql_client.execute(
+        """{users(anniversaryBefore:"2012-04-25") {id}}""", user=default_user
+    )
+    assert not executed.get("errors")
+    assert len(executed["data"]["users"]) == 0
+
+    executed = gql_client.execute(
+        """{users(anniversaryBefore:"2012-04-30") {id}}""", user=default_user
+    )
+    assert not executed.get("errors")
+    assert len(executed["data"]["users"]) == 1
+    assert executed["data"]["users"] == [{"id": str(default_user.id)}]
+
+    executed = gql_client.execute(
+        """{users(anniversaryAfter:"2012-04-30") {id}}""", user=default_user
+    )
+    assert not executed.get("errors")
+    assert len(executed["data"]["users"]) == 0
+
+    executed = gql_client.execute(
+        """{users(anniversaryAfter:"2012-04-25") {id}}""", user=default_user
+    )
+    assert not executed.get("errors")
+    assert len(executed["data"]["users"]) == 1
+    assert executed["data"]["users"] == [{"id": str(default_user.id)}]

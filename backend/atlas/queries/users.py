@@ -16,6 +16,7 @@ class UserOrderBy(graphene.Enum):
     name = "name"
     dateStarted = "dateStarted"
     birthday = "birthday"
+    anniversary = "anniversary"
 
 
 class Query(object):
@@ -31,6 +32,8 @@ class Query(object):
         reports_to=graphene.UUID(),
         date_started_before=graphene.types.datetime.Date(),
         date_started_after=graphene.types.datetime.Date(),
+        anniversary_before=graphene.types.datetime.Date(),
+        anniversary_after=graphene.types.datetime.Date(),
         birthday_after=graphene.types.datetime.Date(),
         birthday_before=graphene.types.datetime.Date(),
         order_by=graphene.Argument(UserOrderBy),
@@ -52,6 +55,8 @@ class Query(object):
         offset: int = 0,
         date_started_before: date = None,
         date_started_after: date = None,
+        anniversary_before: date = None,
+        anniversary_after: date = None,
         birthday_before: date = None,
         birthday_after: date = None,
         limit: int = 1000,
@@ -97,6 +102,24 @@ class Query(object):
         if date_started_after:
             qs = qs.filter(profile__date_started__gt=date_started_after)
 
+        if anniversary_before:
+            qs = qs.filter(
+                Q(profile__date_started__month__lt=anniversary_before.month)
+                | Q(
+                    profile__date_started__month=anniversary_before.month,
+                    profile__date_started__day__lt=anniversary_before.day,
+                )
+            )
+
+        if anniversary_after:
+            qs = qs.filter(
+                Q(profile__date_started__month__gt=anniversary_after.month)
+                | Q(
+                    profile__date_started__month=anniversary_after.month,
+                    profile__date_started__day__gt=anniversary_after.day,
+                )
+            )
+
         if birthday_before:
             qs = qs.filter(
                 Q(profile__date_of_birth__month__lt=birthday_before.month)
@@ -124,6 +147,10 @@ class Query(object):
         elif order_by == "birthday":
             qs = qs.filter(profile__date_of_birth__isnull=False).order_by(
                 "profile__date_of_birth__month", "profile__date_of_birth__day"
+            )
+        elif order_by == "anniversary":
+            qs = qs.filter(profile__date_started__isnull=False).order_by(
+                "profile__date_started__month", "profile__date_started__day"
             )
 
         return gql_optimizer.query(qs, info)[offset:limit]
