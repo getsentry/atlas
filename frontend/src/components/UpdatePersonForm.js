@@ -145,7 +145,7 @@ class UpdatePersonForm extends Component {
             dateStarted: user.dateStarted || "",
             primaryPhone: user.primaryPhone || "",
             isHuman: user.isHuman,
-            office: user.office.id
+            office: user.office ? user.office.id : ""
           };
           console.log(initialValues);
           return (
