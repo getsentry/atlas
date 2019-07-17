@@ -6,8 +6,9 @@ from uuid import uuid4
 
 import requests
 from django.conf import settings
-from django.db import transaction
+from django.db import models, transaction
 
+from atlas.constants import FIELD_MODEL_MAP
 from atlas.models import Identity, Office, Photo, Profile, User
 
 # GET https://www.googleapis.com/admin/directory/v1/users
@@ -109,8 +110,21 @@ def get_office(name: str, office_cache: dict = None) -> Office:
     return office
 
 
-def generate_profile_updates(identity: Identity, user: User, data: dict) -> dict:
+def generate_profile_updates(identity: Identity, user: User, data: dict = None) -> dict:
     profile = user.profile
+
+    if data is None:
+        # update all fields
+        data = {}
+        for field, model in FIELD_MODEL_MAP.items():
+            if model is User:
+                data[field] = getattr(user, field)
+            elif model is Profile:
+                data[field] = getattr(profile, field)
+            else:
+                raise NotImplementedError
+            if isinstance(data[field], models.Model):
+                data[field] = data[field].pk
 
     params = {}
 
@@ -137,13 +151,15 @@ def generate_profile_updates(identity: Identity, user: User, data: dict) -> dict
         ]
 
     if "reports_to" in data:
-        params["relations"] = [
-            {"type": "manager", "value": User.objects.get(data["reports_to"]).email}
-        ]
+        params["relations"] = (
+            [{"type": "manager", "value": User.objects.get(data["reports_to"]).email}]
+            if data["reports_to"]
+            else []
+        )
 
     if "primary_phone" in data:
         params["phones"] = [
-            {"type": "home", "primary": True, "value": data["primary_phone"]}
+            {"type": "home", "primary": True, "value": data.get("primary_phone") or ""}
         ]
 
     for key, field_path in settings.GOOGLE_FIELD_MAP:

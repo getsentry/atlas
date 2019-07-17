@@ -3,6 +3,7 @@ from datetime import date
 import graphene
 from django.db import transaction
 
+from atlas.constants import FIELD_MODEL_MAP, RESTRICTED_FIELDS, SUPERUSER_ONLY_FIELDS
 from atlas.models import Profile, User
 from atlas.schema import Nullable, PhoneNumberField, UserNode
 from atlas.tasks import update_profile
@@ -15,25 +16,6 @@ def is_chain_of_command(user, maybe_manager):
             return True
         cur_user = cur_user.profile.reports_to
     return False
-
-
-FIELD_MODEL_MAP = {
-    "name": User,
-    "handle": Profile,
-    "date_of_birth": Profile,
-    "date_started": Profile,
-    "department": Profile,
-    "title": Profile,
-    "reports_to": Profile,
-    "primary_phone": Profile,
-    "is_human": Profile,
-}
-
-RESTRICTED_FIELDS = frozenset(
-    ["name", "date_of_birth", "date_started", "title", "department", "reports_to"]
-)
-
-SUPERUSER_ONLY_FIELDS = frozenset(["is_human"])
 
 
 class UserInput(graphene.InputObjectType):
