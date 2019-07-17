@@ -152,7 +152,12 @@ def generate_profile_updates(identity: Identity, user: User, data: dict = None) 
 
     if "reports_to" in data:
         params["relations"] = (
-            [{"type": "manager", "value": User.objects.get(data["reports_to"]).email}]
+            [
+                {
+                    "type": "manager",
+                    "value": User.objects.get(id=data["reports_to"]).email,
+                }
+            ]
             if data["reports_to"]
             else []
         )

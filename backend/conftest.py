@@ -55,6 +55,8 @@ def default_user(db):
         date_started=date(2010, 4, 26),
         date_of_birth=date(1990, 8, 12),
         department="Design",
+        office=None,
+        reports_to=None,
     )
     return user
 
@@ -81,6 +83,8 @@ def default_superuser(db):
         date_started=date(2010, 5, 26),
         date_of_birth=date(1990, 2, 13),
         department="G&A",
+        office=None,
+        reports_to=None,
     )
     return user
 
