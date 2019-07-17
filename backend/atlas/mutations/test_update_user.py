@@ -74,7 +74,10 @@ def test_user_cannot_update_other_user(gql_client, default_user, default_superus
     assert resp["ok"] is False
 
 
-def test_superuser_can_update_other_user(gql_client, default_user, default_superuser):
+@patch("atlas.tasks.update_profile.delay")
+def test_superuser_can_update_other_user(
+    mock_task, gql_client, default_user, default_superuser
+):
     executed = gql_client.execute(
         """
     mutation {
@@ -93,6 +96,10 @@ def test_superuser_can_update_other_user(gql_client, default_user, default_super
 
     user = User.objects.get(id=default_user.id)
     assert user.profile.date_started == date(2017, 1, 1)
+
+    mock_task.assert_called_once_with(
+        user_id=default_user.id, updates={"date_started": "2017-01-01"}
+    )
 
 
 def test_superuser_can_set_empty_value_to_date_started(
