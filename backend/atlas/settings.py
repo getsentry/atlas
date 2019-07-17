@@ -19,7 +19,9 @@ from sentry_sdk.integrations.django import DjangoIntegration
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DSN"),
     integrations=[CeleryIntegration(), DjangoIntegration()],
-    environment=os.environ.get("SENTRY_ENVIRONMENT") or "production",
+    environment=os.environ.get("SENTRY_ENVIRONMENT")
+    or os.environ.get("NODE_ENV")
+    or "development",
 )
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
