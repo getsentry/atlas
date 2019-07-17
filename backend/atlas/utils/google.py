@@ -232,10 +232,10 @@ def sync_user(  # NOQA
     # TODO(dcramer): this probably needs to handle multiple orgs
     row = find(data.get("organizations"), lambda x: x["primary"])
     if row:
-        if (row["title"] or None) != profile.title:
-            profile_fields["title"] = row["title"] or None
-        if (row["department"] or None) != profile.department:
-            profile_fields["department"] = row["department"] or None
+        if (row.get("title") or None) != profile.title:
+            profile_fields["title"] = row.get("title") or None
+        if (row.get("department") or None) != profile.department:
+            profile_fields["department"] = row.get("department") or None
     else:
         if profile.title:
             profile_fields["title"] = None
