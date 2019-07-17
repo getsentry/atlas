@@ -11,6 +11,8 @@ class PhoneNumberField(graphene.Scalar):
 
     @staticmethod
     def coerce_phone_number(value):
+        if not value:
+            return ""
         return phonenumbers.format_number(phonenumbers.parse(value, None), FORMAT)
 
     serialize = coerce_phone_number
