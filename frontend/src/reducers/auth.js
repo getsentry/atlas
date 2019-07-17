@@ -1,5 +1,7 @@
 import { LOAD_GAPI, LOGIN, LOGOUT } from "../types";
 
+import * as Sentry from "@sentry/browser";
+
 const initialState = {
   authenticated: null,
   user: null,
@@ -15,6 +17,11 @@ export default (state = initialState, action) => {
         googleAuthInstance: action.payload
       };
     case LOGIN:
+      Sentry.setUser({
+        id: action.payload.user.id,
+        email: action.payload.user.email
+      });
+
       return {
         ...state,
         token: action.payload.token,
@@ -22,6 +29,8 @@ export default (state = initialState, action) => {
         authenticated: true
       };
     case LOGOUT:
+      Sentry.setUser({});
+
       return {
         ...state,
         token: null,
