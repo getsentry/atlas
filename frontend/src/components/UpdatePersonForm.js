@@ -42,6 +42,7 @@ export const PERSON_QUERY = gql`
       dateStarted
       primaryPhone
       isHuman
+      isSuperuser
       photo {
         data
         width
@@ -83,6 +84,7 @@ export const PERSON_MUTATION = gql`
         dateStarted
         primaryPhone
         isHuman
+        isSuperuser
         photo {
           data
           width
