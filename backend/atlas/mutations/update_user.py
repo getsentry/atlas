@@ -29,6 +29,7 @@ class UserInput(graphene.InputObjectType):
     primary_phone = Nullable(PhoneNumberField, required=False)
     is_human = graphene.Boolean(required=False)
     office = graphene.UUID(required=False)
+    is_superuser = graphene.Boolean(required=False)
 
 
 class UpdateUser(graphene.Mutation):

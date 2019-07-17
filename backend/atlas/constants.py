@@ -11,6 +11,7 @@ FIELD_MODEL_MAP = {
     "primary_phone": Profile,
     "is_human": Profile,
     "office": Profile,
+    "is_superuser": User,
 }
 
 RESTRICTED_FIELDS = frozenset(
@@ -25,4 +26,4 @@ RESTRICTED_FIELDS = frozenset(
     ]
 )
 
-SUPERUSER_ONLY_FIELDS = frozenset(["is_human"])
+SUPERUSER_ONLY_FIELDS = frozenset(["is_human", "is_superuser"])

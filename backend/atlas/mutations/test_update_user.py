@@ -120,3 +120,51 @@ def test_superuser_can_set_empty_value_to_date_started(
 
     user = User.objects.get(id=default_user.id)
     assert user.profile.date_started is None
+
+
+@patch("atlas.tasks.update_profile.delay")
+def test_superuser_can_set_superuser(
+    mock_task, gql_client, default_user, default_superuser
+):
+    executed = gql_client.execute(
+        """
+    mutation {
+        updateUser(user:"%s" data:{isSuperuser:true}) {
+            ok
+            errors
+        }
+    }"""
+        % (default_user.id,),
+        user=default_superuser,
+    )
+    assert not executed.get("errors")
+    resp = executed["data"]["updateUser"]
+    assert not resp["errors"]
+    assert resp["ok"] is True
+
+    user = User.objects.get(id=default_user.id)
+    assert user.is_superuser
+
+
+@patch("atlas.tasks.update_profile.delay")
+def test_non_superuser_cannot_set_superuser(
+    mock_task, gql_client, default_user, default_superuser
+):
+    executed = gql_client.execute(
+        """
+    mutation {
+        updateUser(user:"%s" data:{isSuperuser:false}) {
+            ok
+            errors
+        }
+    }"""
+        % (default_superuser.id,),
+        user=default_user,
+    )
+    assert not executed.get("errors")
+    resp = executed["data"]["updateUser"]
+    assert resp["errors"]
+    assert resp["ok"] is False
+
+    user = User.objects.get(id=default_superuser.id)
+    assert user.is_superuser

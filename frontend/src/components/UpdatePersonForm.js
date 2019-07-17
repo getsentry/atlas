@@ -21,7 +21,8 @@ const UserSchema = yup.object().shape({
   primaryPhone: yup.string().nullable(),
   dateStarted: yup.date().nullable(),
   dateOfBirth: yup.date().nullable(),
-  isHuman: yup.bool().nullable()
+  isHuman: yup.bool().nullable(),
+  isSuperuser: yup.bool().nullable()
 });
 
 export const PERSON_QUERY = gql`
@@ -125,7 +126,7 @@ class UpdatePersonForm extends Component {
       );
     }
     if (!currentUser.isSuperuser) {
-      restrictedFields.add("isHuman");
+      ["isHuman", "isSuperuser"].forEach(k => restrictedFields.add(k));
     }
 
     return (
@@ -145,9 +146,9 @@ class UpdatePersonForm extends Component {
             dateStarted: user.dateStarted || "",
             primaryPhone: user.primaryPhone || "",
             isHuman: user.isHuman,
+            isSuperuser: user.isSuperuser,
             office: user.office ? user.office.id : ""
           };
-          console.log(initialValues);
           return (
             <section>
               <Card>
@@ -283,6 +284,12 @@ class UpdatePersonForm extends Component {
                         name="isHuman"
                         label="Human?"
                         readonly={restrictedFields.has("isHuman")}
+                      />
+                      <FieldWrapper
+                        type="checkbox"
+                        name="isSuperuser"
+                        label="Superuser?"
+                        readonly={restrictedFields.has("isSuperuser")}
                       />
                     </Card>
 
