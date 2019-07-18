@@ -93,6 +93,10 @@ class UpdateUser(graphene.Mutation):
             if field == "office" and value:
                 value = Office.objects.get(id=value)
             elif field == "reports_to" and value:
+                if value == user.id:
+                    return UpdateUser(
+                        ok=False, errors=[f"Cannot set reports_to to self"]
+                    )
                 value = User.objects.get(id=value)
 
             model = FIELD_MODEL_MAP[field]

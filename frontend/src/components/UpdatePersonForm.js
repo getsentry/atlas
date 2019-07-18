@@ -27,13 +27,23 @@ const UserSchema = yup.object().shape({
   isSuperuser: yup.bool().nullable()
 });
 
+export const PEOPLE_SELECT_QUERY = gql`
+  query listPeopleForSelect($query: String!) {
+    users(humansOnly: true, query: $query, limit: 10) {
+      id
+      name
+      email
+    }
+  }
+`;
+
 export const PERSON_QUERY = gql`
-  query getPersonForUpdate {
+  query getPersonForUpdate($email: String!) {
     offices {
       id
       name
     }
-    users(humansOnly: false, limit: 1000) {
+    users(humansOnly: false, email: $email) {
       id
       name
       email
@@ -46,12 +56,6 @@ export const PERSON_QUERY = gql`
       primaryPhone
       isHuman
       isSuperuser
-      photo {
-        data
-        width
-        height
-        mimeType
-      }
       office {
         id
         name
@@ -59,13 +63,7 @@ export const PERSON_QUERY = gql`
       reportsTo {
         id
         name
-        title
-        photo {
-          data
-          width
-          height
-          mimeType
-        }
+        email
       }
     }
   }
@@ -87,6 +85,26 @@ class UpdatePersonForm extends Component {
 
   static contextTypes = { router: PropTypes.object.isRequired };
 
+  loadMatchingUsers = (inputValue, callback) => {
+    apolloClient
+      .query({
+        query: PEOPLE_SELECT_QUERY,
+        variables: {
+          query: inputValue
+        }
+      })
+      .then(({ data: { users } }) => {
+        callback(
+          users
+            .filter(u => u.email !== this.props.email)
+            .map(u => ({
+              value: u.id,
+              label: `${u.name} <${u.email}>`
+            }))
+        );
+      });
+  };
+
   render() {
     const currentUser = this.props.user;
     const isRestricted = !currentUser.isSuperuser;
@@ -101,7 +119,7 @@ class UpdatePersonForm extends Component {
     }
 
     return (
-      <Query query={PERSON_QUERY}>
+      <Query query={PERSON_QUERY} variables={{ email: this.props.email }}>
         {({ loading, data: { offices, users } }) => {
           //if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;
@@ -119,7 +137,12 @@ class UpdatePersonForm extends Component {
             dateOfBirth: user.dateOfBirth || "",
             dateStarted: user.dateStarted || "",
             primaryPhone: user.primaryPhone || "",
-            reportsTo: user.reportsTo ? user.reportsTo.id : "",
+            reportsTo: user.reportsTo
+              ? {
+                  value: user.reportsTo.id,
+                  label: `${user.reportsTo.name} <${user.reportsTo.email}>`
+                }
+              : "",
             isHuman: user.isHuman,
             isSuperuser: user.isSuperuser,
             office: user.office ? user.office.id : ""
@@ -135,8 +158,15 @@ class UpdatePersonForm extends Component {
                 onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
                   let data = {};
                   Object.keys(values).forEach(k => {
-                    if (!restrictedFields.has(k) && initialValues[k] !== values[k]) {
-                      data[k] = values[k] || "";
+                    if (restrictedFields.has(k)) return;
+                    let initialVal = initialValues[k];
+                    let curVal = values[k];
+                    if (initialVal.hasOwnProperty("value")) {
+                      initialVal = initialVal.value;
+                      curVal = curVal.value;
+                    }
+                    if (curVal !== initialVal) {
+                      data[k] = curVal || "";
                     }
                   });
                   apolloClient
@@ -243,13 +273,8 @@ class UpdatePersonForm extends Component {
                         type="select"
                         name="reportsTo"
                         label="Manager"
+                        loadOptions={this.loadMatchingUsers}
                         readonly={restrictedFields.has("reportsTo")}
-                        options={[
-                          ["", ""],
-                          ...users
-                            .filter(u => u.isHuman)
-                            .map(u => [u.id, `${u.name} <${u.email}>`])
-                        ]}
                       />
                     </Card>
 
@@ -260,7 +285,10 @@ class UpdatePersonForm extends Component {
                         name="office"
                         label="Office"
                         readonly={restrictedFields.has("office")}
-                        options={[["", ""], ...offices.map(o => [o.id, o.name])]}
+                        options={[
+                          ["", "(no office)"],
+                          ...offices.map(o => [o.id, o.name])
+                        ]}
                       />
                       <FieldWrapper
                         type="date"
