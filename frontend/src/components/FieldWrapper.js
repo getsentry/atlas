@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { Field, ErrorMessage } from "formik";
 
 export default styled(
-  ({ name, label, type, readonly, placeholder, className, hidden, options }) => {
+  ({ name, label, type, readonly, placeholder, className, hidden, options, help }) => {
     let fieldProps = {
       name,
       disabled: readonly,
@@ -26,6 +26,11 @@ export default styled(
       <div className={className}>
         {!hidden && <label>{label}</label>}
         <Field {...fieldProps} />
+        {help && (
+          <div>
+            <small>{help}</small>
+          </div>
+        )}
         <ErrorMessage name={name} />
       </div>
     );

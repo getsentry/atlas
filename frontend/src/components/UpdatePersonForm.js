@@ -192,6 +192,7 @@ class UpdatePersonForm extends Component {
                         name="handle"
                         label="Name (Preferred)"
                         readonly={restrictedFields.has("handle")}
+                        help="Do you have another name or nickname you prefer to go by?."
                       />
                       <FieldWrapper
                         type="text"
