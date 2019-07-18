@@ -5,6 +5,7 @@ import gql from "graphql-tag";
 import styled from "@emotion/styled";
 import { Settings } from "@material-ui/icons";
 
+import Address from "../components/Address";
 import colors from "../colors";
 import IconLink from "../components/IconLink";
 import PageLoader from "./PageLoader";
@@ -17,6 +18,10 @@ export const LIST_OFFICES_QUERY = gql`
       externalId
       name
       location
+      locality
+      administrativeArea
+      postalCode
+      regionCode
       lat
       lng
       numPeople
@@ -61,7 +66,9 @@ export default function OfficeList() {
                       <div>
                         <Link to={`/offices/${o.externalId}`}>{o.name}</Link>
                       </div>
-                      <small>{o.location || ""}</small>
+                      <small>
+                        <Address office={o} />
+                      </small>
                     </td>
                     <td>{o.numPeople.toLocaleString()}</td>
                     <SuperuserOnly>

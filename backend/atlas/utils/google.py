@@ -446,15 +446,13 @@ def sync_building(  # NOQA
     else:
         fields["location"] = None
 
-    if data["address"]["regionCode"]:
-        fields["region_code"] = data["address"]["regionCode"]
-    else:
-        fields["region_code"] = None
-
-    if data["address"]["postalCode"]:
-        fields["postal_code"] = data["address"]["postalCode"]
-    else:
-        fields["postal_code"] = None
+    for loc_field, rem_field in (
+        ("region_code", "regionCode"),
+        ("postal_code", "postalCode"),
+        ("locality", "locality"),
+        ("administrative_area", "administrativeArea"),
+    ):
+        fields[loc_field] = data["address"].get(rem_field) or None
 
     office, created = Office.objects.get_or_create(
         external_id=data["buildingId"], defaults=fields

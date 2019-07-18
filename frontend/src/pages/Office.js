@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { Flex, Box } from "@rebass/grid/emotion";
 import { Settings } from "@material-ui/icons";
 
+import Address from "../components/Address";
 import colors from "../colors";
 import Card from "../components/Card";
 import Content from "../components/Content";
@@ -107,14 +108,7 @@ export default class Office extends Component {
                           <h1>{thisOffice.name}</h1>
                         </div>
                         <div className="contact">
-                          {thisOffice.location && <div>{thisOffice.location}</div>}
-                          {thisOffice.postalCode ||
-                            (thisOffice.regionCode && (
-                              <div>
-                                {thisOffice.postalCode || ""}{" "}
-                                {thisOffice.regionCode || ""}
-                              </div>
-                            ))}
+                          <Address office={thisOffice} />
                         </div>
                         <Card>
                           <DefinitionList prefixWidth={80}>

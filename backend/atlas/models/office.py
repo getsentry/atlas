@@ -16,6 +16,8 @@ class Office(models.Model):
     location = models.TextField(null=True)
     region_code = models.CharField(max_length=64, null=True)
     postal_code = models.CharField(max_length=64, null=True)
+    administrative_area = models.CharField(max_length=64, null=True)
+    locality = models.CharField(max_length=64, null=True)
     lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
     lng = models.DecimalField(max_digits=9, decimal_places=6, null=True)
 

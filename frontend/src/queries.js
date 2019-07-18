@@ -8,6 +8,8 @@ export const GET_OFFICE_QUERY = gql`
       externalId
       description
       location
+      locality
+      administrativeArea
       postalCode
       regionCode
       lat

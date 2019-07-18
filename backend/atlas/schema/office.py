@@ -26,6 +26,8 @@ class OfficeNode(gql_optimizer.OptimizedDjangoObjectType):
             "location",
             "region_code",
             "postal_code",
+            "locality",
+            "administrative_area",
             "lat",
             "lng",
         )
