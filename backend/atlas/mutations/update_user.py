@@ -21,7 +21,7 @@ def is_chain_of_command(user, maybe_manager):
 class UserInput(graphene.InputObjectType):
     name = graphene.String(required=False)
     handle = graphene.String(required=False)
-    pronouns = Pronouns(required=False)
+    pronouns = Pronouns(required=False, default_value=Pronouns.NONE)
     date_of_birth = Nullable(graphene.Date, required=False)
     date_started = Nullable(graphene.Date, required=False)
     title = graphene.String(required=False)

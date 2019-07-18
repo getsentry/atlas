@@ -181,8 +181,12 @@ export default class Person extends Component {
                           <DefinitionList>
                             <dt>Name</dt>
                             <dd>{thisPerson.name}</dd>
-                            <dt>Preferred Name</dt>
-                            <dd>{thisPerson.handle || <Empty />}</dd>
+                            {thisPerson.handle && (
+                              <React.Fragment>
+                                <dt>Preferred Name</dt>
+                                <dd>{thisPerson.handle || <Empty />}</dd>
+                              </React.Fragment>
+                            )}
                             <dt>Pronouns</dt>
                             <dd>
                               {thisPerson.pronouns ? (

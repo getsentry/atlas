@@ -1,6 +1,7 @@
 import React from "react";
 
 export const PRONOUNS = [
+  ["NONE", ""],
   ["HE_HIM", "he / him"],
   ["SHE_HER", "she / her"],
   ["THEY_THEM", "they / them"],

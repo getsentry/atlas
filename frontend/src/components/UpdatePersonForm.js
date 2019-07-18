@@ -113,7 +113,7 @@ class UpdatePersonForm extends Component {
             name: user.name,
             email: user.email,
             handle: user.handle || "",
-            pronouns: user.pronouns || "DECLINE",
+            pronouns: user.pronouns || "NONE",
             title: user.title || "",
             department: user.department || "",
             dateOfBirth: user.dateOfBirth || "",
@@ -135,7 +135,7 @@ class UpdatePersonForm extends Component {
                 onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
                   let data = {};
                   Object.keys(values).forEach(k => {
-                    if (!restrictedFields.has(k)) {
+                    if (!restrictedFields.has(k) && initialValues[k] !== values[k]) {
                       data[k] = values[k] || "";
                     }
                   });
@@ -245,7 +245,7 @@ class UpdatePersonForm extends Component {
                         label="Manager"
                         readonly={restrictedFields.has("reportsTo")}
                         options={[
-                          ["", "Select a human"],
+                          ["", ""],
                           ...users
                             .filter(u => u.isHuman)
                             .map(u => [u.id, `${u.name} <${u.email}>`])
@@ -260,10 +260,7 @@ class UpdatePersonForm extends Component {
                         name="office"
                         label="Office"
                         readonly={restrictedFields.has("office")}
-                        options={[
-                          ["", "Select an office"],
-                          ...offices.map(o => [o.id, o.name])
-                        ]}
+                        options={[["", ""], ...offices.map(o => [o.id, o.name])]}
                       />
                       <FieldWrapper
                         type="date"
