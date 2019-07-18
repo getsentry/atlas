@@ -6,6 +6,7 @@ import graphene_django_optimizer as gql_optimizer
 from atlas.models import Photo, Profile, User
 
 from .phonenumber import PhoneNumberField
+from .pronouns import PronounsField
 
 
 def simple_profile_resolver(name):
@@ -28,6 +29,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
 
     # profile fields
     handle = graphene.String(required=False)
+    pronouns = PronounsField(required=False)
     title = graphene.String(required=False)
     department = graphene.String(required=False)
     dob_day = graphene.Int(required=False)
@@ -190,6 +192,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     resolve_department = simple_profile_resolver("department")
     resolve_date_started = simple_profile_resolver("date_started")
     resolve_is_human = simple_profile_resolver("is_human")
+    resolve_pronouns = simple_profile_resolver("pronouns")
 
     # TODO(dcramer): this query is slow
     @gql_optimizer.resolver_hints(select_related=("profile"))

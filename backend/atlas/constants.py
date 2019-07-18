@@ -12,6 +12,7 @@ FIELD_MODEL_MAP = {
     "is_human": Profile,
     "office": Profile,
     "is_superuser": User,
+    "pronouns": Profile,
 }
 
 RESTRICTED_FIELDS = frozenset(

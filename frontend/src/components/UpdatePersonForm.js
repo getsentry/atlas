@@ -36,6 +36,7 @@ export const PERSON_QUERY = gql`
       name
       email
       handle
+      pronouns
       department
       title
       dateOfBirth
@@ -73,40 +74,6 @@ export const PERSON_MUTATION = gql`
     updateUser(user: $user, data: $data) {
       ok
       errors
-      user {
-        id
-        name
-        email
-        handle
-        department
-        title
-        dateOfBirth
-        dateStarted
-        primaryPhone
-        isHuman
-        isSuperuser
-        photo {
-          data
-          width
-          height
-          mimeType
-        }
-        office {
-          id
-          name
-        }
-        reportsTo {
-          id
-          name
-          title
-          photo {
-            data
-            width
-            height
-            mimeType
-          }
-        }
-      }
     }
   }
 `;
@@ -144,6 +111,7 @@ class UpdatePersonForm extends Component {
             name: user.name,
             email: user.email,
             handle: user.handle || "",
+            pronouns: user.pronouns || "",
             title: user.title || "",
             department: user.department || "",
             dateOfBirth: user.dateOfBirth || "",
@@ -224,6 +192,13 @@ class UpdatePersonForm extends Component {
                         name="handle"
                         label="Name (Preferred)"
                         readonly={restrictedFields.has("handle")}
+                      />
+                      <FieldWrapper
+                        type="text"
+                        name="pronouns"
+                        label="Pronouns"
+                        placeholder="e.g. he / him / his"
+                        readonly={restrictedFields.has("pronouns")}
                       />
                       <FieldWrapper
                         type="email"

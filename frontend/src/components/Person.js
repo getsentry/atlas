@@ -182,6 +182,8 @@ export default class Person extends Component {
                             <dd>{thisPerson.name}</dd>
                             <dt>Preferred Name</dt>
                             <dd>{thisPerson.handle || <Empty />}</dd>
+                            <dt>Pronouns</dt>
+                            <dd>{thisPerson.pronouns || <Empty />}</dd>
                             <dt>Department</dt>
                             <dd>{thisPerson.department || <Empty />}</dd>
                             <dt>Start Date</dt>

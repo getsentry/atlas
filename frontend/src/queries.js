@@ -87,6 +87,7 @@ export const GET_PERSON_QUERY = gql`
       primaryPhone
       isHuman
       tenurePercent
+      pronouns
       reports {
         id
         name

@@ -151,6 +151,7 @@ GOOGLE_FIELD_MAP = (
     ("date_started", "Profile/Date_of_Hire"),
     ("date_of_birth", "Profile/Date_of_Birth"),
     ("handle", "Profile/Handle"),
+    ("pronouns", "Profile/Pronouns"),
     ("is_human", "System/Is_Human"),
 )
 
