@@ -26,12 +26,12 @@ const UserSchema = yup.object().shape({
 });
 
 export const PERSON_QUERY = gql`
-  query getPersonForUpdate($email: String!) {
+  query getPersonForUpdate {
     offices {
       id
       name
     }
-    users(email: $email, humansOnly: false) {
+    users(humansOnly: false, limit: 1000) {
       id
       name
       email
@@ -132,12 +132,12 @@ class UpdatePersonForm extends Component {
     }
 
     return (
-      <Query query={PERSON_QUERY} variables={{ email: this.props.email }}>
+      <Query query={PERSON_QUERY}>
         {({ loading, data: { offices, users } }) => {
           //if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;
-          if (!users.length) return <ErrorMessage message="Couldn't find that person." />;
-          const user = users[0];
+          const user = users.find(u => u.email === this.props.email);
+          if (!user) return <ErrorMessage message="Couldn't find that person." />;
           const initialValues = {
             name: user.name,
             email: user.email,
@@ -147,6 +147,7 @@ class UpdatePersonForm extends Component {
             dateOfBirth: user.dateOfBirth || "",
             dateStarted: user.dateStarted || "",
             primaryPhone: user.primaryPhone || "",
+            reportsTo: user.reportsTo ? user.reportsTo.id : "",
             isHuman: user.isHuman,
             isSuperuser: user.isSuperuser,
             office: user.office ? user.office.id : ""
@@ -256,6 +257,18 @@ class UpdatePersonForm extends Component {
                         name="department"
                         label="Department"
                         readonly={restrictedFields.has("department")}
+                      />
+                      <FieldWrapper
+                        type="select"
+                        name="reportsTo"
+                        label="Manager"
+                        readonly={restrictedFields.has("reportsTo")}
+                        options={[
+                          ["", "Select an human"],
+                          ...users
+                            .filter(u => u.isHuman)
+                            .map(u => [u.id, `${u.name} <${u.email}>`])
+                        ]}
                       />
                     </Card>
 

@@ -133,7 +133,7 @@ def get_office(external_id: str, office_cache: dict = None) -> Office:
     return office
 
 
-def generate_profile_updates(identity: Identity, user: User, data: dict = None) -> dict:
+def generate_profile_updates(user: User, data: dict = None) -> dict:
     profile = user.profile
 
     if data is None:
@@ -222,7 +222,7 @@ def update_all_profiles(identity: Identity, users: List[str] = None) -> BatchSyn
 
 
 def update_profile(identity: Identity, user: User, data: dict = None) -> UserSyncResult:
-    params = generate_profile_updates(identity, user, data)
+    params = generate_profile_updates(user, data)
 
     user_identity = Identity.objects.get(provider="google", user=user)
     response = requests.patch(
@@ -230,16 +230,17 @@ def update_profile(identity: Identity, user: User, data: dict = None) -> UserSyn
         json=params,
         headers={"Authorization": "Bearer {}".format(identity.access_token)},
     )
+    # NOTE(dcramer): we could sync_user here but this doesnt include custom attributes in the response
     data = response.json()
     response.raise_for_status()
 
-    return sync_user(data, user=user, identity=user_identity)
+    return user
 
 
 def sync_user(  # NOQA
     data: dict,
     user: User = None,
-    identity: Identity = None,
+    user_identity: Identity = None,
     user_cache: dict = None,
     office_cache: dict = None,
 ) -> UserSyncResult:
@@ -248,14 +249,16 @@ def sync_user(  # NOQA
     if office_cache is None:
         office_cache = {}
 
-    if identity is None:
+    if user_identity is None:
         try:
-            identity = Identity.objects.get(provider="google", external_id=data["id"])
+            user_identity = Identity.objects.get(
+                provider="google", external_id=data["id"]
+            )
         except Identity.DoesNotExist:
             pass
 
-    if identity and not user:
-        user = identity.user
+    if user_identity and not user:
+        user = user_identity.user
 
     if user is None:
         user, created = get_user(
@@ -266,8 +269,8 @@ def sync_user(  # NOQA
     else:
         created = False
 
-    if identity is None:
-        identity, _ = Identity.objects.get_or_create(
+    if user_identity is None:
+        user_identity, _ = Identity.objects.get_or_create(
             provider="google", external_id=data["id"], defaults={"user": user}
         )
 
@@ -290,11 +293,15 @@ def sync_user(  # NOQA
     if data["name"]["fullName"] != user.name:
         user_fields["name"] = data["name"]["fullName"]
 
-    if data["isAdmin"] != identity.is_admin:
+    if data["isAdmin"] != user_identity.is_admin:
         identity_fields["is_admin"] = data["isAdmin"]
-    if data["suspended"] and identity.is_active:
+    if data["suspended"] and user_identity.is_active:
         identity_fields["is_active"] = False
-    elif identity.access_token and not data["suspended"] and not identity.is_active:
+    elif (
+        user_identity.access_token
+        and not data["suspended"]
+        and not user_identity.is_active
+    ):
         identity_fields["is_active"] = True
 
     # 'organizations': [{'title': 'Chief Executive Officer', 'primary': True, 'customType': '', 'department': 'G&A', 'description': 'Executive'}]
@@ -366,7 +373,7 @@ def sync_user(  # NOQA
         if profile_fields:
             Profile.objects.filter(id=profile.id).update(**profile_fields)
         if identity_fields:
-            Identity.objects.filter(id=identity.id).update(**identity_fields)
+            Identity.objects.filter(id=user_identity.id).update(**identity_fields)
 
     return UserSyncResult(
         user=user,
