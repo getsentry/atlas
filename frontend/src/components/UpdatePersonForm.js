@@ -245,7 +245,7 @@ class UpdatePersonForm extends Component {
                         label="Manager"
                         readonly={restrictedFields.has("reportsTo")}
                         options={[
-                          ["", "Select an human"],
+                          ["", "Select a human"],
                           ...users
                             .filter(u => u.isHuman)
                             .map(u => [u.id, `${u.name} <${u.email}>`])
