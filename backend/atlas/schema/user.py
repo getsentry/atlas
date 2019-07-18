@@ -196,12 +196,13 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     def resolve_tenure_percent(self, info):
         if not self.profile.date_started:
             return None
-        total = Profile.objects.filter(
-            user__is_active=True,
-            date_started__isnull=False,
-            is_human=True,
-            date_started=self.profile.date_started,
-        ).count()
+        total = (
+            Profile.objects.filter(
+                user__is_active=True, date_started__isnull=False, is_human=True
+            )
+            .exclude(date_started=self.profile.date_started)
+            .count()
+        )
         newer_than_me = Profile.objects.filter(
             user__is_active=True,
             is_human=True,
