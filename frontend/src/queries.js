@@ -51,6 +51,8 @@ export const LIST_PEOPLE_QUERY = gql`
       id
       name
       email
+      department
+      isHuman
       title
       dobMonth
       dobDay
