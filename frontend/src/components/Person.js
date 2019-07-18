@@ -74,18 +74,34 @@ const PersonContainer = styled.article`
   }
 `;
 
-const AgeBadge = styled(({ className, dateStarted }) => {
+const AgeBadge = styled(({ className, user: { dateStarted, tenurePercent } }) => {
+  let years = parseInt(moment().diff(moment(dateStarted), "years", true) * 100, 10) / 100;
   return (
     <Card withPadding className={className}>
-      {parseInt(moment().diff(moment(dateStarted), "years", true) * 100, 10) / 100} years
+      <div>
+        {years} year{years !== 1 ? "s" : ""}
+      </div>
+      <em>joined before {parseInt((1.0 - tenurePercent) * 1000, 10) / 10}% of Sentry</em>
     </Card>
   );
 })`
   font-weight: bold;
-  text-transform: uppercase;
+  font-size: 0.9em;
+  padding: 0.5rem;
   letter-spacing: -0.1px;
+  text-align: center;
   color: ${colors.black};
   background: ${colors.yellow};
+
+  > div {
+    text-transform: uppercase;
+  }
+
+  > em {
+    display: block;
+    margin-top: 0.5em;
+    font-weight: normal;
+  }
 `;
 
 export default class Person extends Component {
@@ -137,9 +153,7 @@ export default class Person extends Component {
                           <Phone /> {thisPerson.primaryPhone || "n/a"}
                         </div>
                       </div>
-                      {!!thisPerson.dateStarted && (
-                        <AgeBadge dateStarted={thisPerson.dateStarted} />
-                      )}
+                      {!!thisPerson.dateStarted && <AgeBadge user={thisPerson} />}
                     </section>
                   </Box>
                   <Box flex="1">

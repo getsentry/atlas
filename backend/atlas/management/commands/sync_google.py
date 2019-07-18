@@ -29,23 +29,25 @@ class Command(BaseCommand):
         else:
             result = google.sync_domain(identity, domain, users=options["users"])
         self.stdout.write(self.style.MIGRATE_HEADING("Done!"))
-        self.stdout.write(
-            self.style.MIGRATE_HEADING(
-                " -> buildings: {} ({} created; {} updated; {} pruned)".format(
-                    result.total_buildings,
-                    result.created_buildings,
-                    result.updated_buildings,
-                    result.pruned_buildings,
+
+        if not options["push"]:
+            self.stdout.write(
+                self.style.MIGRATE_HEADING(
+                    " -> buildings: {} ({} created; {} updated; {} pruned)".format(
+                        result.total_buildings,
+                        result.created_buildings,
+                        result.updated_buildings,
+                        result.pruned_buildings,
+                    )
                 )
             )
-        )
-        self.stdout.write(
-            self.style.MIGRATE_HEADING(
-                " -> users: {} ({} created; {} updated; {} pruned)".format(
-                    result.total_users,
-                    result.created_users,
-                    result.updated_users,
-                    result.pruned_users,
+            self.stdout.write(
+                self.style.MIGRATE_HEADING(
+                    " -> users: {} ({} created; {} updated; {} pruned)".format(
+                        result.total_users,
+                        result.created_users,
+                        result.updated_users,
+                        result.pruned_users,
+                    )
                 )
             )
-        )

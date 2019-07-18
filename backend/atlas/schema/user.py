@@ -33,6 +33,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     dob_day = graphene.Int(required=False)
     dob_month = graphene.Int(required=False)
     date_started = graphene.Date(required=False)
+    tenure_percent = graphene.Float(required=False)
     date_of_birth = graphene.Date(required=False)
     primary_phone = PhoneNumberField(required=False)
     is_human = graphene.Boolean(required=False)
@@ -88,7 +89,9 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         if hasattr(self, "num_reports"):
             return self.num_reports
         logging.warning("Uncached resolution for UserNode.num_reports")
-        return Profile.objects.filter(is_human=True, reports_to=self.id).count()
+        return Profile.objects.filter(
+            is_human=True, reports_to=self.id, user__is_active=True
+        ).count()
 
     @gql_optimizer.resolver_hints(
         prefetch_related=("reports", "reports__user", "reports__user__profile")
@@ -103,7 +106,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         ):
             logging.warning("Uncached resolution for UserNode.reports")
             qs = qs.select_related("user", "user__profile")
-        return [r.user for r in qs]
+        return [r.user for r in qs if r.user.is_active and r.is_human]
 
     @gql_optimizer.resolver_hints(select_related=("profile"))
     def resolve_num_peers(self, info):
@@ -118,7 +121,9 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         logging.warning("Uncached resolution for UserNode.num_peers")
         return (
             Profile.objects.filter(
-                is_human=True, reports_to=self.profile.reports_to_id
+                is_human=True,
+                reports_to=self.profile.reports_to_id,
+                user__is_active=True,
             ).count()
             - 1
         )
@@ -145,7 +150,11 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         ):
             logging.warning("Uncached resolution for UserNode.peers")
             qs = qs.select_related("user", "user__profile")
-        return [r.user for r in qs if r.user_id != self.id]
+        return [
+            r.user
+            for r in qs
+            if r.user_id != self.id and r.user.is_active and r.is_human
+        ]
 
     @gql_optimizer.resolver_hints(select_related=("profile"))
     def resolve_primary_phone(self, info):
@@ -181,3 +190,18 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     resolve_department = simple_profile_resolver("department")
     resolve_date_started = simple_profile_resolver("date_started")
     resolve_is_human = simple_profile_resolver("is_human")
+
+    # TODO(dcramer): this query is slow
+    @gql_optimizer.resolver_hints(select_related=("profile"))
+    def resolve_tenure_percent(self, info):
+        if not self.profile.date_started:
+            return None
+        total = Profile.objects.filter(
+            user__is_active=True, date_started__isnull=False, is_human=True
+        ).count()
+        newer_than_me = Profile.objects.filter(
+            user__is_active=True,
+            is_human=True,
+            date_started__gt=self.profile.date_started,
+        ).count()
+        return 1.0 - newer_than_me / total
