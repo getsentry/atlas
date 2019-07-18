@@ -136,7 +136,9 @@ class UpdatePersonForm extends Component {
         {({ loading, data: { offices, users } }) => {
           //if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;
-          const user = users.find(u => u.email === this.props.email);
+          const user = users.find(
+            u => u.email.toLowerCase() === this.props.email.toLowerCase()
+          );
           if (!user) return <ErrorMessage message="Couldn't find that person." />;
           const initialValues = {
             name: user.name,
