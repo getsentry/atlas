@@ -9,12 +9,14 @@ import * as yup from "yup";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import FieldWrapper from "../components/FieldWrapper";
+import { PRONOUNS } from "../components/Pronouns";
 import apolloClient from "../utils/apollo";
 
 const UserSchema = yup.object().shape({
   // name: yup.string().required("Required"),
   // email: yup.string().required("Required"),
   handle: yup.string().nullable(),
+  pronouns: yup.string(),
   title: yup.string().nullable(),
   department: yup.string().nullable(),
   office: yup.string().nullable(),
@@ -111,7 +113,7 @@ class UpdatePersonForm extends Component {
             name: user.name,
             email: user.email,
             handle: user.handle || "",
-            pronouns: user.pronouns || "",
+            pronouns: user.pronouns || "DECLINE",
             title: user.title || "",
             department: user.department || "",
             dateOfBirth: user.dateOfBirth || "",
@@ -195,10 +197,11 @@ class UpdatePersonForm extends Component {
                         help="Do you have another name or nickname you prefer to go by?."
                       />
                       <FieldWrapper
-                        type="text"
+                        type="select"
                         name="pronouns"
                         label="Pronouns"
                         placeholder="e.g. he / him / his"
+                        options={PRONOUNS}
                         readonly={restrictedFields.has("pronouns")}
                       />
                       <FieldWrapper

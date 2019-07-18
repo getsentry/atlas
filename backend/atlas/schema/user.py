@@ -6,7 +6,7 @@ import graphene_django_optimizer as gql_optimizer
 from atlas.models import Photo, Profile, User
 
 from .phonenumber import PhoneNumberField
-from .pronouns import PronounsField
+from .pronouns import Pronouns
 
 
 def simple_profile_resolver(name):
@@ -29,7 +29,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
 
     # profile fields
     handle = graphene.String(required=False)
-    pronouns = PronounsField(required=False)
+    pronouns = Pronouns(required=False)
     title = graphene.String(required=False)
     department = graphene.String(required=False)
     dob_day = graphene.Int(required=False)

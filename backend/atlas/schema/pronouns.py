@@ -1,25 +1,15 @@
 import graphene
-from graphql.language.ast import StringValue
 
 
-class PronounsField(graphene.Scalar):
-    class Meta:
-        name = "Pronouns"
+class Pronouns(graphene.Enum):
+    HE_HIM = "he / him"
+    SHE_HER = "she / her"
+    THEY_THEM = "they / them"
+    OTHER = "other"
+    DECLINE = "decline to choose"
 
-    @staticmethod
-    def coerce_pronouns(value):
-        if not value:
-            return ""
-        bits = value.split("/")
-        if len(bits) == 3:
-            return " / ".join(bits)
-
-    serialize = coerce_pronouns
-    parse_value = coerce_pronouns
-
-    @staticmethod
-    def parse_literal(ast):
-        if isinstance(ast, StringValue):
-            bits = ast.value.split("/")
-            if len(bits) == 3:
-                return " / ".join(bits)
+    # @property
+    # def description(self):
+    #     if self == Episode.NEWHOPE:
+    #         return 'New Hope Episode'
+    #     return 'Other episode'

@@ -5,7 +5,7 @@ from django.db import models, transaction
 
 from atlas.constants import FIELD_MODEL_MAP, RESTRICTED_FIELDS, SUPERUSER_ONLY_FIELDS
 from atlas.models import Office, Profile, User
-from atlas.schema import Nullable, PhoneNumberField, PronounsField, UserNode
+from atlas.schema import Nullable, PhoneNumberField, Pronouns, UserNode
 from atlas.tasks import update_profile
 
 
@@ -21,7 +21,7 @@ def is_chain_of_command(user, maybe_manager):
 class UserInput(graphene.InputObjectType):
     name = graphene.String(required=False)
     handle = graphene.String(required=False)
-    pronouns = PronounsField(required=False)
+    pronouns = Pronouns(required=False)
     date_of_birth = Nullable(graphene.Date, required=False)
     date_started = Nullable(graphene.Date, required=False)
     title = graphene.String(required=False)

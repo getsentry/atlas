@@ -9,12 +9,13 @@ import { Flex, Box } from "@rebass/grid/emotion";
 
 import Avatar from "./Avatar";
 import colors from "../colors";
+import Card from "./Card";
 import Content from "./Content";
+import DefinitionList from "./DefinitionList";
 import ErrorMessage from "./ErrorMessage";
 import IconLink from "./IconLink";
 import PersonList from "./PersonList";
-import Card from "./Card";
-import DefinitionList from "./DefinitionList";
+import Pronouns from "./Pronouns";
 
 import { GET_PERSON_QUERY } from "../queries";
 
@@ -183,7 +184,13 @@ export default class Person extends Component {
                             <dt>Preferred Name</dt>
                             <dd>{thisPerson.handle || <Empty />}</dd>
                             <dt>Pronouns</dt>
-                            <dd>{thisPerson.pronouns || <Empty />}</dd>
+                            <dd>
+                              {thisPerson.pronouns ? (
+                                <Pronouns pronouns={thisPerson.pronouns} />
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
                             <dt>Department</dt>
                             <dd>{thisPerson.department || <Empty />}</dd>
                             <dt>Start Date</dt>
