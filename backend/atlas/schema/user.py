@@ -206,6 +206,6 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
             user__is_active=True,
             is_human=True,
             date_started__isnull=False,
-            date_started__gte=self.profile.date_started,
+            date_started__gt=self.profile.date_started,
         ).count()
         return (total - newer_than_me) / total
