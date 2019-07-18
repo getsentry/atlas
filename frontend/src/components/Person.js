@@ -229,7 +229,7 @@ export default class Person extends Component {
                         )}
                         {!!thisPerson.reports.length && (
                           <Card>
-                            <h3>Reports</h3>
+                            <h3>Team</h3>
                             <PersonList people={thisPerson.reports} />
                           </Card>
                         )}
