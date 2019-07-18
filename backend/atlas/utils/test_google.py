@@ -1,15 +1,13 @@
 from .google import generate_profile_updates
 
 
-def test_generate_profile_updates_is_human(responses, default_identity, default_user):
-    params = generate_profile_updates(
-        default_identity, default_user, {"is_human": True}
-    )
+def test_generate_profile_updates_is_human(responses, default_user):
+    params = generate_profile_updates(default_user, {"is_human": True})
     assert params == {"customSchemas": {"System": {"Is_Human": True}}}
 
 
-def test_generate_profile_updates_all_fields(responses, default_identity, default_user):
-    params = generate_profile_updates(default_identity, default_user)
+def test_generate_profile_updates_all_fields(responses, default_user):
+    params = generate_profile_updates(default_user)
     assert params == {
         "customSchemas": {
             "Profile": {
@@ -27,14 +25,14 @@ def test_generate_profile_updates_all_fields(responses, default_identity, defaul
 
 
 def test_generate_profile_updates_all_fields_with_all_fields(
-    responses, default_identity, default_superuser, default_user, default_office
+    responses, default_superuser, default_user, default_office
 ):
     default_user.profile.reports_to = default_superuser
     default_user.profile.office = default_office
     default_user.profile.primary_phone = "+1 800-123-4567"
     default_user.profile.save()
 
-    params = generate_profile_updates(default_identity, default_user)
+    params = generate_profile_updates(default_user)
     assert params == {
         "customSchemas": {
             "Profile": {

@@ -110,7 +110,7 @@ class Query(object):
                     profile__date_started__month=anniversary_before.month,
                     profile__date_started__day__lt=anniversary_before.day,
                 ),
-                profile__date_started__gt=timezone.now() - timedelta(months=11),
+                profile__date_started__lt=timezone.now() - timedelta(days=330),
             )
 
         if anniversary_after:
@@ -120,7 +120,7 @@ class Query(object):
                     profile__date_started__month=anniversary_after.month,
                     profile__date_started__day__gt=anniversary_after.day,
                 ),
-                profile__date_started__gt=timezone.now() - timedelta(months=11),
+                profile__date_started__lt=timezone.now() - timedelta(days=330),
             )
 
         if birthday_before:

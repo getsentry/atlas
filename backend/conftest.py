@@ -35,7 +35,7 @@ def gql_client(db):
 @pytest.fixture
 def default_office(db):
     return factories.OfficeFactory.create(
-        id=UUID("d2b00771-086f-4fc1-b24c-f5cc7bcd2c78"), name="SFO"
+        id=UUID("d2b00771-086f-4fc1-b24c-f5cc7bcd2c78"), name="SFO", external_id="SFO"
     )
 
 
