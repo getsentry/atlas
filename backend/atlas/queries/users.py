@@ -1,8 +1,9 @@
-from datetime import date
+from datetime import date, timedelta
 
 import graphene
 import graphene_django_optimizer as gql_optimizer
 from django.db.models import Q
+from django.utils import timezone
 from graphql.error import GraphQLError
 
 from atlas.models import User
@@ -108,7 +109,8 @@ class Query(object):
                 | Q(
                     profile__date_started__month=anniversary_before.month,
                     profile__date_started__day__lt=anniversary_before.day,
-                )
+                ),
+                profile__date_started__gt=timezone.now() - timedelta(months=11),
             )
 
         if anniversary_after:
@@ -117,7 +119,8 @@ class Query(object):
                 | Q(
                     profile__date_started__month=anniversary_after.month,
                     profile__date_started__day__gt=anniversary_after.day,
-                )
+                ),
+                profile__date_started__gt=timezone.now() - timedelta(months=11),
             )
 
         if birthday_before:
