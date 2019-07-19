@@ -17,7 +17,7 @@ class Query(object):
 
         qs = (
             Profile.objects.values_list("department", flat=True)
-            .filter(department__isnull=False)
+            .filter(department__isnull=False, is_human=True, user__is_active=True)
             .exclude(department="")
             .distinct()
         )
