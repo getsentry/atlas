@@ -1,7 +1,9 @@
 import graphene
 
-from . import me, offices, users
+from . import departments, me, offices, users
 
 
-class RootQuery(me.Query, offices.Query, users.Query, graphene.ObjectType):
+class RootQuery(
+    me.Query, departments.Query, offices.Query, users.Query, graphene.ObjectType
+):
     pass

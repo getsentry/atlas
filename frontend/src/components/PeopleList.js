@@ -12,9 +12,9 @@ export const peopleQueryVars = {
   orderBy: "name"
 };
 
-export default function PeopleList() {
+export default function PeopleList({ query }) {
   return (
-    <Query query={LIST_PEOPLE_QUERY} variables={peopleQueryVars}>
+    <Query query={LIST_PEOPLE_QUERY} variables={{ peopleQueryVars, ...query }}>
       {({ loading, error, data, fetchMore }) => {
         if (error) throw error;
         if (loading) return <PageLoader />;

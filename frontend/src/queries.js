@@ -1,5 +1,23 @@
 import gql from "graphql-tag";
 
+export const LIST_OFFICES_QUERY = gql`
+  query listOffices {
+    offices {
+      id
+      externalId
+      name
+      location
+      locality
+      administrativeArea
+      postalCode
+      regionCode
+      lat
+      lng
+      numPeople
+    }
+  }
+`;
+
 export const GET_OFFICE_QUERY = gql`
   query getOffice($id: UUID, $externalId: String) {
     offices(id: $id, externalId: $externalId) {
@@ -19,6 +37,14 @@ export const GET_OFFICE_QUERY = gql`
   }
 `;
 
+export const LIST_DEPARTMENTS_QUERY = gql`
+  query listDepartments($name: String, $query: String) {
+    departments(name: $name, query: $query) {
+      name
+    }
+  }
+`;
+
 export const LIST_PEOPLE_QUERY = gql`
   query listPeople(
     $office: UUID
@@ -30,6 +56,7 @@ export const LIST_PEOPLE_QUERY = gql`
     $birthdayBefore: Date
     $birthdayAfter: Date
     $query: String
+    $department: String
     $includeSelf: Boolean
     $orderBy: UserOrderBy
     $offset: Int
@@ -45,6 +72,7 @@ export const LIST_PEOPLE_QUERY = gql`
       birthdayBefore: $birthdayBefore
       birthdayAfter: $birthdayAfter
       query: $query
+      department: $department
       includeSelf: $includeSelf
       orderBy: $orderBy
       offset: $offset

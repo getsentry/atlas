@@ -10,24 +10,7 @@ import colors from "../colors";
 import IconLink from "../components/IconLink";
 import PageLoader from "./PageLoader";
 import SuperuserOnly from "../components/SuperuserOnly";
-
-export const LIST_OFFICES_QUERY = gql`
-  query listOffices {
-    offices {
-      id
-      externalId
-      name
-      location
-      locality
-      administrativeArea
-      postalCode
-      regionCode
-      lat
-      lng
-      numPeople
-    }
-  }
-`;
+import { LIST_OFFICES_QUERY } from "../queries";
 
 const OfficeListContainer = styled.section`
   li {
