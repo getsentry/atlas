@@ -328,7 +328,12 @@ def sync_user(  # NOQA
         profile_fields["reports_to"] = None
 
     # 'locations': [{'type': 'desk', 'area': 'desk', 'buildingId': 'SFO'}]
-    row = find(data.get("locations"), lambda x: x["type"] == "desk" and x["buildingId"])
+    row = find(
+        data.get("locations"),
+        lambda x: x["type"] == "desk"
+        and x["buildingId"]
+        and not x["buildingId"].startswith("$$"),
+    )
     if row:
         office = get_office(row["buildingId"], office_cache=office_cache)
         if profile.office_id != office.id:
