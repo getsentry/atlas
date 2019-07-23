@@ -11,8 +11,6 @@ import * as serviceWorker from "./serviceWorker";
 import config from "./config";
 import apolloClient from "./utils/apollo";
 
-import "./index.css";
-
 Sentry.init({
   dsn: config.sentryDsn,
   environment: config.environment,

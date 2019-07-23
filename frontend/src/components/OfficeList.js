@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import styled from "@emotion/styled";
 import { Settings } from "@material-ui/icons";
 
@@ -59,7 +58,7 @@ export default function OfficeList() {
                         <IconLink
                           icon={<Settings />}
                           to={`/offices/${o.externalId}/update`}
-                          color={colors.black}
+                          color={colors.linkText}
                           style={{ fontSize: "0.9em" }}
                         />
                       </td>

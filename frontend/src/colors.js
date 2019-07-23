@@ -30,6 +30,14 @@ const $teal = "#00B8D9";
 const $cyan = "#4bd6e5";
 
 export default {
+  background: $gray900,
+  text: $white,
+
+  linkText: $white,
+
+  cardBackground: "rgb(56, 68, 77)",
+  cardText: $white,
+
   primary: $indigo,
   primary100: "#F3EBFF",
   primary200: "#E8D6FF",
@@ -44,6 +52,7 @@ export default {
 
   gray100: $gray100,
   gray200: $gray200,
+  gray900: $gray900,
 
   blue: $blue,
   indigo: $indigo,

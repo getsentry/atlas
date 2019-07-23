@@ -9,8 +9,8 @@ export default styled(({ className, to, children }) => {
     <div className={className}>{to ? <Link to={to}>{children}</Link> : children}</div>
   );
 })`
-  background: #fff;
-  color: ${colors.black};
+  background: ${colors.cardBackground};
+  color: ${colors.cardText};
   padding: 1rem 1rem 0;
   margin: 0 0 1.5rem;
   overflow: visible;

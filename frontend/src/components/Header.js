@@ -65,14 +65,14 @@ const Navigation = ({ authenticated, logout, user }) => {
 };
 
 const HeaderContainer = styled.header`
-  background: ${colors.primary};
+  background: ${colors.background};
   border-bottom: 1px solid hsla(0, 0%, 100%, 0.1) !important;
   margin: 0 0.75rem 1.5rem;
   height: 5rem;
 
   h1 {
     margin: 0;
-    color: ${colors.white};
+    color: ${colors.foreground};
     letter-spacing: -2px;
     text-transform: uppercase;
   }

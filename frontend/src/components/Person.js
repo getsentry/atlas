@@ -67,7 +67,7 @@ const PersonContainer = styled.article`
     font-size: 1em;
   }
   .meta a {
-    color: #fff;
+    color: ${colors.white};
   }
   .meta svg {
     font-size: 1em;
