@@ -41,6 +41,7 @@ export const LIST_DEPARTMENTS_QUERY = gql`
   query listDepartments($name: String, $query: String) {
     departments(name: $name, query: $query) {
       name
+      numPeople
     }
   }
 `;

@@ -43,7 +43,12 @@ const Filter = styled(({ className, location, name, title, allLabel, choices }) 
                 }
               }}
             >
-              {c.value}
+              <Flex>
+                <Box flex="1">{c.value}</Box>
+                <Box style={{ textAlign: "right" }}>
+                  {c.count > 0 ? c.count.toLocaleString() : null}
+                </Box>
+              </Flex>
             </Link>
           </li>
         ))}
@@ -85,7 +90,11 @@ function DepartmentFilter({ location }) {
             title="Department"
             name="department"
             allLabel="All Departments"
-            choices={departments.map(d => ({ id: d.name, value: d.name }))}
+            choices={departments.map(d => ({
+              id: d.name,
+              value: d.name,
+              count: d.numPeople
+            }))}
           />
         );
       }}
@@ -106,7 +115,7 @@ function OfficeFilter({ location }) {
             title="Office"
             name="office"
             allLabel="All Offices"
-            choices={offices.map(d => ({ id: d.id, value: d.name }))}
+            choices={offices.map(d => ({ id: d.id, value: d.name, count: d.numPeople }))}
           />
         );
       }}

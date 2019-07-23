@@ -73,7 +73,7 @@ class Query(object):
         if not current_user.is_authenticated:
             raise GraphQLError("You must be authenticated")
 
-        qs = User.objects.filter(is_active=True).distinct()
+        qs = User.objects.select_related("profile").filter(is_active=True).distinct()
 
         if id:
             qs = qs.filter(id=id)

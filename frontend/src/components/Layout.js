@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Global, css } from "@emotion/core";
+import styled from "@emotion/styled";
 
 import AuthenticatedPage from "./AuthenticatedPage";
 import colors from "../colors";
@@ -206,6 +207,22 @@ const globalStyles = css`
   }
 `;
 
+const Footer = styled(({ className }) => (
+  <div className={className}>
+    <a href="https://github.com/getsentry/atlas">Atlas is Open Source</a> — Made with ♥ by{" "}
+    <a href="https://sentry.io">Sentry</a>
+  </div>
+))`
+  font-size: 0.8em;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 2rem 1rem;
+  a {
+    color: inherit;
+    text-decoration: underline;
+  }
+`;
+
 export default class Layout extends Component {
   static propTypes = {
     title: PropTypes.string,
@@ -236,6 +253,7 @@ export default class Layout extends Component {
         ) : (
           this.renderBody()
         )}
+        <Footer />
       </React.Fragment>
     );
   }

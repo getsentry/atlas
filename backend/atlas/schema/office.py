@@ -6,13 +6,11 @@ import graphene_django_optimizer as gql_optimizer
 from atlas.models import Office
 
 from .decimal import Decimal
-from .user import UserNode
 
 
 class OfficeNode(gql_optimizer.OptimizedDjangoObjectType):
     lat = Decimal(required=False)
     lng = Decimal(required=False)
-    people = graphene.List(lambda: UserNode)
     num_people = graphene.Int(required=False)
 
     class Meta:
