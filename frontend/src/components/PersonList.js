@@ -21,6 +21,12 @@ function age(dateStarted) {
   return `${years} year${years !== 1 ? "s" : ""}`;
 }
 
+function fromNowCurrentYear(date) {
+  return moment(date, "YYYY-MM-DD")
+    .year(moment().year())
+    .fromNow();
+}
+
 export default ({ people, withAnniversary, withBirthday, withStartDate }) => (
   <PersonListContainer>
     <ul>
@@ -30,19 +36,36 @@ export default ({ people, withAnniversary, withBirthday, withStartDate }) => (
             <Box flex="1">
               <PersonLink user={p} />
             </Box>
-            {withAnniversary && <Box>{age(p.dateStarted)}</Box>}
+            {withAnniversary && (
+              <Box style={{ textAlign: "right" }}>
+                {age(p.dateStarted)}
+                <br />
+                <small>{fromNowCurrentYear(p.dateStarted)}</small>
+              </Box>
+            )}
             {withBirthday &&
               (p.dobMonth && (
-                <Box>
+                <Box style={{ textAlign: "right" }}>
                   {moment(
                     `${new Date().getFullYear()}-${p.dobMonth}-${p.dobDay}`,
                     "YYYY-MM-DD"
                   ).format("MMMM Do")}
+                  <br />
+                  <small>
+                    {moment(
+                      `${new Date().getFullYear()}-${p.dobMonth}-${p.dobDay}`,
+                      "YYYY-MM-DD"
+                    ).fromNow()}
+                  </small>
                 </Box>
               ))}
             {withStartDate &&
               (p.dateStarted && (
-                <Box>{moment(p.dateStarted, "YYYY-MM-DD").format("MMMM Do")}</Box>
+                <Box style={{ textAlign: "right" }}>
+                  {moment(p.dateStarted, "YYYY-MM-DD").format("MMMM Do")}
+                  <br />
+                  <small>{fromNowCurrentYear(p.dateStarted)}</small>
+                </Box>
               ))}
           </Flex>
         </li>
