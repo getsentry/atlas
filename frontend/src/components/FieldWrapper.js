@@ -4,8 +4,33 @@ import { Field, ErrorMessage } from "formik";
 import AsyncSelect from "react-select/async";
 import Select from "react-select";
 
+import colors from "../colors";
+
+const selectStyles = {
+  option: (provided, state) => {
+    let background;
+    let color;
+    if (state.isSelected) {
+      background = colors.inputBackgroundSelected;
+      color = colors.inputTextSelected;
+    } else if (state.isFocused) {
+      background = colors.inputBackgroundFocused;
+      color = colors.inputTextFocused;
+    } else {
+      background = colors.inputBackground;
+      color = colors.inputText;
+    }
+    return {
+      ...provided,
+      background,
+      color
+    };
+  }
+};
+
 const SelectField = ({ options, field, form }) => (
   <Select
+    styles={selectStyles}
     options={options}
     name={field.name}
     value={options ? options.find(option => option.value === field.value) : ""}
@@ -17,6 +42,7 @@ const SelectField = ({ options, field, form }) => (
 const AsyncSelectField = ({ options, field, form, loadOptions }) => (
   <AsyncSelect
     {...field}
+    styles={selectStyles}
     cacheOptions
     loadOptions={loadOptions}
     name={field.name}

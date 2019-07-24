@@ -150,16 +150,16 @@ const globalStyles = css`
     width: 100%;
     padding: 0.375rem 0.75rem;
     line-height: 1.5;
-    border: 1px solid #ced4da;
+    border: 1px solid ${colors.inputBorder};
     border-radius: 0.25rem;
     transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
-    background: #fff;
-    color: #495057;
+    background: ${colors.inputBackground};
+    color: ${colors.inputText};
   }
   input:disabled,
   select:disabled,
   textarea:disabled {
-    background: #ced4da;
+    background: ${colors.inputBackgroundDisabled};
   }
   button {
     display: inline-block;

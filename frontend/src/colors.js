@@ -36,6 +36,15 @@ export default {
   linkText: $gray300,
   linkTextHover: $white,
 
+  inputBackground: $white,
+  inputBackgroundDisabled: "#ced4da",
+  inputBackgroundSelected: $gray300,
+  inputBackgroundFocused: $gray300,
+  inputText: $black,
+  inputTextSelected: $indigo,
+  inputTextFocused: $black,
+  inputBorder: "#ced4da",
+
   cardBackground: "rgb(56, 68, 77)",
   cardBackgroundHover: $black,
   cardText: $white,

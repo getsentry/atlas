@@ -233,7 +233,7 @@ export default class Person extends Component {
                             <dd>
                               {thisPerson.social.linkedin ? (
                                 <a
-                                  href={`https://linkedin.com/${thisPerson.social.linkedin}`}
+                                  href={`https://linkedin.com/in/${thisPerson.social.linkedin}/`}
                                 >
                                   {thisPerson.social.linkedin}
                                 </a>
