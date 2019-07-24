@@ -78,6 +78,8 @@ const globalStyles = css`
   pre,
   code {
     font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    color: ${colors.yellow};
+    font-size: 0.9em;
   }
   pre {
     white-space: pre-wrap;
