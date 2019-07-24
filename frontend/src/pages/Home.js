@@ -41,17 +41,6 @@ export default class Home extends Component {
       <Layout title="Home">
         <Content>
           <Flex>
-            <Box width={1} px={3}>
-              <Card>
-                <h1>Welcome to Atlas</h1>
-                <p>Atlas is your map to Sentry.</p>
-                <p>
-                  We could probably put the newest hires here? Anniversaries? Birthdays?
-                </p>
-              </Card>
-            </Box>
-          </Flex>
-          <Flex>
             <Box width={1 / 2} px={3}>
               <Card>
                 <h2>Newest Sentries</h2>
