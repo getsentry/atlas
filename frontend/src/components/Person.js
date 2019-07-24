@@ -257,7 +257,7 @@ export default class Person extends Component {
                             <dd>
                               {thisPerson.social.twitter ? (
                                 <a
-                                  href={`https://github.com/${thisPerson.social.twitter}`}
+                                  href={`https://twitter.com/${thisPerson.social.twitter}`}
                                 >
                                   {thisPerson.social.twitter}
                                 </a>
