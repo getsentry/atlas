@@ -108,6 +108,7 @@ export const GET_PERSON_QUERY = gql`
       name
       email
       handle
+      bio
       department
       dobMonth
       dobDay
@@ -117,6 +118,17 @@ export const GET_PERSON_QUERY = gql`
       isHuman
       tenurePercent
       pronouns
+      social {
+        linkedin
+        github
+        twitter
+      }
+      gamerTags {
+        steam
+        xbox
+        playstation
+        nintendo
+      }
       reports {
         id
         name

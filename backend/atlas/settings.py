@@ -146,13 +146,27 @@ GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
 GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI") or "http://localhost:8080"
 GOOGLE_DOMAIN = os.environ.get("GOOGLE_DOMAIN") or "sentry.io"
+# TODO(dcramer): it'd be great to not be storing these in real columns
 GOOGLE_FIELD_MAP = (
     # "column" => "SchemaName/FieldName"
+    # system
+    ("is_human", "System/Is_Human"),
+    # core
     ("date_started", "Profile/Date_of_Hire"),
     ("date_of_birth", "Profile/Date_of_Birth"),
+    # profile
     ("handle", "Profile/Handle"),
     ("pronouns", "Profile/Pronouns"),
-    ("is_human", "System/Is_Human"),
+    # social
+    ("bio", "Profile/Bio"),
+    ("linkedin", "Social/LinkedIn"),
+    ("twitter", "Social/Twitter"),
+    ("github", "Social/GitHub"),
+    # games
+    ("steam", "GamerTags/Steam"),
+    ("xbox", "GamerTags/Xbox"),
+    ("playstation", "GamerTags/PlayStation"),
+    ("nintendo", "GamerTags/Nintendo"),
 )
 
 if not GOOGLE_CLIENT_ID:

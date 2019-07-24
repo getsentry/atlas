@@ -18,9 +18,23 @@ def is_chain_of_command(user, maybe_manager):
     return False
 
 
+class SocialInput(graphene.InputObjectType):
+    linkedin = graphene.String(required=False)
+    github = graphene.String(required=False)
+    twitter = graphene.String(required=False)
+
+
+class GamerTagsInput(graphene.InputObjectType):
+    steam = graphene.String(required=False)
+    xbox = graphene.String(required=False)
+    playstation = graphene.String(required=False)
+    nintendo = graphene.String(required=False)
+
+
 class UserInput(graphene.InputObjectType):
     name = graphene.String(required=False)
     handle = graphene.String(required=False)
+    bio = graphene.String(required=False)
     pronouns = Pronouns(required=False, default_value=Pronouns.NONE)
     date_of_birth = Nullable(graphene.Date, required=False)
     date_started = Nullable(graphene.Date, required=False)
@@ -31,6 +45,8 @@ class UserInput(graphene.InputObjectType):
     is_human = graphene.Boolean(required=False)
     office = Nullable(graphene.UUID, required=False)
     is_superuser = graphene.Boolean(required=False)
+    social = Nullable(SocialInput, required=False)
+    gamer_tags = Nullable(GamerTagsInput, required=False)
 
 
 class UpdateUser(graphene.Mutation):
@@ -80,7 +96,11 @@ class UpdateUser(graphene.Mutation):
 
         updates = {}
         model_updates = {User: {}, Profile: {}}
-        for field, value in data.items():
+
+        flattened_data = data.copy()
+        flattened_data.update(flattened_data.pop("social", {}))
+        flattened_data.update(flattened_data.pop("gamer_tags", {}))
+        for field, value in flattened_data.items():
             if value == "":
                 value = None
 

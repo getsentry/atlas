@@ -6,6 +6,7 @@ import moment from "moment";
 import styled from "@emotion/styled";
 import { Email, Phone, Settings } from "@material-ui/icons";
 import { Flex, Box } from "@rebass/grid/emotion";
+import Markdown from "react-markdown";
 
 import Avatar from "./Avatar";
 import colors from "../colors";
@@ -217,6 +218,94 @@ export default class Person extends Component {
                             </dd>
                             <dt>Birthday</dt>
                             <dd>{dob ? dob.format("MMMM Do") : <Empty />}</dd>
+                          </DefinitionList>
+                        </Card>
+                        {thisPerson.bio && (
+                          <Card>
+                            <h3>Bio</h3>
+                            <Markdown source={thisPerson.bio} />
+                          </Card>
+                        )}
+                        <Card>
+                          <h3>#social</h3>
+                          <DefinitionList>
+                            <dt>LinkedIn</dt>
+                            <dd>
+                              {thisPerson.social.linkedin ? (
+                                <a
+                                  href={`https://linkedin.com/${thisPerson.social.linkedin}`}
+                                >
+                                  {thisPerson.social.linkedin}
+                                </a>
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
+                            <dt>GitHub</dt>
+                            <dd>
+                              {thisPerson.social.github ? (
+                                <a
+                                  href={`https://github.com/${thisPerson.social.github}`}
+                                >
+                                  {thisPerson.social.github}
+                                </a>
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
+                            <dt>Twitter</dt>
+                            <dd>
+                              {thisPerson.social.twitter ? (
+                                <a
+                                  href={`https://github.com/${thisPerson.social.twitter}`}
+                                >
+                                  {thisPerson.social.twitter}
+                                </a>
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
+                          </DefinitionList>
+                        </Card>
+                        <Card>
+                          <h3>#gamers</h3>
+                          <DefinitionList>
+                            <dt>Steam</dt>
+                            <dd>
+                              {thisPerson.gamerTags.steam ? (
+                                <a
+                                  href={`https://steamcommunity.com/id/${thisPerson.gamerTags.steam}`}
+                                >
+                                  {thisPerson.gamerTags.steam}
+                                </a>
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
+                            <dt>Xbox Live</dt>
+                            <dd>
+                              {thisPerson.gamerTags.xbox ? (
+                                thisPerson.gamerTags.xbox
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
+                            <dt>PlayStation</dt>
+                            <dd>
+                              {thisPerson.gamerTags.playstation ? (
+                                thisPerson.gamerTags.playstation
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
+                            <dt>Nintendo</dt>
+                            <dd>
+                              {thisPerson.gamerTags.nintendo ? (
+                                thisPerson.gamerTags.nintendo
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
                           </DefinitionList>
                         </Card>
                       </Box>

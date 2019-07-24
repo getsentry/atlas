@@ -48,6 +48,7 @@ export const PERSON_QUERY = gql`
       name
       email
       handle
+      bio
       pronouns
       department
       title
@@ -56,6 +57,17 @@ export const PERSON_QUERY = gql`
       primaryPhone
       isHuman
       isSuperuser
+      social {
+        linkedin
+        github
+        twitter
+      }
+      gamerTags {
+        steam
+        xbox
+        playstation
+        nintendo
+      }
       office {
         id
         name
@@ -131,6 +143,7 @@ class UpdatePersonForm extends Component {
             name: user.name,
             email: user.email,
             handle: user.handle || "",
+            bio: user.bio || "",
             pronouns: user.pronouns || "NONE",
             title: user.title || "",
             department: user.department || "",
@@ -145,7 +158,18 @@ class UpdatePersonForm extends Component {
               : "",
             isHuman: user.isHuman,
             isSuperuser: user.isSuperuser,
-            office: user.office ? user.office.id : ""
+            office: user.office ? user.office.id : "",
+            social: {
+              twitter: user.social.twitter || "",
+              linkedin: user.social.linkedin || "",
+              github: user.social.github || ""
+            },
+            gamerTags: {
+              steam: user.gamerTags.steam || "",
+              xbox: user.gamerTags.xbox || "",
+              playstation: user.gamerTags.playstation || "",
+              nintendo: user.gamerTags.nintendo || ""
+            }
           };
           return (
             <section>
@@ -235,6 +259,13 @@ class UpdatePersonForm extends Component {
                         readonly={restrictedFields.has("pronouns")}
                       />
                       <FieldWrapper
+                        type="textarea"
+                        name="bio"
+                        label="Bio"
+                        readonly={restrictedFields.has("bio")}
+                        help="A bit about yourself."
+                      />
+                      <FieldWrapper
                         type="email"
                         name="email"
                         label="Email"
@@ -275,6 +306,63 @@ class UpdatePersonForm extends Component {
                         label="Manager"
                         loadOptions={this.loadMatchingUsers}
                         readonly={restrictedFields.has("reportsTo")}
+                      />
+                    </Card>
+
+                    <Card>
+                      <h2>#social</h2>
+                      <FieldWrapper
+                        type="text"
+                        name="social[linkedin]"
+                        label="LinkedIn"
+                        help="Your LinkedIn username."
+                        readonly={restrictedFields.has("social[linkedin]")}
+                      />
+                      <FieldWrapper
+                        type="text"
+                        name="social[github]"
+                        label="GitHub"
+                        help="Your GitHub username."
+                        readonly={restrictedFields.has("social[github]")}
+                      />
+                      <FieldWrapper
+                        type="text"
+                        name="social[twitter]"
+                        label="Twitter"
+                        help="Your Twitter username."
+                        readonly={restrictedFields.has("social[twitter]")}
+                      />
+                    </Card>
+
+                    <Card>
+                      <h2>#gamers</h2>
+                      <FieldWrapper
+                        type="text"
+                        name="gamerTags[steam]"
+                        label="Steam"
+                        help="Your Steam username."
+                        readonly={restrictedFields.has("gamerTags[steam]")}
+                      />
+                      <FieldWrapper
+                        type="text"
+                        name="gamerTags[xbox]"
+                        label="Xbox Live"
+                        help="Your Xbox Live username."
+                        readonly={restrictedFields.has("gamerTags[xbox]")}
+                      />
+                      <FieldWrapper
+                        type="text"
+                        name="gamerTags[playstation]"
+                        label="PlayStation"
+                        help="Your PlayStation username."
+                        readonly={restrictedFields.has("gamerTags[playstation]")}
+                      />
+                      <FieldWrapper
+                        type="text"
+                        name="gamerTags[nintendo]"
+                        label="Nintendo"
+                        help="Your Nintendo username."
+                        readonly={restrictedFields.has("gamerTags[nintendo]")}
                       />
                     </Card>
 

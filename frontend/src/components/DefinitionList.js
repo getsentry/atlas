@@ -24,4 +24,7 @@ export default styled.dl`
   dd {
     margin-bottom: 0.5rem;
   }
+  a {
+    text-decoration: underline;
+  }
 `;

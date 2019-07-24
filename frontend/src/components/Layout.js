@@ -7,32 +7,31 @@ import AuthenticatedPage from "./AuthenticatedPage";
 import colors from "../colors";
 import Header from "./Header";
 
+import RobotoMedium from "../fonts/Roboto-Medium.ttf";
+import RubikRegular from "../fonts/Rubik-Regular.ttf";
+import RubikMedium from "../fonts/Rubik-Medium.ttf";
+import RubikBold from "../fonts/Rubik-Bold.ttf";
+
 const globalStyles = css`
   @font-face {
     font-family: "Rubik";
     font-weight: 400;
-    src: url("./fonts/Rubik-Regular.ttf") format("truetype");
+    src: ${RubikRegular} format("truetype");
   }
-  /* @font-face {
-  font-family: "Rubik";
-  src: url("./fonts/Rubik-Italic.ttf") format("truetype");
-  font-weight: 400;
-  font-style: italic;
-} */
   @font-face {
     font-family: "Rubik";
     font-weight: 500;
-    src: url("./fonts/Rubik-Medium.ttf") format("truetype");
+    src: ${RubikMedium} format("truetype");
   }
   @font-face {
     font-family: "Rubik";
     font-weight: 700;
-    src: url("./fonts/Rubik-Bold.ttf") format("truetype");
+    src: ${RubikBold} format("truetype");
   }
   @font-face {
     font-family: "Roboto";
     font-weight: 500;
-    src: url("./fonts/Roboto-Medium.ttf") format("truetype");
+    src: ${RobotoMedium} format("truetype");
   }
   html {
     box-sizing: border-box;
@@ -88,6 +87,10 @@ const globalStyles = css`
   a {
     color: ${colors.linkText};
     text-decoration: none;
+
+    &:hover {
+      color: ${colors.linkTextHover};
+    }
   }
   h1,
   h2,

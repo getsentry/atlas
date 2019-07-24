@@ -23,13 +23,24 @@ def simple_profile_resolver(name):
     return wrapped
 
 
+class SocialNode(graphene.ObjectType):
+    twitter = graphene.String(required=False)
+    linkedin = graphene.String(required=False)
+    github = graphene.String(required=False)
+
+
+class GamerTagsNode(graphene.ObjectType):
+    steam = graphene.String(required=False)
+    xbox = graphene.String(required=False)
+    playstation = graphene.String(required=False)
+    nintendo = graphene.String(required=False)
+
+
 class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     email = graphene.String(required=False)
     photo = graphene.Field("atlas.schema.PhotoNode")
 
     # profile fields
-    handle = graphene.String(required=False)
-    pronouns = Pronouns(required=False)
     title = graphene.String(required=False)
     department = graphene.String(required=False)
     dob_day = graphene.Int(required=False)
@@ -41,6 +52,14 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     is_human = graphene.Boolean(required=False)
     office = graphene.Field("atlas.schema.OfficeNode")
     reports_to = graphene.Field("atlas.schema.UserNode", required=False)
+
+    # custom profile bits
+    handle = graphene.String(required=False)
+    bio = graphene.String(required=False)
+    pronouns = Pronouns(required=False)
+
+    social = graphene.Field(SocialNode)
+    gamer_tags = graphene.Field(GamerTagsNode)
 
     # computed
     reports = graphene.List(lambda: UserNode)
@@ -75,6 +94,29 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
             return self.photo
         except Photo.DoesNotExist:
             return None
+
+    @gql_optimizer.resolver_hints(select_related=("profile"))
+    def resolve_social(self, info):
+        try:
+            return {
+                "linkedin": self.profile.linkedin,
+                "github": self.profile.github,
+                "twitter": self.profile.twitter,
+            }
+        except Profile.DoesNotExist:
+            return {}
+
+    @gql_optimizer.resolver_hints(select_related=("profile"))
+    def resolve_gamer_tags(self, info):
+        try:
+            return {
+                "steam": self.profile.steam,
+                "xbox": self.profile.xbox,
+                "playstation": self.profile.playstation,
+                "nintendo": self.profile.nintendo,
+            }
+        except Profile.DoesNotExist:
+            return {}
 
     def resolve_email(self, info):
         user = info.context.user
@@ -188,6 +230,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         return self.profile.date_of_birth.day
 
     resolve_handle = simple_profile_resolver("handle")
+    resolve_bio = simple_profile_resolver("bio")
     resolve_title = simple_profile_resolver("title")
     resolve_department = simple_profile_resolver("department")
     resolve_date_started = simple_profile_resolver("date_started")

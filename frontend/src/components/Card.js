@@ -29,7 +29,7 @@ export default styled(({ className, to, children }) => {
     margin-bottom: ${props.withPadding ? "-1rem" : 0};
 
     &:hover {
-      background: ${colors.primary100};
+      background: ${colors.cardBackgroundHover};
     }
   }
   `}

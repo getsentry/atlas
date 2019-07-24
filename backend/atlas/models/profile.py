@@ -14,6 +14,7 @@ class Profile(models.Model):
     date_of_birth = models.DateField(null=True)
     date_started = models.DateField(null=True)
     title = models.TextField(null=True)
+    bio = models.TextField(null=True)
     reports_to = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
@@ -25,6 +26,13 @@ class Profile(models.Model):
     )
     department = models.TextField(null=True)
     primary_phone = models.TextField(null=True)
+    linkedin = models.TextField(null=True)
+    twitter = models.TextField(null=True)
+    github = models.TextField(null=True)
+    steam = models.TextField(null=True)
+    xbox = models.TextField(null=True)
+    playstation = models.TextField(null=True)
+    nintendo = models.TextField(null=True)
     config = JSONField(default=dict)
     is_human = models.BooleanField(default=True)
 

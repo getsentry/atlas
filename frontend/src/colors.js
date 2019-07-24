@@ -33,9 +33,11 @@ export default {
   background: $gray900,
   text: $white,
 
-  linkText: $white,
+  linkText: $gray300,
+  linkTextHover: $white,
 
   cardBackground: "rgb(56, 68, 77)",
+  cardBackgroundHover: $black,
   cardText: $white,
 
   primary: $indigo,
