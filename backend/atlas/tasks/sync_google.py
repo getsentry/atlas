@@ -16,6 +16,8 @@ def sync_google(domain=None):
 
 @shared_task(name="atlas.tasks.update_profile")
 def update_profile(user_id, updates):
+    if not settings.GOOGLE_PUSH_UPDATES:
+        return
     user = User.objects.get(id=user_id)
     identity = google.get_admin_identity()
     google.update_profile(identity, user, updates)

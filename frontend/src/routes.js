@@ -4,6 +4,7 @@ import { Route, IndexRoute } from "react-router";
 
 import App from "./pages/App";
 import AdminAudit from "./pages/AdminAudit";
+import AdminBulkUpdatePeople from "./pages/AdminBulkUpdatePeople";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Office from "./pages/Office";
@@ -34,6 +35,7 @@ export default (
     <Route path="/people/:email" component={Profile} />
     <Route path="/people/:email/update" component={UpdateProfile} />
     <Route path="/admin/audit" component={AdminAudit} />
+    <Route path="/admin/update-people" component={AdminBulkUpdatePeople} />
     <Route path="*" component={NotFoundError} />
   </Route>
 );

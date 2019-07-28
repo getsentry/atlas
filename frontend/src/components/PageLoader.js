@@ -1,19 +1,43 @@
 import React, { Component } from "react";
+import { Flex, Box } from "@rebass/grid/emotion";
 import PropTypes from "prop-types";
 
-import colors from "../colors";
 import InternalError from "./InternalError";
 
 export default class PageLoader extends Component {
   static propTypes = {
     isLoading: PropTypes.bool,
-    error: PropTypes.object
+    error: PropTypes.object,
+    loadingText: PropTypes.string
+  };
+
+  static defaultProps = {
+    isLoading: true
   };
 
   render() {
     let { isLoading, error } = this.props;
     if (isLoading) {
-      return <div style={{ color: colors.white }}>Loading...</div>;
+      return (
+        <Flex alignItems="center" flexDirection="column" p={5}>
+          {this.props.loadingText && (
+            <Box css={{ fontSize: 16, textAlign: "center" }}>
+              {this.props.loadingText}
+            </Box>
+          )}
+          <div class="sk-cube-grid">
+            <div class="sk-cube sk-cube1"></div>
+            <div class="sk-cube sk-cube2"></div>
+            <div class="sk-cube sk-cube3"></div>
+            <div class="sk-cube sk-cube4"></div>
+            <div class="sk-cube sk-cube5"></div>
+            <div class="sk-cube sk-cube6"></div>
+            <div class="sk-cube sk-cube7"></div>
+            <div class="sk-cube sk-cube8"></div>
+            <div class="sk-cube sk-cube9"></div>
+          </div>
+        </Flex>
+      );
     } else if (error) {
       return <InternalError error={error} />;
     } else {

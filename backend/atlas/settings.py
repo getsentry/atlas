@@ -173,3 +173,7 @@ if not GOOGLE_CLIENT_ID:
     logging.warning("You have not configured GOOGLE_CLIENT_ID.")
 if not GOOGLE_CLIENT_SECRET:
     logging.warning("You have not configured GOOGLE_CLIENT_SECRET.")
+
+# should we enable push updates for when local profiles are edited?
+# its useful to disable this in development
+GOOGLE_PUSH_UPDATES = not os.environ.get("DISABLE_GOOGLE_PUSH")

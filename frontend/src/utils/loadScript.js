@@ -15,7 +15,12 @@ export default (d, s, id, jsSrc) => {
     } else {
       d.head.appendChild(js);
     }
+    let timeoutTimer = setTimeout(
+      () => reject(new Error(`Timed out loading ${id}`)),
+      5000
+    );
     js.onload = function() {
+      clearTimeout(timeoutTimer);
       resolve(js);
     };
     cache[id] = js;

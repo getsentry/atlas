@@ -48,7 +48,7 @@ class AuthenticatedPage extends Component {
 
   render() {
     if (this.state.loading) {
-      return <PageLoader />;
+      return <PageLoader loadingText="Please wait while we authenticate your session" />;
     }
     return this.props.children;
   }
