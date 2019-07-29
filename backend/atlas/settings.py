@@ -128,7 +128,7 @@ USE_TZ = True
 # MEDIA_URL = "/media/"
 
 CELERY_IMPORTS = ("atlas.tasks",)
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL") or "redis://localhost:6379/0"
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL") or "redis://127.0.0.1:6379/0"
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BEAT_SCHEDULE = {
