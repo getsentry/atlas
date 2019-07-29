@@ -26,6 +26,7 @@ celery = "^4.3"
 django-celery-beat = "^1.5"
 redis = "^3.2"
 phonenumbers = "^8.10"
+django-health-check = "^3.10"
 
 [tool.poetry.dev-dependencies]
 black = "=19.3b0"

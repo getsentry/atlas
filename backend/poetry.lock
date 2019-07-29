@@ -193,6 +193,14 @@ version = "1.0.0"
 
 [[package]]
 category = "main"
+description = "Run checks on services like databases, queue servers, celery processes, etc."
+name = "django-health-check"
+optional = false
+python-versions = "*"
+version = "3.10.2"
+
+[[package]]
+category = "main"
 description = "A Django app providing database and form fields for pytz timezone objects."
 name = "django-timezone-field"
 optional = false
@@ -830,7 +838,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "8b2e314b052ebd849a862ae522f9299f72b958d1058d7f81c09f820f9af103dc"
+content-hash = "7c021dd1d0d7901c99966229e883a2bcde492526e7e2c576dd53c085e3d3811d"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -854,6 +862,7 @@ coverage = ["0c5fe441b9cfdab64719f24e9684502a59432df7570521563d7b1aff27ac755f", 
 django = ["753d30d3eb078064d2ddadfea65083c9848074a7f93d7b4dc7fa6b1380d278f5", "7cb67e8b934fab23b6daed7144da52e8a25a47eba7f360ca43d2b448506b01ad"]
 django-celery-beat = ["61c92d4b600a9f24406ee0b8d01a9b192253e15d047e3325e1d81e2cacf7aba6", "659b39232c454ac27022bf679939bce0471fd482f3ee9276f5199716cb4afad9"]
 django-enumfields = ["5b0e2dd5973337717ca6bd5a7d9e167e6ae01203c160d4761b88837c4678f219"]
+django-health-check = ["8f4a33e4376865dd4d704df1c1256779566b160e05c9803140b88ce281c018da", "ecd1b7c91563c8518b17fd8d1541ab7faa7cbac6c44120b109e1225b3652a88e"]
 django-timezone-field = ["7d7a37cfeacec5b1e81cd2f0aa334d46ebaa369cd516028579ed343cbc676c38", "d9fdab77c443b78c362ffaeb50fe7d7b54692c89aaae8ca1cae67848139b82ac"]
 entrypoints = ["589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19", "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"]
 execnet = ["027ee5d961afa01e97b90d6ccc34b4ed976702bc58e7f092b3c513ea288cb6d2", "752a3786f17416d491f833a29217dda3ea4a471fc5269c492eebcee8cc4772d3"]

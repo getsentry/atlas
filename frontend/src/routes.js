@@ -5,6 +5,7 @@ import { Route, IndexRoute } from "react-router";
 import App from "./pages/App";
 import AdminAudit from "./pages/AdminAudit";
 import AdminBulkUpdatePeople from "./pages/AdminBulkUpdatePeople";
+import HealthCheck from "./pages/HealthCheck";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Office from "./pages/Office";
@@ -26,6 +27,7 @@ import NotFoundError from "./components/NotFoundError";
 export default (
   <Route path="/" component={App}>
     <IndexRoute component={Home} />
+    <Route path="/healthz" component={HealthCheck} />
     <Route path="/login" component={Login} />
     <Route path="/offices" component={Offices} />
     <Route path="/offices/:externalId" component={Office} />

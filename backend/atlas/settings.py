@@ -45,6 +45,8 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
+    "health_check",
+    "health_check.db",
     "graphene_django",
     "atlas",
     "django_celery_beat",
