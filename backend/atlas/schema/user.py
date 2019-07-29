@@ -18,7 +18,7 @@ def get_default_schedule():
 def simple_profile_resolver(name):
     @gql_optimizer.resolver_hints(select_related=("profile"))
     def wrapped(self, info):
-        if not getattr(self, "_profile_cache", None):
+        if not self._state.fields_cache.get("profile"):
             logging.warning(f"Uncached resolution for UserNode.{name}")
         try:
             return getattr(self.profile, name)
