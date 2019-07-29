@@ -271,6 +271,7 @@ class UpdatePersonForm extends Component {
                         name="name"
                         label="Name (Given)"
                         readonly={restrictedFields.has("name")}
+                        required
                       />
                       <FieldWrapper
                         type="text"
@@ -286,6 +287,7 @@ class UpdatePersonForm extends Component {
                         placeholder="e.g. he / him / his"
                         options={PRONOUNS}
                         readonly={restrictedFields.has("pronouns")}
+                        required
                       />
                       <FieldWrapper
                         type="textarea"
@@ -299,6 +301,7 @@ class UpdatePersonForm extends Component {
                         name="email"
                         label="Email"
                         readonly={restrictedFields.has("email")}
+                        required
                       />
                       <FieldWrapper
                         type="tel"
@@ -352,6 +355,7 @@ class UpdatePersonForm extends Component {
                         options={DAY_SCHEDULE}
                         label="Sunday"
                         readonly={restrictedFields.has("schedule")}
+                        required
                       />
                       <FieldWrapper
                         type="select"
@@ -359,6 +363,7 @@ class UpdatePersonForm extends Component {
                         options={DAY_SCHEDULE}
                         label="Monday"
                         readonly={restrictedFields.has("schedule")}
+                        required
                       />
                       <FieldWrapper
                         type="select"
@@ -366,6 +371,7 @@ class UpdatePersonForm extends Component {
                         options={DAY_SCHEDULE}
                         label="Tuesday"
                         readonly={restrictedFields.has("schedule")}
+                        required
                       />
                       <FieldWrapper
                         type="select"
@@ -373,6 +379,7 @@ class UpdatePersonForm extends Component {
                         options={DAY_SCHEDULE}
                         label="wednesday"
                         readonly={restrictedFields.has("schedule")}
+                        required
                       />
                       <FieldWrapper
                         type="select"
@@ -380,6 +387,7 @@ class UpdatePersonForm extends Component {
                         options={DAY_SCHEDULE}
                         label="Thursday"
                         readonly={restrictedFields.has("schedule")}
+                        required
                       />
                       <FieldWrapper
                         type="select"
@@ -387,6 +395,7 @@ class UpdatePersonForm extends Component {
                         options={DAY_SCHEDULE}
                         label="Friday"
                         readonly={restrictedFields.has("schedule")}
+                        required
                       />
                       <FieldWrapper
                         type="select"
@@ -394,6 +403,7 @@ class UpdatePersonForm extends Component {
                         options={DAY_SCHEDULE}
                         label="Saturday"
                         readonly={restrictedFields.has("schedule")}
+                        required
                       />
                     </Card>
 

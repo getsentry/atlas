@@ -28,29 +28,36 @@ const selectStyles = {
   }
 };
 
-const SelectField = ({ options, field, form }) => (
+const SelectField = ({ field, form, options, ...fieldOptions }) => (
   <Select
+    {...field}
     styles={selectStyles}
     options={options}
     name={field.name}
+    isClearable={!fieldOptions.required}
+    isDisabled={fieldOptions.disabled}
     value={options ? options.find(option => option.value === field.value) : ""}
-    onChange={option => form.setFieldValue(field.name, option.value)}
+    onChange={option => form.setFieldValue(field.name, option ? option.value : "")}
     onBlur={field.onBlur}
   />
 );
 
-const AsyncSelectField = ({ options, field, form, loadOptions }) => (
-  <AsyncSelect
-    {...field}
-    styles={selectStyles}
-    cacheOptions
-    loadOptions={loadOptions}
-    name={field.name}
-    defaultOptions
-    onChange={option => form.setFieldValue(field.name, option)}
-    onBlur={field.onBlur}
-  />
-);
+const AsyncSelectField = ({ field, form, loadOptions, ...fieldOptions }) => {
+  return (
+    <AsyncSelect
+      {...field}
+      styles={selectStyles}
+      cacheOptions
+      loadOptions={loadOptions}
+      isClearable={!fieldOptions.required}
+      isDisabled={fieldOptions.disabled}
+      name={field.name}
+      defaultOptions
+      onChange={option => form.setFieldValue(field.name, option)}
+      onBlur={field.onBlur}
+    />
+  );
+};
 
 export default styled(
   ({
@@ -63,13 +70,15 @@ export default styled(
     hidden,
     options,
     help,
+    required,
     loadOptions
   }) => {
     let fieldProps = {
       name,
       disabled: readonly,
       placeholder,
-      hidden
+      hidden,
+      required: required || false
     };
     if (type === "select") {
       if (loadOptions) {
@@ -79,7 +88,6 @@ export default styled(
         fieldProps.component = SelectField;
         fieldProps.options = options.map(([value, label]) => ({ value, label }));
       }
-      fieldProps.isDisabled = !!readonly;
     } else if (type === "textarea") {
       fieldProps.component = "textarea";
     } else {
