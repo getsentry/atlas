@@ -10,6 +10,7 @@ import Card from "../components/Card";
 import Content from "../components/Content";
 import ErrorMessage from "../components/ErrorMessage";
 import Layout from "../components/Layout";
+import PageLoader from "../components/PageLoader";
 import PersonList from "../components/PersonList";
 import { LIST_PEOPLE_QUERY } from "../queries";
 import apolloClient from "../utils/apollo";
@@ -56,7 +57,7 @@ export default class Home extends Component {
                 >
                   {({ loading, error, data }) => {
                     if (error) return <ErrorMessage message="Error loading people." />;
-                    if (loading) return <div>Loading</div>;
+                    if (loading) return <PageLoader />;
                     const { users } = data;
                     if (!users.length) {
                       return (
@@ -87,7 +88,7 @@ export default class Home extends Component {
                 >
                   {({ loading, error, data }) => {
                     if (error) return <ErrorMessage message="Error loading people." />;
-                    if (loading) return <div>Loading</div>;
+                    if (loading) return <PageLoader />;
                     const { users } = data;
                     if (!users.length) {
                       return (
@@ -115,7 +116,7 @@ export default class Home extends Component {
                 >
                   {({ loading, error, data }) => {
                     if (error) return <ErrorMessage message="Error loading people." />;
-                    if (loading) return <div>Loading</div>;
+                    if (loading) return <PageLoader />;
                     const { users } = data;
                     if (!users.length) {
                       return (
@@ -151,6 +152,12 @@ export default class Home extends Component {
                   <ul>
                     <li>
                       <Button onClick={syncGoogle}>Force Google Sync</Button>
+                    </li>
+                    <li>
+                      <Link to="/admin/audit">Look for broken profiles</Link>
+                    </li>
+                    <li>
+                      <Link to="/admin/update-people">Bulk update profiles</Link>
                     </li>
                   </ul>
                 </Card>
