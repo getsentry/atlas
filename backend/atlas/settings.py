@@ -12,6 +12,7 @@ import logging
 import os
 from datetime import timedelta
 
+import dj_database_url
 import sentry_sdk
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -84,13 +85,9 @@ WSGI_APPLICATION = "atlas.wsgi.application"
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
-        "USER": "postgres",
-        "HOST": "127.0.0.1",
-        "PORT": 5432,
-    }
+    "default": dj_database_url.config(
+        default="postgresql://postgres@127.0.0.1:5432/postgres"
+    )
 }
 
 # Password validation
@@ -131,7 +128,7 @@ USE_TZ = True
 # MEDIA_URL = "/media/"
 
 CELERY_IMPORTS = ("atlas.tasks",)
-CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL") or "redis://localhost:6379/0"
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BEAT_SCHEDULE = {
