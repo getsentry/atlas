@@ -202,6 +202,20 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
             for bit in field_bits[:-1]:
                 schema = schema.setdefault(bit, {})
             schema[field_bits[-1]] = value
+
+    if "schedule" in data:
+        value = data["schedule"] or settings.DEFAULT_SCHEDULE
+        schema = params.setdefault("customSchemas", {})
+        schema[settings.GOOGLE_SCHEDULE_FIELD] = {
+            "Sunday": value[0],
+            "Monday": value[1],
+            "Tuesday": value[2],
+            "Wednesday": value[3],
+            "Thursday": value[4],
+            "Friday": value[5],
+            "Saturday": value[6],
+        }
+
     return params
 
 
@@ -355,11 +369,21 @@ def sync_user(  # NOQA
             value = lookup_field(schemas, field_path)
             if value and attribute_name.startswith("date_"):
                 value = to_date(value)
-            if attribute_name == "is_human":
+            elif attribute_name.startswith("is_"):
                 value = bool(value)
             if getattr(profile, attribute_name) != value:
                 profile_fields[attribute_name] = value
-
+        if settings.GOOGLE_SCHEDULE_FIELD in schemas:
+            value = schemas[settings.GOOGLE_SCHEDULE_FIELD]
+            profile_fields["schedule"] = [
+                value.get("Sunday") or "",
+                value.get("Monday") or "",
+                value.get("Tuesday") or "",
+                value.get("Wednesday") or "",
+                value.get("Thursday") or "",
+                value.get("Friday") or "",
+                value.get("Saturday") or "",
+            ]
         if data["customSchemas"] != profile.config:
             profile_fields["config"] = data["customSchemas"]
     else:
@@ -375,10 +399,17 @@ def sync_user(  # NOQA
     with transaction.atomic():
         if user_fields:
             User.objects.filter(id=user.id).update(**user_fields)
+            for k, v in user_fields.items():
+                setattr(user, k, v)
         if profile_fields:
             Profile.objects.filter(id=profile.id).update(**profile_fields)
+            for k, v in profile_fields.items():
+                setattr(profile, k, v)
+            user.profile = profile
         if identity_fields:
             Identity.objects.filter(id=user_identity.id).update(**identity_fields)
+            for k, v in identity_fields.items():
+                setattr(user_identity, k, v)
 
     return UserSyncResult(
         user=user,

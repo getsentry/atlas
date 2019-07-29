@@ -8,6 +8,7 @@ import * as yup from "yup";
 
 import Button from "../components/Button";
 import Card from "../components/Card";
+import { DAY_SCHEDULE } from "../components/DaySchedule";
 import FieldWrapper from "../components/FieldWrapper";
 import { PRONOUNS } from "../components/Pronouns";
 import apolloClient from "../utils/apollo";
@@ -23,6 +24,7 @@ const UserSchema = yup.object().shape({
   primaryPhone: yup.string().nullable(),
   dateStarted: yup.date().nullable(),
   dateOfBirth: yup.date().nullable(),
+  isContractor: yup.bool().nullable(),
   isHuman: yup.bool().nullable(),
   isSuperuser: yup.bool().nullable()
 });
@@ -55,8 +57,18 @@ export const PERSON_QUERY = gql`
       dateOfBirth
       dateStarted
       primaryPhone
+      isContractor
       isHuman
       isSuperuser
+      schedule {
+        sunday
+        monday
+        tuesday
+        wednesday
+        thursday
+        friday
+        saturday
+      }
       social {
         linkedin
         github
@@ -122,9 +134,15 @@ class UpdatePersonForm extends Component {
     const isRestricted = !currentUser.isSuperuser;
     const restrictedFields = new Set(["name", "email"]);
     if (isRestricted) {
-      ["title", "department", "dateStarted", "dateOfBirth", "office"].forEach(k =>
-        restrictedFields.add(k)
-      );
+      [
+        "title",
+        "department",
+        "dateStarted",
+        "dateOfBirth",
+        "office",
+        "isContractor",
+        "schedule"
+      ].forEach(k => restrictedFields.add(k));
     }
     if (!currentUser.isSuperuser) {
       ["isHuman", "isSuperuser"].forEach(k => restrictedFields.add(k));
@@ -157,6 +175,7 @@ class UpdatePersonForm extends Component {
                 }
               : "",
             isHuman: user.isHuman,
+            isContractor: user.isContractor,
             isSuperuser: user.isSuperuser,
             office: user.office ? user.office.id : "",
             social: {
@@ -169,6 +188,15 @@ class UpdatePersonForm extends Component {
               xbox: user.gamerTags.xbox || "",
               playstation: user.gamerTags.playstation || "",
               nintendo: user.gamerTags.nintendo || ""
+            },
+            schedule: {
+              sunday: user.schedule.sunday || "NONE",
+              monday: user.schedule.monday || "NONE",
+              tuesday: user.schedule.tuesday || "NONE",
+              wednesday: user.schedule.wednesday || "NONE",
+              thursday: user.schedule.thursday || "NONE",
+              friday: user.schedule.friday || "NONE",
+              saturday: user.schedule.saturday || "NONE"
             }
           };
           return (
@@ -185,7 +213,7 @@ class UpdatePersonForm extends Component {
                     if (restrictedFields.has(k)) return;
                     let initialVal = initialValues[k];
                     let curVal = values[k];
-                    if (curVal.hasOwnProperty("value")) {
+                    if (curVal && curVal.hasOwnProperty("value")) {
                       initialVal = initialVal ? initialVal.value : null;
                       curVal = curVal.value;
                     }
@@ -306,6 +334,65 @@ class UpdatePersonForm extends Component {
                         label="Manager"
                         loadOptions={this.loadMatchingUsers}
                         readonly={restrictedFields.has("reportsTo")}
+                      />
+                      <FieldWrapper
+                        type="checkbox"
+                        name="isContractor"
+                        label="Contractor?"
+                        readonly={restrictedFields.has("isContractor")}
+                      />
+                    </Card>
+
+                    <Card>
+                      <h2>Working Schedule</h2>
+                      <FieldWrapper
+                        type="select"
+                        name="schedule[sunday]"
+                        options={DAY_SCHEDULE}
+                        label="Sunday"
+                        readonly={restrictedFields.has("schedule")}
+                      />
+                      <FieldWrapper
+                        type="select"
+                        name="schedule[monday]"
+                        options={DAY_SCHEDULE}
+                        label="Monday"
+                        readonly={restrictedFields.has("schedule")}
+                      />
+                      <FieldWrapper
+                        type="select"
+                        name="schedule[tuesday]"
+                        options={DAY_SCHEDULE}
+                        label="Tuesday"
+                        readonly={restrictedFields.has("schedule")}
+                      />
+                      <FieldWrapper
+                        type="select"
+                        name="schedule[wednesday]"
+                        options={DAY_SCHEDULE}
+                        label="wednesday"
+                        readonly={restrictedFields.has("schedule")}
+                      />
+                      <FieldWrapper
+                        type="select"
+                        name="schedule[thursday]"
+                        options={DAY_SCHEDULE}
+                        label="Thursday"
+                        readonly={restrictedFields.has("schedule")}
+                      />
+                      <FieldWrapper
+                        type="select"
+                        name="schedule[friday]"
+                        options={DAY_SCHEDULE}
+                        label="Friday"
+                        readonly={restrictedFields.has("schedule")}
+                      />
+                      <FieldWrapper
+                        type="select"
+                        name="schedule[saturday]"
+                        options={DAY_SCHEDULE}
+                        label="Saturday"
+                        readonly={restrictedFields.has("schedule")}
                       />
                     </Card>
 

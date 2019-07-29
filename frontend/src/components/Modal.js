@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import colors from "../colors";
 
 export default class Modal extends Component {
   static propTypes = {
@@ -28,8 +29,9 @@ export default class Modal extends Component {
           style={{
             border: "10px solid #111",
             margin: 20,
+            color: colors.black,
             borderRadius: "4px",
-            background: "#fff",
+            background: colors.white,
             padding: 20
           }}
         >

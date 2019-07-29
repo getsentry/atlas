@@ -2,11 +2,17 @@ import logging
 
 import graphene
 import graphene_django_optimizer as gql_optimizer
+from django.conf import settings
 
 from atlas.models import Photo, Profile, User
 
+from .dayschedule import DaySchedule
 from .phonenumber import PhoneNumberField
 from .pronouns import Pronouns
+
+
+def get_default_schedule():
+    return [getattr(DaySchedule, x) for x in settings.DEFAULT_SCHEDULE]
 
 
 def simple_profile_resolver(name):
@@ -21,6 +27,16 @@ def simple_profile_resolver(name):
 
     wrapped.__name__ = f"resolve_{name}"
     return wrapped
+
+
+class ScheduleNode(graphene.ObjectType):
+    sunday = DaySchedule(default_value=DaySchedule.OFF)
+    monday = DaySchedule(default_value=DaySchedule.INOFFICE)
+    tuesday = DaySchedule(default_value=DaySchedule.INOFFICE)
+    wednesday = DaySchedule(default_value=DaySchedule.INOFFICE)
+    thursday = DaySchedule(default_value=DaySchedule.INOFFICE)
+    friday = DaySchedule(default_value=DaySchedule.INOFFICE)
+    saturday = DaySchedule(default_value=DaySchedule.OFF)
 
 
 class SocialNode(graphene.ObjectType):
@@ -49,6 +65,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     tenure_percent = graphene.Float(required=False)
     date_of_birth = graphene.Date(required=False)
     primary_phone = PhoneNumberField(required=False)
+    is_contractor = graphene.Boolean(required=False)
     is_human = graphene.Boolean(required=False)
     office = graphene.Field("atlas.schema.OfficeNode")
     reports_to = graphene.Field("atlas.schema.UserNode", required=False)
@@ -58,6 +75,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     bio = graphene.String(required=False)
     pronouns = Pronouns(required=False)
 
+    schedule = graphene.Field(ScheduleNode)
     social = graphene.Field(SocialNode)
     gamer_tags = graphene.Field(GamerTagsNode)
 
@@ -94,6 +112,22 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
             return self.photo
         except Photo.DoesNotExist:
             return None
+
+    @gql_optimizer.resolver_hints(select_related=("profile"))
+    def resolve_schedule(self, info):
+        try:
+            schedule = self.profile.schedule or get_default_schedule()
+        except Profile.DoesNotExist:
+            schedule = get_default_schedule()
+        return {
+            "sunday": schedule[0],
+            "monday": schedule[1],
+            "tuesday": schedule[2],
+            "wednesday": schedule[3],
+            "thursday": schedule[4],
+            "friday": schedule[5],
+            "saturday": schedule[6],
+        }
 
     @gql_optimizer.resolver_hints(select_related=("profile"))
     def resolve_social(self, info):

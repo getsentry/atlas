@@ -151,6 +151,7 @@ GOOGLE_FIELD_MAP = (
     # "column" => "SchemaName/FieldName"
     # system
     ("is_human", "System/Is_Human"),
+    ("is_contractor", "System/Is_Contractor"),
     # core
     ("date_started", "Profile/Date_of_Hire"),
     ("date_of_birth", "Profile/Date_of_Birth"),
@@ -169,6 +170,10 @@ GOOGLE_FIELD_MAP = (
     ("nintendo", "GamerTags/Nintendo"),
 )
 
+# Excepts a child field for every day of the week:
+# Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+GOOGLE_SCHEDULE_FIELD = "Schedule"
+
 if not GOOGLE_CLIENT_ID:
     logging.warning("You have not configured GOOGLE_CLIENT_ID.")
 if not GOOGLE_CLIENT_SECRET:
@@ -177,3 +182,13 @@ if not GOOGLE_CLIENT_SECRET:
 # should we enable push updates for when local profiles are edited?
 # its useful to disable this in development
 GOOGLE_PUSH_UPDATES = not os.environ.get("DISABLE_GOOGLE_PUSH")
+
+DEFAULT_SCHEDULE = [
+    "OFF",
+    "INOFFICE",
+    "INOFFICE",
+    "INOFFICE",
+    "INOFFICE",
+    "INOFFICE",
+    "OFF",
+]

@@ -1,8 +1,19 @@
 import graphene
 
+from .dayschedule import DaySchedule
 from .nullable import Nullable
 from .phonenumber import PhoneNumberField
 from .pronouns import Pronouns
+
+
+class ScheduleInput(graphene.InputObjectType):
+    sunday = DaySchedule(default_value=DaySchedule.OFF)
+    monday = DaySchedule(default_value=DaySchedule.INOFFICE)
+    tuesday = DaySchedule(default_value=DaySchedule.INOFFICE)
+    wednesday = DaySchedule(default_value=DaySchedule.INOFFICE)
+    thursday = DaySchedule(default_value=DaySchedule.INOFFICE)
+    friday = DaySchedule(default_value=DaySchedule.INOFFICE)
+    saturday = DaySchedule(default_value=DaySchedule.OFF)
 
 
 class SocialInput(graphene.InputObjectType):
@@ -35,3 +46,4 @@ class UserInput(graphene.InputObjectType):
     is_superuser = graphene.Boolean(required=False)
     social = Nullable(SocialInput, required=False)
     gamer_tags = Nullable(GamerTagsInput, required=False)
+    schedule = Nullable(ScheduleInput, required=False)

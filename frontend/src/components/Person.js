@@ -12,6 +12,7 @@ import Avatar from "./Avatar";
 import colors from "../colors";
 import Card from "./Card";
 import Content from "./Content";
+import DaySchedule from "./DaySchedule";
 import DefinitionList from "./DefinitionList";
 import ErrorMessage from "./ErrorMessage";
 import IconLink from "./IconLink";
@@ -144,6 +145,7 @@ export default class Person extends Component {
                           <h2>"{thisPerson.handle}"</h2>
                         )}
                         <h4>{thisPerson.title}</h4>
+                        {thisPerson.isContractor && <h4>(Contractor)</h4>}
                       </div>
                       <div className="section">
                         <div className="item">
@@ -226,6 +228,39 @@ export default class Person extends Component {
                             <Markdown source={thisPerson.bio} />
                           </Card>
                         )}
+                        <Card>
+                          <h3>Schedule</h3>
+                          <DefinitionList>
+                            <dt>Monday</dt>
+                            <dd>
+                              <DaySchedule daySchedule={thisPerson.schedule.monday} />
+                            </dd>
+                            <dt>Tuesday</dt>
+                            <dd>
+                              <DaySchedule daySchedule={thisPerson.schedule.tuesday} />
+                            </dd>
+                            <dt>Wednesday</dt>
+                            <dd>
+                              <DaySchedule daySchedule={thisPerson.schedule.wednesday} />
+                            </dd>
+                            <dt>Thursday</dt>
+                            <dd>
+                              <DaySchedule daySchedule={thisPerson.schedule.thursday} />
+                            </dd>
+                            <dt>Friday</dt>
+                            <dd>
+                              <DaySchedule daySchedule={thisPerson.schedule.friday} />
+                            </dd>
+                            <dt>Saturday</dt>
+                            <dd>
+                              <DaySchedule daySchedule={thisPerson.schedule.saturday} />
+                            </dd>
+                            <dt>Sunday</dt>
+                            <dd>
+                              <DaySchedule daySchedule={thisPerson.schedule.sunday} />
+                            </dd>
+                          </DefinitionList>
+                        </Card>
                         <Card>
                           <h3>#social</h3>
                           <DefinitionList>

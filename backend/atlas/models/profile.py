@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
 
 
@@ -13,6 +13,7 @@ class Profile(models.Model):
     handle = models.TextField(null=True)
     date_of_birth = models.DateField(null=True)
     date_started = models.DateField(null=True)
+    schedule = ArrayField(models.CharField(max_length=8, blank=True), size=7, null=True)
     title = models.TextField(null=True)
     bio = models.TextField(null=True)
     reports_to = models.ForeignKey(
@@ -34,6 +35,7 @@ class Profile(models.Model):
     playstation = models.TextField(null=True)
     nintendo = models.TextField(null=True)
     config = JSONField(default=dict)
+    is_contractor = models.BooleanField(default=False)
     is_human = models.BooleanField(default=True)
 
     class Meta:

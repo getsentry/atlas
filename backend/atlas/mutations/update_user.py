@@ -1,6 +1,7 @@
 from datetime import date
 
 import graphene
+from django.conf import settings
 from django.db import models, transaction
 
 from atlas.constants import FIELD_MODEL_MAP, RESTRICTED_FIELDS, SUPERUSER_ONLY_FIELDS
@@ -87,6 +88,17 @@ class UpdateUser(graphene.Mutation):
                         ok=False, errors=[f"Cannot set reports_to to self"]
                     )
                 value = User.objects.get(id=value)
+            elif field == "schedule" and value:
+                cur_sched = profile.schedule or settings.DEFAULT_SCHEDULE
+                value = [
+                    value.get("sunday", cur_sched[0]) or "",
+                    value.get("monday", cur_sched[1]) or "",
+                    value.get("tuesday", cur_sched[2]) or "",
+                    value.get("wednesday", cur_sched[3]) or "",
+                    value.get("thursday", cur_sched[4]) or "",
+                    value.get("friday", cur_sched[5]) or "",
+                    value.get("saturday", cur_sched[6]) or "",
+                ]
 
             model = FIELD_MODEL_MAP[field]
             if model is User:

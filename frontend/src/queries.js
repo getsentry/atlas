@@ -116,8 +116,18 @@ export const GET_PERSON_QUERY = gql`
       dateStarted
       primaryPhone
       isHuman
+      isContractor
       tenurePercent
       pronouns
+      schedule {
+        sunday
+        monday
+        tuesday
+        wednesday
+        thursday
+        friday
+        saturday
+      }
       social {
         linkedin
         github
