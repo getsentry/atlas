@@ -65,8 +65,8 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     tenure_percent = graphene.Float(required=False)
     date_of_birth = graphene.Date(required=False)
     primary_phone = PhoneNumberField(required=False)
-    is_contractor = graphene.Boolean(required=False)
-    is_human = graphene.Boolean(required=False)
+    is_contractor = graphene.Boolean(required=False, default_value=False)
+    is_human = graphene.Boolean(required=False, default_value=True)
     office = graphene.Field("atlas.schema.OfficeNode")
     reports_to = graphene.Field("atlas.schema.UserNode", required=False)
 

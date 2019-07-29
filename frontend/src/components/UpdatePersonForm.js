@@ -174,9 +174,9 @@ class UpdatePersonForm extends Component {
                   label: `${user.reportsTo.name} <${user.reportsTo.email}>`
                 }
               : "",
-            isHuman: user.isHuman,
-            isContractor: user.isContractor,
-            isSuperuser: user.isSuperuser,
+            isHuman: user.isHuman || true,
+            isContractor: user.isContractor || false,
+            isSuperuser: user.isSuperuser || false,
             office: user.office ? user.office.id : "",
             social: {
               twitter: user.social.twitter || "",
@@ -256,8 +256,9 @@ class UpdatePersonForm extends Component {
                     );
                 }}
               >
-                {({ isSubmitting, status }) => (
+                {({ isSubmitting, status, errors }) => (
                   <Form>
+                    <pre>{JSON.stringify(errors)}</pre>
                     {status && status.error && (
                       <Card withPadding>
                         <strong>{status.error}</strong>

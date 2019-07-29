@@ -37,6 +37,7 @@ class UserInput(graphene.InputObjectType):
     pronouns = Pronouns(required=False, default_value=Pronouns.NONE)
     date_of_birth = Nullable(graphene.Date, required=False)
     date_started = Nullable(graphene.Date, required=False)
+    is_contractor = graphene.Boolean(required=False)
     title = graphene.String(required=False)
     department = graphene.String(required=False)
     reports_to = Nullable(graphene.UUID, required=False)
