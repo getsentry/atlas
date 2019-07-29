@@ -270,6 +270,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     resolve_date_started = simple_profile_resolver("date_started")
     resolve_is_human = simple_profile_resolver("is_human")
     resolve_pronouns = simple_profile_resolver("pronouns")
+    resolve_is_contractor = simple_profile_resolver("is_contractor")
 
     # TODO(dcramer): this query is slow
     @gql_optimizer.resolver_hints(select_related=("profile"))

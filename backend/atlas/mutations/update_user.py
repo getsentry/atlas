@@ -102,13 +102,13 @@ class UpdateUser(graphene.Mutation):
 
             model = FIELD_MODEL_MAP[field]
             if model is User:
-                cur_attr = getattr(user, field)
+                cur_value = getattr(user, field)
             elif model is Profile:
-                cur_attr = getattr(profile, field)
+                cur_value = getattr(profile, field)
             else:
                 raise NotImplementedError
 
-            if cur_attr != value:
+            if cur_value != value:
                 model_updates[model][field] = value
                 if isinstance(value, date):
                     value = value.isoformat()
