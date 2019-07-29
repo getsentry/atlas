@@ -4,6 +4,8 @@ from graphql.language.ast import StringValue
 
 FORMAT = phonenumbers.PhoneNumberFormat.INTERNATIONAL
 
+DEFAULT_REGION = "US"
+
 
 class PhoneNumberField(graphene.Scalar):
     class Meta:
@@ -13,7 +15,9 @@ class PhoneNumberField(graphene.Scalar):
     def coerce_phone_number(value):
         if not value:
             return ""
-        return phonenumbers.format_number(phonenumbers.parse(value, None), FORMAT)
+        return phonenumbers.format_number(
+            phonenumbers.parse(value, DEFAULT_REGION), FORMAT
+        )
 
     serialize = coerce_phone_number
     parse_value = coerce_phone_number
@@ -22,5 +26,5 @@ class PhoneNumberField(graphene.Scalar):
     def parse_literal(ast):
         if isinstance(ast, StringValue):
             return phonenumbers.format_number(
-                phonenumbers.parse(ast.value, None), FORMAT
+                phonenumbers.parse(ast.value, DEFAULT_REGION), FORMAT
             )
