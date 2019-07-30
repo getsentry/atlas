@@ -88,7 +88,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     class Meta:
         model = User
         name = "User"
-        fields = ("id", "email", "name", "is_superuser")
+        fields = ("id", "email", "name", "is_active", "is_superuser")
 
     @gql_optimizer.resolver_hints(select_related=("profile__office"))
     def resolve_office(self, info):
