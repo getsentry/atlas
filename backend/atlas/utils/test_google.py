@@ -38,9 +38,9 @@ def test_generate_profile_updates_all_fields(responses, default_user):
             },
         },
         "organizations": [{"department": "Design", "primary": True, "title": "Dummy"}],
-        "locations": [],
+        "locations": [{"area": "desk", "buildingId": "", "type": "desk"}],
         "phones": [{"primary": True, "type": "home", "value": ""}],
-        "relations": [],
+        "relations": [{"type": "manager", "value": ""}],
     }
 
 

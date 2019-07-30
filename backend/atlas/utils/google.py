@@ -152,17 +152,15 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
     params = {}
 
     if "office" in data:
-        params["locations"] = (
-            [
-                {
-                    "type": "desk",
-                    "area": "desk",
-                    "buildingId": Office.objects.get(id=data["office"]).external_id,
-                }
-            ]
-            if data["office"]
-            else []
-        )
+        params["locations"] = [
+            {
+                "type": "desk",
+                "area": "desk",
+                "buildingId": Office.objects.get(id=data["office"]).external_id
+                if data["office"]
+                else "",
+            }
+        ]
 
     if "title" in data or "department" in data:
         params["organizations"] = [
@@ -174,16 +172,14 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
         ]
 
     if "reports_to" in data:
-        params["relations"] = (
-            [
-                {
-                    "type": "manager",
-                    "value": User.objects.get(id=data["reports_to"]).email,
-                }
-            ]
-            if data["reports_to"]
-            else []
-        )
+        params["relations"] = [
+            {
+                "type": "manager",
+                "value": User.objects.get(id=data["reports_to"]).email
+                if data["reports_to"]
+                else "",
+            }
+        ]
 
     if "primary_phone" in data:
         params["phones"] = [
