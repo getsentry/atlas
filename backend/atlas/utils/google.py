@@ -389,6 +389,8 @@ def sync_user(  # NOQA
             if attribute_name == "is_human":
                 if not profile.is_human:
                     profile_fields[attribute_name] = True
+            elif attribute_name == "is_contractor":
+                profile_fields[attribute_name] = False
             elif getattr(profile, attribute_name) is not None:
                 profile_fields[attribute_name] = None
 
