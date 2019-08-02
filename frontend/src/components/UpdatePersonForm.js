@@ -174,7 +174,7 @@ class UpdatePersonForm extends Component {
                   label: `${user.reportsTo.name} <${user.reportsTo.email}>`
                 }
               : "",
-            isHuman: user.isHuman || true,
+            isHuman: user.isHuman,
             isContractor: user.isContractor || false,
             isSuperuser: user.isSuperuser || false,
             office: user.office ? user.office.id : "",

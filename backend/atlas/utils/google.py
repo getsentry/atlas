@@ -365,6 +365,8 @@ def sync_user(  # NOQA
             value = lookup_field(schemas, field_path)
             if value and attribute_name.startswith("date_"):
                 value = to_date(value)
+            elif attribute_name.startswith("is_human") and value is None:
+                value = True
             elif attribute_name.startswith("is_"):
                 value = bool(value)
             if getattr(profile, attribute_name) != value:
