@@ -107,6 +107,7 @@ def test_sync_user_with_user_and_identity(
         "id": default_identity.external_id,
         "suspended": False,
         "isAdmin": False,
+        "primaryEmail": "jane@example.com",
         "name": {"fullName": "Jane Doe"},
         "customSchemas": {
             "Profile": {
@@ -148,6 +149,8 @@ def test_sync_user_with_user_and_identity(
     assert user.is_active
     assert not user.is_superuser
 
+    assert user.profile.is_human
+    assert not user.profile.is_contractor
     assert user.profile.handle == "Jane"
     assert user.profile.pronouns == "SHE_HER"
     assert user.profile.bio == "My bio!"
@@ -161,3 +164,96 @@ def test_sync_user_with_user_and_identity(
         "INOFFICE",
         "OFF",
     ]
+
+
+def test_sync_user_new_account(responses, default_superuser):
+    payload = {
+        "id": "100000000",
+        "suspended": False,
+        "isAdmin": False,
+        "primaryEmail": "jane@example.com",
+        "name": {"fullName": "Jane Doe"},
+        "customSchemas": {
+            "Profile": {
+                "Date_of_Birth": "1990-08-12",
+                "Date_of_Hire": "2010-04-26",
+                "Handle": "Jane",
+                "Pronouns": "SHE_HER",
+                "Bio": "My bio!",
+            },
+            "System": {"Is_Human": True, "Is_Contractor": False},
+            "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
+            "GamerTags": {
+                "Steam": None,
+                "Xbox": None,
+                "PlayStation": None,
+                "Nintendo": None,
+            },
+            "Schedule": {
+                "Sunday": "OFF",
+                "Monday": "INOFFICE",
+                "Tuesday": "INOFFICE",
+                "Wednesday": "WFH",
+                "Thursday": "INOFFICE",
+                "Friday": "INOFFICE",
+                "Saturday": "OFF",
+            },
+        },
+        "organizations": [{"department": "Design", "primary": True, "title": "Dummy"}],
+        "locations": [{"area": "desk", "buildingId": "SFO", "type": "desk"}],
+        "phones": [{"primary": True, "type": "home", "value": "+1 800-123-4567"}],
+        "relations": [{"type": "manager", "value": "jim@example.com"}],
+    }
+    result = sync_user(data=payload)
+    assert result.created
+    assert result.updated
+
+    user = result.user
+    assert user.name == "Jane Doe"
+    assert user.is_active
+    assert not user.is_superuser
+
+    assert user.profile.is_human
+    assert not user.profile.is_contractor
+    assert user.profile.handle == "Jane"
+    assert user.profile.pronouns == "SHE_HER"
+    assert user.profile.bio == "My bio!"
+
+    assert user.profile.schedule == [
+        "OFF",
+        "INOFFICE",
+        "INOFFICE",
+        "WFH",
+        "INOFFICE",
+        "INOFFICE",
+        "OFF",
+    ]
+
+
+def test_sync_user_new_account_without_custom_schemas(responses, default_superuser):
+    payload = {
+        "id": "100000000",
+        "primaryEmail": "joe@example.com",
+        "suspended": False,
+        "isAdmin": False,
+        "name": {"fullName": "Joe Doe"},
+        "organizations": [{"department": "Design", "primary": True, "title": "Dummy"}],
+        "locations": [{"area": "desk", "buildingId": "SFO", "type": "desk"}],
+        "phones": [{"primary": True, "type": "home", "value": "+1 800-123-4567"}],
+        "relations": [{"type": "manager", "value": "jane@example.com"}],
+    }
+    result = sync_user(data=payload)
+    assert result.created
+    assert result.updated
+
+    user = result.user
+    assert user.name == "Joe Doe"
+    assert user.is_active
+    assert not user.is_superuser
+
+    assert user.profile.is_human
+    assert not user.profile.is_contractor
+    assert user.profile.handle is None
+    assert user.profile.pronouns is None
+    assert user.profile.bio is None
+    assert user.profile.schedule is None
