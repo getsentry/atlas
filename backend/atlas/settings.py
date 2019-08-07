@@ -16,13 +16,18 @@ import dj_database_url
 import sentry_sdk
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DSN"),
-    integrations=[CeleryIntegration(), DjangoIntegration()],
-    environment=os.environ.get("SENTRY_ENVIRONMENT")
-    or os.environ.get("NODE_ENV")
-    or "development",
+    integrations=[CeleryIntegration(), DjangoIntegration(), RedisIntegration()],
+    environment=(
+        os.environ.get("SENTRY_ENVIRONMENT")
+        or os.environ.get("NODE_ENV")
+        or "development"
+    ),
+    traces_sample_rate=1.0,
+    traceparent_v2=True,
 )
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
