@@ -466,21 +466,21 @@ def sync_building(  # NOQA
 ) -> BuildingSyncResult:
     fields = {"name": data["buildingName"], "description": data["description"]}
 
-    if data["coordinates"]["latitude"]:
+    if data.get("coordinates") and data["coordinates"]["latitude"]:
         fields["lat"] = Context(prec=9).create_decimal_from_float(
             data["coordinates"]["latitude"]
         )
     else:
         fields["lat"] = None
 
-    if data["coordinates"]["longitude"]:
+    if data.get("coordinates") and data["coordinates"]["longitude"]:
         fields["lng"] = Context(prec=9).create_decimal_from_float(
             data["coordinates"]["longitude"]
         )
     else:
         fields["lng"] = None
 
-    if data["address"]["addressLines"]:
+    if data.get("address") and data["address"]["addressLines"]:
         fields["location"] = "\n".join(data["address"]["addressLines"])
     else:
         fields["location"] = None
@@ -491,7 +491,9 @@ def sync_building(  # NOQA
         ("locality", "locality"),
         ("administrative_area", "administrativeArea"),
     ):
-        fields[loc_field] = data["address"].get(rem_field) or None
+        fields[loc_field] = (
+            (data["address"].get(rem_field) or None) if data.get("address") else None
+        )
 
     office, created = Office.objects.get_or_create(
         external_id=data["buildingId"], defaults=fields
