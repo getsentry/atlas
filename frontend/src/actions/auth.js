@@ -127,7 +127,6 @@ const login = () => {
             } = response.data;
             if (ok) {
               setCookie("token", token);
-              console.log("logging in");
               return dispatch({
                 type: LOGIN,
                 payload: {
