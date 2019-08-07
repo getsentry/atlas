@@ -145,7 +145,10 @@ CELERY_BEAT_SCHEDULE = {
     }
 }
 
-GRAPHENE = {"SCHEMA": "atlas.root_schema.schema"}
+GRAPHENE = {
+    "SCHEMA": "atlas.root_schema.schema",
+    "MIDDLEWARE": ["atlas.utils.graphql.TracingMiddleware"],
+}
 
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
