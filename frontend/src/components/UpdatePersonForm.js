@@ -24,7 +24,6 @@ const UserSchema = yup.object().shape({
   primaryPhone: yup.string().nullable(),
   dateStarted: yup.date().nullable(),
   dateOfBirth: yup.date().nullable(),
-  isContractor: yup.bool().nullable(),
   isHuman: yup.bool().nullable(),
   isSuperuser: yup.bool().nullable()
 });
@@ -45,6 +44,10 @@ export const PERSON_QUERY = gql`
       id
       name
     }
+    employeeTypes {
+      id
+      name
+    }
     users(humansOnly: false, email: $email) {
       id
       name
@@ -57,7 +60,10 @@ export const PERSON_QUERY = gql`
       dateOfBirth
       dateStarted
       primaryPhone
-      isContractor
+      employeeType {
+        id
+        name
+      }
       isHuman
       isSuperuser
       schedule {
@@ -140,7 +146,7 @@ class UpdatePersonForm extends Component {
         "dateStarted",
         "dateOfBirth",
         "office",
-        "isContractor",
+        "employeeType",
         "schedule"
       ].forEach(k => restrictedFields.add(k));
     }
@@ -150,7 +156,7 @@ class UpdatePersonForm extends Component {
 
     return (
       <Query query={PERSON_QUERY} variables={{ email: this.props.email }}>
-        {({ loading, data: { offices, users } }) => {
+        {({ loading, data: { employeeTypes, offices, users } }) => {
           //if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;
           const user = users.find(
@@ -175,7 +181,7 @@ class UpdatePersonForm extends Component {
                 }
               : "",
             isHuman: user.isHuman,
-            isContractor: user.isContractor || false,
+            employeeType: user.employeeType ? user.employeeType.id : "",
             isSuperuser: user.isSuperuser || false,
             office: user.office ? user.office.id : "",
             social: {
@@ -340,10 +346,14 @@ class UpdatePersonForm extends Component {
                         readonly={restrictedFields.has("reportsTo")}
                       />
                       <FieldWrapper
-                        type="checkbox"
-                        name="isContractor"
-                        label="Contractor?"
-                        readonly={restrictedFields.has("isContractor")}
+                        type="select"
+                        name="employeeType"
+                        label="Employee Type"
+                        options={[
+                          ["", "(none)"],
+                          ...employeeTypes.map(o => [o.id, o.name])
+                        ]}
+                        readonly={restrictedFields.has("employeeType")}
                       />
                     </Card>
 

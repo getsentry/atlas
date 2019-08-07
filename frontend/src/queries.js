@@ -1,5 +1,15 @@
 import gql from "graphql-tag";
 
+export const LIST_EMPLOYEE_TYPES_QUERY = gql`
+  query listEmployeeTypes($name: String, $query: String) {
+    employeeTypes(name: $name, query: $query) {
+      id
+      name
+      numPeople
+    }
+  }
+`;
+
 export const LIST_OFFICES_QUERY = gql`
   query listOffices {
     offices {
@@ -50,6 +60,7 @@ export const LIST_PEOPLE_QUERY = gql`
   query listPeople(
     $office: UUID
     $humansOnly: Boolean
+    $employeeType: String
     $dateStartedBefore: Date
     $dateStartedAfter: Date
     $anniversaryBefore: Date
@@ -66,6 +77,7 @@ export const LIST_PEOPLE_QUERY = gql`
     users(
       office: $office
       humansOnly: $humansOnly
+      employeeType: $employeeType
       dateStartedBefore: $dateStartedBefore
       dateStartedAfter: $dateStartedAfter
       anniversaryBefore: $anniversaryBefore
@@ -116,7 +128,10 @@ export const GET_PERSON_QUERY = gql`
       dateStarted
       primaryPhone
       isHuman
-      isContractor
+      employeeType {
+        id
+        name
+      }
       tenurePercent
       pronouns
       schedule {

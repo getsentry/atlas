@@ -7,6 +7,7 @@ from django.conf import settings
 from atlas.models import Photo, Profile, User
 
 from .dayschedule import DaySchedule
+from .employeetype import EmployeeTypeEnum
 from .phonenumber import PhoneNumberField
 from .pronouns import Pronouns
 
@@ -65,7 +66,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     tenure_percent = graphene.Float(required=False)
     date_of_birth = graphene.Date(required=False)
     primary_phone = PhoneNumberField(required=False)
-    is_contractor = graphene.Boolean(required=False, default_value=False)
+    employee_type = graphene.Field("atlas.schema.EmployeeTypeNode", required=False)
     is_human = graphene.Boolean(required=False, default_value=True)
     office = graphene.Field("atlas.schema.OfficeNode")
     reports_to = graphene.Field("atlas.schema.UserNode", required=False)
@@ -96,6 +97,16 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
             return self.profile.office
         except Profile.DoesNotExist:
             return None
+
+    @gql_optimizer.resolver_hints(select_related=("profile"))
+    def resolve_employee_type(self, info):
+        try:
+            enum = EmployeeTypeEnum[self.profile.employee_type or "NONE"]
+        except KeyError:
+            return None
+        except Profile.DoesNotExist:
+            return None
+        return {"id": enum.name}
 
     @gql_optimizer.resolver_hints(select_related=("profile__reports_to"))
     def resolve_reports_to(self, info):
@@ -270,7 +281,6 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     resolve_date_started = simple_profile_resolver("date_started")
     resolve_is_human = simple_profile_resolver("is_human")
     resolve_pronouns = simple_profile_resolver("pronouns")
-    resolve_is_contractor = simple_profile_resolver("is_contractor")
 
     # TODO(dcramer): this query is slow
     @gql_optimizer.resolver_hints(select_related=("profile"))

@@ -57,6 +57,7 @@ def default_user(db):
         department="Design",
         office=None,
         reports_to=None,
+        employee_type="FULL_TIME",
     )
     return user
 
@@ -84,6 +85,7 @@ def default_superuser(db):
         date_of_birth=date(1990, 2, 13),
         department="G&A",
         office=None,
+        employee_type="FULL_TIME",
         reports_to=None,
     )
     return user

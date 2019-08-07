@@ -385,6 +385,7 @@ def sync_user(  # NOQA
         if data["customSchemas"] != profile.config:
             profile_fields["config"] = data["customSchemas"]
     else:
+        profile_fields["employee_type"] = "FULL_TIME"
         if profile.config:
             profile_fields["config"] = {}
         for attribute_name, _ in settings.GOOGLE_FIELD_MAP:

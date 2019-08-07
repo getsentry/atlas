@@ -12,7 +12,7 @@ FIELD_MODEL_MAP = {
     "bio": Profile,
     "reports_to": Profile,
     "primary_phone": Profile,
-    "is_contractor": Profile,
+    "employee_type": Profile,
     "is_human": Profile,
     "office": Profile,
     "pronouns": Profile,
@@ -35,7 +35,7 @@ RESTRICTED_FIELDS = frozenset(
         "reports_to",
         "office",
         "schedule",
-        "is_contractor",
+        "employee_type",
     ]
 )
 

@@ -31,7 +31,8 @@ export default () => (
                   (u.isHuman && (!u.title || !u.department || !u.dateStarted)) ||
                   (!u.isHuman && (u.reportsTo || u.title || u.department)) ||
                   (u.isHuman &&
-                    !u.isContractor &&
+                    u.employeeType &&
+                    u.employeeType.id === "FULL_TIME" &&
                     u.title !== "CEO" &&
                     u.title !== "Chief Executive Officer" &&
                     !u.reportsTo)
@@ -46,7 +47,8 @@ export default () => (
                     {u.isHuman && !u.department && <div>Missing department</div>}
                     {u.isHuman && !u.dateStarted && <div>Missing dateStarted</div>}
                     {u.isHuman &&
-                      !u.isContractor &&
+                      u.employeeType &&
+                      u.employeeType.id === "FULL_TIME" &&
                       u.title !== "CEO" &&
                       u.title !== "Chief Executive Officer" &&
                       !u.reportsTo && <div>Missing reportsTo</div>}

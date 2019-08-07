@@ -26,6 +26,7 @@ class Query(object):
         id=graphene.UUID(),
         email=graphene.String(),
         query=graphene.String(),
+        employee_type=graphene.String(),
         include_self=graphene.Boolean(default_value=True),
         humans_only=graphene.Boolean(default_value=True),
         titles_only=graphene.Boolean(default_value=False),
@@ -49,6 +50,7 @@ class Query(object):
         id: str = None,
         email: str = None,
         query: str = None,
+        employee_type: str = None,
         include_self: bool = True,
         humans_only: bool = True,
         titles_only: bool = False,
@@ -86,6 +88,9 @@ class Query(object):
 
         if department:
             qs = qs.filter(profile__department=department)
+
+        if employee_type:
+            qs = qs.filter(profile__employee_type=employee_type)
 
         if reports_to:
             qs = qs.filter(profile__reports_to=reports_to)

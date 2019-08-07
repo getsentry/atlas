@@ -11,7 +11,11 @@ import Content from "../components/Content";
 import Layout from "../components/Layout";
 import PeopleList from "../components/PeopleList";
 import PageLoader from "../components/PageLoader";
-import { LIST_DEPARTMENTS_QUERY, LIST_OFFICES_QUERY } from "../queries";
+import {
+  LIST_DEPARTMENTS_QUERY,
+  LIST_EMPLOYEE_TYPES_QUERY,
+  LIST_OFFICES_QUERY
+} from "../queries";
 
 const Filter = styled(({ className, location, name, title, allLabel, choices }) => {
   const value = location.query[name];
@@ -123,6 +127,31 @@ function OfficeFilter({ location }) {
   );
 }
 
+function EmployeeTypeFilter({ location }) {
+  return (
+    <Query query={LIST_EMPLOYEE_TYPES_QUERY}>
+      {({ loading, error, data }) => {
+        if (error) throw error;
+        if (loading) return <PageLoader />;
+        const { employeeTypes } = data;
+        return (
+          <Filter
+            location={location}
+            title="Type"
+            name="employeeType"
+            allLabel="All People"
+            choices={employeeTypes.map(d => ({
+              id: d.id,
+              value: d.name,
+              count: d.numPeople
+            }))}
+          />
+        );
+      }}
+    </Query>
+  );
+}
+
 export default class People extends Component {
   static contextTypes = {
     router: PropTypes.object
@@ -139,6 +168,7 @@ export default class People extends Component {
             <Box width={250} mx={3}>
               <OfficeFilter location={this.context.router.location} />
               <DepartmentFilter location={this.context.router.location} />
+              <EmployeeTypeFilter location={this.context.router.location} />
             </Box>
             <Box flex="1" mx={3}>
               <PeopleList query={this.context.router.location.query} />

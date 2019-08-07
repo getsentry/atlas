@@ -1,4 +1,5 @@
 from datetime import date
+from enum import Enum
 
 import graphene
 from django.conf import settings
@@ -108,14 +109,16 @@ class UpdateUser(graphene.Mutation):
             else:
                 raise NotImplementedError
 
+            if isinstance(value, Enum):
+                value = value.name
+
             if cur_value != value:
                 model_updates[model][field] = value
                 if isinstance(value, date):
                     value = value.isoformat()
-
-                # track update for two-way sync
-                if isinstance(value, models.Model):
+                elif isinstance(value, models.Model):
                     value = value.pk
+                # track update for two-way sync
                 updates[field] = value
 
         with transaction.atomic():

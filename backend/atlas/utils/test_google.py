@@ -26,7 +26,7 @@ def test_generate_profile_updates_all_fields(responses, default_user):
                 "PlayStation": None,
                 "Nintendo": None,
             },
-            "System": {"Is_Human": True, "Is_Contractor": False},
+            "System": {"Is_Human": True, "Employee_Type": "FULL_TIME"},
             "Schedule": {
                 "Sunday": settings.DEFAULT_SCHEDULE[0],
                 "Monday": settings.DEFAULT_SCHEDULE[1],
@@ -49,7 +49,7 @@ def test_generate_profile_updates_all_fields_with_all_fields(
 ):
     default_user.profile.reports_to = default_superuser
     default_user.profile.office = default_office
-    default_user.profile.is_contractor = False
+    default_user.profile.employee_type = "FULL_TIME"
     default_user.profile.handle = "Jane"
     default_user.profile.bio = "My bio!"
     default_user.profile.pronouns = "SHE_HER"
@@ -75,7 +75,7 @@ def test_generate_profile_updates_all_fields_with_all_fields(
                 "Pronouns": "SHE_HER",
                 "Bio": "My bio!",
             },
-            "System": {"Is_Human": True, "Is_Contractor": False},
+            "System": {"Is_Human": True, "Employee_Type": "FULL_TIME"},
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
             "GamerTags": {
                 "Steam": None,
@@ -117,7 +117,7 @@ def test_sync_user_with_user_and_identity(
                 "Pronouns": "SHE_HER",
                 "Bio": "My bio!",
             },
-            "System": {"Is_Human": True, "Is_Contractor": False},
+            "System": {"Is_Human": True, "Employee_Type": "FULL_TIME"},
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
             "GamerTags": {
                 "Steam": None,
@@ -150,7 +150,7 @@ def test_sync_user_with_user_and_identity(
     assert not user.is_superuser
 
     assert user.profile.is_human
-    assert not user.profile.is_contractor
+    assert user.profile.employee_type == "FULL_TIME"
     assert user.profile.handle == "Jane"
     assert user.profile.pronouns == "SHE_HER"
     assert user.profile.bio == "My bio!"
@@ -181,7 +181,7 @@ def test_sync_user_new_account(responses, default_superuser):
                 "Pronouns": "SHE_HER",
                 "Bio": "My bio!",
             },
-            "System": {"Is_Human": True, "Is_Contractor": False},
+            "System": {"Is_Human": True, "Employee_Type": "FULL_TIME"},
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
             "GamerTags": {
                 "Steam": None,
@@ -214,7 +214,7 @@ def test_sync_user_new_account(responses, default_superuser):
     assert not user.is_superuser
 
     assert user.profile.is_human
-    assert not user.profile.is_contractor
+    assert user.profile.employee_type == "FULL_TIME"
     assert user.profile.handle == "Jane"
     assert user.profile.pronouns == "SHE_HER"
     assert user.profile.bio == "My bio!"
@@ -252,7 +252,7 @@ def test_sync_user_new_account_without_custom_schemas(responses, default_superus
     assert not user.is_superuser
 
     assert user.profile.is_human
-    assert not user.profile.is_contractor
+    assert user.profile.employee_type == "FULL_TIME"
     assert user.profile.handle is None
     assert user.profile.pronouns is None
     assert user.profile.bio is None

@@ -21,6 +21,5 @@ class BinaryField(graphene.Scalar):
 
     @staticmethod
     def parse_literal(ast):
-        print(type(ast))
         if isinstance(ast, StringValue):
             return ast.value

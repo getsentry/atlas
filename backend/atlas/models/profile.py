@@ -10,6 +10,7 @@ class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # a handle is what a person "Goes by" - its like a username but irl
     pronouns = models.TextField(null=True)
+    employee_type = models.TextField(null=True)
     handle = models.TextField(null=True)
     date_of_birth = models.DateField(null=True)
     date_started = models.DateField(null=True)
@@ -35,7 +36,6 @@ class Profile(models.Model):
     playstation = models.TextField(null=True)
     nintendo = models.TextField(null=True)
     config = JSONField(default=dict)
-    is_contractor = models.BooleanField(default=False)
     is_human = models.BooleanField(default=True)
 
     class Meta:
