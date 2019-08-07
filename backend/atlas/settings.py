@@ -21,6 +21,7 @@ from sentry_sdk.integrations.redis import RedisIntegration
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DSN"),
     integrations=[CeleryIntegration(), DjangoIntegration(), RedisIntegration()],
+    release=os.environ.get("BUILD_REVISION") or None,
     environment=(
         os.environ.get("SENTRY_ENVIRONMENT")
         or os.environ.get("NODE_ENV")
