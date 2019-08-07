@@ -1,5 +1,6 @@
 import logging
 
+import sentry_sdk
 from django.contrib.auth.models import AnonymousUser
 from django.utils.functional import SimpleLazyObject
 
@@ -39,4 +40,12 @@ class JWSTokenAuthenticationMiddleware(object):
             request.user = SimpleLazyObject(lambda: get_user(header))
         else:
             request.user = AnonymousUser()
+
+        with sentry_sdk.configure_scope() as scope:
+            scope.user = (
+                {"id": request.user.id, "email": request.user.email}
+                if request.user.is_authenticated
+                else {}
+            )
+
         return self.get_response(request)
