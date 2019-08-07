@@ -367,6 +367,8 @@ def sync_user(  # NOQA
                 value = to_date(value)
             elif attribute_name.startswith("is_human") and value is None:
                 value = True
+            elif attribute_name == "employee_type" and value is None:
+                value = "FULL_TIME"
             elif attribute_name.startswith("is_"):
                 value = bool(value)
             if getattr(profile, attribute_name) != value:
