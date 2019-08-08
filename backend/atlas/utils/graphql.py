@@ -6,13 +6,13 @@ import sentry_sdk
 class TracingMiddleware(object):
     def _after_resolve(self, span, info, data):
         span.__exit__(None, None, None)
-        span.description = ".".join(str(p) for p in info.path)
         return data
 
     def resolve(self, _next, root, info, *args, **kwargs):
         span = sentry_sdk.Hub.current.span(
             transaction=str(info.path[0]) if len(info.path) == 1 else None,
-            op=info.operation.operation,
+            op="graphql.resolve",
+            description=".".join(str(p) for p in info.path),
         )
         span.__enter__()
         on_result_f = partial(self._after_resolve, span, info)
