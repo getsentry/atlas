@@ -619,7 +619,7 @@ def sync_users(
                 continue
             total += 1
             with sentry_sdk.Hub.current.span(
-                op="google.sync-user", description=row["primaryEmail"]
+                op="google.sync-user", description=str(row["id"])
             ), transaction.atomic():
                 user, is_created, is_updated = sync_user(
                     row, user_cache=user_cache, office_cache=office_cache
