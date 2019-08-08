@@ -624,8 +624,11 @@ def sync_users(
                 user, is_created, is_updated = sync_user(
                     row, user_cache=user_cache, office_cache=office_cache
                 )
-                if sync_user_photo(identity, user):
-                    is_updated = True
+                with sentry_sdk.Hub.current.span(
+                    op="google.sync-user-photo", description=str(row["id"])
+                ):
+                    if sync_user_photo(identity, user):
+                        is_updated = True
                 if is_created:
                     created += 1
                 if is_updated:
