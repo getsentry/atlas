@@ -6,6 +6,7 @@ from typing import Any, List, Optional, Tuple
 from uuid import uuid4
 
 import requests
+import sentry_sdk
 from django.conf import settings
 from django.db import models, transaction
 
@@ -564,7 +565,9 @@ def sync_buildings(
                 continue
 
             total += 1
-            with transaction.atomic():
+            with sentry_sdk.Hub.current.span(
+                op="google.sync-building", description=row["buildingId"]
+            ), transaction.atomic():
                 office, is_created, is_updated = sync_building(row)
                 if is_created:
                     created += 1
@@ -615,7 +618,9 @@ def sync_users(
             if users and row["primaryEmail"] not in users:
                 continue
             total += 1
-            with transaction.atomic():
+            with sentry_sdk.Hub.current.span(
+                op="google.sync-user", description=row["primaryEmail"]
+            ), transaction.atomic():
                 user, is_created, is_updated = sync_user(
                     row, user_cache=user_cache, office_cache=office_cache
                 )
