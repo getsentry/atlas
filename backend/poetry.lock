@@ -233,7 +233,7 @@ description = "execnet: rapid multi-Python deployment"
 name = "execnet"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "1.6.1"
+version = "1.7.0"
 
 [package.dependencies]
 apipkg = ">=1.4"
@@ -763,6 +763,10 @@ version = "0.10.2"
 certifi = "*"
 urllib3 = "*"
 
+[package.source]
+reference = "211f7f41f52a5f5a956ee5e780688149a2fda1b6"
+type = "git"
+url = "https://github.com/getsentry/sentry-python.git"
 [[package]]
 category = "main"
 description = "This library brings functools.singledispatch from Python 3.4 to Python 2.6-3.3."
@@ -847,7 +851,7 @@ python-versions = ">=2.7"
 version = "0.5.2"
 
 [metadata]
-content-hash = "b0e0e9e78ae74d5c22ed0ea16f8e15a1d9653cce979fa0ce03973e5db71f5e6b"
+content-hash = "561d112cac00fb9fc5b24b936386e9c06213a0982d068cc28abc0e637ba5e669"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -875,7 +879,7 @@ django-enumfields = ["5b0e2dd5973337717ca6bd5a7d9e167e6ae01203c160d4761b88837c46
 django-health-check = ["8f4a33e4376865dd4d704df1c1256779566b160e05c9803140b88ce281c018da", "ecd1b7c91563c8518b17fd8d1541ab7faa7cbac6c44120b109e1225b3652a88e"]
 django-timezone-field = ["7d7a37cfeacec5b1e81cd2f0aa334d46ebaa369cd516028579ed343cbc676c38", "d9fdab77c443b78c362ffaeb50fe7d7b54692c89aaae8ca1cae67848139b82ac"]
 entrypoints = ["589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19", "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"]
-execnet = ["64dcdc248d007060f6f6500e7c79a4f87ee692063e3ec51e9bebf30ef2ea21d7", "dfd10a5663f94d1235e6fbee86bc53e2f89b6f15e031e7e6d9e4bb345bcd7e52"]
+execnet = ["0dd40ad3b960aae93bdad7fe1c3f049bbcc8fba47094655a4301f5b33e906816", "3839f3c1e9270926e7b3d9b0a52a57be89c302a3826a2b19c8d6e6c3d2b506d2"]
 factory-boy = ["728df59b372c9588b83153facf26d3d28947fc750e8e3c95cefa9bed0e6394ee", "faf48d608a1735f0d0a3c9cbf536d64f9132b547dae7ba452c4d99a79e84a370"]
 faker = ["96ad7902706f2409a2d0c3de5132f69b413555a419bacec99d3f16e657895b47", "b3bb64aff9571510de6812df45122b633dbc6227e870edae3ed9430f94698521"]
 flake8 = ["19241c1cbc971b9962473e4438a2ca19749a7dd002dd1a946eaba171b4114548", "8e9dfa3cecb2400b3738a42c54c3043e821682b9c840b0448c0503f781130696"]
@@ -923,7 +927,7 @@ requests = ["11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4", 
 responses = ["502d9c0c8008439cfcdef7e251f507fcfdd503b56e8c0c87c3c3e3393953f790", "97193c0183d63fba8cd3a041c75464e4b09ea0aff6328800d1546598567dde0b"]
 rsa = ["14ba45700ff1ec9eeb206a2ce76b32814958a98e372006c8fb76ba820211be66", "1a836406405730121ae9823e19c6e806c62bbad73f890574fff50efa4122c487"]
 rx = ["13a1d8d9e252625c173dc795471e614eadfe1cf40ffc684e08b8fff0d9748c23", "7357592bc7e881a95e0c2013b73326f704953301ab551fbc8133a6fadab84105"]
-sentry-sdk = ["d491aa6399eaa3eded433972751a9770180730fd8b4c225b0b7f49c4fa2af70b", "d68003cdffbbfcadaa2c445b72e1050b0a44406f94199866f192986c016b23f5"]
+sentry-sdk = []
 singledispatch = ["5b06af87df13818d14f08a028e42f566640aef80805c3b50c5056b086e3c2b9c", "833b46966687b3de7f438c761ac475213e53b306740f1abfaa86e1d1aae56aa8"]
 six = ["3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c", "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"]
 sqlparse = ["40afe6b8d4b1117e7dff5504d7a8ce07d9a1b15aeeade8a2d10f130a834f8177", "7c3dca29c022744e95b547e867cee89f4fce4373f3549ccd8797d8eb52cdb873"]
