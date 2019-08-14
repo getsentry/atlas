@@ -57,6 +57,7 @@ def default_user(db):
         department="Design",
         office=None,
         reports_to=None,
+        referred_by=None,
         employee_type="FULL_TIME",
     )
     return user
@@ -87,6 +88,7 @@ def default_superuser(db):
         office=None,
         employee_type="FULL_TIME",
         reports_to=None,
+        referred_by=None,
     )
     return user
 

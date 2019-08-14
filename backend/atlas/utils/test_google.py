@@ -18,6 +18,7 @@ def test_generate_profile_updates_all_fields(responses, default_user):
                 "Handle": None,
                 "Pronouns": None,
                 "Bio": None,
+                "Referred_By": None,
             },
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
             "GamerTags": {
@@ -48,6 +49,7 @@ def test_generate_profile_updates_all_fields_with_all_fields(
     responses, default_superuser, default_user, default_office
 ):
     default_user.profile.reports_to = default_superuser
+    default_user.profile.referred_by = default_superuser
     default_user.profile.office = default_office
     default_user.profile.employee_type = "FULL_TIME"
     default_user.profile.handle = "Jane"
@@ -74,6 +76,7 @@ def test_generate_profile_updates_all_fields_with_all_fields(
                 "Handle": "Jane",
                 "Pronouns": "SHE_HER",
                 "Bio": "My bio!",
+                "Referred_By": default_superuser.email,
             },
             "System": {"Is_Human": True, "Employee_Type": "FULL_TIME"},
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
@@ -116,6 +119,7 @@ def test_sync_user_with_user_and_identity(
                 "Handle": "Jane",
                 "Pronouns": "SHE_HER",
                 "Bio": "My bio!",
+                "Referred_By": None,
             },
             "System": {"Is_Human": True, "Employee_Type": "FULL_TIME"},
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
@@ -180,6 +184,7 @@ def test_sync_user_new_account(responses, default_superuser):
                 "Handle": "Jane",
                 "Pronouns": "SHE_HER",
                 "Bio": "My bio!",
+                "Referred_By": None,
             },
             "System": {"Is_Human": True, "Employee_Type": "FULL_TIME"},
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},

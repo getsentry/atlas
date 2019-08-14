@@ -95,6 +95,11 @@ export const PERSON_QUERY = gql`
         name
         email
       }
+      referredBy {
+        id
+        name
+        email
+      }
     }
   }
 `;
@@ -178,6 +183,12 @@ class UpdatePersonForm extends Component {
               ? {
                   value: user.reportsTo.id,
                   label: `${user.reportsTo.name} <${user.reportsTo.email}>`
+                }
+              : "",
+            referredBy: user.referredBy
+              ? {
+                  value: user.referredBy.id,
+                  label: `${user.referredBy.name} <${user.referredBy.email}>`
                 }
               : "",
             isHuman: user.isHuman,
@@ -491,6 +502,13 @@ class UpdatePersonForm extends Component {
                         name="dateStarted"
                         label="Start Date"
                         readonly={restrictedFields.has("dateStarted")}
+                      />
+                      <FieldWrapper
+                        type="select"
+                        name="referredBy"
+                        label="Referred By"
+                        loadOptions={this.loadMatchingUsers}
+                        readonly={restrictedFields.has("referredBy")}
                       />
                     </Card>
 

@@ -204,6 +204,18 @@ export const GET_PERSON_QUERY = gql`
           mimeType
         }
       }
+      referredBy {
+        id
+        name
+        email
+        title
+        photo {
+          data
+          width
+          height
+          mimeType
+        }
+      }
     }
   }
 `;

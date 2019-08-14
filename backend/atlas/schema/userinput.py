@@ -41,6 +41,7 @@ class UserInput(graphene.InputObjectType):
     title = graphene.String(required=False)
     department = graphene.String(required=False)
     reports_to = Nullable(graphene.UUID, required=False)
+    referred_by = Nullable(graphene.UUID, required=False)
     primary_phone = Nullable(PhoneNumberField, required=False)
     is_human = graphene.Boolean(required=False)
     office = Nullable(graphene.UUID, required=False)

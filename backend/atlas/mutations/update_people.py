@@ -67,9 +67,9 @@ def process_item(current_user: User, data: UserInput) -> List[str]:
 
         if field == "office" and value:
             value = Office.objects.get(id=value)
-        elif field == "reports_to" and value:
+        elif field in ("reports_to", "referred_by") and value:
             if value == user.id:
-                return [f"Cannot set reports_to to self"]
+                return [f"Cannot set {field} to self"]
             value = User.objects.get(id=value)
 
         model = FIELD_MODEL_MAP[field]

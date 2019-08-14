@@ -163,6 +163,7 @@ GOOGLE_FIELD_MAP = (
     # core
     ("date_started", "Profile/Date_of_Hire"),
     ("date_of_birth", "Profile/Date_of_Birth"),
+    ("referred_by", "Profile/Referred_By"),
     # profile
     ("handle", "Profile/Handle"),
     ("pronouns", "Profile/Pronouns"),

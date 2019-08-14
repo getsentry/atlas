@@ -33,6 +33,7 @@ class Query(object):
         office=graphene.UUID(),
         department=graphene.String(),
         reports_to=graphene.UUID(),
+        referred_by=graphene.UUID(),
         date_started_before=graphene.types.datetime.Date(),
         date_started_after=graphene.types.datetime.Date(),
         anniversary_before=graphene.types.datetime.Date(),
@@ -57,6 +58,7 @@ class Query(object):
         office: str = None,
         department: str = None,
         reports_to: str = None,
+        referred_by: str = None,
         offset: int = 0,
         date_started_before: date = None,
         date_started_after: date = None,
@@ -94,6 +96,9 @@ class Query(object):
 
         if reports_to:
             qs = qs.filter(profile__reports_to=reports_to)
+
+        if referred_by:
+            qs = qs.filter(profile__referred_by=referred_by)
 
         if query:
             qs = qs.filter(name__istartswith=query)

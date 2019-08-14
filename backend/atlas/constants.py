@@ -23,6 +23,7 @@ FIELD_MODEL_MAP = {
     "xbox": Profile,
     "playstation": Profile,
     "nintendo": Profile,
+    "referred_by": Profile,
 }
 
 RESTRICTED_FIELDS = frozenset(
@@ -36,6 +37,7 @@ RESTRICTED_FIELDS = frozenset(
         "office",
         "schedule",
         "employee_type",
+        "referred_by",
     ]
 )
 

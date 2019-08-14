@@ -223,6 +223,14 @@ export default class Person extends Component {
                             </dd>
                             <dt>Birthday</dt>
                             <dd>{dob ? dob.format("MMMM Do") : <Empty />}</dd>
+                            <dt>Referred By</dt>
+                            <dd>
+                              {thisPerson.referredBy ? (
+                                <PersonList people={[thisPerson.referredBy]} />
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
                           </DefinitionList>
                         </Card>
                         {thisPerson.bio && (

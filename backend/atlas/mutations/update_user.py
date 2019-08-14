@@ -83,11 +83,9 @@ class UpdateUser(graphene.Mutation):
 
             if field == "office" and value:
                 value = Office.objects.get(id=value)
-            elif field == "reports_to" and value:
+            elif field in ("reports_to", "referred_by") and value:
                 if value == user.id:
-                    return UpdateUser(
-                        ok=False, errors=[f"Cannot set reports_to to self"]
-                    )
+                    return UpdateUser(ok=False, errors=[f"Cannot set {field} to self"])
                 value = User.objects.get(id=value)
             elif field == "schedule" and value:
                 cur_sched = profile.schedule or settings.DEFAULT_SCHEDULE

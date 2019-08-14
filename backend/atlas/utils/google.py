@@ -191,8 +191,15 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
         if key in data:
             if isinstance(data[key], date):
                 value = data[key].isoformat()
+            elif isinstance(data[key], User):
+                value = data[key].email
+            elif isinstance(data[key], models.Model):
+                value = str(data[key].pk)
             else:
                 value = data[key]
+
+            if key == "referred_by" and value:
+                value = User.objects.get(id=data["referred_by"]).email
 
             schema = params.setdefault("customSchemas", {})
             field_bits = field_path.split("/")
@@ -372,6 +379,8 @@ def sync_user(  # NOQA
                 value = "FULL_TIME"
             elif attribute_name.startswith("is_"):
                 value = bool(value)
+            elif attribute_name == "referred_by" and value is not None:
+                value, _ = get_user(email=value, user_cache=user_cache)
             if getattr(profile, attribute_name) != value:
                 profile_fields[attribute_name] = value
         if settings.GOOGLE_SCHEDULE_FIELD in schemas:

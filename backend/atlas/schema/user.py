@@ -70,6 +70,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     is_human = graphene.Boolean(required=False, default_value=True)
     office = graphene.Field("atlas.schema.OfficeNode")
     reports_to = graphene.Field("atlas.schema.UserNode", required=False)
+    referred_by = graphene.Field("atlas.schema.UserNode", required=False)
 
     # custom profile bits
     handle = graphene.String(required=False)
@@ -85,6 +86,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     num_reports = graphene.Int(required=False)
     peers = graphene.List(lambda: UserNode)
     num_peers = graphene.Int(required=False)
+    num_referrals = graphene.Int(required=False)
 
     class Meta:
         model = User
@@ -112,6 +114,13 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     def resolve_reports_to(self, info):
         try:
             return self.profile.reports_to
+        except Profile.DoesNotExist:
+            return None
+
+    @gql_optimizer.resolver_hints(select_related=("profile__referred_by"))
+    def resolve_referred_by(self, info):
+        try:
+            return self.profile.referred_by
         except Profile.DoesNotExist:
             return None
 
@@ -168,6 +177,16 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         if user.is_authenticated:
             return self.email
         return None
+
+    def resolve_num_referrals(self, info):
+        if not self.id:
+            return 0
+        if hasattr(self, "num_referrals"):
+            return self.num_referrals
+        logging.warning("Uncached resolution for UserNode.num_referrals")
+        return Profile.objects.filter(
+            is_human=True, referred_by=self.id, user__is_active=True
+        ).count()
 
     # TODO(dcramer):
     # if "numReports" in selected_fields:
