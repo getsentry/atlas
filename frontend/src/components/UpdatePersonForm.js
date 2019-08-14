@@ -152,7 +152,9 @@ class UpdatePersonForm extends Component {
         "dateOfBirth",
         "office",
         "employeeType",
-        "schedule"
+        "schedule",
+        "referredBy",
+        "reportsTo"
       ].forEach(k => restrictedFields.add(k));
     }
     if (!currentUser.isSuperuser) {
