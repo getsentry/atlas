@@ -4,12 +4,20 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     strategy:
       max-parallel: 4
       matrix:
         python-version: [3.7]
-
+    services:
+      postgresql:
+        image: postgres:10.1-alpine
+        ports:
+          - 5432:5432
+      redis:
+        image: redis:5.0-alpine
+        ports:
+          - 6379:6379
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python ${{ matrix.python-version }}
@@ -26,7 +34,7 @@ jobs:
       - name: Lint with pre-commit
         run: |
           PATH=$HOME/.poetry/bin:$PATH PATH=node_modules/.bin:$PATH pre-commit run -a -v
-      - name: Test with pytest
+      - name: Test backend
         env:
           SENTRY_ENVIRONMENT: test
         run: |
