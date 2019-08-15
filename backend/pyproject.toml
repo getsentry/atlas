@@ -32,7 +32,6 @@ dj-database-url = "^0.5.0"
 [tool.poetry.dev-dependencies]
 black = "=19.3b0"
 flake8 = "^3.6"
-pre-commit = "^1.13"
 pytest = "^4.6"
 pytest-django = "^3.5"
 pytest-xdist = "^1.28"
