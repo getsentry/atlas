@@ -11,15 +11,6 @@ from atlas.schema import UserInput, UserNode
 from atlas.tasks import update_profile
 
 
-def is_chain_of_command(user, maybe_manager):
-    cur_user = user
-    while cur_user.profile.reports_to_id:
-        if cur_user.profile.reports_to_id == maybe_manager.id:
-            return True
-        cur_user = cur_user.profile.reports_to
-    return False
-
-
 class UpdateUser(graphene.Mutation):
     class Arguments:
         user = graphene.UUID(required=True)
@@ -39,13 +30,8 @@ class UpdateUser(graphene.Mutation):
         except User.DoesNotExist:
             return UpdateUser(ok=False, errors=["Invalid user"])
 
-        # three conditions where you can edit a user
-        # - the user is you (you can edit some fields)
-        # - the user is in your chain of command (you're their boss)
-        # - you're a superuser (IT, HR)
-        is_restricted = not current_user.is_superuser and not is_chain_of_command(
-            user, current_user
-        )
+        # only superuser (human resources) can edit restricted fields
+        is_restricted = not current_user.is_superuser
         if user.id != current_user.id and is_restricted:
             return UpdateUser(ok=False, errors=["Cannot edit this user"])
 

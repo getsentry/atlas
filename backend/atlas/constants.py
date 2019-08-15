@@ -26,6 +26,7 @@ FIELD_MODEL_MAP = {
     "referred_by": Profile,
 }
 
+# only HR can edit restricted fields
 RESTRICTED_FIELDS = frozenset(
     [
         "name",

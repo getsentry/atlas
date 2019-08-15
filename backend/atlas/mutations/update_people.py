@@ -10,28 +10,14 @@ from atlas.schema import UserInput
 from atlas.tasks import update_profile
 
 
-def is_chain_of_command(user, maybe_manager):
-    cur_user = user
-    while cur_user.profile.reports_to_id:
-        if cur_user.profile.reports_to_id == maybe_manager.id:
-            return True
-        cur_user = cur_user.profile.reports_to
-    return False
-
-
 def process_item(current_user: User, data: UserInput) -> List[str]:
     try:
         user = User.objects.select_related("profile").get(id=data.pop("id"))
     except (User.DoesNotExist, KeyError):
         return ["Invalid user"]
 
-    # three conditions where you can edit a user
-    # - the user is you (you can edit some fields)
-    # - the user is in your chain of command (you're their boss)
-    # - you're a superuser (IT, HR)
-    is_restricted = not current_user.is_superuser and not is_chain_of_command(
-        user, current_user
-    )
+    # limited to human resources
+    is_restricted = not current_user.is_superuser
     if user.id != current_user.id and is_restricted:
         return ["Cannot edit this user"]
 
