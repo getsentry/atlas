@@ -127,7 +127,7 @@ The frontend service is built on top of next.js. It contains all user interface 
 To launch the frontend service run the following:
 
 ```shell
-$ cd frontend && npm run dev
+$ cd frontend && npm start
 ```
 
 ## Repository Layout
