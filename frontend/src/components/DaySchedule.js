@@ -9,6 +9,6 @@ export const DAY_SCHEDULE = [
 
 export default ({ daySchedule }) => (
   <React.Fragment>
-    {daySchedule && DAY_SCHEDULE.find(p => p[0] === daySchedule || "NONE")[1]}
+    {DAY_SCHEDULE.find(p => p[0] === (daySchedule || "NONE"))[1]}
   </React.Fragment>
 );
