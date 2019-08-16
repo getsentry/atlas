@@ -32,6 +32,53 @@ def test_user_can_update_handle(mock_task, gql_client, default_user):
     assert user.profile.handle == "Zoolander"
 
 
+@patch("atlas.tasks.update_profile.delay")
+def test_user_can_update_schedule(mock_task, gql_client, default_user):
+    executed = gql_client.execute(
+        """
+    mutation {
+        updateUser(user:"%s" data:{schedule:{monday: OFF}}) {
+            ok
+            errors
+            user {id, schedule { monday } }
+        }
+    }"""
+        % (default_user.id,),
+        user=default_user,
+    )
+    assert not executed.get("errors")
+    resp = executed["data"]["updateUser"]
+    assert not resp["errors"]
+    assert resp["ok"] is True
+    assert resp["user"] == {"id": str(default_user.id), "schedule": {"monday": "OFF"}}
+
+    mock_task.assert_called_once_with(
+        user_id=default_user.id,
+        updates={
+            "schedule": [
+                "OFF",
+                "OFF",
+                "INOFFICE",
+                "INOFFICE",
+                "INOFFICE",
+                "INOFFICE",
+                "OFF",
+            ]
+        },
+    )
+
+    user = User.objects.get(id=default_user.id)
+    assert user.profile.schedule == [
+        "OFF",
+        "OFF",
+        "INOFFICE",
+        "INOFFICE",
+        "INOFFICE",
+        "INOFFICE",
+        "OFF",
+    ]
+
+
 def test_user_cannot_update_start_date(gql_client, default_user):
     executed = gql_client.execute(
         """

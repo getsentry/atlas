@@ -1,4 +1,5 @@
 from datetime import date
+from enum import Enum
 from typing import List
 
 import graphene
@@ -66,11 +67,13 @@ def process_item(current_user: User, data: UserInput) -> List[str]:
         else:
             raise NotImplementedError
 
+        if isinstance(value, Enum):
+            value = value.name
+
         if cur_attr != value:
             model_updates[model][field] = value
             if isinstance(value, date):
                 value = value.isoformat()
-
             # track update for two-way sync
             if isinstance(value, models.Model):
                 value = value.pk

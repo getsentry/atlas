@@ -93,6 +93,9 @@ class UpdateUser(graphene.Mutation):
             else:
                 raise NotImplementedError
 
+            if field == "schedule":
+                value = [v.name if isinstance(v, Enum) else v for v in value]
+
             if isinstance(value, Enum):
                 value = value.name
 
