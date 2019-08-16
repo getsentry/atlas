@@ -152,9 +152,27 @@ function EmployeeTypeFilter({ location }) {
   );
 }
 
+const SearchInput = styled.input`
+  background: #273444;
+  border: 0;
+  color: #fff;
+`;
+
 export default class People extends Component {
   static contextTypes = {
     router: PropTypes.object
+  };
+
+  onSearch = e => {
+    e.preventDefault();
+    this.context.router.push({
+      pathname: this.context.router.location.pathname,
+      query: { ...this.context.router.location.query, query: this.state.query }
+    });
+  };
+
+  onChangeQuery = e => {
+    this.setState({ query: e.target.value });
   };
 
   render() {
@@ -162,7 +180,21 @@ export default class People extends Component {
       <Layout>
         <Content>
           <Card>
-            <h1>People</h1>
+            <Flex mx={-3}>
+              <Box width={250} mx={3}>
+                <h1>People</h1>
+              </Box>
+              <Box flex="1" mx={3}>
+                <form onSubmit={this.onSearch}>
+                  <SearchInput
+                    type="text"
+                    name="query"
+                    placeholder="search"
+                    onChange={this.onChangeQuery}
+                  />
+                </form>
+              </Box>
+            </Flex>
           </Card>
           <Flex mx={-3}>
             <Box width={250} mx={3}>

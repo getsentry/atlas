@@ -24,8 +24,8 @@ export default function PeopleList({ query }) {
           <React.Fragment>
             <Flex flexWrap="wrap" mx={-2}>
               {users.map(u => (
-                <Box px={1} mx="auto" width={196}>
-                  <PersonCard user={u} key={u.id} />
+                <Box px={1} mx="auto" width={196} key={u.id}>
+                  <PersonCard user={u} />
                 </Box>
               ))}
             </Flex>
