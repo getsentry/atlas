@@ -36,7 +36,6 @@ RESTRICTED_FIELDS = frozenset(
         "department",
         "reports_to",
         "office",
-        "schedule",
         "employee_type",
         "referred_by",
     ]
