@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router";
 import { Query } from "react-apollo";
 import { Flex, Box } from "@rebass/grid/emotion";
+import styled from "@emotion/styled";
 import gql from "graphql-tag";
 import moment from "moment";
 
@@ -36,11 +38,43 @@ const syncGoogle = () => {
     });
 };
 
+const SearchInput = styled.input`
+  background: #273444;
+  border: 0;
+  color: #fff;
+`;
+
 export default class Home extends Component {
+  static contextTypes = {
+    router: PropTypes.object
+  };
+
+  onSearch = e => {
+    e.preventDefault();
+    this.context.router.push({
+      pathname: "/people",
+      query: { query: this.state.query }
+    });
+  };
+
+  onChangeQuery = e => {
+    this.setState({ query: e.target.value });
+  };
+
   render() {
     return (
       <Layout title="Home">
         <Content>
+          <Box flex="1" mx={3}>
+            <form onSubmit={this.onSearch}>
+              <SearchInput
+                type="text"
+                name="query"
+                placeholder="find a human"
+                onChange={this.onChangeQuery}
+              />
+            </form>
+          </Box>
           <Flex>
             <Box width={1 / 2} px={3}>
               <Card>
