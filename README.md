@@ -1,13 +1,13 @@
 # atlas
 
-**Note: the README is fairly outdated, see GH-7 for tracking**
-
 Atlas is an internal portal, offering a variety of features helping bring visibility within your organization.
 
 It's built on top of G Suite by Google, and currently features:
 
-- A synced employee directory
+- A two-way synced employee directory
 - An automatically generated organization chart
+
+This project is still in its infancy, and pull requests are absolutely welcome.
 
 ## API Keys
 
@@ -20,13 +20,13 @@ You'll need two sets of credentials from Google:
 
 **Make sure you disable Adblock as it seems to break Google Auth**
 
-You'll need a Postgres instance running with standard credentials. A basic docker service included and can be run with compose:
+You'll need a Postgres instance running with standard credentials. A basic docker service is included and can be run with compose:
 
 ```shell
 $ docker-compose up -d
 ```
 
-From there, activate a virtualenv using Python 3.7.x (this is automatic if you're using pyenv and direnv), and install the dependencies:
+From there, activate a virtualenv using Python 3.7.x (this is automatic if you're using ``pyenv`` and ``direnv``), and install the dependencies:
 
 ```shell
 $ make
@@ -38,13 +38,12 @@ Apply database migrations:
 $ atlas migrate
 ```
 
-Lastly, grab the Google and Sentry credentials, and place them in .env. See the included `.env.example`:
+Lastly, grab the Google, and place them in .env. See the included `.env.example` for additional configuration:
 
 ```shell
 GOOGLE_CLIENT_SECRET=
 GOOGLE_CLIENT_ID=
 GOOGLE_MAPS_KEY=
-SENTRY_DSN=
 ```
 
 ## Mock Data
@@ -59,7 +58,7 @@ Note: If you run this multiple times you will end up with multiple similar profi
 
 ## Syncing People
 
-**You will need domain permission to sync data**
+**You will need an account with domain permission to sync data**
 
 Once you've authenticated with your Google Auth, you can sync the directory with the following command:
 
@@ -73,7 +72,7 @@ Atlas is made up of two key services.
 
 The **backend** service is a Django application exporting a graphql API. It runs on top of a Postgres database and is completely stateless.
 
-The **frontend** service is a next.js application implementing the majority of user interactions as well as authentication.
+The **frontend** service is a SPA built on React implementing the majority of user interactions as well as authentication.
 
 These services can be run easily in local development using the included proxy with the following:
 
@@ -122,9 +121,15 @@ Here's a helpful app which lets you bind an auth header:
 
 https://github.com/skevy/graphiql-app
 
+Note: You can also use the included helper to generate an auth token:
+
+```shell
+$ atlas generate_auth_token [email address]
+```
+
 ### Frontend
 
-The frontend service is built on top of next.js. It contains all user interface logic as well as various business flows.
+The frontend service is built on top of React as a Single Page Application (SPA). It contains all user interface logic as well as various business flows.
 
 To launch the frontend service run the following:
 
@@ -137,15 +142,16 @@ $ cd frontend && npm start
 ```
 atlas
 ├── backend
-|   ├── atlas               // python backend service
+|   ├── atlas               // django backend service
 |   |   ├── models          // database schema
 |   |   ├── mutations       // registered mutations
 |   |   └── queries         // registered queries
 └── frontend
     └── src
+        ├── actions             // redux actions
         ├── components          // standard react components
-        ├── pages               // next.js pages
-        └── redux               // redux support
+        ├── pages               // core routing components
+        └── reducers            // redux reducers
 ```
 
 ### Data Model
@@ -156,6 +162,7 @@ atlas
 atlas
 ├── Office
 └── User
+    ├── Photo
     ├── Profile
     └── Identity
 ```
