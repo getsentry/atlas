@@ -14,7 +14,12 @@ This project is still in its infancy, and pull requests are absolutely welcome.
 You'll need two sets of credentials from Google:
 
 1. An API key with access to both the Maps JavaScript API and the Geocoding API
-2. An OAuth application configured
+2. An OAuth application configured:
+   - application type is internal
+   - authorized domains should include your domain name (e.g. example.com)
+   - scopes should include email, profile, and openid
+3. A set of credentials should be generated:
+   - origins and redirect uri should both be the root domain (e.g. http://atlas.example.com)
 
 ## Development
 
