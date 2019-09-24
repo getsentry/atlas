@@ -20,7 +20,7 @@ You'll need two sets of credentials from Google:
 
 **Make sure you disable Adblock as it seems to break Google Auth**
 
-You'll need a Postgres instance running with standard credentials. A basic docker service is included and can be run with compose:
+You'll need Postgres and Redis instances running with standard credentials. A basic set of docker services are included and can be run with compose:
 
 ```shell
 $ docker-compose up -d
@@ -92,6 +92,28 @@ To launch the backend service (from within your virtualenv) run the following:
 $ atlas runserver
 ```
 
+### Offline Workers
+
+Offline workers are bundled with the backend application, and run by Celery.
+
+To launch the workers service (from within your virtualenv) run the following:
+
+```shell
+$ atlas worker
+```
+
+### Frontend
+
+The frontend service is built on top of React as a Single Page Application (SPA). It contains all user interface logic as well as various business flows.
+
+To launch the frontend service run the following:
+
+```shell
+$ cd frontend && npm start
+```
+
+## Authentication
+
 Authentication is done via the following:
 
 1. Perform a login mutation:
@@ -125,16 +147,6 @@ Note: You can also use the included helper to generate an auth token:
 
 ```shell
 $ atlas generate_auth_token [email address]
-```
-
-### Frontend
-
-The frontend service is built on top of React as a Single Page Application (SPA). It contains all user interface logic as well as various business flows.
-
-To launch the frontend service run the following:
-
-```shell
-$ cd frontend && npm start
 ```
 
 ## Repository Layout
