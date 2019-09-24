@@ -18,7 +18,7 @@ gunicorn = "^19.9"
 factory-boy = "^2.11"
 django-enumfields = "^1.0"
 google-auth = "^1.6"
-sentry-sdk = { git = "https://github.com/getsentry/sentry-python.git", rev = "211f7f41f52a5f5a956ee5e780688149a2fda1b6" }
+sentry-sdk = "^0.12"
 requests = "^2.22"
 aniso8601 = "^5.0"
 graphene-django-optimizer = "^0.4.0"
