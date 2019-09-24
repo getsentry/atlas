@@ -1,5 +1,7 @@
 # atlas
 
+**Note: the README is fairly outdated, see GH-7 for tracking**
+
 Atlas is an internal portal, offering a variety of features helping bring visibility within your organization.
 
 It's built on top of G Suite by Google, and currently features:
