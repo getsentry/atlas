@@ -216,6 +216,7 @@ class UpdatePersonForm extends Component {
       [
         "title",
         "department",
+        "team",
         "dateStarted",
         "dateOfBirth",
         "office",

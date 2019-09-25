@@ -34,6 +34,7 @@ RESTRICTED_FIELDS = frozenset(
         "date_started",
         "title",
         "department",
+        "team",
         "reports_to",
         "office",
         "employee_type",
