@@ -33,6 +33,7 @@ class Profile(models.Model):
         "atlas.Office", null=True, on_delete=models.SET_NULL, related_name="profiles"
     )
     department = models.TextField(null=True)
+    team = models.TextField(null=True)
     primary_phone = models.TextField(null=True)
     linkedin = models.TextField(null=True)
     twitter = models.TextField(null=True)

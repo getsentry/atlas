@@ -25,9 +25,13 @@ class Command(BaseCommand):
         )
 
         if options["push"]:
-            result = google.update_all_profiles(identity, users=options["users"])
+            result = google.update_all_profiles(
+                identity=identity, users=options["users"]
+            )
         else:
-            result = google.sync_domain(identity, domain, users=options["users"])
+            result = google.sync_domain(
+                identity=identity, domain=domain, users=options["users"]
+            )
         self.stdout.write(self.style.MIGRATE_HEADING("Done!"))
 
         if not options["push"]:

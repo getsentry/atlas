@@ -169,6 +169,7 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
                 "primary": True,
                 "title": data.get("title") or profile.title,
                 "department": data.get("department") or profile.department,
+                "customType": data.get("employee_type") or profile.employee_type,
             }
         ]
 
@@ -330,6 +331,9 @@ def sync_user(  # NOQA
             profile_fields["title"] = row.get("title") or None
         if (row.get("department") or None) != profile.department:
             profile_fields["department"] = row.get("department") or None
+        # default value is FULL_TIME when its empty
+        if (row.get("customType") or "FULL_TIME") != profile.employee_type:
+            profile_fields["employee_type"] = row.get("customType") or "FULL_TIME"
     else:
         if profile.title:
             profile_fields["title"] = None
@@ -375,8 +379,6 @@ def sync_user(  # NOQA
                 value = to_date(value)
             elif attribute_name.startswith("is_human") and value is None:
                 value = True
-            elif attribute_name == "employee_type" and value is None:
-                value = "FULL_TIME"
             elif attribute_name.startswith("is_"):
                 value = bool(value)
             elif attribute_name == "referred_by" and value is not None:
@@ -397,7 +399,6 @@ def sync_user(  # NOQA
         if data["customSchemas"] != profile.config:
             profile_fields["config"] = data["customSchemas"]
     else:
-        profile_fields["employee_type"] = "FULL_TIME"
         if profile.config:
             profile_fields["config"] = {}
         for attribute_name, _ in settings.GOOGLE_FIELD_MAP:
@@ -528,11 +529,15 @@ def sync_domain(
     user_cache = {}
 
     building_result = sync_buildings(
-        identity, domain, offices, office_cache=office_cache, user_cache=user_cache
+        identity,
+        domain,
+        offices=offices,
+        office_cache=office_cache,
+        user_cache=user_cache,
     )
 
     user_result = sync_users(
-        identity, domain, users, office_cache=office_cache, user_cache=user_cache
+        identity, domain, users=users, office_cache=office_cache, user_cache=user_cache
     )
 
     return DomainSyncResult(

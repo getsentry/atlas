@@ -31,7 +31,7 @@ You'll need Postgres and Redis instances running with standard credentials. A ba
 $ docker-compose up -d
 ```
 
-From there, activate a virtualenv using Python 3.7.x (this is automatic if you're using ``pyenv`` and ``direnv``), and install the dependencies:
+From there, activate a virtualenv using Python 3.7.x (this is automatic if you're using `pyenv` and `direnv`), and install the dependencies:
 
 ```shell
 $ make
@@ -68,7 +68,7 @@ Note: If you run this multiple times you will end up with multiple similar profi
 Once you've authenticated with your Google Auth, you can sync the directory with the following command:
 
 ```shell
-$ atlas sync_google sentry.io
+$ atlas sync_google
 ```
 
 ## Services

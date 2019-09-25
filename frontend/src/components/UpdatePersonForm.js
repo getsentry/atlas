@@ -28,6 +28,22 @@ const UserSchema = yup.object().shape({
   isSuperuser: yup.bool().nullable()
 });
 
+export const DEPARTMENT_SELECT_QUERY = gql`
+  query listDepartmentsForSelect($query: String!) {
+    departments(query: $query) {
+      name
+    }
+  }
+`;
+
+export const TEAM_SELECT_QUERY = gql`
+  query listTeamsForSelect($query: String!) {
+    teams(query: $query) {
+      name
+    }
+  }
+`;
+
 export const PEOPLE_SELECT_QUERY = gql`
   query listPeopleForSelect($query: String!) {
     users(humansOnly: true, query: $query, limit: 10) {
@@ -137,6 +153,58 @@ class UpdatePersonForm extends Component {
               label: `${u.name} <${u.email}>`
             }))
         );
+      });
+  };
+
+  loadMatchingDepartments = (inputValue, callback) => {
+    apolloClient
+      .query({
+        query: DEPARTMENT_SELECT_QUERY,
+        variables: {
+          query: inputValue
+        }
+      })
+      .then(({ data: { departments } }) => {
+        let results = [];
+        if (inputValue !== "") {
+          results.push({
+            value: inputValue,
+            label: inputValue
+          });
+        }
+        results.push(
+          ...departments.map(u => ({
+            value: u.name,
+            label: u.name
+          }))
+        );
+        callback(results);
+      });
+  };
+
+  loadMatchingTeams = (inputValue, callback) => {
+    apolloClient
+      .query({
+        query: TEAM_SELECT_QUERY,
+        variables: {
+          query: inputValue
+        }
+      })
+      .then(({ data: { teams } }) => {
+        let results = [];
+        if (inputValue !== "") {
+          results.push({
+            value: inputValue,
+            label: inputValue
+          });
+        }
+        results.push(
+          ...teams.map(u => ({
+            value: u.name,
+            label: u.name
+          }))
+        );
+        callback(results);
       });
   };
 
@@ -339,16 +407,20 @@ class UpdatePersonForm extends Component {
                     <Card>
                       <h2>Role</h2>
                       <FieldWrapper
+                        type="select"
+                        name="employeeType"
+                        label="Employee Type"
+                        options={[
+                          ["", "(none)"],
+                          ...employeeTypes.map(o => [o.id, o.name])
+                        ]}
+                        readonly={restrictedFields.has("employeeType")}
+                      />
+                      <FieldWrapper
                         type="text"
                         name="title"
                         label="Title"
                         readonly={restrictedFields.has("title")}
-                      />
-                      <FieldWrapper
-                        type="text"
-                        name="department"
-                        label="Department"
-                        readonly={restrictedFields.has("department")}
                       />
                       <FieldWrapper
                         type="select"
@@ -359,13 +431,40 @@ class UpdatePersonForm extends Component {
                       />
                       <FieldWrapper
                         type="select"
-                        name="employeeType"
-                        label="Employee Type"
+                        name="department"
+                        label="Department"
+                        loadOptions={this.loadMatchingDepartments}
+                        readonly={restrictedFields.has("department")}
+                      />
+                      <FieldWrapper
+                        type="select"
+                        name="team"
+                        label="Team"
+                        loadOptions={this.loadMatchingTeams}
+                        readonly={restrictedFields.has("team")}
+                      />
+                      <FieldWrapper
+                        type="select"
+                        name="office"
+                        label="Office"
+                        readonly={restrictedFields.has("office")}
                         options={[
-                          ["", "(none)"],
-                          ...employeeTypes.map(o => [o.id, o.name])
+                          ["", "(no office)"],
+                          ...offices.map(o => [o.id, o.name])
                         ]}
-                        readonly={restrictedFields.has("employeeType")}
+                      />
+                      <FieldWrapper
+                        type="date"
+                        name="dateStarted"
+                        label="Start Date"
+                        readonly={restrictedFields.has("dateStarted")}
+                      />
+                      <FieldWrapper
+                        type="select"
+                        name="referredBy"
+                        label="Referred By"
+                        loadOptions={this.loadMatchingUsers}
+                        readonly={restrictedFields.has("referredBy")}
                       />
                     </Card>
 
@@ -483,33 +582,6 @@ class UpdatePersonForm extends Component {
                         label="Nintendo"
                         help="Your Nintendo username."
                         readonly={restrictedFields.has("gamerTags[nintendo]")}
-                      />
-                    </Card>
-
-                    <Card>
-                      <h2>Organization</h2>
-                      <FieldWrapper
-                        type="select"
-                        name="office"
-                        label="Office"
-                        readonly={restrictedFields.has("office")}
-                        options={[
-                          ["", "(no office)"],
-                          ...offices.map(o => [o.id, o.name])
-                        ]}
-                      />
-                      <FieldWrapper
-                        type="date"
-                        name="dateStarted"
-                        label="Start Date"
-                        readonly={restrictedFields.has("dateStarted")}
-                      />
-                      <FieldWrapper
-                        type="select"
-                        name="referredBy"
-                        label="Referred By"
-                        loadOptions={this.loadMatchingUsers}
-                        readonly={restrictedFields.has("referredBy")}
                       />
                     </Card>
 
