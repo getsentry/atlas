@@ -209,7 +209,7 @@ class UpdatePersonForm extends Component {
             department: user.department
               ? {
                   value: user.department.id,
-                  label: user.departmen.name
+                  label: user.department.name
                 }
               : "",
             dateOfBirth: user.dateOfBirth || "",
