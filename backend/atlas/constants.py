@@ -8,6 +8,7 @@ FIELD_MODEL_MAP = {
     "date_started": Profile,
     "schedule": Profile,
     "department": Profile,
+    "team": Profile,
     "title": Profile,
     "bio": Profile,
     "reports_to": Profile,
