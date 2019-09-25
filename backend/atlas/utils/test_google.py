@@ -27,7 +27,7 @@ def test_generate_profile_updates_all_fields(responses, default_user):
                 "PlayStation": None,
                 "Nintendo": None,
             },
-            "System": {"Is_Human": True},
+            "System": {"Is_Human": True, "Team": None},
             "Schedule": {
                 "Sunday": settings.DEFAULT_SCHEDULE[0],
                 "Monday": settings.DEFAULT_SCHEDULE[1],
@@ -60,6 +60,7 @@ def test_generate_profile_updates_all_fields_with_all_fields(
     default_user.profile.office = default_office
     default_user.profile.employee_type = "FULL_TIME"
     default_user.profile.handle = "Jane"
+    default_user.profile.team = "Cool Cats"
     default_user.profile.bio = "My bio!"
     default_user.profile.pronouns = "SHE_HER"
     default_user.profile.primary_phone = "+1 800-123-4567"
@@ -85,7 +86,7 @@ def test_generate_profile_updates_all_fields_with_all_fields(
                 "Bio": "My bio!",
                 "Referred_By": default_superuser.email,
             },
-            "System": {"Is_Human": True},
+            "System": {"Is_Human": True, "Team": "Cool Cats"},
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
             "GamerTags": {
                 "Steam": None,
@@ -135,7 +136,7 @@ def test_sync_user_with_user_and_identity(
                 "Bio": "My bio!",
                 "Referred_By": None,
             },
-            "System": {"Is_Human": True},
+            "System": {"Is_Human": True, "Team": "Cool Cats"},
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
             "GamerTags": {
                 "Steam": None,
@@ -176,6 +177,7 @@ def test_sync_user_with_user_and_identity(
 
     assert user.profile.is_human
     assert user.profile.employee_type == "FULL_TIME"
+    assert user.profile.team == "Cool Cats"
     assert user.profile.handle == "Jane"
     assert user.profile.pronouns == "SHE_HER"
     assert user.profile.bio == "My bio!"
@@ -207,7 +209,7 @@ def test_sync_user_new_account(responses, default_superuser):
                 "Bio": "My bio!",
                 "Referred_By": None,
             },
-            "System": {"Is_Human": True},
+            "System": {"Is_Human": True, "Team": None},
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
             "GamerTags": {
                 "Steam": None,
