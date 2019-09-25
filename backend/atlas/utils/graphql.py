@@ -3,7 +3,7 @@ import sentry_sdk
 
 class TracingMiddleware(object):
     def resolve(self, _next, root, info, *args, **kwargs):
-        span = sentry_sdk.Hub.current.span(
+        span = sentry_sdk.Hub.current.start_span(
             # transaction=str(info.path[0]) if len(info.path) == 1 else None,
             op="graphql.resolve",
             description=".".join(str(p) for p in info.path),
