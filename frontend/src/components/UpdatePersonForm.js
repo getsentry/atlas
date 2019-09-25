@@ -330,14 +330,12 @@ class UpdatePersonForm extends Component {
                       }
                     })
                     .then(
-                      ({
-                        data: {
-                          updateUser: { ok, errors }
-                        }
-                      }) => {
+                      ({ data: { updateUser }, errors }) => {
                         setSubmitting(false);
-                        if (!ok) {
-                          setStatus({ error: "" + errors[0] });
+                        if (errors) {
+                          setStatus({ error: "" + errors[0].message });
+                        } else if (!updateUser.ok) {
+                          setStatus({ error: "" + updateUser.errors[0] });
                         } else {
                           this.context.router.push({
                             pathname: `/people/${user.email}`
