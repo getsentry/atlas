@@ -574,7 +574,7 @@ def sync_buildings(
                 continue
 
             total += 1
-            with sentry_sdk.Hub.current.span(
+            with sentry_sdk.Hub.current.start_span(
                 op="google.sync-building", description=row["buildingId"]
             ), transaction.atomic():
                 office, is_created, is_updated = sync_building(row)
@@ -627,13 +627,13 @@ def sync_users(
             if users and row["primaryEmail"] not in users:
                 continue
             total += 1
-            with sentry_sdk.Hub.current.span(
+            with sentry_sdk.Hub.current.start_span(
                 op="google.sync-user", description=str(row["id"])
             ), transaction.atomic():
                 user, is_created, is_updated = sync_user(
                     row, user_cache=user_cache, office_cache=office_cache
                 )
-                with sentry_sdk.Hub.current.span(
+                with sentry_sdk.Hub.current.start_span(
                     op="google.sync-user-photo", description=str(row["id"])
                 ):
                     if sync_user_photo(identity, user):
