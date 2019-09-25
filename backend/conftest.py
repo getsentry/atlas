@@ -40,7 +40,21 @@ def default_office(db):
 
 
 @pytest.fixture
-def default_user(db):
+def design_department(db):
+    return factories.DepartmentFactory.create(
+        id=UUID("624f950b-a57e-4d81-83bf-f50ea0ff2545"), name="Design"
+    )
+
+
+@pytest.fixture
+def ga_department(db):
+    return factories.DepartmentFactory.create(
+        id=UUID("12a1120e-07a8-4d4b-aa94-a74694aa0b85"), name="G&A"
+    )
+
+
+@pytest.fixture
+def default_user(db, design_department):
     user = factories.UserFactory(
         id=UUID("449c76aa-ad6a-46a8-b32b-91d965e3f462"),
         name="Reel Big Phish",
@@ -54,7 +68,7 @@ def default_user(db):
         title="Dummy",
         date_started=date(2010, 4, 26),
         date_of_birth=date(1990, 8, 12),
-        department="Design",
+        department=design_department,
         office=None,
         reports_to=None,
         referred_by=None,
@@ -69,7 +83,7 @@ def default_identity(db, default_user):
 
 
 @pytest.fixture
-def default_superuser(db):
+def default_superuser(db, ga_department):
     user = factories.UserFactory(
         id=UUID("559c76aa-ad6a-46a8-b32b-91d965e3f462"),
         name="Captain Planet",
@@ -84,7 +98,7 @@ def default_superuser(db):
         title="Super Dummy",
         date_started=date(2010, 5, 26),
         date_of_birth=date(1990, 2, 13),
-        department="G&A",
+        department=ga_department,
         office=None,
         employee_type="FULL_TIME",
         reports_to=None,

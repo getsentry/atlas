@@ -7,6 +7,7 @@ class Command(BaseCommand):
     help = "Load mock data"
 
     def handle(self, *args, **options):
+        raise NotImplementedError("TODO")
         ceo = factories.ProfileFactory.create(ceo=True)
         print(f"Created {ceo}")
         cmo = factories.ProfileFactory.create(cmo=True, reports_to=ceo.user)

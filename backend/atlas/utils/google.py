@@ -11,7 +11,7 @@ from django.conf import settings
 from django.db import models, transaction
 
 from atlas.constants import FIELD_MODEL_MAP
-from atlas.models import Identity, Office, Photo, Profile, User
+from atlas.models import Department, Identity, Office, Photo, Profile, User
 
 # GET https://www.googleapis.com/admin/directory/v1/users
 # ?domain=primary domain name&pageToken=token for next results page
@@ -168,7 +168,7 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
             {
                 "primary": True,
                 "title": data.get("title") or profile.title,
-                "department": data.get("department") or profile.department,
+                "department": data.get("department") or profile.department_id,
                 "customType": data.get("employee_type") or profile.employee_type,
             }
         ]
@@ -330,7 +330,15 @@ def sync_user(  # NOQA
         if (row.get("title") or None) != profile.title:
             profile_fields["title"] = row.get("title") or None
         if (row.get("department") or None) != profile.department:
-            profile_fields["department"] = row.get("department") or None
+            value = row.get("department") or None
+            if value:
+                try:
+                    from uuid import UUID
+
+                    UUID(value)
+                except ValueError:
+                    value = Department.objects.get_or_create(name=value)[0].id
+            profile_fields["department_id"] = value
         # default value is FULL_TIME when its empty
         if (row.get("customType") or "FULL_TIME") != profile.employee_type:
             profile_fields["employee_type"] = row.get("customType") or "FULL_TIME"
@@ -338,7 +346,7 @@ def sync_user(  # NOQA
         if profile.title:
             profile_fields["title"] = None
         if profile.department:
-            profile_fields["department"] = None
+            profile_fields["department_id"] = None
 
     # 'relations': [{'value': 'david@sentry.io', 'type': 'manager'}]
     row = find(data.get("relations"), lambda x: x["type"] == "manager" and x["value"])
