@@ -245,6 +245,7 @@ class UpdatePersonForm extends Component {
             pronouns: user.pronouns || "NONE",
             title: user.title || "",
             department: user.department || "",
+            team: user.team || "",
             dateOfBirth: user.dateOfBirth || "",
             dateStarted: user.dateStarted || "",
             primaryPhone: user.primaryPhone || "",
