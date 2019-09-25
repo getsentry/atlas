@@ -27,7 +27,7 @@ def test_generate_profile_updates_all_fields(responses, default_user):
                 "PlayStation": None,
                 "Nintendo": None,
             },
-            "System": {"Is_Human": True, "Employee_Type": "FULL_TIME"},
+            "System": {"Is_Human": True},
             "Schedule": {
                 "Sunday": settings.DEFAULT_SCHEDULE[0],
                 "Monday": settings.DEFAULT_SCHEDULE[1],
@@ -38,7 +38,14 @@ def test_generate_profile_updates_all_fields(responses, default_user):
                 "Saturday": settings.DEFAULT_SCHEDULE[6],
             },
         },
-        "organizations": [{"department": "Design", "primary": True, "title": "Dummy"}],
+        "organizations": [
+            {
+                "department": "Design",
+                "primary": True,
+                "title": "Dummy",
+                "customType": "FULL_TIME",
+            }
+        ],
         "locations": [{"area": "desk", "buildingId": "", "type": "desk"}],
         "phones": [{"primary": True, "type": "home", "value": ""}],
         "relations": [{"type": "manager", "value": ""}],
@@ -78,7 +85,7 @@ def test_generate_profile_updates_all_fields_with_all_fields(
                 "Bio": "My bio!",
                 "Referred_By": default_superuser.email,
             },
-            "System": {"Is_Human": True, "Employee_Type": "FULL_TIME"},
+            "System": {"Is_Human": True},
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
             "GamerTags": {
                 "Steam": None,
@@ -96,7 +103,14 @@ def test_generate_profile_updates_all_fields_with_all_fields(
                 "Saturday": "OFF",
             },
         },
-        "organizations": [{"department": "Design", "primary": True, "title": "Dummy"}],
+        "organizations": [
+            {
+                "department": "Design",
+                "primary": True,
+                "title": "Dummy",
+                "customType": "FULL_TIME",
+            }
+        ],
         "locations": [{"area": "desk", "buildingId": "SFO", "type": "desk"}],
         "phones": [{"primary": True, "type": "home", "value": "+1 800-123-4567"}],
         "relations": [{"type": "manager", "value": default_superuser.email}],
@@ -121,7 +135,7 @@ def test_sync_user_with_user_and_identity(
                 "Bio": "My bio!",
                 "Referred_By": None,
             },
-            "System": {"Is_Human": True, "Employee_Type": "FULL_TIME"},
+            "System": {"Is_Human": True},
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
             "GamerTags": {
                 "Steam": None,
@@ -139,7 +153,14 @@ def test_sync_user_with_user_and_identity(
                 "Saturday": "OFF",
             },
         },
-        "organizations": [{"department": "Design", "primary": True, "title": "Dummy"}],
+        "organizations": [
+            {
+                "department": "Design",
+                "primary": True,
+                "title": "Dummy",
+                "customType": "FULL_TIME",
+            }
+        ],
         "locations": [{"area": "desk", "buildingId": "SFO", "type": "desk"}],
         "phones": [{"primary": True, "type": "home", "value": "+1 800-123-4567"}],
         "relations": [{"type": "manager", "value": default_superuser.email}],
@@ -186,7 +207,7 @@ def test_sync_user_new_account(responses, default_superuser):
                 "Bio": "My bio!",
                 "Referred_By": None,
             },
-            "System": {"Is_Human": True, "Employee_Type": "FULL_TIME"},
+            "System": {"Is_Human": True},
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
             "GamerTags": {
                 "Steam": None,
@@ -204,7 +225,14 @@ def test_sync_user_new_account(responses, default_superuser):
                 "Saturday": "OFF",
             },
         },
-        "organizations": [{"department": "Design", "primary": True, "title": "Dummy"}],
+        "organizations": [
+            {
+                "department": "Design",
+                "primary": True,
+                "title": "Dummy",
+                "customType": "FULL_TIME",
+            }
+        ],
         "locations": [{"area": "desk", "buildingId": "SFO", "type": "desk"}],
         "phones": [{"primary": True, "type": "home", "value": "+1 800-123-4567"}],
         "relations": [{"type": "manager", "value": "jim@example.com"}],
