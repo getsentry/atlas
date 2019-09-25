@@ -40,6 +40,7 @@ class UserInput(graphene.InputObjectType):
     employee_type = graphene.String(required=False)
     title = graphene.String(required=False)
     department = graphene.String(required=False)
+    team = graphene.String(required=False)
     reports_to = Nullable(graphene.UUID, required=False)
     referred_by = Nullable(graphene.UUID, required=False)
     primary_phone = Nullable(PhoneNumberField, required=False)
