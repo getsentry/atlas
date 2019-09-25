@@ -20,7 +20,6 @@ const UserSchema = yup.object().shape({
   pronouns: yup.string(),
   title: yup.string().nullable(),
   department: yup.string().nullable(),
-  team: yup.string().nullable(),
   office: yup.string().nullable(),
   primaryPhone: yup.string().nullable(),
   dateStarted: yup.date().nullable(),
@@ -32,14 +31,7 @@ const UserSchema = yup.object().shape({
 export const DEPARTMENT_SELECT_QUERY = gql`
   query listDepartmentsForSelect($query: String!) {
     departments(query: $query) {
-      name
-    }
-  }
-`;
-
-export const TEAM_SELECT_QUERY = gql`
-  query listTeamsForSelect($query: String!) {
-    teams(query: $query) {
+      id
       name
     }
   }
@@ -72,8 +64,10 @@ export const PERSON_QUERY = gql`
       handle
       bio
       pronouns
-      department
-      team
+      department {
+        id
+        name
+      }
       title
       dateOfBirth
       dateStarted
@@ -167,46 +161,12 @@ class UpdatePersonForm extends Component {
         }
       })
       .then(({ data: { departments } }) => {
-        let results = [];
-        if (inputValue !== "") {
-          results.push({
-            value: inputValue,
-            label: inputValue
-          });
-        }
-        results.push(
-          ...departments.map(u => ({
-            value: u.name,
+        callback(
+          departments.map(u => ({
+            value: u.id,
             label: u.name
           }))
         );
-        callback(results);
-      });
-  };
-
-  loadMatchingTeams = (inputValue, callback) => {
-    apolloClient
-      .query({
-        query: TEAM_SELECT_QUERY,
-        variables: {
-          query: inputValue
-        }
-      })
-      .then(({ data: { teams } }) => {
-        let results = [];
-        if (inputValue !== "") {
-          results.push({
-            value: inputValue,
-            label: inputValue
-          });
-        }
-        results.push(
-          ...teams.map(u => ({
-            value: u.name,
-            label: u.name
-          }))
-        );
-        callback(results);
       });
   };
 
@@ -218,7 +178,6 @@ class UpdatePersonForm extends Component {
       [
         "title",
         "department",
-        "team",
         "dateStarted",
         "dateOfBirth",
         "office",
@@ -249,14 +208,8 @@ class UpdatePersonForm extends Component {
             title: user.title || "",
             department: user.department
               ? {
-                  value: user.department,
-                  label: user.department
-                }
-              : "",
-            team: user.team
-              ? {
-                  value: user.team,
-                  label: user.team
+                  value: user.department.id,
+                  label: user.departmen.name
                 }
               : "",
             dateOfBirth: user.dateOfBirth || "",
@@ -447,13 +400,6 @@ class UpdatePersonForm extends Component {
                         label="Department"
                         loadOptions={this.loadMatchingDepartments}
                         readonly={restrictedFields.has("department")}
-                      />
-                      <FieldWrapper
-                        type="select"
-                        name="team"
-                        label="Team"
-                        loadOptions={this.loadMatchingTeams}
-                        readonly={restrictedFields.has("team")}
                       />
                       <FieldWrapper
                         type="select"

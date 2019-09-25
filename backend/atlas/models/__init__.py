@@ -1,3 +1,4 @@
+from .department import *  # NOQA
 from .identity import *  # NOQA
 from .office import *  # NOQA
 from .photo import *  # NOQA

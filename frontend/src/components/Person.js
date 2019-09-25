@@ -202,7 +202,13 @@ export default class Person extends Component {
                               )}
                             </dd>
                             <dt>Department</dt>
-                            <dd>{thisPerson.department || <Empty />}</dd>
+                            <dd>
+                              {thisPerson.department ? (
+                                thisPerson.department.name
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
                             <dt>Team</dt>
                             <dd>{thisPerson.team || <Empty />}</dd>
                             <dt>Start Date</dt>

@@ -159,7 +159,7 @@ GOOGLE_FIELD_MAP = (
     # "column" => "SchemaName/FieldName"
     # system
     ("is_human", "System/Is_Human"),
-    ("team", "System/Team"),
+    ("department", "System/Department"),
     # core
     ("date_started", "Profile/Date_of_Hire"),
     ("date_of_birth", "Profile/Date_of_Birth"),

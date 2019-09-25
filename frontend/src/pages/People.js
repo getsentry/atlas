@@ -83,7 +83,7 @@ const Filter = styled(({ className, location, name, title, allLabel, choices }) 
 
 function DepartmentFilter({ location }) {
   return (
-    <Query query={LIST_DEPARTMENTS_QUERY}>
+    <Query query={LIST_DEPARTMENTS_QUERY} variables={{ peopleOnly: true }}>
       {({ loading, error, data }) => {
         if (error) throw error;
         if (loading) return <PageLoader />;
@@ -95,7 +95,7 @@ function DepartmentFilter({ location }) {
             name="department"
             allLabel="All Departments"
             choices={departments.map(d => ({
-              id: d.name,
+              id: d.id,
               value: d.name,
               count: d.numPeople
             }))}

@@ -31,8 +31,7 @@ class Query(object):
         humans_only=graphene.Boolean(default_value=True),
         titles_only=graphene.Boolean(default_value=False),
         office=graphene.UUID(),
-        department=graphene.String(),
-        team=graphene.String(),
+        department=graphene.UUID(),
         reports_to=graphene.UUID(),
         referred_by=graphene.UUID(),
         date_started_before=graphene.types.datetime.Date(),
@@ -58,7 +57,6 @@ class Query(object):
         titles_only: bool = False,
         office: str = None,
         department: str = None,
-        team: str = None,
         reports_to: str = None,
         referred_by: str = None,
         offset: int = 0,
@@ -92,9 +90,6 @@ class Query(object):
 
         if department:
             qs = qs.filter(profile__department=department)
-
-        if team:
-            qs = qs.filter(profile__team=team)
 
         if employee_type:
             qs = qs.filter(profile__employee_type=employee_type)

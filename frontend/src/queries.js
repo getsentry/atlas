@@ -48,8 +48,9 @@ export const GET_OFFICE_QUERY = gql`
 `;
 
 export const LIST_DEPARTMENTS_QUERY = gql`
-  query listDepartments($name: String, $query: String) {
-    departments(name: $name, query: $query) {
+  query listDepartments($id: UUID, $query: String, $peopleOnly: Boolean) {
+    departments(id: $id, query: $query, peopleOnly: $peopleOnly) {
+      id
       name
       numPeople
     }
@@ -68,8 +69,7 @@ export const LIST_PEOPLE_QUERY = gql`
     $birthdayBefore: Date
     $birthdayAfter: Date
     $query: String
-    $department: String
-    $team: String
+    $department: UUID
     $includeSelf: Boolean
     $orderBy: UserOrderBy
     $offset: Int
@@ -87,7 +87,6 @@ export const LIST_PEOPLE_QUERY = gql`
       birthdayAfter: $birthdayAfter
       query: $query
       department: $department
-      team: $team
       includeSelf: $includeSelf
       orderBy: $orderBy
       offset: $offset
@@ -96,8 +95,10 @@ export const LIST_PEOPLE_QUERY = gql`
       id
       name
       email
-      department
-      team
+      department {
+        id
+        name
+      }
       isHuman
       title
       dobMonth
@@ -124,8 +125,10 @@ export const GET_PERSON_QUERY = gql`
       email
       handle
       bio
-      department
-      team
+      department {
+        id
+        name
+      }
       dobMonth
       dobDay
       title

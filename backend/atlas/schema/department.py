@@ -1,18 +1,24 @@
 import logging
 
 import graphene
+import graphene_django_optimizer as gql_optimizer
 
-from atlas.models import Profile
+from atlas.models import Department, Profile
 
 
-class DepartmentNode(graphene.ObjectType):
-    name = graphene.String()
+class DepartmentNode(gql_optimizer.OptimizedDjangoObjectType):
     num_people = graphene.Int(required=False)
+    # parent = graphene.Field(lambda: DepartmentNode)
+
+    class Meta:
+        model = Department
+        name = "Department"
+        fields = ("id", "name")
 
     def resolve_num_people(self, info):
-        if not self["name"]:
+        if not self.id:
             return 0
-        qs = Profile.objects.filter(department=self["name"])
+        qs = Profile.objects.filter(department=self.id)
         if (
             not hasattr(self, "_prefetched_objects_cache")
             or "people" not in self._prefetched_objects_cache

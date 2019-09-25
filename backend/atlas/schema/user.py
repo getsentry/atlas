@@ -59,8 +59,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
 
     # profile fields
     title = graphene.String(required=False)
-    department = graphene.String(required=False)
-    team = graphene.String(required=False)
+    department = graphene.Field("atlas.schema.DepartmentNode", required=False)
     dob_day = graphene.Int(required=False)
     dob_month = graphene.Int(required=False)
     date_started = graphene.Date(required=False)
@@ -298,7 +297,6 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     resolve_bio = simple_profile_resolver("bio")
     resolve_title = simple_profile_resolver("title")
     resolve_department = simple_profile_resolver("department")
-    resolve_team = simple_profile_resolver("team")
     resolve_date_started = simple_profile_resolver("date_started")
     resolve_is_human = simple_profile_resolver("is_human")
     resolve_pronouns = simple_profile_resolver("pronouns")
