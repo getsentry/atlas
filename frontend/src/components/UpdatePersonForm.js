@@ -20,6 +20,7 @@ const UserSchema = yup.object().shape({
   pronouns: yup.string(),
   title: yup.string().nullable(),
   department: yup.string().nullable(),
+  team: yup.string().nullable(),
   office: yup.string().nullable(),
   primaryPhone: yup.string().nullable(),
   dateStarted: yup.date().nullable(),
