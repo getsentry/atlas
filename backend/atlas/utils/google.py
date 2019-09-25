@@ -163,7 +163,7 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
             }
         ]
 
-    if "title" in data or "department" in data:
+    if "title" in data or "department" in data or "employee_type" in data:
         params["organizations"] = [
             {
                 "primary": True,
