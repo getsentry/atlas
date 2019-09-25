@@ -72,6 +72,7 @@ export const PERSON_QUERY = gql`
       bio
       pronouns
       department
+      team
       title
       dateOfBirth
       dateStarted

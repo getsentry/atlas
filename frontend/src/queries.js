@@ -69,6 +69,7 @@ export const LIST_PEOPLE_QUERY = gql`
     $birthdayAfter: Date
     $query: String
     $department: String
+    $team: String
     $includeSelf: Boolean
     $orderBy: UserOrderBy
     $offset: Int
@@ -86,6 +87,7 @@ export const LIST_PEOPLE_QUERY = gql`
       birthdayAfter: $birthdayAfter
       query: $query
       department: $department
+      team: $team
       includeSelf: $includeSelf
       orderBy: $orderBy
       offset: $offset
@@ -95,6 +97,7 @@ export const LIST_PEOPLE_QUERY = gql`
       name
       email
       department
+      team
       isHuman
       title
       dobMonth
@@ -122,6 +125,7 @@ export const GET_PERSON_QUERY = gql`
       handle
       bio
       department
+      team
       dobMonth
       dobDay
       title
