@@ -3,6 +3,7 @@ import { Route, IndexRoute } from "react-router";
 // import Loadable from "react-loadable";
 
 import App from "./pages/App";
+import AdminLayout from "./pages/AdminLayout";
 import AdminAudit from "./pages/AdminAudit";
 import AdminBulkUpdatePeople from "./pages/AdminBulkUpdatePeople";
 import HealthCheck from "./pages/HealthCheck";
@@ -36,8 +37,10 @@ export default (
     <Route path="/people" component={People} />
     <Route path="/people/:email" component={Profile} />
     <Route path="/people/:email/update" component={UpdateProfile} />
-    <Route path="/admin/audit" component={AdminAudit} />
-    <Route path="/admin/update-people" component={AdminBulkUpdatePeople} />
+    <Route path="/admin" component={AdminLayout}>
+      <Route path="/admin/audit" component={AdminAudit} />
+      <Route path="/admin/update-people" component={AdminBulkUpdatePeople} />
+    </Route>
     <Route path="*" component={NotFoundError} />
   </Route>
 );
