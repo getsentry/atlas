@@ -29,6 +29,7 @@ sentry_sdk.init(
     ),
     traces_sample_rate=1.0,
     traceparent_v2=True,
+    _experiments={"fast_serialize": True},
 )
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
