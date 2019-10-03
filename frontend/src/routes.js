@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Office from "./pages/Office";
 import Offices from "./pages/Offices";
+import Onboarding from "./pages/Onboarding";
 import OrgChart from "./pages/OrgChart";
 import People from "./pages/People";
 import Profile from "./pages/Profile";
@@ -33,6 +34,7 @@ export default (
     <Route path="/offices" component={Offices} />
     <Route path="/offices/:externalId" component={Office} />
     <Route path="/offices/:externalId/update" component={UpdateOffice} />
+    <Route path="/onboarding" component={Onboarding} />
     <Route path="/orgChart" component={OrgChart} />
     <Route path="/people" component={People} />
     <Route path="/people/:email" component={Profile} />

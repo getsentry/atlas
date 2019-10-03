@@ -68,6 +68,8 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     primary_phone = PhoneNumberField(required=False)
     employee_type = graphene.Field("atlas.schema.EmployeeTypeNode", required=False)
     is_human = graphene.Boolean(required=False, default_value=True)
+    has_onboarded = graphene.Boolean(required=False, default_value=True)
+
     office = graphene.Field("atlas.schema.OfficeNode")
     reports_to = graphene.Field("atlas.schema.UserNode", required=False)
     referred_by = graphene.Field("atlas.schema.UserNode", required=False)
@@ -300,6 +302,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     resolve_date_started = simple_profile_resolver("date_started")
     resolve_is_human = simple_profile_resolver("is_human")
     resolve_pronouns = simple_profile_resolver("pronouns")
+    resolve_has_onboarded = simple_profile_resolver("has_onboarded")
 
     # TODO(dcramer): this query is slow
     @gql_optimizer.resolver_hints(select_related=("profile"))

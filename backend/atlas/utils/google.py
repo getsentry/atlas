@@ -10,7 +10,7 @@ import sentry_sdk
 from django.conf import settings
 from django.db import models, transaction
 
-from atlas.constants import FIELD_MODEL_MAP
+from atlas.constants import BOOLEAN_PREFIXES, DEFAULT_VALUES, FIELD_MODEL_MAP
 from atlas.models import Department, Identity, Office, Photo, Profile, User
 
 # GET https://www.googleapis.com/admin/directory/v1/users
@@ -385,9 +385,9 @@ def sync_user(  # NOQA
             value = lookup_field(schemas, field_path)
             if value and attribute_name.startswith("date_"):
                 value = to_date(value)
-            elif attribute_name.startswith("is_human") and value is None:
-                value = True
-            elif attribute_name.startswith("is_"):
+            elif value is None and attribute_name in DEFAULT_VALUES:
+                value = DEFAULT_VALUES[attribute_name]
+            elif attribute_name.startswith(BOOLEAN_PREFIXES):
                 value = bool(value)
             elif attribute_name == "referred_by" and value is not None:
                 value, _ = get_user(email=value, user_cache=user_cache)
@@ -410,10 +410,10 @@ def sync_user(  # NOQA
         if profile.config:
             profile_fields["config"] = {}
         for attribute_name, _ in settings.GOOGLE_FIELD_MAP:
-            if attribute_name == "is_human":
-                if not profile.is_human:
-                    profile_fields[attribute_name] = True
-            elif attribute_name.startswith("is_"):
+            if attribute_name in DEFAULT_VALUES:
+                if getattr(profile, attribute_name) != DEFAULT_VALUES[attribute_name]:
+                    profile_fields[attribute_name] = DEFAULT_VALUES[attribute_name]
+            elif attribute_name.startswith(BOOLEAN_PREFIXES):
                 profile_fields[attribute_name] = False
             elif getattr(profile, attribute_name) is not None:
                 profile_fields[attribute_name] = None

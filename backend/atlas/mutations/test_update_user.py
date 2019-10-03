@@ -25,7 +25,7 @@ def test_user_can_update_handle(mock_task, gql_client, default_user):
     assert resp["user"] == {"id": str(default_user.id), "handle": "Zoolander"}
 
     mock_task.assert_called_once_with(
-        user_id=default_user.id, updates={"handle": "Zoolander"}
+        user_id=default_user.id, updates={"handle": "Zoolander", "has_onboarded": True}
     )
 
     user = User.objects.get(id=default_user.id)
@@ -63,7 +63,8 @@ def test_user_can_update_schedule(mock_task, gql_client, default_user):
                 "INOFFICE",
                 "INOFFICE",
                 "OFF",
-            ]
+            ],
+            "has_onboarded": True,
         },
     )
 

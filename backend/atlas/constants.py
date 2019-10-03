@@ -24,6 +24,7 @@ FIELD_MODEL_MAP = {
     "playstation": Profile,
     "nintendo": Profile,
     "referred_by": Profile,
+    "has_onboarded": Profile,
 }
 
 # only HR can edit restricted fields
@@ -41,4 +42,9 @@ RESTRICTED_FIELDS = frozenset(
     ]
 )
 
-SUPERUSER_ONLY_FIELDS = frozenset(["is_human", "is_superuser"])
+SUPERUSER_ONLY_FIELDS = frozenset(["is_human", "is_superuser", "has_onboarded"])
+
+# attribute prefixes which are always booleans
+BOOLEAN_PREFIXES = ("is_", "has_")
+
+DEFAULT_VALUES = {"is_human": True, "has_onboarded": False}

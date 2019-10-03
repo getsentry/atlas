@@ -27,7 +27,7 @@ def test_generate_profile_updates_all_fields(responses, default_user):
                 "PlayStation": None,
                 "Nintendo": None,
             },
-            "System": {"Is_Human": True},
+            "System": {"Is_Human": True, "Has_Onboarded": False},
             "Schedule": {
                 "Sunday": settings.DEFAULT_SCHEDULE[0],
                 "Monday": settings.DEFAULT_SCHEDULE[1],
@@ -58,10 +58,12 @@ def test_generate_profile_updates_all_fields_with_all_fields(
     default_user.profile.reports_to = default_superuser
     default_user.profile.referred_by = default_superuser
     default_user.profile.office = default_office
+    default_user.profile.twitter = "@getsentry"
     default_user.profile.employee_type = "FULL_TIME"
     default_user.profile.handle = "Jane"
     default_user.profile.bio = "My bio!"
     default_user.profile.pronouns = "SHE_HER"
+    default_user.profile.has_onboarded = True
     default_user.profile.primary_phone = "+1 800-123-4567"
     default_user.profile.schedule = [
         "OFF",
@@ -85,8 +87,8 @@ def test_generate_profile_updates_all_fields_with_all_fields(
                 "Bio": "My bio!",
                 "Referred_By": default_superuser.email,
             },
-            "System": {"Is_Human": True},
-            "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
+            "System": {"Is_Human": True, "Has_Onboarded": True},
+            "Social": {"GitHub": None, "LinkedIn": None, "Twitter": "@getsentry"},
             "GamerTags": {
                 "Steam": None,
                 "Xbox": None,

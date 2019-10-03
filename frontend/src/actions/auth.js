@@ -17,6 +17,7 @@ export const LOGIN_MUTATION = gql`
         email
         name
         isSuperuser
+        hasOnboarded
         photo {
           data
           width
@@ -35,6 +36,7 @@ export const CURRENT_USER_QUERY = gql`
       name
       email
       isSuperuser
+      hasOnboarded
       photo {
         data
         width

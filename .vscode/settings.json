@@ -14,32 +14,38 @@
   "files.trimTrailingWhitespace": false,
   "files.trimFinalNewlines": false,
   "files.insertFinalNewline": true,
-
   "[json]": {
+    "editor.insertSpaces": true,
     "editor.detectIndentation": false,
     "editor.tabSize": 2,
     "editor.formatOnSave": true
   },
-
   "[javascript]": {
+    "editor.insertSpaces": true,
     "editor.detectIndentation": false,
     "editor.tabSize": 2,
     "editor.formatOnSave": true
   },
-
+  "[javascriptreact]": {
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
+  },
   "[css]": {
+    "editor.insertSpaces": true,
     "editor.detectIndentation": false,
     "editor.tabSize": 2,
     "editor.formatOnSave": true
   },
-
   "[html]": {
+    "editor.insertSpaces": true,
     "editor.detectIndentation": false,
     "editor.tabSize": 2,
     "editor.formatOnSave": true
   },
-
   "[python]": {
+    "editor.insertSpaces": true,
     "editor.detectIndentation": false,
     "editor.tabSize": 4,
     "editor.formatOnSave": true,
@@ -47,7 +53,6 @@
       "source.organizeImports": true
     }
   },
-
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
   "python.formatting.provider": "black",

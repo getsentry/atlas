@@ -30,9 +30,11 @@ class UpdateUser(graphene.Mutation):
         except User.DoesNotExist:
             return UpdateUser(ok=False, errors=["Invalid user"])
 
+        is_current_user = user.id == current_user.id
+
         # only superuser (human resources) can edit restricted fields
         is_restricted = not current_user.is_superuser
-        if user.id != current_user.id and is_restricted:
+        if not is_current_user and is_restricted:
             return UpdateUser(ok=False, errors=["Cannot edit this user"])
 
         invalid_fields = (
@@ -53,6 +55,12 @@ class UpdateUser(graphene.Mutation):
 
         updates = {}
         model_updates = {User: {}, Profile: {}}
+
+        # for any update_user from self we signal it as onboarding successful
+        # XXX(dcramer): this could cause some problems, but should work for our use case
+        if is_current_user and not profile.has_onboarded:
+            model_updates[Profile]["has_onboarded"] = True
+            updates["has_onboarded"] = True
 
         flattened_data = data.copy()
         flattened_data.update(flattened_data.pop("social", {}))

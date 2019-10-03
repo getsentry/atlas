@@ -127,7 +127,8 @@ export const PERSON_MUTATION = gql`
 
 class UpdatePersonForm extends Component {
   static propTypes = {
-    email: PropTypes.string.isRequired
+    email: PropTypes.string.isRequired,
+    onboarding: PropTypes.bool
   };
 
   static contextTypes = { router: PropTypes.object.isRequired };
@@ -253,122 +254,118 @@ class UpdatePersonForm extends Component {
             }
           };
           return (
-            <section>
-              <Card>
-                <h1>{user.name}</h1>
-              </Card>
-              <Formik
-                initialValues={initialValues}
-                validationSchema={UserSchema}
-                onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
-                  let data = {};
-                  Object.keys(values).forEach(k => {
-                    if (restrictedFields.has(k)) return;
-                    let initialVal = initialValues[k];
-                    let curVal = values[k];
-                    if (curVal && curVal.hasOwnProperty("value")) {
-                      initialVal = initialVal ? initialVal.value : null;
-                      curVal = curVal.value;
+            <Formik
+              initialValues={initialValues}
+              validationSchema={UserSchema}
+              onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
+                let data = {};
+                Object.keys(values).forEach(k => {
+                  if (restrictedFields.has(k)) return;
+                  let initialVal = initialValues[k];
+                  let curVal = values[k];
+                  if (curVal && curVal.hasOwnProperty("value")) {
+                    initialVal = initialVal ? initialVal.value : null;
+                    curVal = curVal.value;
+                  }
+                  if (curVal !== initialVal) {
+                    data[k] = curVal || "";
+                  }
+                });
+                apolloClient
+                  .mutate({
+                    mutation: PERSON_MUTATION,
+                    variables: {
+                      user: user.id,
+                      data
                     }
-                    if (curVal !== initialVal) {
-                      data[k] = curVal || "";
+                  })
+                  .then(
+                    ({ data: { updateUser }, errors }) => {
+                      setSubmitting(false);
+                      if (errors) {
+                        setStatus({ error: "" + errors[0].message });
+                      } else if (!updateUser.ok) {
+                        setStatus({ error: "" + updateUser.errors[0] });
+                      } else {
+                        this.context.router.push({
+                          pathname: `/people/${user.email}`
+                        });
+                      }
+                    },
+                    err => {
+                      if (err.graphQLErrors && err.graphQLErrors.length) {
+                        // do something useful
+                        setStatus({ error: "" + err });
+                      } else {
+                        setStatus({ error: "" + err });
+                      }
+                      setSubmitting(false);
                     }
-                  });
-                  apolloClient
-                    .mutate({
-                      mutation: PERSON_MUTATION,
-                      variables: {
-                        user: user.id,
-                        data
-                      }
-                    })
-                    .then(
-                      ({ data: { updateUser }, errors }) => {
-                        setSubmitting(false);
-                        if (errors) {
-                          setStatus({ error: "" + errors[0].message });
-                        } else if (!updateUser.ok) {
-                          setStatus({ error: "" + updateUser.errors[0] });
-                        } else {
-                          this.context.router.push({
-                            pathname: `/people/${user.email}`
-                          });
-                        }
-                      },
-                      err => {
-                        if (err.graphQLErrors && err.graphQLErrors.length) {
-                          // do something useful
-                          setStatus({ error: "" + err });
-                        } else {
-                          setStatus({ error: "" + err });
-                        }
-                        setSubmitting(false);
-                      }
-                    );
-                }}
-              >
-                {({ isSubmitting, status, errors }) => (
-                  <Form>
-                    <pre>{JSON.stringify(errors)}</pre>
-                    {status && status.error && (
-                      <Card withPadding>
-                        <strong>{status.error}</strong>
-                      </Card>
-                    )}
-                    <Card>
-                      <h2>Personal</h2>
-                      <FieldWrapper
-                        type="text"
-                        name="name"
-                        label="Name (Given)"
-                        readonly={restrictedFields.has("name")}
-                        required
-                      />
-                      <FieldWrapper
-                        type="text"
-                        name="handle"
-                        label="Name (Preferred)"
-                        readonly={restrictedFields.has("handle")}
-                        help="Do you have another name or nickname you prefer to go by?."
-                      />
-                      <FieldWrapper
-                        type="select"
-                        name="pronouns"
-                        label="Pronouns"
-                        placeholder="e.g. he / him / his"
-                        options={PRONOUNS}
-                        readonly={restrictedFields.has("pronouns")}
-                        required
-                      />
-                      <FieldWrapper
-                        type="textarea"
-                        name="bio"
-                        label="Bio"
-                        readonly={restrictedFields.has("bio")}
-                        help="A bit about yourself."
-                      />
-                      <FieldWrapper
-                        type="email"
-                        name="email"
-                        label="Email"
-                        readonly={restrictedFields.has("email")}
-                        required
-                      />
-                      <FieldWrapper
-                        type="tel"
-                        name="primaryPhone"
-                        label="Phone Number"
-                        placeholder="+1-555-555-5555"
-                        readonly={restrictedFields.has("primaryPhone")}
-                      />
-                      <FieldWrapper
-                        type="date"
-                        name="dateOfBirth"
-                        label="Date of Birth"
-                        readonly={restrictedFields.has("dateOfBirth")}
-                      />
+                  );
+              }}
+            >
+              {({ isSubmitting, status, errors }) => (
+                <Form>
+                  {status && status.error && (
+                    <Card withPadding>
+                      <strong>{status.error}</strong>
                     </Card>
+                  )}
+                  <Card>
+                    <h2>Personal</h2>
+                    <FieldWrapper
+                      type="text"
+                      name="name"
+                      label="Name (Given)"
+                      readonly={restrictedFields.has("name")}
+                      required
+                    />
+                    <FieldWrapper
+                      type="text"
+                      name="handle"
+                      label="Name (Preferred)"
+                      readonly={restrictedFields.has("handle")}
+                      help="Do you have another name or nickname you prefer to go by?."
+                    />
+                    <FieldWrapper
+                      type="select"
+                      name="pronouns"
+                      label="Pronouns"
+                      placeholder="e.g. he / him / his"
+                      options={PRONOUNS}
+                      readonly={restrictedFields.has("pronouns")}
+                      required
+                    />
+                    <FieldWrapper
+                      type="textarea"
+                      name="bio"
+                      label="Bio"
+                      readonly={restrictedFields.has("bio")}
+                      help="A bit about yourself."
+                    />
+                    <FieldWrapper
+                      type="email"
+                      name="email"
+                      label="Email"
+                      readonly={restrictedFields.has("email")}
+                      required
+                    />
+                    <FieldWrapper
+                      type="tel"
+                      name="primaryPhone"
+                      label="Phone Number"
+                      placeholder="+1-555-555-5555"
+                      readonly={restrictedFields.has("primaryPhone")}
+                    />
+                    <FieldWrapper
+                      type="date"
+                      name="dateOfBirth"
+                      label="Date of Birth"
+                      readonly={restrictedFields.has("dateOfBirth")}
+                    />
+                  </Card>
 
+                  {!this.props.onboarding && (
                     <Card>
                       <h2>Role</h2>
                       <FieldWrapper
@@ -425,124 +422,126 @@ class UpdatePersonForm extends Component {
                         readonly={restrictedFields.has("referredBy")}
                       />
                     </Card>
+                  )}
 
-                    <Card>
-                      <h2>Working Schedule</h2>
-                      <FieldWrapper
-                        type="select"
-                        name="schedule[sunday]"
-                        options={DAY_SCHEDULE}
-                        label="Sunday"
-                        readonly={restrictedFields.has("schedule")}
-                        required
-                      />
-                      <FieldWrapper
-                        type="select"
-                        name="schedule[monday]"
-                        options={DAY_SCHEDULE}
-                        label="Monday"
-                        readonly={restrictedFields.has("schedule")}
-                        required
-                      />
-                      <FieldWrapper
-                        type="select"
-                        name="schedule[tuesday]"
-                        options={DAY_SCHEDULE}
-                        label="Tuesday"
-                        readonly={restrictedFields.has("schedule")}
-                        required
-                      />
-                      <FieldWrapper
-                        type="select"
-                        name="schedule[wednesday]"
-                        options={DAY_SCHEDULE}
-                        label="wednesday"
-                        readonly={restrictedFields.has("schedule")}
-                        required
-                      />
-                      <FieldWrapper
-                        type="select"
-                        name="schedule[thursday]"
-                        options={DAY_SCHEDULE}
-                        label="Thursday"
-                        readonly={restrictedFields.has("schedule")}
-                        required
-                      />
-                      <FieldWrapper
-                        type="select"
-                        name="schedule[friday]"
-                        options={DAY_SCHEDULE}
-                        label="Friday"
-                        readonly={restrictedFields.has("schedule")}
-                        required
-                      />
-                      <FieldWrapper
-                        type="select"
-                        name="schedule[saturday]"
-                        options={DAY_SCHEDULE}
-                        label="Saturday"
-                        readonly={restrictedFields.has("schedule")}
-                        required
-                      />
-                    </Card>
+                  <Card>
+                    <h2>Working Schedule</h2>
+                    <FieldWrapper
+                      type="select"
+                      name="schedule[sunday]"
+                      options={DAY_SCHEDULE}
+                      label="Sunday"
+                      readonly={restrictedFields.has("schedule")}
+                      required
+                    />
+                    <FieldWrapper
+                      type="select"
+                      name="schedule[monday]"
+                      options={DAY_SCHEDULE}
+                      label="Monday"
+                      readonly={restrictedFields.has("schedule")}
+                      required
+                    />
+                    <FieldWrapper
+                      type="select"
+                      name="schedule[tuesday]"
+                      options={DAY_SCHEDULE}
+                      label="Tuesday"
+                      readonly={restrictedFields.has("schedule")}
+                      required
+                    />
+                    <FieldWrapper
+                      type="select"
+                      name="schedule[wednesday]"
+                      options={DAY_SCHEDULE}
+                      label="wednesday"
+                      readonly={restrictedFields.has("schedule")}
+                      required
+                    />
+                    <FieldWrapper
+                      type="select"
+                      name="schedule[thursday]"
+                      options={DAY_SCHEDULE}
+                      label="Thursday"
+                      readonly={restrictedFields.has("schedule")}
+                      required
+                    />
+                    <FieldWrapper
+                      type="select"
+                      name="schedule[friday]"
+                      options={DAY_SCHEDULE}
+                      label="Friday"
+                      readonly={restrictedFields.has("schedule")}
+                      required
+                    />
+                    <FieldWrapper
+                      type="select"
+                      name="schedule[saturday]"
+                      options={DAY_SCHEDULE}
+                      label="Saturday"
+                      readonly={restrictedFields.has("schedule")}
+                      required
+                    />
+                  </Card>
 
-                    <Card>
-                      <h2>#social</h2>
-                      <FieldWrapper
-                        type="text"
-                        name="social[linkedin]"
-                        label="LinkedIn"
-                        help="Your LinkedIn username."
-                        readonly={restrictedFields.has("social[linkedin]")}
-                      />
-                      <FieldWrapper
-                        type="text"
-                        name="social[github]"
-                        label="GitHub"
-                        help="Your GitHub username."
-                        readonly={restrictedFields.has("social[github]")}
-                      />
-                      <FieldWrapper
-                        type="text"
-                        name="social[twitter]"
-                        label="Twitter"
-                        help="Your Twitter username."
-                        readonly={restrictedFields.has("social[twitter]")}
-                      />
-                    </Card>
+                  <Card>
+                    <h2>#social</h2>
+                    <FieldWrapper
+                      type="text"
+                      name="social[linkedin]"
+                      label="LinkedIn"
+                      help="Your LinkedIn username."
+                      readonly={restrictedFields.has("social[linkedin]")}
+                    />
+                    <FieldWrapper
+                      type="text"
+                      name="social[github]"
+                      label="GitHub"
+                      help="Your GitHub username."
+                      readonly={restrictedFields.has("social[github]")}
+                    />
+                    <FieldWrapper
+                      type="text"
+                      name="social[twitter]"
+                      label="Twitter"
+                      help="Your Twitter username."
+                      readonly={restrictedFields.has("social[twitter]")}
+                    />
+                  </Card>
 
-                    <Card>
-                      <h2>#gamers</h2>
-                      <FieldWrapper
-                        type="text"
-                        name="gamerTags[steam]"
-                        label="Steam"
-                        help="Your Steam username."
-                        readonly={restrictedFields.has("gamerTags[steam]")}
-                      />
-                      <FieldWrapper
-                        type="text"
-                        name="gamerTags[xbox]"
-                        label="Xbox Live"
-                        help="Your Xbox Live username."
-                        readonly={restrictedFields.has("gamerTags[xbox]")}
-                      />
-                      <FieldWrapper
-                        type="text"
-                        name="gamerTags[playstation]"
-                        label="PlayStation"
-                        help="Your PlayStation username."
-                        readonly={restrictedFields.has("gamerTags[playstation]")}
-                      />
-                      <FieldWrapper
-                        type="text"
-                        name="gamerTags[nintendo]"
-                        label="Nintendo"
-                        help="Your Nintendo username."
-                        readonly={restrictedFields.has("gamerTags[nintendo]")}
-                      />
-                    </Card>
+                  <Card>
+                    <h2>#gamers</h2>
+                    <FieldWrapper
+                      type="text"
+                      name="gamerTags[steam]"
+                      label="Steam"
+                      help="Your Steam username."
+                      readonly={restrictedFields.has("gamerTags[steam]")}
+                    />
+                    <FieldWrapper
+                      type="text"
+                      name="gamerTags[xbox]"
+                      label="Xbox Live"
+                      help="Your Xbox Live username."
+                      readonly={restrictedFields.has("gamerTags[xbox]")}
+                    />
+                    <FieldWrapper
+                      type="text"
+                      name="gamerTags[playstation]"
+                      label="PlayStation"
+                      help="Your PlayStation username."
+                      readonly={restrictedFields.has("gamerTags[playstation]")}
+                    />
+                    <FieldWrapper
+                      type="text"
+                      name="gamerTags[nintendo]"
+                      label="Nintendo"
+                      help="Your Nintendo username."
+                      readonly={restrictedFields.has("gamerTags[nintendo]")}
+                    />
+                  </Card>
 
+                  {!this.props.onboarding && (
                     <Card>
                       <h2>Meta</h2>
                       <FieldWrapper
@@ -558,16 +557,16 @@ class UpdatePersonForm extends Component {
                         readonly={restrictedFields.has("isSuperuser")}
                       />
                     </Card>
+                  )}
 
-                    <Card withPadding>
-                      <Button type="submit" disabled={isSubmitting}>
-                        Submit
-                      </Button>
-                    </Card>
-                  </Form>
-                )}
-              </Formik>
-            </section>
+                  <Card withPadding>
+                    <Button type="submit" disabled={isSubmitting}>
+                      Continue
+                    </Button>
+                  </Card>
+                </Form>
+              )}
+            </Formik>
           );
         }}
       </Query>

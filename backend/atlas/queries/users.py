@@ -66,6 +66,7 @@ class Query(object):
         anniversary_after: date = None,
         birthday_before: date = None,
         birthday_after: date = None,
+        has_onboarded: bool = None,
         limit: int = 1000,
         order_by: str = None,
         **kwargs
@@ -117,6 +118,11 @@ class Query(object):
 
         if date_started_after:
             qs = qs.filter(profile__date_started__gt=date_started_after)
+
+        if has_onboarded is True:
+            qs = qs.filter(profile__has_onboarded=True)
+        elif has_onboarded is False:
+            qs = qs.filter(profile__has_onboarded=False)
 
         if anniversary_before:
             qs = qs.filter(

@@ -45,6 +45,7 @@ class Profile(models.Model):
     nintendo = models.TextField(null=True)
     config = JSONField(default=dict)
     is_human = models.BooleanField(default=True)
+    has_onboarded = models.BooleanField(default=False)
 
     class Meta:
         db_table = "profile"

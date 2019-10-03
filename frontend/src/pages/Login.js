@@ -71,7 +71,9 @@ class Login extends Component {
 
   componentDidUpdate() {
     if (this.props.authenticated) {
-      let nextUri = this.context.router.location.query.next || "/";
+      let nextUri = this.props.user.hasOnboarded
+        ? this.context.router.location.query.next || "/"
+        : "/onboarding";
       if (nextUri.indexOf("/") !== 0) nextUri = "";
       this.context.router.push({
         pathname: nextUri
@@ -114,7 +116,8 @@ class Login extends Component {
 export default connect(
   ({ auth }) => ({
     gapi: auth.gapi,
-    authenticated: auth.authenticated
+    authenticated: auth.authenticated,
+    user: auth.user
   }),
   { loadSession: actions.loadSession, login: actions.login }
 )(Login);
