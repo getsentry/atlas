@@ -41,7 +41,7 @@ export default ({ children }) => (
           </Card>
           <Card withPadding>
             <h2>Departments</h2>
-            <NavigationLink to="/admin/departments">Search</NavigationLink>
+            <NavigationLink to="/admin/departments">All Departments</NavigationLink>
           </Card>
         </Box>
         <Box flex="1" mx={3}>

@@ -5,8 +5,9 @@ import { Route, IndexRoute } from "react-router";
 import App from "./pages/App";
 import AdminLayout from "./pages/AdminLayout";
 import AdminAudit from "./pages/AdminAudit";
-import AdminDepartments from "./pages/AdminDepartments";
 import AdminBulkUpdatePeople from "./pages/AdminBulkUpdatePeople";
+import AdminDepartments from "./pages/AdminDepartments";
+import AdminUpdateDepartment from "./pages/AdminUpdateDepartment";
 import HealthCheck from "./pages/HealthCheck";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -43,6 +44,7 @@ export default (
     <Route path="/admin" component={AdminLayout}>
       <Route path="/admin/audit" component={AdminAudit} />
       <Route path="/admin/departments" component={AdminDepartments} />
+      <Route path="/admin/departments/:departmentId" component={AdminUpdateDepartment} />
       <Route path="/admin/update-people" component={AdminBulkUpdatePeople} />
     </Route>
     <Route path="*" component={NotFoundError} />

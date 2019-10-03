@@ -51,8 +51,13 @@ class UpdateDepartment(graphene.Mutation):
                 updates[field] = value
 
         if "parent" in updates:
-            updates["parent"] = parent = Department.objects.get(pk=updates["parent"])
-            updates["tree"] = (parent.tree or []) + [parent.pk]
+            if updates["parent"]:
+                updates["parent"] = parent = Department.objects.get(
+                    pk=updates["parent"]
+                )
+                updates["tree"] = (parent.tree or []) + [parent.pk]
+            else:
+                updates["tree"] = None
 
         if updates:
             for key, value in updates.items():

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 import { Flex, Box } from "@rebass/grid/emotion";
 import { Query } from "react-apollo";
 
@@ -23,16 +24,20 @@ export default () => (
           if (loading) return <PageLoader />;
           const { departments } = data;
           return departments.map(d => (
-            <Flex>
-              <Box flex="1">
-                <strong>{d.name}</strong>
-                <br />
-                <small>{d.id}</small>
-              </Box>
-              <Box style={{ textAlign: "right" }}>
-                {d.numPeople > 0 ? d.numPeople.toLocaleString() : null}
-              </Box>
-            </Flex>
+            <div style={{ marginBottom: "0.5rem" }}>
+              <Flex>
+                <Box flex="1">
+                  <strong>
+                    <Link to={`/admin/departments/${d.id}`}>{d.name}</Link>
+                  </strong>
+                  <br />
+                  <small>{d.id}</small>
+                </Box>
+                <Box style={{ textAlign: "right" }}>
+                  {d.numPeople > 0 ? d.numPeople.toLocaleString() : null}
+                </Box>
+              </Flex>
+            </div>
           ));
         }}
       </Query>
