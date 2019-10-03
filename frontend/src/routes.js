@@ -7,6 +7,7 @@ import AdminLayout from "./pages/AdminLayout";
 import AdminAudit from "./pages/AdminAudit";
 import AdminBulkUpdatePeople from "./pages/AdminBulkUpdatePeople";
 import AdminDepartments from "./pages/AdminDepartments";
+import AdminDeleteDepartment from "./pages/AdminDeleteDepartment";
 import AdminUpdateDepartment from "./pages/AdminUpdateDepartment";
 import HealthCheck from "./pages/HealthCheck";
 import Home from "./pages/Home";
@@ -45,6 +46,10 @@ export default (
       <Route path="/admin/audit" component={AdminAudit} />
       <Route path="/admin/departments" component={AdminDepartments} />
       <Route path="/admin/departments/:departmentId" component={AdminUpdateDepartment} />
+      <Route
+        path="/admin/departments/:departmentId/delete"
+        component={AdminDeleteDepartment}
+      />
       <Route path="/admin/update-people" component={AdminBulkUpdatePeople} />
     </Route>
     <Route path="*" component={NotFoundError} />

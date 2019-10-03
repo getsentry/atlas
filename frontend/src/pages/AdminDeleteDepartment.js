@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as yup from "yup";
 
-import Button, { ButtonLink } from "../components/Button";
+import Button from "../components/Button";
 import Card from "../components/Card";
 import FieldWrapper from "../components/FieldWrapper";
 import apolloClient from "../utils/apollo";
@@ -36,9 +36,9 @@ export const DEPARTMENT_QUERY = gql`
   }
 `;
 
-export const DEPARTMENT_MUTATION = gql`
-  mutation updateDepartment($department: UUID!, $data: DepartmentInput!) {
-    updateDepartment(department: $department, data: $data) {
+export const DEPARTMENT_DELETE_MUTATION = gql`
+  mutation deleteDepartment($department: UUID!, $newDepartment: UUID!) {
+    deleteDepartment(department: $department, newDepartment: $newDepartment) {
       ok
       errors
     }
@@ -57,16 +57,14 @@ export default class extends Component {
         }
       })
       .then(({ data: { departments } }) => {
-        callback([
-          {
-            value: "",
-            label: "(no parent)"
-          },
-          ...departments.map(u => ({
-            value: u.id,
-            label: u.name
-          }))
-        ]);
+        callback(
+          departments
+            .filter(d => d.id !== this.props.params.departmentId)
+            .map(u => ({
+              value: u.id,
+              label: u.name
+            }))
+        );
       });
   };
 
@@ -79,51 +77,34 @@ export default class extends Component {
           if (!departments.length)
             return <ErrorMessage message="Couldn't find that department." />;
           const department = departments[0];
-          const initialValues = {
-            id: department.id,
-            name: department.name,
-            parent: department.parent
-              ? {
-                  value: department.parent.id,
-                  label: department.parent.name
-                }
-              : {
-                  value: "",
-                  label: "(no parent)"
-                }
-          };
           return (
             <Formik
-              initialValues={initialValues}
+              initialValues={{}}
               validationSchema={DepartmentSchema}
               onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
                 let data = {};
                 Object.keys(values).forEach(k => {
-                  let initialVal = initialValues[k];
                   let curVal = values[k];
                   if (curVal && curVal.hasOwnProperty("value")) {
-                    initialVal = initialVal ? initialVal.value : null;
                     curVal = curVal.value;
                   }
-                  if (curVal !== initialVal) {
-                    data[k] = curVal || "";
-                  }
+                  data[k] = curVal || "";
                 });
                 apolloClient
                   .mutate({
-                    mutation: DEPARTMENT_MUTATION,
+                    mutation: DEPARTMENT_DELETE_MUTATION,
                     variables: {
                       department: department.id,
-                      data
+                      ...data
                     }
                   })
                   .then(
-                    ({ data: { updateDepartment }, errors }) => {
+                    ({ data: { deleteDepartment }, errors }) => {
                       setSubmitting(false);
                       if (errors) {
                         setStatus({ error: "" + errors[0].message });
-                      } else if (!updateDepartment.ok) {
-                        setStatus({ error: "" + updateDepartment.errors[0] });
+                      } else if (!deleteDepartment.ok) {
+                        setStatus({ error: "" + deleteDepartment.errors[0] });
                       } else {
                         this.context.router.push({
                           pathname: `/admin/departments`
@@ -144,33 +125,38 @@ export default class extends Component {
             >
               {({ isSubmitting, status, errors }) => (
                 <Form>
+                  <Card>
+                    <p>
+                      You are removing the <strong>{department.name}</strong> department.
+                    </p>
+                    <p>
+                      To continue you need to select a department where any existing
+                      people will be transferred to.
+                    </p>
+                    <p>
+                      <strong>This operation cannot be undone!</strong>
+                    </p>
+                  </Card>
                   {status && status.error && (
                     <Card withPadding>
                       <strong>{status.error}</strong>
                     </Card>
                   )}
                   <Card>
-                    <FieldWrapper type="text" name="id" label="ID" readonly required />
-                    <FieldWrapper type="text" name="name" label="Name" required />
                     <FieldWrapper
                       type="select"
-                      name="parent"
-                      label="Parent"
+                      name="newDepartment"
+                      label="New Department"
+                      help="Where should we transfer people to?"
                       loadOptions={this.loadMatchingDepartments}
+                      required
                     />
                   </Card>
 
                   <Card withPadding>
-                    <Button type="submit" disabled={isSubmitting}>
-                      Save Changes
+                    <Button priority="danger" type="submit" disabled={isSubmitting}>
+                      Save & Delete
                     </Button>
-                    <ButtonLink
-                      priority="danger"
-                      to={`/admin/departments/${department.id}/delete`}
-                      disabled={isSubmitting}
-                    >
-                      Delete
-                    </ButtonLink>
                   </Card>
                 </Form>
               )}

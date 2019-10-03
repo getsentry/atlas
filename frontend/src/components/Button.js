@@ -1,8 +1,10 @@
+import { css } from "@emotion/core";
 import styled from "@emotion/styled";
+import { Link } from "react-router";
 
 import colors from "../colors";
 
-export default styled.button`
+const button_styles = props => css`
   display: inline-block;
   font-weight: 400;
   text-align: center;
@@ -11,6 +13,7 @@ export default styled.button`
   padding: 0.375rem 0.75rem;
   line-height: 1.5;
   border-radius: 0.25rem;
+  margin-right: 0.5rem;
   cursor: pointer;
   background: ${colors.white};
   color: ${colors.primary};
@@ -26,4 +29,23 @@ export default styled.button`
     border-color: ${colors.primary};
     color: ${colors.white};
   }
+  ${props.priority === "danger" &&
+    `
+    color: ${colors.red};
+    border-color: ${colors.red};
+
+    &:hover {
+      background: ${colors.red};
+      border-color: ${colors.red};
+      }
+    }
+  `}
+`;
+
+export const ButtonLink = styled(Link)`
+  ${button_styles}
+`;
+
+export default styled.button`
+  ${button_styles}
 `;
