@@ -29,6 +29,9 @@ export default () => (
                 <br />
                 <small>{d.id}</small>
               </Box>
+              <Box style={{ textAlign: "right" }}>
+                {d.numPeople > 0 ? d.numPeople.toLocaleString() : null}
+              </Box>
             </Flex>
           ));
         }}
