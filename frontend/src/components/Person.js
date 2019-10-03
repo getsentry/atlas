@@ -146,6 +146,7 @@ export default class Person extends Component {
                         )}
                         <h4>{thisPerson.title}</h4>
                         {thisPerson.employeeType &&
+                          thisPerson.employeeType.name &&
                           thisPerson.employeeType.id !== "FULL_TIME" && (
                             <h4>({thisPerson.employeeType.name})</h4>
                           )}
