@@ -1,6 +1,7 @@
 from .binary import *  # NOQA
 from .decimal import *  # NOQA
 from .department import *  # NOQA
+from .departmentinput import *  # NOQA
 from .employeetype import *  # NOQA
 from .nullable import *  # NOQA
 from .office import *  # NOQA

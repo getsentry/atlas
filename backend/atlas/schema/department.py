@@ -8,7 +8,7 @@ from atlas.models import Department, Profile
 
 class DepartmentNode(gql_optimizer.OptimizedDjangoObjectType):
     num_people = graphene.Int(required=False)
-    # parent = graphene.Field(lambda: DepartmentNode)
+    parent = graphene.Field(lambda: DepartmentNode)
 
     class Meta:
         model = Department

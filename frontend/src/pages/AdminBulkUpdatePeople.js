@@ -21,8 +21,10 @@ export const BULK_PERSON_MUTATION = gql`
 export default class AdminBulkUpdatePeople extends Component {
   render() {
     return (
-      <Card>
-        <h1>Update People</h1>
+      <section>
+        <Card>
+          <h1>Update People</h1>
+        </Card>
         <Query
           query={LIST_PEOPLE_QUERY}
           variables={{
@@ -48,67 +50,67 @@ export default class AdminBulkUpdatePeople extends Component {
                 })
             );
             return (
-              <section>
-                <Formik
-                  initialValues={initialValues}
-                  onSubmit={({ users }, { setErrors, setStatus, setSubmitting }) => {
-                    let data = [];
-                    Object.keys(users).forEach(id => {
-                      let userData = { id };
-                      let changes = false;
-                      Object.keys(users[id]).forEach(k => {
-                        let initialVal = initialValues.users[id][k];
-                        let curVal = users[id][k];
-                        if (curVal.hasOwnProperty("value")) {
-                          initialVal = initialVal ? initialVal.value : null;
-                          curVal = curVal.value;
-                        }
-                        if (curVal !== initialVal) {
-                          userData[k] = curVal || "";
-                          changes = true;
-                        }
-                      });
-                      if (changes) data.push(userData);
+              <Formik
+                initialValues={initialValues}
+                onSubmit={({ users }, { setErrors, setStatus, setSubmitting }) => {
+                  let data = [];
+                  Object.keys(users).forEach(id => {
+                    let userData = { id };
+                    let changes = false;
+                    Object.keys(users[id]).forEach(k => {
+                      let initialVal = initialValues.users[id][k];
+                      let curVal = users[id][k];
+                      if (curVal.hasOwnProperty("value")) {
+                        initialVal = initialVal ? initialVal.value : null;
+                        curVal = curVal.value;
+                      }
+                      if (curVal !== initialVal) {
+                        userData[k] = curVal || "";
+                        changes = true;
+                      }
                     });
-                    apolloClient
-                      .mutate({
-                        mutation: BULK_PERSON_MUTATION,
-                        variables: {
-                          data
+                    if (changes) data.push(userData);
+                  });
+                  apolloClient
+                    .mutate({
+                      mutation: BULK_PERSON_MUTATION,
+                      variables: {
+                        data
+                      }
+                    })
+                    .then(
+                      ({
+                        data: {
+                          updatePeople: { ok, errors }
                         }
-                      })
-                      .then(
-                        ({
-                          data: {
-                            updatePeople: { ok, errors }
-                          }
-                        }) => {
-                          setSubmitting(false);
-                          if (!ok) {
-                            setStatus({ error: "" + errors[0] });
-                          } else {
-                            window.location.reload();
-                          }
-                        },
-                        err => {
-                          if (err.graphQLErrors && err.graphQLErrors.length) {
-                            // do something useful
-                            setStatus({ error: "" + err });
-                          } else {
-                            setStatus({ error: "" + err });
-                          }
-                          setSubmitting(false);
+                      }) => {
+                        setSubmitting(false);
+                        if (!ok) {
+                          setStatus({ error: "" + errors[0] });
+                        } else {
+                          window.location.reload();
                         }
-                      );
-                  }}
-                >
-                  {({ isSubmitting, status }) => (
-                    <Form>
-                      {status && status.error && (
-                        <Card withPadding>
-                          <strong>{status.error}</strong>
-                        </Card>
-                      )}
+                      },
+                      err => {
+                        if (err.graphQLErrors && err.graphQLErrors.length) {
+                          // do something useful
+                          setStatus({ error: "" + err });
+                        } else {
+                          setStatus({ error: "" + err });
+                        }
+                        setSubmitting(false);
+                      }
+                    );
+                }}
+              >
+                {({ isSubmitting, status }) => (
+                  <Form>
+                    {status && status.error && (
+                      <Card withPadding>
+                        <strong>{status.error}</strong>
+                      </Card>
+                    )}
+                    <Card>
                       <table>
                         <thead>
                           <tr>
@@ -153,19 +155,19 @@ export default class AdminBulkUpdatePeople extends Component {
                           ))}
                         </tbody>
                       </table>
-                      <Card withPadding>
-                        <Button type="submit" disabled={isSubmitting}>
-                          Submit
-                        </Button>
-                      </Card>
-                    </Form>
-                  )}
-                </Formik>
-              </section>
+                    </Card>
+                    <Card withPadding>
+                      <Button type="submit" disabled={isSubmitting}>
+                        Save Changes
+                      </Button>
+                    </Card>
+                  </Form>
+                )}
+              </Formik>
             );
           }}
         </Query>
-      </Card>
+      </section>
     );
   }
 }
