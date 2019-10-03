@@ -6,7 +6,7 @@ from django.conf import settings
 from django.db import models, transaction
 
 from atlas.constants import FIELD_MODEL_MAP, RESTRICTED_FIELDS, SUPERUSER_ONLY_FIELDS
-from atlas.models import Office, Profile, User
+from atlas.models import Department, Office, Profile, User
 from atlas.schema import UserInput, UserNode
 from atlas.tasks import update_profile
 
@@ -77,6 +77,8 @@ class UpdateUser(graphene.Mutation):
 
             if field == "office" and value:
                 value = Office.objects.get(id=value)
+            elif field == "department" and value:
+                value = Department.objects.get(id=value)
             elif field in ("reports_to", "referred_by") and value:
                 if value == user.id:
                     return UpdateUser(ok=False, errors=[f"Cannot set {field} to self"])
