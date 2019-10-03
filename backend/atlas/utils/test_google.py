@@ -9,6 +9,9 @@ def test_generate_profile_updates_is_human(responses, default_user):
 
 
 def test_generate_profile_updates_all_fields(responses, default_user):
+    default_user.profile.has_onboarded = False
+    default_user.profile.save()
+
     params = generate_profile_updates(default_user)
     assert params == {
         "customSchemas": {

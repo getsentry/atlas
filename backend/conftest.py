@@ -73,6 +73,7 @@ def default_user(db, design_department):
         reports_to=None,
         referred_by=None,
         employee_type="FULL_TIME",
+        has_onboarded=True,
     )
     return user
 
@@ -103,6 +104,7 @@ def default_superuser(db, ga_department):
         employee_type="FULL_TIME",
         reports_to=None,
         referred_by=None,
+        has_onboarded=True,
     )
     return user
 
