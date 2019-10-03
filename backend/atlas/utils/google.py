@@ -339,9 +339,12 @@ def sync_user(  # NOQA
                 except ValueError:
                     value = Department.objects.get_or_create(name=value)[0].id
             profile_fields["department_id"] = value
-        # default value is FULL_TIME when its empty
-        if (row.get("customType") or "FULL_TIME") != profile.employee_type:
-            profile_fields["employee_type"] = row.get("customType") or "FULL_TIME"
+        if (
+            row.get("customType") or DEFAULT_VALUES.get("employee_type")
+        ) != profile.employee_type:
+            profile_fields["employee_type"] = row.get(
+                "customType"
+            ) or DEFAULT_VALUES.get("employee_type")
     else:
         if profile.title:
             profile_fields["title"] = None
