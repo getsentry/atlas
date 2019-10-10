@@ -13,7 +13,7 @@ class Query(object):
         # root=graphene.UUID(),
         # parent=graphene.UUID(),
         query=graphene.String(),
-        people_only=graphene.Boolean(default_value=True),
+        people_only=graphene.Boolean(default_value=False),
         offset=graphene.Int(),
         limit=graphene.Int(),
     )

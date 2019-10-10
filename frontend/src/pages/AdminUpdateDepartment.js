@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as yup from "yup";
 
@@ -9,41 +8,15 @@ import Button, { ButtonLink } from "../components/Button";
 import Card from "../components/Card";
 import FieldWrapper from "../components/FieldWrapper";
 import apolloClient from "../utils/apollo";
+import {
+  GET_DEPARTMENT_QUERY,
+  SELECT_DEPARTMENT_QUERY,
+  UPDATE_DEPARTMENT_MUTATION
+} from "../queries";
 
 const DepartmentSchema = yup.object().shape({
   name: yup.string().nullable()
 });
-
-export const DEPARTMENT_SELECT_QUERY = gql`
-  query listDepartmentsForSelect($query: String!) {
-    departments(query: $query, limit: 10) {
-      id
-      name
-    }
-  }
-`;
-
-export const DEPARTMENT_QUERY = gql`
-  query getDepartmentForUpdate($id: UUID!) {
-    departments(id: $id) {
-      id
-      name
-      parent {
-        id
-        name
-      }
-    }
-  }
-`;
-
-export const DEPARTMENT_MUTATION = gql`
-  mutation updateDepartment($department: UUID!, $data: DepartmentInput!) {
-    updateDepartment(department: $department, data: $data) {
-      ok
-      errors
-    }
-  }
-`;
 
 export default class extends Component {
   static contextTypes = { router: PropTypes.object.isRequired };
@@ -51,7 +24,7 @@ export default class extends Component {
   loadMatchingDepartments = (inputValue, callback) => {
     apolloClient
       .query({
-        query: DEPARTMENT_SELECT_QUERY,
+        query: SELECT_DEPARTMENT_QUERY,
         variables: {
           query: inputValue
         }
@@ -72,7 +45,10 @@ export default class extends Component {
 
   render() {
     return (
-      <Query query={DEPARTMENT_QUERY} variables={{ id: this.props.params.departmentId }}>
+      <Query
+        query={GET_DEPARTMENT_QUERY}
+        variables={{ id: this.props.params.departmentId }}
+      >
         {({ loading, data: { departments } }) => {
           //if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;
@@ -111,7 +87,7 @@ export default class extends Component {
                 });
                 apolloClient
                   .mutate({
-                    mutation: DEPARTMENT_MUTATION,
+                    mutation: UPDATE_DEPARTMENT_MUTATION,
                     variables: {
                       department: department.id,
                       data

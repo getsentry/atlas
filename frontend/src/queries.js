@@ -57,6 +57,46 @@ export const LIST_DEPARTMENTS_QUERY = gql`
   }
 `;
 
+export const GET_DEPARTMENT_QUERY = gql`
+  query getDepartmentForUpdate($id: UUID!) {
+    departments(id: $id) {
+      id
+      name
+      parent {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const SELECT_DEPARTMENT_QUERY = gql`
+  query listDepartmentsForSelect($query: String!) {
+    departments(query: $query, limit: 10) {
+      id
+      name
+    }
+  }
+`;
+
+export const CREATE_DEPARTMENT_MUTATION = gql`
+  mutation createDepartment($data: DepartmentInput!) {
+    createDepartment(data: $data) {
+      ok
+      errors
+    }
+  }
+`;
+
+export const UPDATE_DEPARTMENT_MUTATION = gql`
+  mutation updateDepartment($department: UUID!, $data: DepartmentInput!) {
+    updateDepartment(department: $department, data: $data) {
+      ok
+      errors
+    }
+  }
+`;
+
 export const LIST_PEOPLE_QUERY = gql`
   query listPeople(
     $office: UUID

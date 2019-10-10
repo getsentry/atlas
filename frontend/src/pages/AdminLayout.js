@@ -42,6 +42,9 @@ export default ({ children }) => (
           <Card withPadding>
             <h2>Departments</h2>
             <NavigationLink to="/admin/departments">All Departments</NavigationLink>
+            <NavigationLink to="/admin/departments/create">
+              Create Department
+            </NavigationLink>
           </Card>
         </Box>
         <Box flex="1" mx={3}>
