@@ -90,7 +90,10 @@ class Query(object):
             qs = qs.filter(profile__office=office)
 
         if department:
-            qs = qs.filter(profile__department=department)
+            qs = qs.filter(
+                Q(profile__department=department)
+                | Q(profile__department__tree__contains=[department])
+            )
 
         if employee_type:
             qs = qs.filter(profile__employee_type=employee_type)

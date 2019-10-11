@@ -66,14 +66,16 @@ export default class Home extends Component {
       <Layout title="Home">
         <Content>
           <Box flex="1" mx={3}>
-            <form onSubmit={this.onSearch}>
-              <SearchInput
-                type="text"
-                name="query"
-                placeholder="find a human"
-                onChange={this.onChangeQuery}
-              />
-            </form>
+            <Card>
+              <form onSubmit={this.onSearch}>
+                <SearchInput
+                  type="text"
+                  name="query"
+                  placeholder="find a human"
+                  onChange={this.onChangeQuery}
+                />
+              </form>
+            </Card>
           </Box>
           <Flex>
             <Box width={1 / 2} px={3}>
