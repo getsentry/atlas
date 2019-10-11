@@ -83,7 +83,10 @@ const Filter = styled(({ className, location, name, title, allLabel, choices }) 
 
 function DepartmentFilter({ location }) {
   return (
-    <Query query={LIST_DEPARTMENTS_QUERY} variables={{ peopleOnly: true }}>
+    <Query
+      query={LIST_DEPARTMENTS_QUERY}
+      variables={{ peopleOnly: true, rootOnly: true }}
+    >
       {({ loading, error, data }) => {
         if (error) throw error;
         if (loading) return <PageLoader />;

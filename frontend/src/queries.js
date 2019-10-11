@@ -48,8 +48,13 @@ export const GET_OFFICE_QUERY = gql`
 `;
 
 export const LIST_DEPARTMENTS_QUERY = gql`
-  query listDepartments($id: UUID, $query: String, $peopleOnly: Boolean) {
-    departments(id: $id, query: $query, peopleOnly: $peopleOnly) {
+  query listDepartments(
+    $id: UUID
+    $query: String
+    $peopleOnly: Boolean
+    $rootOnly: Boolean
+  ) {
+    departments(id: $id, query: $query, peopleOnly: $peopleOnly, rootOnly: $rootOnly) {
       id
       name
       numPeople
@@ -168,6 +173,10 @@ export const GET_PERSON_QUERY = gql`
       department {
         id
         name
+        tree {
+          id
+          name
+        }
       }
       dobMonth
       dobDay

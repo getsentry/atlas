@@ -47,6 +47,16 @@ def design_department(db):
 
 
 @pytest.fixture
+def creative_department(design_department):
+    return factories.DepartmentFactory(
+        id=UUID("955ed539-750a-400c-8e88-cf60f471f16b"),
+        name="Creative",
+        parent=design_department,
+        tree=(design_department.tree or []) + [design_department.id],
+    )
+
+
+@pytest.fixture
 def ga_department(db):
     return factories.DepartmentFactory.create(
         id=UUID("12a1120e-07a8-4d4b-aa94-a74694aa0b85"), name="G&A"

@@ -107,6 +107,42 @@ const AgeBadge = styled(({ className, user: { dateStarted, tenurePercent } }) =>
   }
 `;
 
+const DepartmentTree = styled(({ className, department }) => {
+  if (!department)
+    return (
+      <div className={className}>
+        <Empty />
+      </div>
+    );
+  return (
+    <ul className={className}>
+      {department.tree.map(n => {
+        return <li>{n.name}</li>;
+      })}
+      <li>{department.name}</li>
+    </ul>
+  );
+})`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+
+  li {
+    display: inline;
+
+    &:after {
+      padding: 0 0.25rem;
+      font-size: 0.9em;
+      content: " » ";
+    }
+
+    &:last-child:after {
+      content: "";
+    }
+  }
+`;
+
 export default class Person extends Component {
   static propTypes = {
     email: PropTypes.string.isRequired
@@ -204,11 +240,7 @@ export default class Person extends Component {
                             </dd>
                             <dt>Department</dt>
                             <dd>
-                              {thisPerson.department ? (
-                                thisPerson.department.name
-                              ) : (
-                                <Empty />
-                              )}
+                              <DepartmentTree department={thisPerson.department} />
                             </dd>
                             <dt>Team</dt>
                             <dd>{thisPerson.team || <Empty />}</dd>
