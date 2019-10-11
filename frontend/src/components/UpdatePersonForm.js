@@ -9,6 +9,7 @@ import * as yup from "yup";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import { DAY_SCHEDULE } from "../components/DaySchedule";
+import DepartmentSelectField from "../components/DepartmentSelectField";
 import FieldWrapper from "../components/FieldWrapper";
 import { PRONOUNS } from "../components/Pronouns";
 import apolloClient from "../utils/apollo";
@@ -27,15 +28,6 @@ const UserSchema = yup.object().shape({
   isHuman: yup.bool().nullable(),
   isSuperuser: yup.bool().nullable()
 });
-
-export const DEPARTMENT_SELECT_QUERY = gql`
-  query listDepartmentsForSelect($query: String!) {
-    departments(query: $query) {
-      id
-      name
-    }
-  }
-`;
 
 export const PEOPLE_SELECT_QUERY = gql`
   query listPeopleForSelect($query: String!) {
@@ -149,24 +141,6 @@ class UpdatePersonForm extends Component {
               value: u.id,
               label: `${u.name} <${u.email}>`
             }))
-        );
-      });
-  };
-
-  loadMatchingDepartments = (inputValue, callback) => {
-    apolloClient
-      .query({
-        query: DEPARTMENT_SELECT_QUERY,
-        variables: {
-          query: inputValue
-        }
-      })
-      .then(({ data: { departments } }) => {
-        callback(
-          departments.map(u => ({
-            value: u.id,
-            label: u.name
-          }))
         );
       });
   };
@@ -391,11 +365,9 @@ class UpdatePersonForm extends Component {
                         loadOptions={this.loadMatchingUsers}
                         readonly={restrictedFields.has("reportsTo")}
                       />
-                      <FieldWrapper
-                        type="select"
+                      <DepartmentSelectField
                         name="department"
                         label="Department"
-                        loadOptions={this.loadMatchingDepartments}
                         readonly={restrictedFields.has("department")}
                       />
                       <FieldWrapper

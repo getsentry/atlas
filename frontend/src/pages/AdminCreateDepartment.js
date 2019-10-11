@@ -5,9 +5,10 @@ import * as yup from "yup";
 
 import Button from "../components/Button";
 import Card from "../components/Card";
+import DepartmentSelectField from "../components/DepartmentSelectField";
 import FieldWrapper from "../components/FieldWrapper";
 import apolloClient from "../utils/apollo";
-import { CREATE_DEPARTMENT_MUTATION, SELECT_DEPARTMENT_QUERY } from "../queries";
+import { CREATE_DEPARTMENT_MUTATION } from "../queries";
 
 const DepartmentSchema = yup.object().shape({
   name: yup.string().nullable()
@@ -15,28 +16,6 @@ const DepartmentSchema = yup.object().shape({
 
 export default class extends Component {
   static contextTypes = { router: PropTypes.object.isRequired };
-
-  loadMatchingDepartments = (inputValue, callback) => {
-    apolloClient
-      .query({
-        query: SELECT_DEPARTMENT_QUERY,
-        variables: {
-          query: inputValue
-        }
-      })
-      .then(({ data: { departments } }) => {
-        callback([
-          {
-            value: "",
-            label: "(no parent)"
-          },
-          ...departments.map(u => ({
-            value: u.id,
-            label: u.name
-          }))
-        ]);
-      });
-  };
 
   render() {
     const initialValues = {};
@@ -98,12 +77,7 @@ export default class extends Component {
             )}
             <Card>
               <FieldWrapper type="text" name="name" label="Name" required />
-              <FieldWrapper
-                type="select"
-                name="parent"
-                label="Parent"
-                loadOptions={this.loadMatchingDepartments}
-              />
+              <DepartmentSelectField name="parent" label="Parent" />
             </Card>
 
             <Card withPadding>

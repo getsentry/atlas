@@ -31,6 +31,7 @@ const selectStyles = {
 const SelectField = ({ field, form, options, ...fieldOptions }) => (
   <Select
     {...field}
+    formatOptionLabel={fieldOptions.formatOptionLabel}
     styles={selectStyles}
     options={options}
     name={field.name}
@@ -46,6 +47,7 @@ const AsyncSelectField = ({ field, form, loadOptions, ...fieldOptions }) => {
   return (
     <AsyncSelect
       {...field}
+      formatOptionLabel={fieldOptions.formatOptionLabel}
       styles={selectStyles}
       cacheOptions
       loadOptions={loadOptions}
@@ -71,19 +73,19 @@ export default styled(
     options,
     help,
     required,
-    loadOptions
+    ...fieldOptions
   }) => {
     let fieldProps = {
       name,
       disabled: readonly,
       placeholder,
       hidden,
-      required: required || false
+      required: required || false,
+      ...fieldOptions
     };
     if (type === "select") {
-      if (loadOptions) {
+      if (fieldProps.loadOptions) {
         fieldProps.component = AsyncSelectField;
-        fieldProps.loadOptions = loadOptions;
       } else {
         fieldProps.component = SelectField;
         fieldProps.options = options.map(([value, label]) => ({ value, label }));

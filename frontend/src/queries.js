@@ -80,6 +80,9 @@ export const SELECT_DEPARTMENT_QUERY = gql`
     departments(query: $query, limit: 10) {
       id
       name
+      tree {
+        name
+      }
     }
   }
 `;

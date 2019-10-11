@@ -6,13 +6,10 @@ import * as yup from "yup";
 
 import Button, { ButtonLink } from "../components/Button";
 import Card from "../components/Card";
+import DepartmentSelectField from "../components/DepartmentSelectField";
 import FieldWrapper from "../components/FieldWrapper";
 import apolloClient from "../utils/apollo";
-import {
-  GET_DEPARTMENT_QUERY,
-  SELECT_DEPARTMENT_QUERY,
-  UPDATE_DEPARTMENT_MUTATION
-} from "../queries";
+import { GET_DEPARTMENT_QUERY, UPDATE_DEPARTMENT_MUTATION } from "../queries";
 
 const DepartmentSchema = yup.object().shape({
   name: yup.string().nullable()
@@ -20,28 +17,6 @@ const DepartmentSchema = yup.object().shape({
 
 export default class extends Component {
   static contextTypes = { router: PropTypes.object.isRequired };
-
-  loadMatchingDepartments = (inputValue, callback) => {
-    apolloClient
-      .query({
-        query: SELECT_DEPARTMENT_QUERY,
-        variables: {
-          query: inputValue
-        }
-      })
-      .then(({ data: { departments } }) => {
-        callback([
-          {
-            value: "",
-            label: "(no parent)"
-          },
-          ...departments.map(u => ({
-            value: u.id,
-            label: u.name
-          }))
-        ]);
-      });
-  };
 
   render() {
     return (
@@ -128,11 +103,10 @@ export default class extends Component {
                   <Card>
                     <FieldWrapper type="text" name="id" label="ID" readonly required />
                     <FieldWrapper type="text" name="name" label="Name" required />
-                    <FieldWrapper
-                      type="select"
+                    <DepartmentSelectField
                       name="parent"
                       label="Parent"
-                      loadOptions={this.loadMatchingDepartments}
+                      exclude={department.id}
                     />
                   </Card>
 
