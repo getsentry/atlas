@@ -63,6 +63,7 @@ export default {
 
   gray100: $gray100,
   gray200: $gray200,
+  gray700: $gray700,
   gray900: $gray900,
 
   blue: $blue,

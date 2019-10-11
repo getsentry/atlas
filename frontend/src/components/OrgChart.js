@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import Draggable from "react-draggable";
+import styled from "@emotion/styled";
 
-import "./OrgChart.css";
+import colors from "../colors";
 
-export default class OrgChart extends Component {
+class OrgChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -91,7 +92,7 @@ export default class OrgChart extends Component {
     };
 
     return (
-      <div className="reactOrgChart-container">
+      <div className={this.props.className}>
         <div className="reactOrgChart" style={{ zoom: this.state.zoom }}>
           <Draggable>
             <div>{tree.map(renderChildren)}</div>
@@ -101,3 +102,89 @@ export default class OrgChart extends Component {
     );
   }
 }
+
+const StyledOrgChart = styled(OrgChart)`
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0;
+  top: 34px;
+  zoom: 0.9;
+  margin-top: 3rem;
+  background-color: ${colors.background};
+  border-top: 1px solid hsla(0, 0%, 100%, 0.1);
+  display: flex;
+  flex: 1;
+  background-size: 10px 10px;
+  background-image: linear-gradient(to right, rgba(1, 1, 1, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(1, 1, 1, 0.03) 1px, transparent 1px);
+
+  .reactOrgChart {
+    margin: 2px;
+    padding: 2rem;
+    display: block;
+    overflow: hidden;
+    cursor: all-scroll;
+    flex-grow: 1;
+  }
+
+  .reactOrgChart .orgNodeChildGroup .node {
+    border: solid 1px ${colors.gray700};
+    display: inline-block;
+    padding: 4px;
+    width: 100px;
+  }
+
+  .reactOrgChart .orgNodeChildGroup .nodeCell {
+    text-align: center;
+  }
+
+  .reactOrgChart .orgNodeChildGroup .nodeCell .nodeItem {
+    border: solid 1px ${colors.gray700};
+    margin: 0 3px;
+    border-radius: 3px;
+    padding: 5px;
+    width: 200px;
+    display: inline-block;
+    color: ${colors.cardText};}
+    background: ${colors.background};
+  }
+  .reactOrgChart .orgNodeChildGroup .nodeCell .nodeItem img {
+    display: inline-block;
+    width: 32px;
+  }
+
+  .reactOrgChart .orgNodeChildGroup .nodeGroupCell {
+    vertical-align: top;
+  }
+
+  .reactOrgChart .orgNodeChildGroup .nodeGroupLineVerticalMiddle {
+    height: 25px;
+    width: 50%;
+    border-right: solid 1px ${colors.gray700};
+  }
+
+  .reactOrgChart .nodeLineBorderTop {
+    border-top: solid 1px ${colors.gray700};
+  }
+
+  .reactOrgChart table {
+    border-collapse: collapse;
+    border: none;
+    margin: 0 auto;
+  }
+
+  .reactOrgChart td {
+    padding: 0;
+  }
+
+  .reactOrgChart table.nodeLineTable {
+    width: 100%;
+  }
+
+  .reactOrgChart table td.nodeCell {
+    width: 50%;
+  }
+`;
+
+export default StyledOrgChart;
