@@ -3,7 +3,7 @@ from collections import namedtuple
 from datetime import date
 from decimal import Context
 from typing import Any, List, Optional, Tuple
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import requests
 import sentry_sdk
@@ -149,6 +149,8 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
                 raise NotImplementedError
             if isinstance(data[field], models.Model):
                 data[field] = data[field].pk
+            if isinstance(data[field], UUID):
+                data[field] = str(data[field])
 
     params = {}
 

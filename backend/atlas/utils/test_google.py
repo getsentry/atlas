@@ -10,6 +10,7 @@ def test_generate_profile_updates_is_human(responses, default_user):
 
 def test_generate_profile_updates_all_fields(responses, default_user):
     default_user.profile.has_onboarded = False
+    default_user.profile.department = None
     default_user.profile.save()
 
     params = generate_profile_updates(default_user)
@@ -43,7 +44,7 @@ def test_generate_profile_updates_all_fields(responses, default_user):
         },
         "organizations": [
             {
-                "department": default_user.profile.department_id,
+                "department": "",
                 "primary": True,
                 "title": "Dummy",
                 "customType": "FULL_TIME",
@@ -56,11 +57,12 @@ def test_generate_profile_updates_all_fields(responses, default_user):
 
 
 def test_generate_profile_updates_all_fields_with_all_fields(
-    responses, default_superuser, default_user, default_office
+    responses, default_superuser, default_user, default_office, ga_department
 ):
     default_user.profile.reports_to = default_superuser
     default_user.profile.referred_by = default_superuser
     default_user.profile.office = default_office
+    default_user.profile.department = ga_department
     default_user.profile.twitter = "@getsentry"
     default_user.profile.employee_type = "FULL_TIME"
     default_user.profile.handle = "Jane"
@@ -110,7 +112,7 @@ def test_generate_profile_updates_all_fields_with_all_fields(
         },
         "organizations": [
             {
-                "department": default_user.profile.department_id,
+                "department": str(ga_department.id),
                 "primary": True,
                 "title": "Dummy",
                 "customType": "FULL_TIME",
