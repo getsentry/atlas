@@ -168,7 +168,8 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
             {
                 "primary": True,
                 "title": data.get("title") or profile.title,
-                "department": data.get("department") or profile.department_id,
+                "department": data.get("department")
+                or str(profile.department_id or ""),
                 "customType": data.get("employee_type")
                 or profile.employee_type
                 or DEFAULT_VALUES.get("employee_type"),
