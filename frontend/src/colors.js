@@ -1,4 +1,4 @@
-const $white = "#FFF";
+const $white = "#f7f7f8";
 const $gray100 = "#FAFBFE";
 const $gray200 = "#EFF2F7";
 // eslint-disable-next-line
@@ -30,7 +30,7 @@ const $teal = "#00B8D9";
 const $cyan = "#4bd6e5";
 
 export default {
-  background: $gray900,
+  background: "#3e3947",
   text: $white,
 
   linkText: $gray300,
@@ -45,7 +45,7 @@ export default {
   inputTextFocused: $black,
   inputBorder: "#ced4da",
 
-  cardBackground: "rgb(56, 68, 77)",
+  cardBackground: "#4a4455",
   cardBackgroundHover: $black,
   cardText: $white,
 
