@@ -3,14 +3,39 @@ import styled from "@emotion/styled";
 
 const ChildSet = styled.ul`
   margin: 0;
-`;
+  list-style: none;
+  position: relative;
 
-const Node = styled.div`
-  border: solid 1px hsla(0, 0%, 100%, 0.1);
-  display: inline-block;
-  padding: 4px;
-  width: 250px;
-  margin-bottom: 0.25rem;
+  ul li {
+    border-left: 1px solid rgb(100, 100, 100);
+    margin: 0;
+    padding: 0 0 0.5rem 0.5rem;
+    position: relative;
+
+    &:first-child {
+      padding-top: 0.5rem;
+    }
+
+    &:last-child {
+      border-left: 0;
+    }
+
+    &:before {
+      position: absolute;
+      top: -1rem;
+      left: 0;
+      height: 2rem;
+      width: 0.5rem;
+      color: white;
+      border-bottom: 1px solid rgb(100, 100, 100);
+      content: "";
+      display: inline-block;
+    }
+
+    &:last-child:before {
+      border-left: 1px solid rgb(100, 100, 100);
+    }
+  }
 `;
 
 export default class OrgChart extends Component {
@@ -30,11 +55,7 @@ export default class OrgChart extends Component {
   };
 
   renderNode = node => {
-    return (
-      <Node>
-        <this.props.NodeComponent node={node} />
-      </Node>
-    );
+    return <this.props.NodeComponent node={node} />;
   };
 
   renderChildren = children => {

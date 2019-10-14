@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import OrgChart from "../components/OrgChart";
 import Layout from "../components/Layout";
 import PageLoader from "../components/PageLoader";
-import PersonLink from "../components/PersonLink";
+import PersonCard from "../components/PersonCard";
 
 export const LIST_ALL_PEOPLE_QUERY = gql`
   query listAllPeople {
@@ -53,11 +53,7 @@ const listToTree = list => {
 };
 
 const Node = ({ node }) => {
-  return (
-    <div className="nodeItem">
-      <PersonLink user={node} />
-    </div>
-  );
+  return <PersonCard user={node} horizontal slim noMargin />;
 };
 
 export default () => (
