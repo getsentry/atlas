@@ -339,7 +339,7 @@ def sync_user(  # NOQA
 
                     UUID(value)
                 except ValueError:
-                    value = Department.objects.get_or_create(name=value)[0].id
+                    value = str(Department.objects.get_or_create(name=value)[0].id)
             profile_fields["department_id"] = value
         if (
             row.get("customType") or DEFAULT_VALUES.get("employee_type")
