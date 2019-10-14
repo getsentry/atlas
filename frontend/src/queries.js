@@ -278,3 +278,20 @@ export const GET_PERSON_QUERY = gql`
     }
   }
 `;
+
+export const SELECT_PEOPLE_QUERY = gql`
+  query listPeopleForSelect($query: String!) {
+    users(humansOnly: true, query: $query, limit: 10) {
+      id
+      name
+      email
+      title
+      photo {
+        data
+        width
+        height
+        mimeType
+      }
+    }
+  }
+`;

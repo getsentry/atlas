@@ -9,8 +9,44 @@ import Button from "../components/Button";
 import colors from "../colors";
 import Card from "../components/Card";
 import DepartmentSelectField from "../components/DepartmentSelectField";
+import PersonSelectField from "../components/PersonSelectField";
 import PageLoader from "../components/PageLoader";
-import { LIST_PEOPLE_QUERY } from "../queries";
+
+export const LIST_PEOPLE_QUERY = gql`
+  query listPeopleForUpdate {
+    users(humansOnly: true, limit: 1000) {
+      id
+      name
+      email
+      department {
+        id
+        name
+      }
+      isHuman
+      title
+      dobMonth
+      dobDay
+      dateStarted
+      photo {
+        data
+        width
+        height
+        mimeType
+      }
+      reportsTo {
+        id
+        name
+        email
+        photo {
+          data
+          width
+          height
+          mimeType
+        }
+      }
+    }
+  }
+`;
 
 export const BULK_PERSON_MUTATION = gql`
   mutation updatePeople($data: [UserInput]!) {
@@ -66,7 +102,12 @@ export default class AdminBulkUpdatePeople extends Component {
                         label: u.department.name
                       }
                     : "",
-                  dateOfBirth: u.dateOfBirth || "",
+                  reportsTo: u.reportsTo
+                    ? {
+                        value: u.reportsTo.id,
+                        label: `${u.reportsTo.name} <${u.reportsTo.email}>`
+                      }
+                    : "",
                   dateStarted: u.dateStarted || ""
                 })
             );
@@ -165,15 +206,17 @@ export default class AdminBulkUpdatePeople extends Component {
                                   />
                                 </td>
                                 <td>
-                                  <Field
-                                    type="date"
-                                    name={`users[${u.id}][dateStarted]`}
+                                  <PersonSelectField
+                                    label=""
+                                    name={`users[${u.id}][reportsTo]`}
+                                    exclude={u.id}
+                                    noMargin
                                   />
                                 </td>
                                 <td>
                                   <Field
                                     type="date"
-                                    name={`users[${u.id}][dateOfBirth]`}
+                                    name={`users[${u.id}][dateStarted]`}
                                   />
                                 </td>
                               </tr>

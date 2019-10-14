@@ -11,6 +11,7 @@ import Card from "../components/Card";
 import { DAY_SCHEDULE } from "../components/DaySchedule";
 import DepartmentSelectField from "../components/DepartmentSelectField";
 import FieldWrapper from "../components/FieldWrapper";
+import PersonSelectField from "../components/PersonSelectField";
 import { PRONOUNS } from "../components/Pronouns";
 import apolloClient from "../utils/apollo";
 
@@ -28,16 +29,6 @@ const UserSchema = yup.object().shape({
   isHuman: yup.bool().nullable(),
   isSuperuser: yup.bool().nullable()
 });
-
-export const PEOPLE_SELECT_QUERY = gql`
-  query listPeopleForSelect($query: String!) {
-    users(humansOnly: true, query: $query, limit: 10) {
-      id
-      name
-      email
-    }
-  }
-`;
 
 export const PERSON_QUERY = gql`
   query getPersonForUpdate($email: String!) {
@@ -98,6 +89,12 @@ export const PERSON_QUERY = gql`
         id
         name
         email
+        photo {
+          data
+          width
+          height
+          mimeType
+        }
       }
       referredBy {
         id
@@ -124,26 +121,6 @@ class UpdatePersonForm extends Component {
   };
 
   static contextTypes = { router: PropTypes.object.isRequired };
-
-  loadMatchingUsers = (inputValue, callback) => {
-    apolloClient
-      .query({
-        query: PEOPLE_SELECT_QUERY,
-        variables: {
-          query: inputValue
-        }
-      })
-      .then(({ data: { users } }) => {
-        callback(
-          users
-            .filter(u => u.email !== this.props.email)
-            .map(u => ({
-              value: u.id,
-              label: `${u.name} <${u.email}>`
-            }))
-        );
-      });
-  };
 
   render() {
     const currentUser = this.props.user;
@@ -358,11 +335,10 @@ class UpdatePersonForm extends Component {
                         label="Title"
                         readonly={restrictedFields.has("title")}
                       />
-                      <FieldWrapper
-                        type="select"
+                      <PersonSelectField
                         name="reportsTo"
                         label="Manager"
-                        loadOptions={this.loadMatchingUsers}
+                        exclude={user.id}
                         readonly={restrictedFields.has("reportsTo")}
                       />
                       <DepartmentSelectField
@@ -386,11 +362,10 @@ class UpdatePersonForm extends Component {
                         label="Start Date"
                         readonly={restrictedFields.has("dateStarted")}
                       />
-                      <FieldWrapper
-                        type="select"
+                      <PersonSelectField
                         name="referredBy"
                         label="Referred By"
-                        loadOptions={this.loadMatchingUsers}
+                        exclude={user.id}
                         readonly={restrictedFields.has("referredBy")}
                       />
                     </Card>

@@ -71,7 +71,7 @@ export default class DepartmentSelectField extends Component {
     return <DepartmentTree name={label} tree={tree} />;
   };
 
-  loadMatchingDepartments = (inputValue, callback) => {
+  loadMatches = (inputValue, callback) => {
     apolloClient
       .query({
         query: SELECT_DEPARTMENT_QUERY,
@@ -96,7 +96,7 @@ export default class DepartmentSelectField extends Component {
     return (
       <FieldWrapper
         type="select"
-        loadOptions={this.loadMatchingDepartments}
+        loadOptions={this.loadMatches}
         formatOptionLabel={this.formatOption}
         {...this.props}
       />
