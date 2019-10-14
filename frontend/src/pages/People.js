@@ -4,10 +4,12 @@ import styled from "@emotion/styled";
 import { Link } from "react-router";
 import { Query } from "react-apollo";
 import { Flex, Box } from "@rebass/grid/emotion";
+import { AccountTree } from "@material-ui/icons";
 
 import colors from "../colors";
 import Card from "../components/Card";
 import Content from "../components/Content";
+import IconLink from "../components/IconLink";
 import Layout from "../components/Layout";
 import PeopleList from "../components/PeopleList";
 import PageLoader from "../components/PageLoader";
@@ -183,7 +185,7 @@ export default class People extends Component {
       <Layout>
         <Content>
           <Card>
-            <Flex mx={-3}>
+            <Flex mx={-3} alignItems="center">
               <Box width={250} mx={3}>
                 <h1>People</h1>
               </Box>
@@ -196,6 +198,13 @@ export default class People extends Component {
                     onChange={this.onChangeQuery}
                   />
                 </form>
+              </Box>
+              <Box mr={3}>
+                <IconLink
+                  icon={<AccountTree />}
+                  to={`/orgChart`}
+                  style={{ fontSize: "0.9em", marginBottom: "1rem" }}
+                />
               </Box>
             </Flex>
           </Card>

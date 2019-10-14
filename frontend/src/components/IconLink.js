@@ -4,9 +4,9 @@ import styled from "@emotion/styled";
 
 import colors from "../colors";
 
-export default styled(({ to, icon, children, className }) => {
+export default styled(({ to, icon, children, className, style }) => {
   return (
-    <Link to={to} className={className}>
+    <Link to={to} className={className} style={style}>
       {icon} {children}
     </Link>
   );
