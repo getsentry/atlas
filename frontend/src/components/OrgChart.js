@@ -129,7 +129,7 @@ const StyledOrgChart = styled(OrgChart)`
   }
 
   .reactOrgChart .orgNodeChildGroup .node {
-    border: solid 1px ${colors.gray700};
+    border: solid 1px hsla(0, 0%, 100%, 0.1);
     display: inline-block;
     padding: 4px;
     width: 100px;
@@ -140,7 +140,7 @@ const StyledOrgChart = styled(OrgChart)`
   }
 
   .reactOrgChart .orgNodeChildGroup .nodeCell .nodeItem {
-    border: solid 1px ${colors.gray700};
+    border: solid 1px hsla(0, 0%, 100%, 0.1);
     margin: 0 3px;
     border-radius: 3px;
     padding: 5px;
@@ -161,11 +161,11 @@ const StyledOrgChart = styled(OrgChart)`
   .reactOrgChart .orgNodeChildGroup .nodeGroupLineVerticalMiddle {
     height: 25px;
     width: 50%;
-    border-right: solid 1px ${colors.gray700};
+    border-right: solid 1px hsla(0, 0%, 100%, 0.1);
   }
 
   .reactOrgChart .nodeLineBorderTop {
-    border-top: solid 1px ${colors.gray700};
+    border-top: solid 1px hsla(0, 0%, 100%, 0.1);
   }
 
   .reactOrgChart table {
