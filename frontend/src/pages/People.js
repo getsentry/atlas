@@ -74,6 +74,10 @@ const Filter = styled(({ className, location, name, title, allLabel, choices }) 
       display: block;
       padding: 0.25rem 0.5rem;
       border-radius: 4px;
+
+      &:hover {
+        background: ${colors.cardBackgroundHover};
+      }
     }
 
     &.active a {

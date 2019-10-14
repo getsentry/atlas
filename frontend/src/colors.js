@@ -46,7 +46,7 @@ export default {
   inputBorder: "#ced4da",
 
   cardBackground: "#4a4455",
-  cardBackgroundHover: $black,
+  cardBackgroundHover: "#585262",
   cardText: $white,
 
   primary: $indigo,

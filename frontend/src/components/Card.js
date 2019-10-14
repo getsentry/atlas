@@ -11,11 +11,11 @@ export default styled(({ className, to, children }) => {
 })`
   background: ${colors.cardBackground};
   color: ${colors.cardText};
-  padding: 1rem 1rem 0;
-  margin: 0 0 1.5rem;
+  padding: ${props => (props.slim ? "0.5rem" : "1rem")} 1rem 0;
+  margin: 0 0 ${props => (props.noMargin ? 0 : "1.5rem")};
   overflow: visible;
   border-radius: 4px;
-  padding-bottom: ${props => (props.withPadding ? "1rem" : 0)};
+  padding-bottom: ${props => (props.withPadding ? (props.slim ? "0.5rem" : "1rem") : 0)};
 
   ${props =>
     props.to &&
@@ -23,10 +23,10 @@ export default styled(({ className, to, children }) => {
   & > a {
     color: inherit;
     display: block;
-    padding: 1rem 1rem 0;
-    padding-bottom: ${props.withPadding ? "1rem" : 0};
-    margin: -1rem -1rem 0;
-    margin-bottom: ${props.withPadding ? "-1rem" : 0};
+    padding: ${props.slim ? "0.5rem 1rem" : "1rem 1rem"} 0;
+    padding-bottom: ${props.withPadding ? (props.slim ? "0.5rem" : "1rem") : 0};
+    margin: ${props.slim ? "-0.5rem -1rem" : "-1rem -1rem"} 0;
+    margin-bottom: ${props.withPadding ? (props.slim ? "-0.5rem" : "-1rem") : 0};
 
     &:hover {
       background: ${colors.cardBackgroundHover};
