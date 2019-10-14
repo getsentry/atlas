@@ -150,6 +150,7 @@ const globalStyles = css`
   input[type="date"],
   select,
   textarea {
+    display: block;
     width: 100%;
     padding: 0.375rem 0.75rem;
     line-height: 1.5;

@@ -98,8 +98,8 @@ export default styled(
     const isInlineLabel = type === "checkbox";
     return (
       <div className={className}>
-        {!hidden && !isInlineLabel && <label>{label}</label>}
-        {isInlineLabel ? (
+        {label && !hidden && !isInlineLabel && <label>{label}</label>}
+        {isInlineLabel && label ? (
           <label>
             <Field {...fieldProps} /> {label}
           </label>
@@ -116,5 +116,5 @@ export default styled(
     );
   }
 )`
-  margin-bottom: 1rem;
+  ${props => !props.noMargin && "margin-bottom: 1rem"};
 `;

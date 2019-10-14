@@ -96,11 +96,9 @@ export default class DepartmentSelectField extends Component {
     return (
       <FieldWrapper
         type="select"
-        name={this.props.name}
-        label={this.props.label}
         loadOptions={this.loadMatchingDepartments}
-        readonly={this.props.readonly}
         formatOptionLabel={this.formatOption}
+        {...this.props}
       />
     );
   }
