@@ -170,13 +170,15 @@ class UpdatePersonForm extends Component {
             reportsTo: user.reportsTo
               ? {
                   value: user.reportsTo.id,
-                  label: `${user.reportsTo.name} <${user.reportsTo.email}>`
+                  label: `${user.reportsTo.name} <${user.reportsTo.email}>`,
+                  user: user.reportsTo
                 }
               : "",
             referredBy: user.referredBy
               ? {
                   value: user.referredBy.id,
-                  label: `${user.referredBy.name} <${user.referredBy.email}>`
+                  label: `${user.referredBy.name} <${user.referredBy.email}>`,
+                  user: user.referredBy
                 }
               : "",
             isHuman: user.isHuman,

@@ -9,6 +9,7 @@ import FieldWrapper from "./FieldWrapper";
 import { SELECT_PEOPLE_QUERY } from "../queries";
 
 const PersonChoice = styled(({ className, user }) => {
+  if (!user) return "";
   return (
     <div className={className}>
       <Avatar user={user} size={32} mr="5px" />
@@ -28,10 +29,17 @@ const PersonChoice = styled(({ className, user }) => {
     color: ${colors.gray300};
   }
 
+  img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
   aside {
     overflow: hidden;
     flex-grow: 1;
     display: inline-block;
+    text-align: left;
 
     h4 {
       margin-bottom: 0;

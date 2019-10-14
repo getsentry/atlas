@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { Query } from "react-apollo";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
+import { Flex, Box } from "@rebass/grid/emotion";
 import gql from "graphql-tag";
-import styled from "@emotion/styled";
 
 import apolloClient from "../utils/apollo";
 import Button from "../components/Button";
-import colors from "../colors";
 import Card from "../components/Card";
+import FieldWrapper from "../components/FieldWrapper";
 import DepartmentSelectField from "../components/DepartmentSelectField";
 import PersonSelectField from "../components/PersonSelectField";
 import PageLoader from "../components/PageLoader";
@@ -57,20 +57,6 @@ export const BULK_PERSON_MUTATION = gql`
   }
 `;
 
-const StyledTable = styled.table`
-  border-spacing: 0;
-
-  tbody {
-    tr td {
-      background: ${colors.cardBackground};
-    }
-    tr:nth-child(4n) td,
-    tr:nth-child(4n - 1) td {
-      background: ${colors.black};
-    }
-  }
-`;
-
 export default class AdminBulkUpdatePeople extends Component {
   render() {
     return (
@@ -78,13 +64,7 @@ export default class AdminBulkUpdatePeople extends Component {
         <Card>
           <h1>Update People</h1>
         </Card>
-        <Query
-          query={LIST_PEOPLE_QUERY}
-          variables={{
-            humansOnly: false,
-            limit: 1000
-          }}
-        >
+        <Query query={LIST_PEOPLE_QUERY}>
           {({ loading, error, data }) => {
             if (error) throw error;
             if (loading) return <PageLoader />;
@@ -105,7 +85,8 @@ export default class AdminBulkUpdatePeople extends Component {
                   reportsTo: u.reportsTo
                     ? {
                         value: u.reportsTo.id,
-                        label: `${u.reportsTo.name} <${u.reportsTo.email}>`
+                        label: `${u.reportsTo.name} <${u.reportsTo.email}>`,
+                        user: u.reportsTo
                       }
                     : "",
                   dateStarted: u.dateStarted || ""
@@ -172,59 +153,48 @@ export default class AdminBulkUpdatePeople extends Component {
                         <strong>{status.error}</strong>
                       </Card>
                     )}
-                    <Card>
-                      <StyledTable>
-                        <thead>
-                          <tr>
-                            <th>Title</th>
-                            <th>Department</th>
-                            <th width={160}>Date Started</th>
-                            <th width={160}>Date of Birth</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {users.map(u => (
-                            <React.Fragment key={u.id}>
-                              <tr>
-                                <td colSpan={5}>
-                                  {u.name} <small>&lt;{u.email}&gt;</small>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <Field
-                                    type="text"
-                                    name={`users[${u.id}][title]`}
-                                    placeholder="title"
-                                  />
-                                </td>
-                                <td>
-                                  <DepartmentSelectField
-                                    label=""
-                                    name={`users[${u.id}][department]`}
-                                    noMargin
-                                  />
-                                </td>
-                                <td>
-                                  <PersonSelectField
-                                    label=""
-                                    name={`users[${u.id}][reportsTo]`}
-                                    exclude={u.id}
-                                    noMargin
-                                  />
-                                </td>
-                                <td>
-                                  <Field
-                                    type="date"
-                                    name={`users[${u.id}][dateStarted]`}
-                                  />
-                                </td>
-                              </tr>
-                            </React.Fragment>
-                          ))}
-                        </tbody>
-                      </StyledTable>
-                    </Card>
+                    {users.map(u => (
+                      <Card key={u.id} withPadding>
+                        <h4>
+                          {u.name} <span>&lt;{u.email}&gt;</span>
+                        </h4>
+                        <Flex mx={-3} mb={3}>
+                          <Box width={1 / 2} mx={3}>
+                            <FieldWrapper
+                              type="text"
+                              label="Title"
+                              name={`users[${u.id}][title]`}
+                              placeholder="title"
+                              noMargin
+                            />
+                          </Box>
+                          <Box width={1 / 2} mx={3}>
+                            <DepartmentSelectField
+                              name={`users[${u.id}][department]`}
+                              noMargin
+                            />
+                          </Box>
+                        </Flex>
+                        <Flex mx={-3}>
+                          <Box width={1 / 2} mx={3}>
+                            <PersonSelectField
+                              label="Manager"
+                              name={`users[${u.id}][reportsTo]`}
+                              exclude={u.id}
+                              noMargin
+                            />
+                          </Box>
+                          <Box width={1 / 2} mx={3}>
+                            <FieldWrapper
+                              label="Date Started"
+                              type="date"
+                              name={`users[${u.id}][dateStarted]`}
+                              noMargin
+                            />
+                          </Box>
+                        </Flex>
+                      </Card>
+                    ))}
                     <Card withPadding>
                       <Button type="submit" disabled={isSubmitting}>
                         Save Changes
