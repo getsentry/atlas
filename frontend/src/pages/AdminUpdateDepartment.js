@@ -33,6 +33,7 @@ export default class extends Component {
           const initialValues = {
             id: department.id,
             name: department.name,
+            costCenter: department.costCenter,
             parent: department.parent
               ? {
                   value: department.parent.id,
@@ -108,6 +109,7 @@ export default class extends Component {
                       label="Parent"
                       exclude={department.id}
                     />
+                    <FieldWrapper type="number" name="costCenter" label="Cost Center" />
                   </Card>
 
                   <Card withPadding>

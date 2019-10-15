@@ -26,9 +26,9 @@ def test_departments_with_tree(
         """{departments {id, tree {id}}}""", user=default_user
     )
     assert executed["data"]["departments"] == [
+        {"id": str(design_department.id), "tree": []},
         {
             "id": str(creative_department.id),
             "tree": [{"id": str(design_department.id)}],
         },
-        {"id": str(design_department.id), "tree": []},
     ]

@@ -58,6 +58,7 @@ export const LIST_DEPARTMENTS_QUERY = gql`
       id
       name
       numPeople
+      costCenter
     }
   }
 `;
@@ -67,6 +68,7 @@ export const GET_DEPARTMENT_QUERY = gql`
     departments(id: $id) {
       id
       name
+      costCenter
       parent {
         id
         name
@@ -80,6 +82,7 @@ export const SELECT_DEPARTMENT_QUERY = gql`
     departments(query: $query, limit: 10) {
       id
       name
+      costCenter
       tree {
         name
       }

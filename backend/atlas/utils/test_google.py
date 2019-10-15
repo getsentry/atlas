@@ -48,6 +48,7 @@ def test_generate_profile_updates_all_fields(responses, default_user):
                 "primary": True,
                 "title": "Dummy",
                 "customType": "FULL_TIME",
+                "costCenter": "",
             }
         ],
         "locations": [{"area": "desk", "buildingId": "", "type": "desk"}],
@@ -112,9 +113,10 @@ def test_generate_profile_updates_all_fields_with_all_fields(
         },
         "organizations": [
             {
-                "department": str(ga_department.id),
+                "department": ga_department.name,
                 "primary": True,
                 "title": "Dummy",
+                "costCenter": "100",
                 "customType": "FULL_TIME",
             }
         ],
@@ -165,6 +167,7 @@ def test_sync_user_with_user_and_identity(
                 "department": "Design",
                 "primary": True,
                 "title": "Dummy",
+                "costCenter": "200",
                 "customType": "FULL_TIME",
             }
         ],
@@ -237,6 +240,7 @@ def test_sync_user_new_account(responses, default_superuser):
                 "department": "Design",
                 "primary": True,
                 "title": "Dummy",
+                "costCenter": "200",
                 "customType": "FULL_TIME",
             }
         ],

@@ -28,13 +28,14 @@ export default () => (
               <Flex>
                 <Box flex="1">
                   <strong>
-                    <Link to={`/admin/departments/${d.id}`}>{d.name}</Link>
+                    <Link to={`/admin/departments/${d.id}`}>
+                      {!!d.costCenter && `${d.costCenter}-`}
+                      {d.name}
+                    </Link>
                   </strong>
-                  <br />
-                  <small>{d.id}</small>
                 </Box>
                 <Box style={{ textAlign: "right" }}>
-                  {d.numPeople > 0 ? d.numPeople.toLocaleString() : null}
+                  {d.numPeople > 0 && d.numPeople.toLocaleString()}
                 </Box>
               </Flex>
             </div>

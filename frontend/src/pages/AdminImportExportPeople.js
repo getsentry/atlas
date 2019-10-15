@@ -14,6 +14,7 @@ export const EXPORT_PEOPLE_QUERY = gql`
       department {
         id
         name
+        costCenter
       }
       isHuman
       title
@@ -56,6 +57,12 @@ const downloadCsv = (rows, filename) => {
   }
 };
 
+const formatDepartment = department => {
+  if (!department) return "";
+  if (department.costCenter) return `${department.costCenter}-${department.name}`;
+  return department.name;
+};
+
 export default class ImportExportPeople extends Component {
   export = () => {
     apolloClient
@@ -86,7 +93,7 @@ export default class ImportExportPeople extends Component {
                 u.dateStarted,
                 u.title,
                 u.reportsTo ? u.reportsTo.email : "",
-                u.department ? u.department.name : "",
+                formatDepartment(u.department),
                 u.employee_type,
                 u.is_human
               ])

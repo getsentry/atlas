@@ -42,7 +42,7 @@ def default_office(db):
 @pytest.fixture
 def design_department(db):
     return factories.DepartmentFactory.create(
-        id=UUID("624f950b-a57e-4d81-83bf-f50ea0ff2545"), name="Design"
+        id=UUID("624f950b-a57e-4d81-83bf-f50ea0ff2545"), name="Design", cost_center=200
     )
 
 
@@ -53,13 +53,14 @@ def creative_department(design_department):
         name="Creative",
         parent=design_department,
         tree=(design_department.tree or []) + [design_department.id],
+        cost_center=220,
     )
 
 
 @pytest.fixture
 def ga_department(db):
     return factories.DepartmentFactory.create(
-        id=UUID("12a1120e-07a8-4d4b-aa94-a74694aa0b85"), name="G&A"
+        id=UUID("12a1120e-07a8-4d4b-aa94-a74694aa0b85"), name="G&A", cost_center=100
     )
 
 

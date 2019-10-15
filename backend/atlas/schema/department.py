@@ -15,7 +15,7 @@ class DepartmentNode(gql_optimizer.OptimizedDjangoObjectType):
     class Meta:
         model = Department
         name = "Department"
-        fields = ("id", "name")
+        fields = ("id", "name", "cost_center")
 
     def resolve_tree(self, info):
         if not self.id or not self.tree:

@@ -134,6 +134,51 @@ def get_office(external_id: str, office_cache: dict = None) -> Office:
     return office
 
 
+def get_department(name: str, cost_center: str = None):
+    try:
+        from uuid import UUID
+
+        UUID(name)
+    except ValueError:
+        name_is_id = False
+    else:
+        name_is_id = True
+
+    result = None
+    if cost_center:
+        cost_center = int(cost_center)
+        try:
+            result = Department.objects.get(cost_center=cost_center)
+        except Department.DoesNotExist:
+            pass
+
+    if not result:
+        if name_is_id:
+            try:
+                result = Department.objects.get(id=name)
+            except Department.DoesNotExist:
+                return None
+
+        result = Department.objects.get_or_create(
+            name=name, defaults={"cost_center": cost_center}
+        )[0]
+
+    fields = []
+    # we only override the name if cost_center is empty or the name is empty
+    if result.name != name and (not cost_center or not result.name):
+        result.name = name
+        fields.append("name")
+
+    if result.cost_center != cost_center:
+        result.cost_center = cost_center
+        fields.append("cost_center")
+
+    if fields:
+        result.save(update_fields=fields)
+
+    return str(result.id)
+
+
 def generate_profile_updates(user: User, data: dict = None) -> dict:
     profile = user.profile
 
@@ -166,15 +211,22 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
         ]
 
     if "title" in data or "department" in data or "employee_type" in data:
+        deptartment = (
+            Department.objects.get(id=data["department"])
+            if data.get("department")
+            else profile.department
+        )
         params["organizations"] = [
             {
                 "primary": True,
                 "title": data.get("title") or profile.title,
-                "department": data.get("department")
-                or str(profile.department_id or ""),
-                "customType": data.get("employee_type")
-                or profile.employee_type
-                or DEFAULT_VALUES.get("employee_type"),
+                "department": deptartment.name if deptartment else "",
+                "costCenter": str(deptartment.cost_center if deptartment else ""),
+                "customType": (
+                    data.get("employee_type")
+                    or profile.employee_type
+                    or DEFAULT_VALUES.get("employee_type")
+                ),
             }
         ]
 
@@ -337,12 +389,8 @@ def sync_user(  # NOQA
         if (row.get("department") or None) != profile.department:
             value = row.get("department") or None
             if value:
-                try:
-                    from uuid import UUID
+                value = get_department(name=value, cost_center=row.get("costCenter"))
 
-                    UUID(value)
-                except ValueError:
-                    value = str(Department.objects.get_or_create(name=value)[0].id)
             profile_fields["department_id"] = value
         if (
             row.get("customType") or DEFAULT_VALUES.get("employee_type")

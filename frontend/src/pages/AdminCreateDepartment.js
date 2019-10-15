@@ -78,6 +78,7 @@ export default class extends Component {
             <Card>
               <FieldWrapper type="text" name="name" label="Name" required />
               <DepartmentSelectField name="parent" label="Parent" />
+              <FieldWrapper type="number" name="costCenter" label="Cost Center" />
             </Card>
 
             <Card withPadding>

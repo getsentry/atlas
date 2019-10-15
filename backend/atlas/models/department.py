@@ -10,6 +10,7 @@ class Department(models.Model):
     tree = ArrayField(models.UUIDField(), null=True, db_index=True)
     parent = models.ForeignKey("self", null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=64, unique=True)
+    cost_center = models.PositiveIntegerField(null=True, unique=True)
 
     class Meta:
         db_table = "department"

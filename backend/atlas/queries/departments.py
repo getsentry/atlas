@@ -13,6 +13,7 @@ class Query(object):
         # root=graphene.UUID(),
         # parent=graphene.UUID(),
         query=graphene.String(),
+        cost_center=graphene.Int(),
         root_only=graphene.Boolean(default_value=False),
         people_only=graphene.Boolean(default_value=False),
         offset=graphene.Int(),
@@ -26,6 +27,7 @@ class Query(object):
         # root: str = None,
         # parent: str = None,
         query: str = None,
+        cost_center: int = None,
         root_only: bool = False,
         people_only: bool = False,
         offset: int = 0,
@@ -58,10 +60,13 @@ class Query(object):
                 profile__is_human=True, profile__user__is_active=True
             ).exclude(profile=None)
 
+        if cost_center is not None:
+            qs = qs.filter(cost_center=cost_center)
+
         if query:
             qs = qs.filter(name__istartswith=query)
 
-        qs = qs.order_by("name")
+        qs = qs.order_by("cost_center", "name")
 
         results = list(gql_optimizer.query(qs, info)[offset:limit])
         # see DepartmentNode for details on usage
