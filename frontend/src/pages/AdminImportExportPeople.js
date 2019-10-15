@@ -75,8 +75,8 @@ export default class ImportExportPeople extends Component {
                 "date_started",
                 "title",
                 "reports_to",
-                "department_id",
-                "department_name",
+                "department",
+                "employee_type",
                 "is_human"
               ],
               ...users.map(u => [
@@ -86,8 +86,8 @@ export default class ImportExportPeople extends Component {
                 u.dateStarted,
                 u.title,
                 u.reportsTo ? u.reportsTo.email : "",
-                u.department ? u.department.id : "",
                 u.department ? u.department.name : "",
+                u.employee_type,
                 u.is_human
               ])
             ],
