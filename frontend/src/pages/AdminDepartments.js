@@ -27,12 +27,10 @@ export default () => (
             <div style={{ marginBottom: "0.5rem" }}>
               <Flex>
                 <Box flex="1">
-                  <strong>
-                    <Link to={`/admin/departments/${d.id}`}>
-                      {!!d.costCenter && `${d.costCenter}-`}
-                      {d.name}
-                    </Link>
-                  </strong>
+                  <Link to={`/admin/departments/${d.id}`}>
+                    {!!d.costCenter && `${d.costCenter}-`}
+                    {d.name}
+                  </Link>
                 </Box>
                 <Box style={{ textAlign: "right" }}>
                   {d.numPeople > 0 && d.numPeople.toLocaleString()}
