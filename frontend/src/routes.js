@@ -9,6 +9,7 @@ import AdminBulkUpdatePeople from "./pages/AdminBulkUpdatePeople";
 import AdminCreateDepartment from "./pages/AdminCreateDepartment";
 import AdminDepartments from "./pages/AdminDepartments";
 import AdminDeleteDepartment from "./pages/AdminDeleteDepartment";
+import AdminImportExportPeople from "./pages/AdminImportExportPeople";
 import AdminUpdateDepartment from "./pages/AdminUpdateDepartment";
 import HealthCheck from "./pages/HealthCheck";
 import Home from "./pages/Home";
@@ -44,7 +45,6 @@ export default (
     <Route path="/people/:email" component={Profile} />
     <Route path="/people/:email/update" component={UpdateProfile} />
     <Route path="/admin" component={AdminLayout}>
-      <Route path="/admin/audit" component={AdminAudit} />
       <Route path="/admin/departments" component={AdminDepartments} />
       <Route path="/admin/departments/create" component={AdminCreateDepartment} />
       <Route path="/admin/departments/:departmentId" component={AdminUpdateDepartment} />
@@ -52,7 +52,9 @@ export default (
         path="/admin/departments/:departmentId/delete"
         component={AdminDeleteDepartment}
       />
-      <Route path="/admin/update-people" component={AdminBulkUpdatePeople} />
+      <Route path="/admin/people/audit" component={AdminAudit} />
+      <Route path="/admin/people/bulk-update" component={AdminBulkUpdatePeople} />
+      <Route path="/admin/people/import-export" component={AdminImportExportPeople} />
     </Route>
     <Route path="*" component={NotFoundError} />
   </Route>

@@ -36,8 +36,11 @@ export default ({ children }) => (
         <Box width={250} mx={3}>
           <Card withPadding>
             <h2>People</h2>
-            <NavigationLink to="/admin/audit">Audit Profiles</NavigationLink>
-            <NavigationLink to="/admin/update-people">Bulk Update</NavigationLink>
+            <NavigationLink to="/admin/people/audit">Audit Profiles</NavigationLink>
+            <NavigationLink to="/admin/people/bulk-update">Bulk Update</NavigationLink>
+            <NavigationLink to="/admin/people/import-export">
+              Import/Export
+            </NavigationLink>
           </Card>
           <Card withPadding>
             <h2>Departments</h2>
