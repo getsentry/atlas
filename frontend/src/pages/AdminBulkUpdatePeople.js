@@ -21,6 +21,11 @@ export const LIST_PEOPLE_QUERY = gql`
       department {
         id
         name
+        costCenter
+        tree {
+          name
+          costCenter
+        }
       }
       isHuman
       title
@@ -76,19 +81,8 @@ export default class AdminBulkUpdatePeople extends Component {
               u =>
                 (initialValues.users[u.id] = {
                   title: u.title || "",
-                  department: u.department
-                    ? {
-                        value: u.department.id,
-                        label: u.department.name
-                      }
-                    : "",
-                  reportsTo: u.reportsTo
-                    ? {
-                        value: u.reportsTo.id,
-                        label: `${u.reportsTo.name} <${u.reportsTo.email}>`,
-                        user: u.reportsTo
-                      }
-                    : "",
+                  department: u.department,
+                  reportsTo: u.reportsTo,
                   dateStarted: u.dateStarted || ""
                 })
             );

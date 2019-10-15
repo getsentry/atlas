@@ -7,14 +7,22 @@ import colors from "../colors";
 import FieldWrapper from "./FieldWrapper";
 import { SELECT_DEPARTMENT_QUERY } from "../queries";
 
-const DepartmentTree = styled(({ className, name, tree }) => {
+const DepartmentTree = styled(({ className, department: { costCenter, name, tree } }) => {
   return (
     <div className={className}>
-      <span>{name}</span>
+      <span>
+        {!!costCenter && `${costCenter} - `}
+        {name}
+      </span>
       {tree && !!tree.length && (
         <ul>
           {tree.map(n => {
-            return <li>{n.name}</li>;
+            return (
+              <li>
+                {!!n.costCenter && `${n.costCenter} - `}
+                {n.name}
+              </li>
+            );
           })}
         </ul>
       )}
@@ -67,8 +75,13 @@ export default class DepartmentSelectField extends Component {
     label: "Department"
   };
 
-  formatOption = ({ value, label, tree }) => {
-    return <DepartmentTree name={label} tree={tree} />;
+  formatOptionLabel = department => {
+    if (!department) return null;
+    return <DepartmentTree key={department.id} department={department} />;
+  };
+
+  getOptionValue = department => {
+    return department.id;
   };
 
   loadMatches = (inputValue, callback) => {
@@ -81,13 +94,7 @@ export default class DepartmentSelectField extends Component {
       })
       .then(({ data: { departments } }) => {
         callback(
-          departments
-            .filter(u => !this.props.exclude || this.props.exclude !== u.id)
-            .map(u => ({
-              value: u.id,
-              label: u.name,
-              tree: u.tree
-            }))
+          departments.filter(u => !this.props.exclude || this.props.exclude !== u.id)
         );
       });
   };
@@ -97,7 +104,8 @@ export default class DepartmentSelectField extends Component {
       <FieldWrapper
         type="select"
         loadOptions={this.loadMatches}
-        formatOptionLabel={this.formatOption}
+        formatOptionLabel={this.formatOptionLabel}
+        getOptionValue={this.getOptionValue}
         {...this.props}
       />
     );

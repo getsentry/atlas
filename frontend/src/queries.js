@@ -69,9 +69,14 @@ export const GET_DEPARTMENT_QUERY = gql`
       id
       name
       costCenter
+      tree {
+        costCenter
+        name
+      }
       parent {
         id
         name
+        costCenter
       }
     }
   }
@@ -84,6 +89,7 @@ export const SELECT_DEPARTMENT_QUERY = gql`
       name
       costCenter
       tree {
+        costCenter
         name
       }
     }

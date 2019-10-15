@@ -80,8 +80,12 @@ export default class PersonSelectField extends Component {
     label: "Person"
   };
 
-  formatOption = ({ value, user }) => {
+  formatOptionLabel = user => {
     return <PersonChoice user={user} />;
+  };
+
+  getOptionValue = user => {
+    return user.id;
   };
 
   loadMatches = (inputValue, callback) => {
@@ -93,14 +97,7 @@ export default class PersonSelectField extends Component {
         }
       })
       .then(({ data: { users } }) => {
-        callback(
-          users
-            .filter(u => !this.props.exclude || this.props.exclude !== u.id)
-            .map(u => ({
-              value: u.id,
-              user: u
-            }))
-        );
+        callback(users.filter(u => !this.props.exclude || this.props.exclude !== u.id));
       });
   };
 
@@ -109,7 +106,8 @@ export default class PersonSelectField extends Component {
       <FieldWrapper
         type="select"
         loadOptions={this.loadMatches}
-        formatOptionLabel={this.formatOption}
+        getOptionValue={this.getOptionValue}
+        formatOptionLabel={this.formatOptionLabel}
         {...this.props}
       />
     );

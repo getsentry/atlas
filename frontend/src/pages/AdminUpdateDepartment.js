@@ -35,14 +35,6 @@ export default class extends Component {
             name: department.name,
             costCenter: department.costCenter,
             parent: department.parent
-              ? {
-                  value: department.parent.id,
-                  label: department.parent.name
-                }
-              : {
-                  value: "",
-                  label: "(no parent)"
-                }
           };
           return (
             <Formik
@@ -61,6 +53,7 @@ export default class extends Component {
                     data[k] = curVal || "";
                   }
                 });
+                console.log(data);
                 apolloClient
                   .mutate({
                     mutation: UPDATE_DEPARTMENT_MUTATION,

@@ -158,29 +158,12 @@ class UpdatePersonForm extends Component {
             bio: user.bio || "",
             pronouns: user.pronouns || "NONE",
             title: user.title || "",
-            department: user.department
-              ? {
-                  value: user.department.id,
-                  label: user.department.name
-                }
-              : "",
+            department: user.department,
             dateOfBirth: user.dateOfBirth || "",
             dateStarted: user.dateStarted || "",
             primaryPhone: user.primaryPhone || "",
-            reportsTo: user.reportsTo
-              ? {
-                  value: user.reportsTo.id,
-                  label: `${user.reportsTo.name} <${user.reportsTo.email}>`,
-                  user: user.reportsTo
-                }
-              : "",
-            referredBy: user.referredBy
-              ? {
-                  value: user.referredBy.id,
-                  label: `${user.referredBy.name} <${user.referredBy.email}>`,
-                  user: user.referredBy
-                }
-              : "",
+            reportsTo: user.reportsTo,
+            referredBy: user.referredBy,
             isHuman: user.isHuman,
             employeeType: user.employeeType ? user.employeeType.id : "",
             isSuperuser: user.isSuperuser || false,

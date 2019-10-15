@@ -31,7 +31,7 @@ const selectStyles = {
 const SelectField = ({ field, form, options, ...fieldOptions }) => (
   <Select
     {...field}
-    formatOptionLabel={fieldOptions.formatOptionLabel}
+    {...fieldOptions}
     styles={selectStyles}
     options={options}
     name={field.name}
@@ -47,7 +47,7 @@ const AsyncSelectField = ({ field, form, loadOptions, ...fieldOptions }) => {
   return (
     <AsyncSelect
       {...field}
-      formatOptionLabel={fieldOptions.formatOptionLabel}
+      {...fieldOptions}
       styles={selectStyles}
       cacheOptions
       loadOptions={loadOptions}
