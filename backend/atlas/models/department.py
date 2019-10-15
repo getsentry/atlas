@@ -9,7 +9,7 @@ class Department(models.Model):
     # full materialized tree excluding self (all parents, in order)
     tree = ArrayField(models.UUIDField(), null=True, db_index=True)
     parent = models.ForeignKey("self", null=True, on_delete=models.CASCADE)
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
 
     class Meta:
         db_table = "department"
