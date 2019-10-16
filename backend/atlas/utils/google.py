@@ -169,7 +169,7 @@ def get_department(name: str, cost_center: str = None):
         result.name = name
         fields.append("name")
 
-    if result.cost_center != cost_center:
+    if result.cost_center != cost_center and cost_center:
         result.cost_center = cost_center
         fields.append("cost_center")
 
