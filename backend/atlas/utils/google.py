@@ -150,7 +150,10 @@ class Cache(object):
 
         result = None
         if cost_center:
-            cost_center = int(cost_center)
+            try:
+                cost_center = int(cost_center)
+            except ValueError:
+                return None
             try:
                 result = Department.objects.get(cost_center=cost_center)
             except Department.DoesNotExist:
