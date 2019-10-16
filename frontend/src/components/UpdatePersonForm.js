@@ -50,6 +50,11 @@ export const PERSON_QUERY = gql`
       department {
         id
         name
+        costCenter
+        tree {
+          name
+          costCenter
+        }
       }
       title
       dateOfBirth
