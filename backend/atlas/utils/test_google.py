@@ -1,6 +1,57 @@
+import pytest
 from django.conf import settings
 
 from .google import generate_profile_updates, sync_user
+
+
+@pytest.fixture
+def user_payload():
+    return {
+        "id": "100000000",
+        "suspended": False,
+        "isAdmin": False,
+        "primaryEmail": "jane@example.com",
+        "name": {"fullName": "Jane Doe"},
+        "customSchemas": {
+            "Profile": {
+                "Date_of_Birth": "1990-08-12",
+                "Date_of_Hire": "2010-04-26",
+                "Handle": "Jane",
+                "Pronouns": "SHE_HER",
+                "Bio": "My bio!",
+                "Referred_By": None,
+            },
+            "System": {"Is_Human": True},
+            "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
+            "GamerTags": {
+                "Steam": None,
+                "Xbox": None,
+                "PlayStation": None,
+                "Nintendo": None,
+            },
+            "Schedule": {
+                "Sunday": "OFF",
+                "Monday": "INOFFICE",
+                "Tuesday": "INOFFICE",
+                "Wednesday": "WFH",
+                "Thursday": "INOFFICE",
+                "Friday": "INOFFICE",
+                "Saturday": "OFF",
+            },
+        },
+        "organizations": [
+            {
+                "primary": True,
+                "title": "Dummy",
+                "customType": "FULL_TIME",
+                "department": "Design",
+                "cost_center": "200",
+            }
+        ],
+        "locations": [{"area": "desk", "buildingId": "SFO", "type": "desk"}],
+        "phones": [{"primary": True, "type": "home", "value": "+1 800-123-4567"}],
+        "relations": [{"type": "manager", "value": "jim@example.com"}],
+    }
 
 
 def test_generate_profile_updates_is_human(responses, default_user):
@@ -236,13 +287,7 @@ def test_sync_user_new_account(responses, default_superuser):
             },
         },
         "organizations": [
-            {
-                "department": "Design",
-                "primary": True,
-                "title": "Dummy",
-                "costCenter": "200",
-                "customType": "FULL_TIME",
-            }
+            {"primary": True, "title": "Dummy", "customType": "FULL_TIME"}
         ],
         "locations": [{"area": "desk", "buildingId": "SFO", "type": "desk"}],
         "phones": [{"primary": True, "type": "home", "value": "+1 800-123-4567"}],
@@ -301,3 +346,65 @@ def test_sync_user_new_account_without_custom_schemas(responses, default_superus
     assert user.profile.pronouns is None
     assert user.profile.bio is None
     assert user.profile.schedule is None
+
+
+def test_sync_user_new_account_new_department(
+    responses, default_superuser, user_payload
+):
+    user_payload["organizations"][0] = {
+        "department": "Product Design",
+        "primary": True,
+        "title": "Dummy",
+        "costCenter": "230",
+        "customType": "FULL_TIME",
+    }
+    result = sync_user(data=user_payload)
+    assert result.created
+    assert result.updated
+
+    user = result.user
+    assert user.profile.department.name == "Product Design"
+    assert user.profile.department.cost_center == 230
+
+
+def test_sync_user_new_account_renamed_department_existing_cost_center(
+    responses, default_superuser, user_payload, design_department
+):
+    assert design_department.cost_center
+
+    user_payload["organizations"][0] = {
+        "department": "Realest Design",
+        "primary": True,
+        "title": "Dummy",
+        "costCenter": str(design_department.cost_center),
+        "customType": "FULL_TIME",
+    }
+    result = sync_user(data=user_payload)
+    assert result.created
+    assert result.updated
+
+    user = result.user
+    assert user.profile.department.id == design_department.id
+    assert user.profile.department.name == "Design"
+    assert user.profile.department.cost_center == design_department.cost_center
+
+
+def test_sync_user_new_account_updated_department_without_cost_center(
+    responses, default_superuser, design_department, user_payload
+):
+    assert design_department.cost_center
+
+    user_payload["organizations"][0] = {
+        "department": "Design",
+        "primary": True,
+        "title": "Dummy",
+        "customType": "FULL_TIME",
+    }
+    result = sync_user(data=user_payload)
+    assert result.created
+    assert result.updated
+
+    user = result.user
+    assert user.profile.department.id == design_department.id
+    assert user.profile.department.name == "Design"
+    assert user.profile.department.cost_center == design_department.cost_center

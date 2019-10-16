@@ -1,5 +1,5 @@
 from base64 import urlsafe_b64decode
-from collections import namedtuple
+from collections import defaultdict, namedtuple
 from datetime import date
 from decimal import Context
 from typing import Any, List, Optional, Tuple
@@ -105,78 +105,84 @@ def lookup_field(data: dict, field_path: str) -> Optional[Any]:
     return cur_path
 
 
-def get_user(
-    email: str, name: str = None, user_cache: dict = None
-) -> Tuple[User, bool]:
-    if user_cache is None:
-        user_cache = {}
-    if email in user_cache:
-        return user_cache[email], False
-    try:
-        user = User.objects.get(email=email)
-        created = False
-    except User.DoesNotExist:
-        user = User.objects.create_user(email=email, name=email.split("@", 1)[0])
-        created = True
-    user_cache[email] = user
-    return user, created
+class Cache(object):
+    def __init__(self):
+        self.items = defaultdict(dict)
 
-
-def get_office(external_id: str, office_cache: dict = None) -> Office:
-    if office_cache is None:
-        office_cache = {}
-    if external_id in office_cache:
-        return office_cache[external_id]
-    office, created = Office.objects.get_or_create(
-        external_id=external_id, defaults={"name": external_id}
-    )
-    office_cache[external_id] = office
-    return office
-
-
-def get_department(name: str, cost_center: str = None):
-    try:
-        from uuid import UUID
-
-        UUID(name)
-    except ValueError:
-        name_is_id = False
-    else:
-        name_is_id = True
-
-    result = None
-    if cost_center:
-        cost_center = int(cost_center)
+    def get_user(self, email: str, name: str = None) -> Tuple[User, bool]:
+        if email in self.items[User]:
+            return self.items[User][email], False
         try:
-            result = Department.objects.get(cost_center=cost_center)
-        except Department.DoesNotExist:
-            pass
+            user = User.objects.get(email=email)
+            created = False
+        except User.DoesNotExist:
+            user = User.objects.create_user(email=email, name=email.split("@", 1)[0])
+            created = True
+        self.items[User][email] = user
+        return user, created
 
-    if not result:
-        if name_is_id:
+    def get_office(self, external_id: str) -> Office:
+        if external_id in self.items[Office]:
+            return self.items[Office][external_id]
+        office, created = Office.objects.get_or_create(
+            external_id=external_id, defaults={"name": external_id}
+        )
+        self.items[Office][external_id] = office
+        return office
+
+    def put_office(self, office: Office):
+        self.items[Office][office.external_id] = office
+
+    def get_department(
+        self, name: str, cost_center: str = None
+    ) -> Optional[Department]:
+        if cost_center in self.items[Department]:
+            return self.items[Department][cost_center]
+
+        try:
+            from uuid import UUID
+
+            UUID(name)
+        except ValueError:
+            name_is_id = False
+        else:
+            name_is_id = True
+
+        result = None
+        if cost_center:
+            cost_center = int(cost_center)
             try:
-                result = Department.objects.get(id=name)
+                result = Department.objects.get(cost_center=cost_center)
             except Department.DoesNotExist:
-                return None
+                pass
 
-        result = Department.objects.get_or_create(
-            name=name, defaults={"cost_center": cost_center}
-        )[0]
+        if not result:
+            if name_is_id:
+                try:
+                    result = Department.objects.get(id=name)
+                except Department.DoesNotExist:
+                    return None
 
-    fields = []
-    # we only override the name if cost_center is empty or the name is empty
-    if result.name != name and (not cost_center or not result.name):
-        result.name = name
-        fields.append("name")
+            result = Department.objects.get_or_create(
+                name=name, defaults={"cost_center": cost_center}
+            )[0]
 
-    if result.cost_center != cost_center and cost_center:
-        result.cost_center = cost_center
-        fields.append("cost_center")
+        fields = []
+        # we only override the name if cost_center is empty or the name is empty
+        if result.name != name and (not cost_center or not result.name):
+            result.name = name
+            fields.append("name")
 
-    if fields:
-        result.save(update_fields=fields)
+        if result.cost_center != cost_center and cost_center:
+            result.cost_center = cost_center
+            fields.append("cost_center")
 
-    return str(result.id)
+        if fields:
+            result.save(update_fields=fields)
+
+        self.items[Department][cost_center] = result
+
+        return result
 
 
 def generate_profile_updates(user: User, data: dict = None) -> dict:
@@ -314,16 +320,10 @@ def update_profile(identity: Identity, user: User, data: dict = None) -> UserSyn
 
 
 def sync_user(  # NOQA
-    data: dict,
-    user: User = None,
-    user_identity: Identity = None,
-    user_cache: dict = None,
-    office_cache: dict = None,
+    data: dict, user: User = None, user_identity: Identity = None, cache: Cache = None
 ) -> UserSyncResult:
-    if user_cache is None:
-        user_cache = {}
-    if office_cache is None:
-        office_cache = {}
+    if cache is None:
+        cache = Cache()
 
     if user_identity is None:
         try:
@@ -337,10 +337,8 @@ def sync_user(  # NOQA
         user = user_identity.user
 
     if user is None:
-        user, created = get_user(
-            email=data["primaryEmail"],
-            name=data["name"]["fullName"],
-            user_cache=user_cache,
+        user, created = cache.get_user(
+            email=data["primaryEmail"], name=data["name"]["fullName"]
         )
     else:
         created = False
@@ -389,9 +387,10 @@ def sync_user(  # NOQA
         if (row.get("department") or None) != profile.department:
             value = row.get("department") or None
             if value:
-                value = get_department(name=value, cost_center=row.get("costCenter"))
-
-            profile_fields["department_id"] = value
+                value = cache.get_department(
+                    name=value, cost_center=row.get("costCenter")
+                )
+            profile_fields["department"] = value
         if (
             row.get("customType") or DEFAULT_VALUES.get("employee_type")
         ) != profile.employee_type:
@@ -402,12 +401,14 @@ def sync_user(  # NOQA
         if profile.title:
             profile_fields["title"] = None
         if profile.department:
-            profile_fields["department_id"] = None
+            profile_fields["department"] = None
+        if not profile.employee_type:
+            profile_fields["employee_type"] = DEFAULT_VALUES.get("employee_type")
 
     # 'relations': [{'value': 'david@sentry.io', 'type': 'manager'}]
     row = find(data.get("relations"), lambda x: x["type"] == "manager" and x["value"])
     if row:
-        reports_to, _ = get_user(email=row["value"], user_cache=user_cache)
+        reports_to, _ = cache.get_user(email=row["value"])
         if profile.reports_to_id != reports_to.id:
             profile_fields["reports_to"] = reports_to
     elif profile.reports_to_id:
@@ -421,7 +422,7 @@ def sync_user(  # NOQA
         and not x["buildingId"].startswith("$$"),
     )
     if row:
-        office = get_office(row["buildingId"], office_cache=office_cache)
+        office = cache.get_office(row["buildingId"])
         if profile.office_id != office.id:
             profile_fields["office"] = office
     elif profile.office_id:
@@ -446,7 +447,7 @@ def sync_user(  # NOQA
             elif attribute_name.startswith(BOOLEAN_PREFIXES):
                 value = bool(value)
             elif attribute_name == "referred_by" and value is not None:
-                value, _ = get_user(email=value, user_cache=user_cache)
+                value, _ = cache.get_user(email=value)
             if getattr(profile, attribute_name) != value:
                 profile_fields[attribute_name] = value
         if settings.GOOGLE_SCHEDULE_FIELD in schemas:
@@ -533,11 +534,7 @@ def sync_user_photo(identity: Identity, user: User):
 
 
 def sync_building(  # NOQA
-    data: dict,
-    office: Office = None,
-    identity: Identity = None,
-    user_cache: dict = None,
-    office_cache: dict = None,
+    data: dict, office: Office = None, identity: Identity = None, cache: Cache = None
 ) -> BuildingSyncResult:
     fields = {"name": data["buildingName"], "description": data["description"]}
 
@@ -589,20 +586,11 @@ def sync_building(  # NOQA
 def sync_domain(
     identity: Identity, domain: str, users: List[str] = None, offices: List[str] = None
 ) -> DomainSyncResult:
-    office_cache = {}
-    user_cache = {}
+    cache = Cache()
 
-    building_result = sync_buildings(
-        identity,
-        domain,
-        offices=offices,
-        office_cache=office_cache,
-        user_cache=user_cache,
-    )
+    building_result = sync_buildings(identity, domain, offices=offices, cache=cache)
 
-    user_result = sync_users(
-        identity, domain, users=users, office_cache=office_cache, user_cache=user_cache
-    )
+    user_result = sync_users(identity, domain, users=users, cache=cache)
 
     return DomainSyncResult(
         total_users=user_result.total,
@@ -617,11 +605,7 @@ def sync_domain(
 
 
 def sync_buildings(
-    identity: Identity,
-    domain: str,
-    offices: List[str] = None,
-    user_cache: dict = None,
-    office_cache: dict = None,
+    identity: Identity, domain: str, offices: List[str] = None, cache: Cache = None
 ) -> BatchSyncResult:
     total, created, updated = 0, 0, 0
     known = set()
@@ -651,7 +635,7 @@ def sync_buildings(
                     created += 1
                 if is_updated:
                     updated += 1
-                office_cache[office.external_id] = office
+                cache.put_office(office)
         page_token = data.get("nextPageToken")
         has_more = bool(page_token)
 
@@ -667,11 +651,7 @@ def sync_buildings(
 
 
 def sync_users(
-    identity: Identity,
-    domain: str,
-    users: List[str] = None,
-    user_cache: dict = None,
-    office_cache: dict = None,
+    identity: Identity, domain: str, users: List[str] = None, cache: Cache = None
 ) -> BatchSyncResult:
     total, created, updated = 0, 0, 0
     known = set()
@@ -699,9 +679,7 @@ def sync_users(
             with sentry_sdk.Hub.current.start_span(
                 op="google.sync-user", description=str(row["id"])
             ), transaction.atomic():
-                user, is_created, is_updated = sync_user(
-                    row, user_cache=user_cache, office_cache=office_cache
-                )
+                user, is_created, is_updated = sync_user(row, cache=cache)
                 with sentry_sdk.Hub.current.start_span(
                     op="google.sync-user-photo", description=str(row["id"])
                 ):
