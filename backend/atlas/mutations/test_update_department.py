@@ -70,3 +70,28 @@ def test_superuser_can_update_parent(
     department = Department.objects.get(id=design_department.id)
     assert department.parent_id == ga_department.id
     assert department.tree == [ga_department.id]
+
+
+def test_superuser_can_update_cost_center(
+    gql_client, default_superuser, design_department
+):
+    executed = gql_client.execute(
+        """
+    mutation {
+        updateDepartment(department:"%s" data:{costCenter:500}) {
+            ok
+            errors
+            department { id, costCenter }
+        }
+    }"""
+        % (design_department.id,),
+        user=default_superuser,
+    )
+    assert not executed.get("errors")
+    resp = executed["data"]["updateDepartment"]
+    assert not resp["errors"]
+    assert resp["ok"] is True
+    assert resp["department"] == {"id": str(design_department.id), "costCenter": 500}
+
+    department = Department.objects.get(id=design_department.id)
+    assert department.cost_center == 500
