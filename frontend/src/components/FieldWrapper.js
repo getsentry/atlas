@@ -55,7 +55,12 @@ const AsyncSelectField = ({ field, form, loadOptions, ...fieldOptions }) => {
       isDisabled={fieldOptions.disabled}
       name={field.name}
       defaultOptions
-      onChange={option => form.setFieldValue(field.name, option)}
+      onChange={option =>
+        form.setFieldValue(
+          field.name,
+          fieldOptions.getOptionValue ? fieldOptions.getOptionValue(option) : option.value
+        )
+      }
       onBlur={field.onBlur}
     />
   );

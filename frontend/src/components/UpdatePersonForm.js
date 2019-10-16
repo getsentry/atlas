@@ -204,10 +204,6 @@ class UpdatePersonForm extends Component {
                   if (restrictedFields.has(k)) return;
                   let initialVal = initialValues[k];
                   let curVal = values[k];
-                  if (curVal && curVal.hasOwnProperty("value")) {
-                    initialVal = initialVal ? initialVal.value : null;
-                    curVal = curVal.value;
-                  }
                   if (curVal !== initialVal) {
                     data[k] = curVal || "";
                   }
