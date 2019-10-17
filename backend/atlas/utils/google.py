@@ -183,7 +183,8 @@ class Cache(object):
         if fields:
             result.save(update_fields=fields)
 
-        self.items[Department][cost_center] = result
+        if cost_center:
+            self.items[Department][cost_center] = result
 
         return result
 
