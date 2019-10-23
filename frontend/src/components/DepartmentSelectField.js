@@ -81,7 +81,8 @@ export default class DepartmentSelectField extends Component {
   };
 
   getOptionValue = department => {
-    return department.id;
+    // TODO(dcramer): id love to only use the actual primary key
+    return department;
   };
 
   loadMatches = (inputValue, callback) => {

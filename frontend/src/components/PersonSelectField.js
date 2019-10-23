@@ -85,7 +85,8 @@ export default class PersonSelectField extends Component {
   };
 
   getOptionValue = user => {
-    return user.id;
+    // TODO(dcramer): id love to only use the actual primary key
+    return user;
   };
 
   loadMatches = (inputValue, callback) => {

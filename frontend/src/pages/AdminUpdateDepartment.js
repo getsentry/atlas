@@ -49,6 +49,7 @@ export default class extends Component {
                     data[k] = curVal || "";
                   }
                 });
+                if (data.parent) data.parent = data.parent.id;
                 apolloClient
                   .mutate({
                     mutation: UPDATE_DEPARTMENT_MUTATION,

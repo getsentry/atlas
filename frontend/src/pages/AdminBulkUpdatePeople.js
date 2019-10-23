@@ -106,6 +106,10 @@ export default class AdminBulkUpdatePeople extends Component {
                         changes = true;
                       }
                     });
+                    if (userData.organization)
+                      userData.organization = userData.organization.id;
+                    if (userData.reportsTo) userData.reportsTo = userData.reportsTo.id;
+                    if (userData.referredBy) userData.referredBy = userData.referredBy.id;
                     if (changes) data.push(userData);
                   });
                   apolloClient

@@ -208,6 +208,9 @@ class UpdatePersonForm extends Component {
                     data[k] = curVal || "";
                   }
                 });
+                if (data.organization) data.organization = data.organization.id;
+                if (data.reportsTo) data.reportsTo = data.reportsTo.id;
+                if (data.referredBy) data.referredBy = data.referredBy.id;
                 apolloClient
                   .mutate({
                     mutation: PERSON_MUTATION,
