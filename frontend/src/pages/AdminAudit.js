@@ -27,7 +27,9 @@ export default () => (
           return users
             .filter(
               u =>
-                (u.isHuman && (!u.title || !u.department || !u.dateStarted)) ||
+                (u.isHuman &&
+                  (u.employeeType === "FULL_TIME" || u.employeeType === "INTERN") &&
+                  (!u.title || !u.department || !u.dateStarted)) ||
                 (!u.isHuman && (u.reportsTo || u.title || u.department)) ||
                 (u.isHuman &&
                   u.employeeType &&
