@@ -167,6 +167,10 @@ export const LIST_PEOPLE_QUERY = gql`
         height
         mimeType
       }
+      employeeType {
+        id
+        name
+      }
       reportsTo {
         id
       }
