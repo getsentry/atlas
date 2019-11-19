@@ -25,19 +25,20 @@ export default () => (
           if (loading) return <PageLoader />;
           const { users } = data;
           return users
-            .filter(
-              u =>
+            .filter(u => {
+              const employeeTypeId = u.employeeType ? u.employeeType.id : null;
+              return (
                 (u.isHuman &&
-                  (u.employeeType === "FULL_TIME" || u.employeeType === "INTERN") &&
+                  (employeeTypeId === "FULL_TIME" || employeeTypeId === "INTERN") &&
                   (!u.title || !u.department || !u.dateStarted)) ||
                 (!u.isHuman && (u.reportsTo || u.title || u.department)) ||
                 (u.isHuman &&
-                  u.employeeType &&
-                  u.employeeType.id === "FULL_TIME" &&
+                  employeeTypeId === "FULL_TIME" &&
                   u.title !== "CEO" &&
                   u.title !== "Chief Executive Officer" &&
                   !u.reportsTo)
-            )
+              );
+            })
             .map(u => (
               <div style={{ marginBottom: "0.5rem" }}>
                 <Flex>
