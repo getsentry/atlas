@@ -8,6 +8,13 @@ export default class extends Component {
     return (
       <Layout>
         <Person email={this.props.params.email} />
+        <input
+          type="button"
+          onClick={() => {
+            throw new Error("break");
+          }}
+          value="Break me"
+        />
       </Layout>
     );
   }
