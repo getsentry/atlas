@@ -4,6 +4,7 @@ import { render } from "react-dom";
 import { Provider } from "react-redux";
 import * as Sentry from "@sentry/browser";
 import { Tracing } from "@sentry/integrations";
+import SentryRRWeb from "@sentry/rrweb";
 import { ApolloProvider } from "react-apollo";
 
 import routes from "./routes";
@@ -19,7 +20,8 @@ Sentry.init({
   integrations: [
     new Tracing({
       tracingOrigins: ["localhost", "atlas.getsentry.net", /^\//]
-    })
+    }),
+    new SentryRRWeb()
   ]
 });
 
