@@ -19,3 +19,4 @@ images:
 - 'us.gcr.io/$PROJECT_ID/atlas-frontend:latest'
 options:
     substitution_option: 'ALLOW_LOOSE'
+logsBucket: 'gs://sentryio-cloudbuild-logs/getsentry/'
