@@ -11,6 +11,8 @@ ENV PYTHONUNBUFFERED 1
 ENV PIP_NO_CACHE_DIR off
 ENV PIP_DISABLE_PIP_VERSION_CHECK on
 
+ENV POETRY_VERSION 1.0.3
+
 ENV NODE_ENV production
 
 RUN mkdir -p /usr/src/app
@@ -28,8 +30,8 @@ RUN set -ex \
   libpq-dev \
   && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/0.12.16/get-poetry.py | python \
-  && poetry config settings.virtualenvs.create false
+RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python \
+  && poetry config virtualenvs.create false
 
 COPY pyproject.toml poetry.lock /usr/src/app/
 # HACK(dcramer): we need the atlas module to be installable at this stage
