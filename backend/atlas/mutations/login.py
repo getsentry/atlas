@@ -19,7 +19,12 @@ def urlsafe_b64decode(b64string):
     return base64.urlsafe_b64decode(padded)
 
 
-def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
+def get_user_from_google_auth_code(
+    auth_code: str = None, cache: google.Cache = None
+) -> Optional[User]:
+    if cache is None:
+        cache = google.Cache()
+
     resp = requests.post(
         "https://www.googleapis.com/oauth2/v4/token",
         json={
@@ -98,7 +103,7 @@ def get_user_from_google_auth_code(auth_code: str = None) -> Optional[User]:
             )
             return identity.user
 
-        user, _ = google.get_user(email=payload["email"], name=payload["name"])
+        user, _ = cache.get_user(email=payload["email"], name=payload["name"])
 
         try:
             with transaction.atomic():
