@@ -34,10 +34,10 @@ const PersonLinkContainer = styled.article`
   }
 `;
 
-export default function({ user }) {
-  if (!user) return <em>n/a</em>;
+export default function({ className, user }) {
+  if (!user) return <em className={className}>n/a</em>;
   return (
-    <PersonLinkContainer>
+    <PersonLinkContainer className={className}>
       <Avatar user={user} size={32} mr="5px" />
       <aside>
         <h4>

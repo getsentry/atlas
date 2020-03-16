@@ -1,12 +1,13 @@
 import logging
 
 import sentry_sdk
-from graphene_django.views import GraphQLView
+
+from graphene_file_upload.django import FileUploadGraphQLView
 
 logger = logging.getLogger("atlas")
 
 
-class EnhancedGraphQLView(GraphQLView):
+class EnhancedGraphQLView(FileUploadGraphQLView):
     # https://github.com/graphql-python/graphene-django/issues/124
     def execute_graphql_request(self, *args, **kwargs):
         """Extract any exceptions and send them to Sentry"""

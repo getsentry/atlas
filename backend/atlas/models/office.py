@@ -4,8 +4,13 @@ from django.db import models
 
 
 class OfficeManager(models.Manager):
-    def get_by_natural_key(self, name):
-        return self.get(name=name)
+    def get_by_natural_key(self, external_id):
+        return self.get(external_id=external_id)
+
+    def get_or_create_by_natural_key(self, external_id):
+        return self.get_or_create(
+            external_id=external_id, defaults={"name": external_id}
+        )
 
 
 class Office(models.Model):

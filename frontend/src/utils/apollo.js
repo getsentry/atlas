@@ -1,5 +1,6 @@
-import { ApolloClient, InMemoryCache, HttpLink } from "apollo-boost";
+import { ApolloClient, InMemoryCache } from "apollo-boost";
 import { ApolloLink, concat } from "apollo-link";
+import { createUploadLink } from "apollo-upload-client";
 
 import config from "../config";
 import { getCookie } from "./cookie";
@@ -37,7 +38,7 @@ function create(initialState) {
     return forward(operation);
   });
 
-  const httpLink = new HttpLink({
+  const httpLink = createUploadLink({
     uri: config.apiEndpoint, // Server URL (must be absolute)
     credentials: "same-origin" // Additional fetch() options like `credentials` or `headers`
   });

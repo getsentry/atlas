@@ -40,7 +40,7 @@ export default () => (
               );
             })
             .map(u => (
-              <div style={{ marginBottom: "0.5rem" }}>
+              <div style={{ marginBottom: "0.5rem" }} key={u.id}>
                 <Flex>
                   <Box flex="1">
                     <PersonLink user={u} />

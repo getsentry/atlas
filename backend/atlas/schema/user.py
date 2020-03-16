@@ -316,10 +316,14 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
             .exclude(date_started=self.profile.date_started)
             .count()
         )
+        if total == 1:
+            return 0
         newer_than_me = Profile.objects.filter(
             user__is_active=True,
             is_human=True,
             date_started__isnull=False,
             date_started__gt=self.profile.date_started,
         ).count()
+        if newer_than_me == 0:
+            return 0
         return (total - newer_than_me) / total

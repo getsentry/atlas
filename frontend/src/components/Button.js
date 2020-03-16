@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 import colors from "../colors";
 
-const button_styles = props => css`
+export const buttonStyles = props => css`
   display: inline-block;
   font-weight: 400;
   text-align: center;
@@ -20,6 +20,11 @@ const button_styles = props => css`
   border-color: ${colors.primary};
   transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.1s ease-in-out;
+
+  svg {
+    vertical-align: top;
+    margin-right: 5px;
+  }
 
   &:disabled {
     background: #ced4da;
@@ -43,9 +48,9 @@ const button_styles = props => css`
 `;
 
 export const ButtonLink = styled(Link)`
-  ${button_styles}
+  ${buttonStyles}
 `;
 
 export default styled.button`
-  ${button_styles}
+  ${buttonStyles}
 `;
