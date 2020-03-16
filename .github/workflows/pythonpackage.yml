@@ -1,9 +1,9 @@
-name: Python package
+name: Atlas
 
 on: [push]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-18.04
     services:
       postgresql:

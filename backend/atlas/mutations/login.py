@@ -119,7 +119,9 @@ def get_user_from_google_auth_code(
                     refresh_token=data["refresh_token"],
                 )
                 if profile:
-                    google.sync_user(data=profile, user=user, identity=identity)
+                    google.sync_user(
+                        data=profile, user=user, user_identity=identity, cache=cache
+                    )
 
                 return user
         except IntegrityError as exc:
