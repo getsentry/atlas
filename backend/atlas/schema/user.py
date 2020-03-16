@@ -24,7 +24,7 @@ def simple_profile_resolver(name):
         try:
             return getattr(self.profile, name)
         except Profile.DoesNotExist:
-            return Profile(is_human=True, user=self)
+            return getattr(Profile(is_human=True, user=self), name)
 
     wrapped.__name__ = f"resolve_{name}"
     return wrapped
