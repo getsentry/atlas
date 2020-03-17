@@ -4,9 +4,7 @@
   "description": "## Install",
   "main": "index.js",
   "dependencies": {
-    "@sentry/rrweb": "^0.1.0",
-    "concurrently": "^4.1.0",
-    "rrweb": "^0.7.27"
+    "concurrently": "^4.1.0"
   },
   "devDependencies": {},
   "scripts": {
