@@ -431,7 +431,7 @@ def sync_user(  # NOQA
     elif profile.office_id:
         profile_fields["office"] = None
 
-    row = find(data.get("phones"), lambda x: x["primary"])
+    row = find(data.get("phones"), lambda x: x.get("primary"))
     if row:
         if profile.primary_phone != row["value"]:
             profile_fields["primary_phone"] = row["value"]
