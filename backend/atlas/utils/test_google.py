@@ -1,6 +1,8 @@
 import pytest
 from django.conf import settings
 
+from atlas.models import Profile
+
 from .google import generate_profile_updates, sync_user
 
 
@@ -408,3 +410,31 @@ def test_sync_user_new_account_updated_department_without_cost_center(
     assert user.profile.department.id == design_department.id
     assert user.profile.department.name == "Design"
     assert user.profile.department.cost_center == design_department.cost_center
+
+
+def test_sync_user_new_account_manager(responses, db):
+    payload = {
+        "id": "100000000",
+        "suspended": False,
+        "isAdmin": False,
+        "primaryEmail": "jane@example.com",
+        "name": {"fullName": "Jane Doe"},
+        "customSchemas": {},
+        "organizations": [
+            {"primary": True, "title": "Dummy", "customType": "FULL_TIME"}
+        ],
+        "locations": [{"area": "desk", "buildingId": "SFO", "type": "desk"}],
+        "phones": [{"primary": True, "type": "home", "value": "+1 800-123-4567"}],
+        "relations": [{"type": "manager", "value": "jim@example.com"}],
+    }
+    result = sync_user(data=payload)
+    assert result.created
+    assert result.updated
+
+    user = result.user
+    assert user.name == "Jane Doe"
+
+    manager = user.profile.reports_to
+    assert manager.name == "jim"
+    assert manager.email == "jim@example.com"
+    assert not Profile.objects.filter(user_id=manager.id).exists()

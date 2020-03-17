@@ -287,7 +287,6 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
             "Friday": value[5],
             "Saturday": value[6],
         }
-
     return params
 
 
