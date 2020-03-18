@@ -286,7 +286,7 @@ export default class ImportExportPeople extends Component {
   importFiles = files => {
     this.setState({
       importing: true,
-      changes: [],
+      changes: null,
       files
     });
     apolloClient
@@ -303,6 +303,7 @@ export default class ImportExportPeople extends Component {
         } else {
           this.setState({
             importing: false,
+            changes: null,
             errors: importCsv.errors
           });
         }
@@ -310,6 +311,7 @@ export default class ImportExportPeople extends Component {
       .catch(err => {
         this.setState({
           errors: ["Unknown"],
+          changes: null,
           importing: false
         });
         throw err;

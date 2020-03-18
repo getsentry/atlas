@@ -113,7 +113,7 @@ class ImportCsv(graphene.Mutation):
                 # TODO(dcramer): validate employee_type
                 if hasattr(current_value, "natural_key"):
                     current_value = "-".join(
-                        str(k) for k in current_value.natural_key()
+                        str(k) for k in current_value.natural_key() if k
                     )
                 elif key.startswith("date_") and value:
                     value = dateutil.parser.parse(value).date()
