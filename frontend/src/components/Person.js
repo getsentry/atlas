@@ -355,7 +355,7 @@ export default class Person extends Component {
                           </DefinitionList>
                         </Card>
                         <Card>
-                          <h3>#gamers</h3>
+                          <h3>#z-gamers</h3>
                           <DefinitionList>
                             <dt>Steam</dt>
                             <dd>

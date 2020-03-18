@@ -15,7 +15,10 @@ class DepartmentManager(models.Manager):
             name_is_id = True
 
         if cost_center:
-            return self.get(cost_center=cost_center)
+            try:
+                return self.get(cost_center=cost_center)
+            except self.model.DoesNotExist:
+                pass
         if name_is_id:
             return self.get(id=name)
         return self.get(name=name)
