@@ -20,12 +20,14 @@ CSV_FIELDS = set(
         "name",
         "email",
         "date_started",
+        "date_of_birth",
         "title",
         "reports_to",
         "department",
         "office",
         "employee_type",
         "is_human",
+        "is_directory_hidden",
     )
 )
 
@@ -59,8 +61,10 @@ class CsvChange(graphene.ObjectType):
     office = graphene.Field(StringChange, required=False)
     reports_to = graphene.Field(StringChange, required=False)
     date_started = graphene.Field(DateChange, required=False)
+    date_of_birth = graphene.Field(DateChange, required=False)
     employee_type = graphene.Field(EmployeeTypeChange, required=False)
     is_human = graphene.Field(BooleanChange, required=False)
+    is_directory_hidden = graphene.Field(BooleanChange, required=False)
 
 
 class ImportCsv(graphene.Mutation):
@@ -117,6 +121,8 @@ class ImportCsv(graphene.Mutation):
                     )
                 elif key.startswith("date_") and value:
                     value = dateutil.parser.parse(value).date()
+                    if key == "date_of_birth":
+                        value = value.replace(year=1900)
                 elif key.startswith("is_") and value:
                     value = value.lower()
                     if value in ("true", "1", "yes"):

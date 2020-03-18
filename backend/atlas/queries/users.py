@@ -28,6 +28,7 @@ class Query(object):
         query=graphene.String(),
         employee_type=graphene.String(),
         include_self=graphene.Boolean(default_value=True),
+        include_hidden=graphene.Boolean(default_value=False),
         humans_only=graphene.Boolean(default_value=True),
         titles_only=graphene.Boolean(default_value=False),
         office=graphene.UUID(),
@@ -53,6 +54,7 @@ class Query(object):
         query: str = None,
         employee_type: str = None,
         include_self: bool = True,
+        include_hidden: bool = False,
         humans_only: bool = True,
         titles_only: bool = False,
         office: str = None,
@@ -79,6 +81,9 @@ class Query(object):
             raise GraphQLError("You must be authenticated")
 
         qs = User.objects.select_related("profile").filter(is_active=True).distinct()
+
+        if not include_hidden:
+            qs = qs.exclude(profile__is_directory_hidden=True)
 
         if id:
             qs = qs.filter(id=id)

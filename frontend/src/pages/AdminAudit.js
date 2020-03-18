@@ -29,10 +29,12 @@ export default () => (
               const employeeTypeId = u.employeeType ? u.employeeType.id : null;
               return (
                 (u.isHuman &&
+                  !u.isDirectoryHidden &&
                   (employeeTypeId === "FULL_TIME" || employeeTypeId === "INTERN") &&
                   (!u.title || !u.department || !u.dateStarted)) ||
                 (!u.isHuman && (u.reportsTo || u.title || u.department)) ||
                 (u.isHuman &&
+                  !u.isDirectoryHidden &&
                   employeeTypeId === "FULL_TIME" &&
                   u.title !== "CEO" &&
                   u.title !== "Chief Executive Officer" &&
@@ -46,16 +48,23 @@ export default () => (
                     <PersonLink user={u} />
                   </Box>
                   <Box>
-                    {u.isHuman && !u.title && <div>Missing title</div>}
-                    {u.isHuman && !u.department && <div>Missing department</div>}
-                    {u.isHuman && !u.dateStarted && <div>Missing dateStarted</div>}
+                    {u.isHuman && !u.isDirectoryHidden && !u.title && (
+                      <div>Missing title</div>
+                    )}
+                    {u.isHuman && !u.isDirectoryHidden && !u.department && (
+                      <div>Missing department</div>
+                    )}
+                    {u.isHuman && !u.isDirectoryHidden && !u.dateStarted && (
+                      <div>Missing dateStarted</div>
+                    )}
                     {u.isHuman &&
+                      !u.isDirectoryHidden &&
                       u.employeeType &&
                       u.employeeType.id === "FULL_TIME" &&
                       u.title !== "CEO" &&
                       u.title !== "Chief Executive Officer" &&
                       !u.reportsTo && <div>Missing reportsTo</div>}
-                    {!u.isHuman && <div>Probably a human</div>}
+                    {!u.isHuman && !u.isDirectoryHidden && <div>Probably a human</div>}
                   </Box>
                 </Flex>
               </div>

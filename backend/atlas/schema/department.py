@@ -41,7 +41,9 @@ class DepartmentNode(gql_optimizer.OptimizedDjangoObjectType):
         if not self.id:
             return 0
         qs = Profile.objects.filter(
-            Q(department=self.id) | Q(department__tree__contains=[self.id])
+            Q(department=self.id) | Q(department__tree__contains=[self.id]),
+            is_human=True,
+            is_directory_hidden=False,
         )
         if (
             not hasattr(self, "_prefetched_objects_cache")
@@ -49,4 +51,10 @@ class DepartmentNode(gql_optimizer.OptimizedDjangoObjectType):
         ):
             logging.warning("Uncached resolution for DepartmentNode.num_people")
             qs = qs.select_related("user")
-        return sum([1 for r in qs if r.user.is_active and r.is_human])
+        return sum(
+            [
+                1
+                for r in qs
+                if r.user.is_active and r.is_human and not r.is_directory_hidden
+            ]
+        )

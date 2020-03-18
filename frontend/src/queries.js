@@ -128,6 +128,7 @@ export const LIST_PEOPLE_QUERY = gql`
     $query: String
     $department: UUID
     $includeSelf: Boolean
+    $includeHidden: Boolean
     $orderBy: UserOrderBy
     $offset: Int
     $limit: Int
@@ -145,6 +146,7 @@ export const LIST_PEOPLE_QUERY = gql`
       query: $query
       department: $department
       includeSelf: $includeSelf
+      includeHidden: $includeHidden
       orderBy: $orderBy
       offset: $offset
       limit: $limit
@@ -157,6 +159,7 @@ export const LIST_PEOPLE_QUERY = gql`
         name
       }
       isHuman
+      isDirectoryHidden
       title
       dobMonth
       dobDay
@@ -179,8 +182,8 @@ export const LIST_PEOPLE_QUERY = gql`
 `;
 
 export const GET_PERSON_QUERY = gql`
-  query getPerson($email: String) {
-    users(email: $email, humansOnly: false) {
+  query getPerson($email: String, $includeHidden: Boolean) {
+    users(email: $email, humansOnly: false, includeHidden: $includeHidden) {
       id
       name
       email
@@ -200,6 +203,7 @@ export const GET_PERSON_QUERY = gql`
       dateStarted
       primaryPhone
       isHuman
+      isDirectoryHidden
       employeeType {
         id
         name
@@ -293,8 +297,8 @@ export const GET_PERSON_QUERY = gql`
 `;
 
 export const SELECT_PEOPLE_QUERY = gql`
-  query listPeopleForSelect($query: String!) {
-    users(humansOnly: true, query: $query, limit: 10) {
+  query listPeopleForSelect($query: String!, $includeHidden: Boolean) {
+    users(humansOnly: true, query: $query, limit: 10, includeHidden: $includeHidden) {
       id
       name
       email
@@ -310,8 +314,8 @@ export const SELECT_PEOPLE_QUERY = gql`
 `;
 
 export const EXPORT_PEOPLE_QUERY = gql`
-  query exportPeople($offset: Int, $limit: Int) {
-    users(offset: $offset, limit: $limit) {
+  query exportPeople {
+    users(limit: 1000, includeHidden: true) {
       id
       name
       email
@@ -327,6 +331,7 @@ export const EXPORT_PEOPLE_QUERY = gql`
         id
       }
       isHuman
+      isDirectoryHidden
       title
       dateStarted
       reportsTo {
@@ -365,6 +370,10 @@ export const IMPORT_CSV_MUTATION = gql`
           new
         }
         isHuman {
+          previous
+          new
+        }
+        isDirectoryHidden {
           previous
           new
         }

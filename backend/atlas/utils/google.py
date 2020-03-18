@@ -214,7 +214,10 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
     for key, field_path in settings.GOOGLE_FIELD_MAP:
         if key in data:
             if isinstance(data[key], date):
-                value = data[key].isoformat()
+                if key == "date_of_birth":
+                    value = data[key].replace(year=1900).isoformat()
+                else:
+                    value = data[key].isoformat()
             elif isinstance(data[key], User):
                 value = data[key].email
             elif isinstance(data[key], models.Model):
@@ -348,9 +351,11 @@ def sync_user(  # NOQA
             if value:
                 value = cache.get_department(
                     name=value,
-                    cost_center=int(row["costCenter"])
-                    if row.get("costCenter") not in (None, "None", "")
-                    else None,
+                    cost_center=(
+                        int(row["costCenter"])
+                        if row.get("costCenter") not in (None, "None", "")
+                        else None
+                    ),
                 )
             profile_fields["department"] = value
         if (
@@ -404,6 +409,8 @@ def sync_user(  # NOQA
             value = lookup_field(schemas, field_path)
             if value and attribute_name.startswith("date_"):
                 value = to_date(value)
+                if attribute_name == "date_of_birth":
+                    value = value.replace(year=1900)
             elif value is None and attribute_name in DEFAULT_VALUES:
                 value = DEFAULT_VALUES[attribute_name]
             elif attribute_name.startswith(BOOLEAN_PREFIXES):

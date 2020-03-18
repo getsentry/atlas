@@ -39,8 +39,7 @@ class ExportCard extends Component {
   export = () => {
     apolloClient
       .query({
-        query: EXPORT_PEOPLE_QUERY,
-        variables: { limit: 1000 }
+        query: EXPORT_PEOPLE_QUERY
       })
       .then(response => {
         const { users } = response.data;
@@ -52,24 +51,28 @@ class ExportCard extends Component {
                 "name",
                 "email",
                 "date_started",
+                "date_of_birth",
                 "title",
                 "reports_to",
                 "department",
                 "office",
                 "employee_type",
-                "is_human"
+                "is_human",
+                "is_directory_hidden"
               ],
               ...users.map(u => [
                 u.id,
                 u.name,
                 u.email,
                 u.dateStarted,
+                u.dateOfBirth,
                 u.title,
                 u.reportsTo ? u.reportsTo.email : "",
                 formatDepartment(u.department),
                 formatOffice(u.office),
                 u.employeeType ? u.employeeType.id : "",
-                u.isHuman
+                u.isHuman,
+                u.isDirectoryHidden
               ])
             ],
             `people-${new Date().getTime()}.csv`
@@ -342,6 +345,21 @@ export default class ImportExportPeople extends Component {
                 update people. You'll be given a preview of the changes before they're
                 applied.
               </p>
+              <p>Some things to note:</p>
+              <ul>
+                <li>
+                  <code>date_of_birth</code> will always use the fixed year 1900 for
+                  privacy reasons
+                </li>
+                <li>
+                  <code>department</code> is in the format of{" "}
+                  <code>[COST_CENTER]-[NAME]</code>
+                </li>
+                <li>
+                  <code>employee_type</code> can be one of <code>FULL_TIME</code>,{" "}
+                  <code>CONTRACT</code>, or <code>INTERN</code>
+                </li>
+              </ul>
               <div>
                 <input
                   type="file"

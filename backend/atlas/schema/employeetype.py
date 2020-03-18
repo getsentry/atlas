@@ -20,14 +20,22 @@ class EmployeeTypeNode(graphene.ObjectType):
     def resolve_num_people(self, info):
         if not self["id"]:
             return 0
-        qs = Profile.objects.filter(employee_type=self["id"])
+        qs = Profile.objects.filter(
+            employee_type=self["id"], is_human=True, is_directory_hidden=False
+        )
         if (
             not hasattr(self, "_prefetched_objects_cache")
             or "people" not in self._prefetched_objects_cache
         ):
             logging.warning("Uncached resolution for OfficeNode.num_people")
             qs = qs.select_related("user")
-        return sum([1 for r in qs if r.user.is_active and r.is_human])
+        return sum(
+            [
+                1
+                for r in qs
+                if r.user.is_active and r.is_human and not r.is_directory_hidden
+            ]
+        )
 
     def resolve_name(self, info):
         if not self["id"]:

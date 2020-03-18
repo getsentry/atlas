@@ -68,6 +68,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     primary_phone = PhoneNumberField(required=False)
     employee_type = graphene.Field("atlas.schema.EmployeeTypeNode", required=False)
     is_human = graphene.Boolean(required=False, default_value=True)
+    is_directory_hidden = graphene.Boolean(required=False, default_value=False)
     has_onboarded = graphene.Boolean(required=False, default_value=True)
 
     office = graphene.Field("atlas.schema.OfficeNode")
@@ -187,7 +188,10 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
             return self.num_referrals
         logging.warning("Uncached resolution for UserNode.num_referrals")
         return Profile.objects.filter(
-            is_human=True, referred_by=self.id, user__is_active=True
+            is_human=True,
+            referred_by=self.id,
+            user__is_active=True,
+            is_directory_hidden=False,
         ).count()
 
     # TODO(dcramer):
@@ -200,7 +204,10 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
             return self.num_reports
         logging.warning("Uncached resolution for UserNode.num_reports")
         return Profile.objects.filter(
-            is_human=True, reports_to=self.id, user__is_active=True
+            is_human=True,
+            reports_to=self.id,
+            user__is_active=True,
+            is_directory_hidden=False,
         ).count()
 
     @gql_optimizer.resolver_hints(
@@ -209,14 +216,20 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     def resolve_reports(self, info):
         if not self.id:
             return []
-        qs = self.reports.all()
+        qs = self.reports.filter(
+            user__is_active=True, is_human=True, is_directory_hidden=False
+        )
         if (
             not hasattr(self, "_prefetched_objects_cache")
             or "reports" not in self._prefetched_objects_cache
         ):
             logging.warning("Uncached resolution for UserNode.reports")
             qs = qs.select_related("user", "user__profile")
-        return [r.user for r in qs if r.user.is_active and r.is_human]
+        return [
+            r.user
+            for r in qs
+            if r.user.is_active and r.is_human and not r.is_directory_hidden
+        ]
 
     @gql_optimizer.resolver_hints(select_related=("profile"))
     def resolve_num_peers(self, info):
@@ -232,6 +245,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         return (
             Profile.objects.filter(
                 is_human=True,
+                is_directory_hidden=False,
                 reports_to=self.profile.reports_to_id,
                 user__is_active=True,
             ).count()
@@ -253,7 +267,9 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
             return []
         if not self.profile.reports_to:
             return []
-        qs = self.profile.reports_to.reports.all()
+        qs = self.profile.reports_to.reports.filter(
+            user__is_active=True, is_human=True, is_directory_hidden=False
+        )
         if (
             not hasattr(self, "_prefetched_objects_cache")
             or "peers" not in self._prefetched_objects_cache
@@ -263,7 +279,10 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         return [
             r.user
             for r in qs
-            if r.user_id != self.id and r.user.is_active and r.is_human
+            if r.user_id != self.id
+            and r.user.is_active
+            and r.is_human
+            and not r.is_directory_hidden
         ]
 
     @gql_optimizer.resolver_hints(select_related=("profile"))
@@ -278,10 +297,10 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         current_user = info.context.user
         if not current_user.is_authenticated:
             return None
+        if not self.profile.date_of_birth:
+            return None
         # dob is considered sensitive (the year) as it discloses age
-        if current_user.is_superuser or current_user.id == self.id:
-            return self.profile.date_of_birth
-        return None
+        return self.profile.date_of_birth.replace(year=1900)
 
     @gql_optimizer.resolver_hints(select_related=("profile"))
     def resolve_dob_month(self, info):
@@ -301,6 +320,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
     resolve_department = simple_profile_resolver("department")
     resolve_date_started = simple_profile_resolver("date_started")
     resolve_is_human = simple_profile_resolver("is_human")
+    resolve_is_directory_hidden = simple_profile_resolver("is_directory_hidden")
     resolve_pronouns = simple_profile_resolver("pronouns")
     resolve_has_onboarded = simple_profile_resolver("has_onboarded")
 
@@ -311,7 +331,10 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
             return None
         total = (
             Profile.objects.filter(
-                user__is_active=True, date_started__isnull=False, is_human=True
+                user__is_active=True,
+                date_started__isnull=False,
+                is_human=True,
+                is_directory_hidden=False,
             )
             .exclude(date_started=self.profile.date_started)
             .count()
@@ -321,6 +344,7 @@ class UserNode(gql_optimizer.OptimizedDjangoObjectType):
         newer_than_me = Profile.objects.filter(
             user__is_active=True,
             is_human=True,
+            is_directory_hidden=False,
             date_started__isnull=False,
             date_started__gt=self.profile.date_started,
         ).count()

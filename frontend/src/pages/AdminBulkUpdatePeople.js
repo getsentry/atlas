@@ -28,6 +28,7 @@ export const LIST_PEOPLE_QUERY = gql`
         }
       }
       isHuman
+      isDirectoryHidden
       title
       dobMonth
       dobDay

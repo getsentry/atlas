@@ -12,6 +12,8 @@ class Profile(models.Model):
     pronouns = models.TextField(null=True)
     employee_type = models.TextField(null=True)
     handle = models.TextField(null=True)
+    # the year of birth is considered confidential and thus is discarded by Atlas
+    # instead we store the year as 1900 to keep this in a known/easy to work w/ schema
     date_of_birth = models.DateField(null=True)
     date_started = models.DateField(null=True)
     schedule = ArrayField(models.CharField(max_length=8, blank=True), size=7, null=True)
@@ -46,6 +48,7 @@ class Profile(models.Model):
     config = JSONField(default=dict)
     is_human = models.BooleanField(default=True)
     has_onboarded = models.BooleanField(default=False)
+    is_directory_hidden = models.BooleanField(default=False)
 
     class Meta:
         db_table = "profile"

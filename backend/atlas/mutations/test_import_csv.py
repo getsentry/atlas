@@ -18,6 +18,7 @@ mutation importCsv ($file: Upload!, $apply: Boolean) {
             employeeType { previous, new }
             isHuman { previous, new }
             dateStarted { previous, new }
+            isDirectoryHidden { previous, new }
         }
     }
 }

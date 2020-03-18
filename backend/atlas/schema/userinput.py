@@ -44,6 +44,7 @@ class UserInput(graphene.InputObjectType):
     referred_by = Nullable(graphene.UUID, required=False)
     primary_phone = Nullable(PhoneNumberField, required=False)
     is_human = graphene.Boolean(required=False)
+    is_directory_hidden = graphene.Boolean(required=False)
     office = Nullable(graphene.UUID, required=False)
     is_superuser = graphene.Boolean(required=False)
     social = Nullable(SocialInput, required=False)
