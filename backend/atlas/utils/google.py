@@ -173,7 +173,7 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
         ]
 
     if "title" in data or "department" in data or "employee_type" in data:
-        deptartment = (
+        department = (
             Department.objects.get(id=data["department"])
             if data.get("department")
             else profile.department
@@ -182,8 +182,12 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
             {
                 "primary": True,
                 "title": data.get("title") or profile.title,
-                "department": deptartment.name if deptartment else "",
-                "costCenter": str(deptartment.cost_center if deptartment else ""),
+                "department": department.name if department else "",
+                "costCenter": str(
+                    department.cost_center
+                    if department and department.cost_center
+                    else ""
+                ),
                 "customType": (
                     data.get("employee_type")
                     or profile.employee_type
@@ -345,7 +349,7 @@ def sync_user(  # NOQA
                 value = cache.get_department(
                     name=value,
                     cost_center=int(row["costCenter"])
-                    if row.get("costCenter")
+                    if row.get("costCenter") not in (None, "None", "")
                     else None,
                 )
             profile_fields["department"] = value

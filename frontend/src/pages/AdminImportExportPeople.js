@@ -115,17 +115,15 @@ const Errors = ({ errors }) => (
 );
 
 const PreviewHeader = ({ onApply, saving, changes }) => {
-  let numChanges = changes.reduce(
-    (a, b) => mapChangedAttributes(a).length + mapChangedAttributes(b).length,
-    []
-  );
+  let numChanges = 0;
+  changes.forEach(c => (numChanges += mapChangedAttributes(c).length));
   return (
     <Card withPadding>
       <Flex>
         <Box flex="1">
           <h2>Import Preview</h2>{" "}
           <span>
-            {numChanges.toLocaleString()} change{numChanges === 1 ? "s" : ""}
+            {numChanges.toLocaleString()} change{numChanges !== 1 ? "s" : ""}
           </span>
         </Box>
         <Box>

@@ -446,7 +446,7 @@ class UpdatePersonForm extends Component {
                   </Card>
 
                   <Card>
-                    <h2>#gamers</h2>
+                    <h2>#z-gamers</h2>
                     <FieldWrapper
                       type="text"
                       name="gamerTags[steam]"
