@@ -308,3 +308,75 @@ export const SELECT_PEOPLE_QUERY = gql`
     }
   }
 `;
+
+export const EXPORT_PEOPLE_QUERY = gql`
+  query exportPeople($offset: Int, $limit: Int) {
+    users(offset: $offset, limit: $limit) {
+      id
+      name
+      email
+      department {
+        id
+        name
+        costCenter
+      }
+      office {
+        externalId
+      }
+      employeeType {
+        id
+      }
+      isHuman
+      title
+      dateStarted
+      reportsTo {
+        email
+      }
+    }
+  }
+`;
+
+export const IMPORT_CSV_MUTATION = gql`
+  mutation importCsv($file: Upload!, $ignoreEmptyCells: Boolean, $apply: Boolean) {
+    importCsv(file: $file, ignoreEmptyCells: $ignoreEmptyCells, apply: $apply) {
+      ok
+      errors
+      applied
+      changes {
+        user {
+          id
+          name
+          email
+        }
+        name {
+          previous
+          new
+        }
+        title {
+          previous
+          new
+        }
+        department {
+          previous
+          new
+        }
+        office {
+          previous
+          new
+        }
+        isHuman {
+          previous
+          new
+        }
+        reportsTo {
+          previous
+          new
+        }
+        dateStarted {
+          previous
+          new
+        }
+      }
+    }
+  }
+`;

@@ -20,11 +20,12 @@ class Context(object):
 
 
 class GqlClient(graphene.test.Client):
-    def execute(self, query, user=None):
+    def execute(self, query, variables=None, user=None, files=None):
         context = Context()
         if user:
             context.user = user
-        return super().execute(query, context=context)
+        context.FILES = files or {}
+        return super().execute(query, variables=variables, context=context)
 
 
 @pytest.fixture

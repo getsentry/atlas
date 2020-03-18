@@ -109,24 +109,17 @@ class Cache(object):
     def __init__(self):
         self.items = defaultdict(dict)
 
-    def get_user(self, email: str, name: str = None) -> Tuple[User, bool]:
+    def get_user(self, email: str, name: Optional[str] = None) -> Tuple[User, bool]:
         if email in self.items[User]:
             return self.items[User][email], False
-        try:
-            user = User.objects.get(email=email)
-            created = False
-        except User.DoesNotExist:
-            user = User.objects.create_user(email=email, name=email.split("@", 1)[0])
-            created = True
+        user, created = User.objects.get_or_create_by_natural_key(email=email)
         self.items[User][email] = user
         return user, created
 
     def get_office(self, external_id: str) -> Office:
         if external_id in self.items[Office]:
             return self.items[Office][external_id]
-        office, created = Office.objects.get_or_create(
-            external_id=external_id, defaults={"name": external_id}
-        )
+        office, created = Office.objects.get_or_create_by_natural_key(external_id)
         self.items[Office][external_id] = office
         return office
 
@@ -134,57 +127,16 @@ class Cache(object):
         self.items[Office][office.external_id] = office
 
     def get_department(
-        self, name: str, cost_center: str = None
+        self, name: str, cost_center: Optional[int] = None
     ) -> Optional[Department]:
         if cost_center in self.items[Department]:
             return self.items[Department][cost_center]
 
-        try:
-            from uuid import UUID
-
-            UUID(name)
-        except ValueError:
-            name_is_id = False
-        else:
-            name_is_id = True
-
-        result = None
-        if cost_center:
-            try:
-                cost_center = int(cost_center)
-            except ValueError:
-                return None
-            try:
-                result = Department.objects.get(cost_center=cost_center)
-            except Department.DoesNotExist:
-                pass
-
-        if not result:
-            if name_is_id:
-                try:
-                    result = Department.objects.get(id=name)
-                except Department.DoesNotExist:
-                    return None
-
-            result = Department.objects.get_or_create(
-                name=name, defaults={"cost_center": cost_center}
-            )[0]
-
-        fields = []
-        # we only override the name if cost_center is empty or the name is empty
-        if result.name != name and (not cost_center or not result.name):
-            result.name = name
-            fields.append("name")
-
-        if result.cost_center != cost_center and cost_center:
-            result.cost_center = cost_center
-            fields.append("cost_center")
-
-        if fields:
-            result.save(update_fields=fields)
-
-        if cost_center:
-            self.items[Department][cost_center] = result
+        result, created = Department.objects.get_or_create_by_natural_key(
+            cost_center, name
+        )
+        if result.cost_center:
+            self.items[Department][result.cost_center] = result
 
         return result
 
@@ -351,7 +303,7 @@ def sync_user(  # NOQA
             provider="google", external_id=data["id"], defaults={"user": user}
         )
 
-    profile, _ = Profile.objects.get_or_create(user=user)
+    profile = user.get_profile()
 
     identity_fields = {}
     user_fields = {}
@@ -391,7 +343,10 @@ def sync_user(  # NOQA
             value = row.get("department") or None
             if value:
                 value = cache.get_department(
-                    name=value, cost_center=row.get("costCenter")
+                    name=value,
+                    cost_center=int(row["costCenter"])
+                    if row.get("costCenter")
+                    else None,
                 )
             profile_fields["department"] = value
         if (

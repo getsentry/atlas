@@ -50,8 +50,7 @@ class UpdateUser(graphene.Mutation):
                 ok=False, errors=[f"Cannot update field: {f}" for f in invalid_fields]
             )
 
-        profile, _ = Profile.objects.get_or_create(user=user)
-        user.profile = profile
+        profile = user.get_profile()
 
         updates = {}
         model_updates = {User: {}, Profile: {}}

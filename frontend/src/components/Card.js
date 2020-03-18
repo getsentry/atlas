@@ -4,9 +4,11 @@ import styled from "@emotion/styled";
 
 import colors from "../colors";
 
-export default styled(({ className, to, children }) => {
+export default styled(({ className, to, children, ...props }) => {
   return (
-    <div className={className}>{to ? <Link to={to}>{children}</Link> : children}</div>
+    <div className={className} {...props}>
+      {to ? <Link to={to}>{children}</Link> : children}
+    </div>
   );
 })`
   background: ${colors.cardBackground};

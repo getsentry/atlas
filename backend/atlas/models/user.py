@@ -5,6 +5,8 @@ from django.db import models
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
+from .profile import Profile
+
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -20,6 +22,11 @@ class UserManager(BaseUserManager):
 
     def get_by_natural_key(self, email):
         return self.get(email=email)
+
+    def get_or_create_by_natural_key(self, email):
+        return self.get_or_create(
+            email=email, defaults={"name": email.split("@", 1)[0]}
+        )
 
     def create_user(self, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", False)
@@ -70,3 +77,11 @@ class User(AbstractUser):
 
     def natural_key(self):
         return [self.email]
+
+    def get_profile(self):
+        try:
+            return self.profile
+        except Profile.DoesNotExist:
+            return Profile.objects.get_or_create(
+                user=self, defaults={"is_human": True}
+            )[0]
