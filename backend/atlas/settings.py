@@ -160,6 +160,7 @@ GOOGLE_FIELD_MAP = (
     # "column" => "SchemaName/FieldName"
     # system
     ("is_human", "System/Is_Human"),
+    ("is_directory_hidden", "System/Is_Directory_Hidden"),
     ("has_onboarded", "System/Has_Onboarded"),
     # ("department", "System/Department"),
     # core

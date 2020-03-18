@@ -14,6 +14,7 @@ FIELD_MODEL_MAP = {
     "primary_phone": Profile,
     "employee_type": Profile,
     "is_human": Profile,
+    "is_directory_hidden": Profile,
     "office": Profile,
     "pronouns": Profile,
     "linkedin": Profile,
@@ -42,13 +43,16 @@ RESTRICTED_FIELDS = frozenset(
     ]
 )
 
-SUPERUSER_ONLY_FIELDS = frozenset(["is_human", "is_superuser", "has_onboarded"])
+SUPERUSER_ONLY_FIELDS = frozenset(
+    ["is_human", "is_directory_hidden", "is_superuser", "has_onboarded"]
+)
 
 # attribute prefixes which are always booleans
 BOOLEAN_PREFIXES = ("is_", "has_")
 
 DEFAULT_VALUES = {
     "is_human": True,
+    "is_directory_hidden": False,
     "has_onboarded": False,
     "employee_type": "FULL_TIME",
 }

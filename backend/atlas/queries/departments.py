@@ -57,7 +57,9 @@ class Query(object):
 
         if people_only:
             qs = qs.filter(
-                profile__is_human=True, profile__user__is_active=True
+                profile__is_human=True,
+                profile__user__is_active=True,
+                profile__is_directory_hidden=False,
             ).exclude(profile=None)
 
         if cost_center is not None:

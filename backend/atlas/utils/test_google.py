@@ -16,14 +16,14 @@ def user_payload():
         "name": {"fullName": "Jane Doe"},
         "customSchemas": {
             "Profile": {
-                "Date_of_Birth": "1990-08-12",
+                "Date_of_Birth": "1900-08-12",
                 "Date_of_Hire": "2010-04-26",
                 "Handle": "Jane",
                 "Pronouns": "SHE_HER",
                 "Bio": "My bio!",
                 "Referred_By": None,
             },
-            "System": {"Is_Human": True},
+            "System": {"Is_Human": True, "Is_Directory_Hidden": False},
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": None},
             "GamerTags": {
                 "Steam": None,
@@ -70,7 +70,7 @@ def test_generate_profile_updates_all_fields(responses, default_user):
     assert params == {
         "customSchemas": {
             "Profile": {
-                "Date_of_Birth": "1990-08-12",
+                "Date_of_Birth": "1900-08-12",
                 "Date_of_Hire": "2010-04-26",
                 "Handle": None,
                 "Pronouns": None,
@@ -84,7 +84,11 @@ def test_generate_profile_updates_all_fields(responses, default_user):
                 "PlayStation": None,
                 "Nintendo": None,
             },
-            "System": {"Is_Human": True, "Has_Onboarded": False},
+            "System": {
+                "Is_Human": True,
+                "Has_Onboarded": False,
+                "Is_Directory_Hidden": False,
+            },
             "Schedule": {
                 "Sunday": settings.DEFAULT_SCHEDULE[0],
                 "Monday": settings.DEFAULT_SCHEDULE[1],
@@ -139,14 +143,18 @@ def test_generate_profile_updates_all_fields_with_all_fields(
     assert params == {
         "customSchemas": {
             "Profile": {
-                "Date_of_Birth": "1990-08-12",
+                "Date_of_Birth": "1900-08-12",
                 "Date_of_Hire": "2010-04-26",
                 "Handle": "Jane",
                 "Pronouns": "SHE_HER",
                 "Bio": "My bio!",
                 "Referred_By": default_superuser.email,
             },
-            "System": {"Is_Human": True, "Has_Onboarded": True},
+            "System": {
+                "Is_Human": True,
+                "Has_Onboarded": True,
+                "Is_Directory_Hidden": False,
+            },
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": "@getsentry"},
             "GamerTags": {
                 "Steam": None,
@@ -190,7 +198,7 @@ def test_sync_user_with_user_and_identity(
         "name": {"fullName": "Jane Doe"},
         "customSchemas": {
             "Profile": {
-                "Date_of_Birth": "1990-08-12",
+                "Date_of_Birth": "1900-08-12",
                 "Date_of_Hire": "2010-04-26",
                 "Handle": "Jane",
                 "Pronouns": "SHE_HER",
@@ -238,6 +246,7 @@ def test_sync_user_with_user_and_identity(
     assert not user.is_superuser
 
     assert user.profile.is_human
+    assert not user.profile.is_directory_hidden
     assert user.profile.employee_type == "FULL_TIME"
     assert user.profile.handle == "Jane"
     assert user.profile.pronouns == "SHE_HER"
@@ -263,7 +272,7 @@ def test_sync_user_new_account(responses, default_superuser):
         "name": {"fullName": "Jane Doe"},
         "customSchemas": {
             "Profile": {
-                "Date_of_Birth": "1990-08-12",
+                "Date_of_Birth": "1900-08-12",
                 "Date_of_Hire": "2010-04-26",
                 "Handle": "Jane",
                 "Pronouns": "SHE_HER",
@@ -305,6 +314,7 @@ def test_sync_user_new_account(responses, default_superuser):
     assert not user.is_superuser
 
     assert user.profile.is_human
+    assert not user.profile.is_directory_hidden
     assert user.profile.employee_type == "FULL_TIME"
     assert user.profile.handle == "Jane"
     assert user.profile.pronouns == "SHE_HER"
@@ -343,6 +353,7 @@ def test_sync_user_new_account_without_custom_schemas(responses, default_superus
     assert not user.is_superuser
 
     assert user.profile.is_human
+    assert not user.profile.is_directory_hidden
     assert user.profile.employee_type == "FULL_TIME"
     assert user.profile.handle is None
     assert user.profile.pronouns is None

@@ -27,6 +27,7 @@ const UserSchema = yup.object().shape({
   dateStarted: yup.date().nullable(),
   dateOfBirth: yup.date().nullable(),
   isHuman: yup.bool().nullable(),
+  isDirectoryHidden: yup.bool().nullable(),
   isSuperuser: yup.bool().nullable()
 });
 
@@ -40,7 +41,7 @@ export const PERSON_QUERY = gql`
       id
       name
     }
-    users(humansOnly: false, email: $email) {
+    users(humansOnly: false, email: $email, includeHidden: true) {
       id
       name
       email
@@ -65,6 +66,7 @@ export const PERSON_QUERY = gql`
         name
       }
       isHuman
+      isDirectoryHidden
       isSuperuser
       schedule {
         sunday
@@ -144,7 +146,9 @@ class UpdatePersonForm extends Component {
       ].forEach(k => restrictedFields.add(k));
     }
     if (!currentUser.isSuperuser) {
-      ["isHuman", "isSuperuser"].forEach(k => restrictedFields.add(k));
+      ["isHuman", "isDirectoryHidden", "isSuperuser"].forEach(k =>
+        restrictedFields.add(k)
+      );
     }
 
     return (
@@ -170,6 +174,7 @@ class UpdatePersonForm extends Component {
             reportsTo: user.reportsTo,
             referredBy: user.referredBy,
             isHuman: user.isHuman,
+            isDirectoryHidden: user.isDirectoryHidden,
             employeeType: user.employeeType ? user.employeeType.id : "",
             isSuperuser: user.isSuperuser || false,
             office: user.office ? user.office.id : "",
@@ -477,7 +482,7 @@ class UpdatePersonForm extends Component {
                     />
                   </Card>
 
-                  {!this.props.onboarding && (
+                  {!this.props.onboarding && currentUser.isSuperuser && (
                     <Card>
                       <h2>Meta</h2>
                       <FieldWrapper
@@ -485,6 +490,13 @@ class UpdatePersonForm extends Component {
                         name="isHuman"
                         label="Human?"
                         readonly={restrictedFields.has("isHuman")}
+                      />
+                      <FieldWrapper
+                        type="checkbox"
+                        name="isDirectoryHidden"
+                        label="Hidden in Directory?"
+                        readonly={restrictedFields.has("isDirectoryHidden")}
+                        help="Should this user be hidden in the directory? Useful for personnel who are no longer part of the organization."
                       />
                       <FieldWrapper
                         type="checkbox"

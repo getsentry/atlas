@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
 import moment from "moment";
@@ -143,16 +144,21 @@ const DepartmentTree = styled(({ className, department }) => {
   }
 `;
 
-export default class Person extends Component {
+class Person extends Component {
   static propTypes = {
     email: PropTypes.string.isRequired
   };
 
   render() {
+    const currentUser = this.props.user;
     return (
       <Query
         query={GET_PERSON_QUERY}
-        variables={{ email: this.props.email, humansOnly: false }}
+        variables={{
+          email: this.props.email,
+          humansOnly: false,
+          includeHidden: currentUser.isSuperuser
+        }}
       >
         {({ loading, error, data }) => {
           if (error) return <ErrorMessage message="Error loading person." />;
@@ -217,6 +223,14 @@ export default class Person extends Component {
                         </Box>
                       </Flex>
                     </ProfileHeader>
+
+                    {thisPerson.isDirectoryHidden && (
+                      <Card withPadding>
+                        <strong>
+                          This person has been hidden from the public directory.
+                        </strong>
+                      </Card>
+                    )}
 
                     <Flex>
                       <Box width={2 / 3} px={3}>
@@ -427,3 +441,7 @@ export default class Person extends Component {
     );
   }
 }
+
+export default connect(({ auth }) => ({
+  user: auth.user
+}))(Person);
