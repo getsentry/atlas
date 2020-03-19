@@ -13,11 +13,13 @@ import IconLink from "../components/IconLink";
 import Layout from "../components/Layout";
 import PeopleList from "../components/PeopleList";
 import PageLoader from "../components/PageLoader";
-import {
-  LIST_DEPARTMENTS_QUERY,
-  LIST_EMPLOYEE_TYPES_QUERY,
-  LIST_OFFICES_QUERY
-} from "../queries";
+import { SEARCH_PEOPLE_QUERY } from "../queries";
+
+export const peopleQueryVars = {
+  offset: 0,
+  limit: 100,
+  orderBy: "name"
+};
 
 const Filter = styled(({ className, location, name, title, allLabel, choices }) => {
   const value = location.query[name];
@@ -87,80 +89,6 @@ const Filter = styled(({ className, location, name, title, allLabel, choices }) 
   }
 `;
 
-function DepartmentFilter({ location }) {
-  return (
-    <Query
-      query={LIST_DEPARTMENTS_QUERY}
-      variables={{ peopleOnly: true, rootOnly: true }}
-    >
-      {({ loading, error, data }) => {
-        if (error) throw error;
-        if (loading) return <PageLoader />;
-        const { departments } = data;
-        return (
-          <Filter
-            location={location}
-            title="Department"
-            name="department"
-            allLabel="All Departments"
-            choices={departments.map(d => ({
-              id: d.id,
-              value: d.name,
-              count: d.numPeople
-            }))}
-          />
-        );
-      }}
-    </Query>
-  );
-}
-
-function OfficeFilter({ location }) {
-  return (
-    <Query query={LIST_OFFICES_QUERY}>
-      {({ loading, error, data }) => {
-        if (error) throw error;
-        if (loading) return <PageLoader />;
-        const { offices } = data;
-        return (
-          <Filter
-            location={location}
-            title="Office"
-            name="office"
-            allLabel="All Offices"
-            choices={offices.map(d => ({ id: d.id, value: d.name, count: d.numPeople }))}
-          />
-        );
-      }}
-    </Query>
-  );
-}
-
-function EmployeeTypeFilter({ location }) {
-  return (
-    <Query query={LIST_EMPLOYEE_TYPES_QUERY}>
-      {({ loading, error, data }) => {
-        if (error) throw error;
-        if (loading) return <PageLoader />;
-        const { employeeTypes } = data;
-        return (
-          <Filter
-            location={location}
-            title="Type"
-            name="employeeType"
-            allLabel="All People"
-            choices={employeeTypes.map(d => ({
-              id: d.id,
-              value: d.name,
-              count: d.numPeople
-            }))}
-          />
-        );
-      }}
-    </Query>
-  );
-}
-
 const SearchInput = styled.input`
   background: #273444;
   border: 0;
@@ -185,6 +113,7 @@ export default class People extends Component {
   };
 
   render() {
+    const { location } = this.context.router;
     return (
       <Layout>
         <Content>
@@ -212,16 +141,63 @@ export default class People extends Component {
               </Box>
             </Flex>
           </Card>
-          <Flex mx={-3}>
-            <Box width={250} mx={3}>
-              <OfficeFilter location={this.context.router.location} />
-              <DepartmentFilter location={this.context.router.location} />
-              <EmployeeTypeFilter location={this.context.router.location} />
-            </Box>
-            <Box flex="1" mx={3}>
-              <PeopleList query={this.context.router.location.query} />
-            </Box>
-          </Flex>
+          <Query
+            query={SEARCH_PEOPLE_QUERY}
+            variables={{ peopleQueryVars, ...location.query }}
+          >
+            {({ loading, error, data, fetchMore }) => {
+              if (error) throw error;
+              if (loading) return <PageLoader />;
+              const {
+                users: {
+                  results,
+                  facets: { departments, offices, employeeTypes }
+                }
+              } = data;
+              return (
+                <Flex mx={-3}>
+                  <Box width={250} mx={3}>
+                    <Filter
+                      location={location}
+                      title="Office"
+                      name="office"
+                      allLabel="All Offices"
+                      choices={offices.map(d => ({
+                        id: d.id,
+                        value: d.name,
+                        count: d.numPeople
+                      }))}
+                    />
+                    <Filter
+                      location={location}
+                      title="Department"
+                      name="department"
+                      allLabel="All Departments"
+                      choices={departments.map(d => ({
+                        id: d.id,
+                        value: d.name,
+                        count: d.numPeople
+                      }))}
+                    />
+                    <Filter
+                      location={location}
+                      title="Type"
+                      name="employeeType"
+                      allLabel="All People"
+                      choices={employeeTypes.map(d => ({
+                        id: d.id,
+                        value: d.name,
+                        count: d.numPeople
+                      }))}
+                    />
+                  </Box>
+                  <Box flex="1" mx={3}>
+                    <PeopleList users={results} />
+                  </Box>
+                </Flex>
+              );
+            }}
+          </Query>
         </Content>
       </Layout>
     );

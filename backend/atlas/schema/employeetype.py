@@ -29,7 +29,7 @@ class EmployeeTypeNode(graphene.ObjectType):
             not hasattr(self, "_prefetched_objects_cache")
             or "people" not in self._prefetched_objects_cache
         ):
-            logging.warning("Uncached resolution for OfficeNode.num_people")
+            logging.warning("Uncached resolution for EmployeeTypeNode.num_people")
             qs = qs.select_related("user")
         return sum(
             [
@@ -43,3 +43,10 @@ class EmployeeTypeNode(graphene.ObjectType):
         if not self["id"]:
             return "Unknown"
         return EmployeeTypeEnum[self["id"]].value
+
+
+ALL_EMPLOYEE_TYPES = (
+    EmployeeTypeEnum.FULL_TIME,
+    EmployeeTypeEnum.CONTRACT,
+    EmployeeTypeEnum.INTERN,
+)

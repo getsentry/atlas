@@ -183,6 +183,92 @@ export const LIST_PEOPLE_QUERY = gql`
   }
 `;
 
+export const SEARCH_PEOPLE_QUERY = gql`
+  query searchPeople(
+    $office: UUID
+    $humansOnly: Boolean
+    $employeeType: String
+    $dateStartedBefore: Date
+    $dateStartedAfter: Date
+    $anniversaryBefore: Date
+    $anniversaryAfter: Date
+    $birthdayBefore: Date
+    $birthdayAfter: Date
+    $query: String
+    $department: UUID
+    $includeSelf: Boolean
+    $includeHidden: Boolean
+    $orderBy: UserOrderBy
+    $offset: Int
+    $limit: Int
+  ) {
+    users(
+      office: $office
+      humansOnly: $humansOnly
+      employeeType: $employeeType
+      dateStartedBefore: $dateStartedBefore
+      dateStartedAfter: $dateStartedAfter
+      anniversaryBefore: $anniversaryBefore
+      anniversaryAfter: $anniversaryAfter
+      birthdayBefore: $birthdayBefore
+      birthdayAfter: $birthdayAfter
+      query: $query
+      department: $department
+      includeSelf: $includeSelf
+      includeHidden: $includeHidden
+      orderBy: $orderBy
+      offset: $offset
+      limit: $limit
+    ) {
+      facets {
+        departments {
+          id
+          name
+          numPeople
+        }
+        offices {
+          id
+          name
+          numPeople
+        }
+        employeeTypes {
+          id
+          name
+          numPeople
+        }
+      }
+      results {
+        id
+        name
+        email
+        department {
+          id
+          name
+        }
+        isHuman
+        isDirectoryHidden
+        title
+        dobMonth
+        dobDay
+        dateStarted
+        photo {
+          data
+          width
+          height
+          mimeType
+        }
+        employeeType {
+          id
+          name
+        }
+        reportsTo {
+          id
+        }
+      }
+    }
+  }
+`;
+
 export const GET_PERSON_QUERY = gql`
   query getPerson($email: String, $includeHidden: Boolean) {
     users(email: $email, humansOnly: false, includeHidden: $includeHidden) {
