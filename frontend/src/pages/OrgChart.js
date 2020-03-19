@@ -49,7 +49,7 @@ const listToTree = list => {
       roots.push(node);
     }
   }
-  return roots;
+  return roots.filter(n => n.children.length);
 };
 
 const Node = ({ node }) => {
