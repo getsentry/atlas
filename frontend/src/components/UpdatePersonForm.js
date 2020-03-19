@@ -42,71 +42,73 @@ export const PERSON_QUERY = gql`
       name
     }
     users(humansOnly: false, email: $email, includeHidden: true) {
-      id
-      name
-      email
-      handle
-      bio
-      pronouns
-      department {
+      results {
         id
         name
-        costCenter
-        tree {
+        email
+        handle
+        bio
+        pronouns
+        department {
+          id
           name
           costCenter
+          tree {
+            name
+            costCenter
+          }
         }
-      }
-      title
-      dateOfBirth
-      dateStarted
-      primaryPhone
-      employeeType {
-        id
-        name
-      }
-      isHuman
-      isDirectoryHidden
-      isSuperuser
-      schedule {
-        sunday
-        monday
-        tuesday
-        wednesday
-        thursday
-        friday
-        saturday
-      }
-      social {
-        linkedin
-        github
-        twitter
-      }
-      gamerTags {
-        steam
-        xbox
-        playstation
-        nintendo
-      }
-      office {
-        id
-        name
-      }
-      reportsTo {
-        id
-        name
-        email
-        photo {
-          data
-          width
-          height
-          mimeType
+        title
+        dateOfBirth
+        dateStarted
+        primaryPhone
+        employeeType {
+          id
+          name
         }
-      }
-      referredBy {
-        id
-        name
-        email
+        isHuman
+        isDirectoryHidden
+        isSuperuser
+        schedule {
+          sunday
+          monday
+          tuesday
+          wednesday
+          thursday
+          friday
+          saturday
+        }
+        social {
+          linkedin
+          github
+          twitter
+        }
+        gamerTags {
+          steam
+          xbox
+          playstation
+          nintendo
+        }
+        office {
+          id
+          name
+        }
+        reportsTo {
+          id
+          name
+          email
+          photo {
+            data
+            width
+            height
+            mimeType
+          }
+        }
+        referredBy {
+          id
+          name
+          email
+        }
       }
     }
   }
@@ -156,7 +158,7 @@ class UpdatePersonForm extends Component {
         {({ loading, data: { employeeTypes, offices, users } }) => {
           //if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;
-          const user = users.find(
+          const user = users.results.find(
             u => u.email.toLowerCase() === this.props.email.toLowerCase()
           );
           if (!user) return <ErrorMessage message="Couldn't find that person." />;

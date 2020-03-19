@@ -38,6 +38,8 @@ class DepartmentNode(gql_optimizer.OptimizedDjangoObjectType):
         return [results[i] for i in self.tree]
 
     def resolve_num_people(self, info):
+        if hasattr(self, "num_people"):
+            return self.num_people
         if not self.id:
             return 0
         qs = Profile.objects.filter(

@@ -23,7 +23,7 @@ export default function PeopleList({ query }) {
         return (
           <React.Fragment>
             <Flex flexWrap="wrap" mx={-2}>
-              {users.map(u => (
+              {users.results.map(u => (
                 <Box px={1} mx="auto" width={196} key={u.id}>
                   <PersonCard user={u} />
                 </Box>
@@ -48,16 +48,20 @@ function loadMorePeople(users, fetchMore) {
   fetchMore({
     variables: {
       ...peopleQueryVars,
-      offset: users.length
+      offset: users.results.length
     },
     updateQuery: (previousResult, { fetchMoreResult }) => {
       if (!fetchMoreResult) {
         return previousResult;
       }
-      return Object.assign({}, previousResult, {
-        // Append the new results to the old one
-        users: [...previousResult.users, ...fetchMoreResult.users]
-      });
+      return {
+        ...fetchMoreResult,
+        users: {
+          ...fetchMoreResult.users,
+          // Append the new results to the old one
+          results: [...previousResult.users.results, ...fetchMoreResult.users.results]
+        }
+      };
     }
   });
 }

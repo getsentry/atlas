@@ -18,6 +18,8 @@ class EmployeeTypeNode(graphene.ObjectType):
     num_people = graphene.Int(required=False)
 
     def resolve_num_people(self, info):
+        if "num_people" in self:
+            return self["num_people"]
         if not self["id"]:
             return 0
         qs = Profile.objects.filter(

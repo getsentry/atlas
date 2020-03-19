@@ -153,7 +153,7 @@ export default class Office extends Component {
                           if (loading) return <div>Loading</div>;
                           return (
                             <Flex flexWrap="wrap" mx={-2}>
-                              {data.users.map(u => (
+                              {data.users.results.map(u => (
                                 <Box px={1} mx="auto" width={196}>
                                   <PersonCard user={u} key={u.id} />
                                 </Box>

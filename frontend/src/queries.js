@@ -151,31 +151,33 @@ export const LIST_PEOPLE_QUERY = gql`
       offset: $offset
       limit: $limit
     ) {
-      id
-      name
-      email
-      department {
+      results {
         id
         name
-      }
-      isHuman
-      isDirectoryHidden
-      title
-      dobMonth
-      dobDay
-      dateStarted
-      photo {
-        data
-        width
-        height
-        mimeType
-      }
-      employeeType {
-        id
-        name
-      }
-      reportsTo {
-        id
+        email
+        department {
+          id
+          name
+        }
+        isHuman
+        isDirectoryHidden
+        title
+        dobMonth
+        dobDay
+        dateStarted
+        photo {
+          data
+          width
+          height
+          mimeType
+        }
+        employeeType {
+          id
+          name
+        }
+        reportsTo {
+          id
+        }
       }
     }
   }
@@ -184,112 +186,114 @@ export const LIST_PEOPLE_QUERY = gql`
 export const GET_PERSON_QUERY = gql`
   query getPerson($email: String, $includeHidden: Boolean) {
     users(email: $email, humansOnly: false, includeHidden: $includeHidden) {
-      id
-      name
-      email
-      handle
-      bio
-      department {
+      results {
         id
         name
-        tree {
+        email
+        handle
+        bio
+        department {
+          id
+          name
+          tree {
+            id
+            name
+          }
+        }
+        dobMonth
+        dobDay
+        title
+        dateStarted
+        primaryPhone
+        isHuman
+        isDirectoryHidden
+        employeeType {
           id
           name
         }
-      }
-      dobMonth
-      dobDay
-      title
-      dateStarted
-      primaryPhone
-      isHuman
-      isDirectoryHidden
-      employeeType {
-        id
-        name
-      }
-      tenurePercent
-      pronouns
-      schedule {
-        sunday
-        monday
-        tuesday
-        wednesday
-        thursday
-        friday
-        saturday
-      }
-      social {
-        linkedin
-        github
-        twitter
-      }
-      gamerTags {
-        steam
-        xbox
-        playstation
-        nintendo
-      }
-      reports {
-        id
-        name
-        email
-        title
+        tenurePercent
+        pronouns
+        schedule {
+          sunday
+          monday
+          tuesday
+          wednesday
+          thursday
+          friday
+          saturday
+        }
+        social {
+          linkedin
+          github
+          twitter
+        }
+        gamerTags {
+          steam
+          xbox
+          playstation
+          nintendo
+        }
+        reports {
+          id
+          name
+          email
+          title
+          photo {
+            data
+            width
+            height
+            mimeType
+          }
+        }
+        peers {
+          id
+          name
+          email
+          title
+          photo {
+            data
+            width
+            height
+            mimeType
+          }
+        }
         photo {
           data
           width
           height
           mimeType
         }
-      }
-      peers {
-        id
-        name
-        email
-        title
-        photo {
-          data
-          width
-          height
-          mimeType
+        office {
+          id
+          externalId
+          name
+          location
+          lat
+          lng
         }
-      }
-      photo {
-        data
-        width
-        height
-        mimeType
-      }
-      office {
-        id
-        externalId
-        name
-        location
-        lat
-        lng
-      }
-      reportsTo {
-        id
-        name
-        email
-        title
-        photo {
-          data
-          width
-          height
-          mimeType
+        reportsTo {
+          id
+          name
+          email
+          title
+          photo {
+            data
+            width
+            height
+            mimeType
+          }
         }
-      }
-      referredBy {
-        id
-        name
-        email
-        title
-        photo {
-          data
-          width
-          height
-          mimeType
+        referredBy {
+          id
+          name
+          email
+          title
+          photo {
+            data
+            width
+            height
+            mimeType
+          }
         }
       }
     }
@@ -299,15 +303,17 @@ export const GET_PERSON_QUERY = gql`
 export const SELECT_PEOPLE_QUERY = gql`
   query listPeopleForSelect($query: String!, $includeHidden: Boolean) {
     users(humansOnly: true, query: $query, limit: 10, includeHidden: $includeHidden) {
-      id
-      name
-      email
-      title
-      photo {
-        data
-        width
-        height
-        mimeType
+      results {
+        id
+        name
+        email
+        title
+        photo {
+          data
+          width
+          height
+          mimeType
+        }
       }
     }
   }
@@ -316,26 +322,28 @@ export const SELECT_PEOPLE_QUERY = gql`
 export const EXPORT_PEOPLE_QUERY = gql`
   query exportPeople {
     users(limit: 1000, includeHidden: true) {
-      id
-      name
-      email
-      department {
+      results {
         id
         name
-        costCenter
-      }
-      office {
-        externalId
-      }
-      employeeType {
-        id
-      }
-      isHuman
-      isDirectoryHidden
-      title
-      dateStarted
-      reportsTo {
         email
+        department {
+          id
+          name
+          costCenter
+        }
+        office {
+          externalId
+        }
+        employeeType {
+          id
+        }
+        isHuman
+        isDirectoryHidden
+        title
+        dateStarted
+        reportsTo {
+          email
+        }
       }
     }
   }

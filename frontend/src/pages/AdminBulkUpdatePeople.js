@@ -74,7 +74,7 @@ export default class AdminBulkUpdatePeople extends Component {
           {({ loading, error, data }) => {
             if (error) throw error;
             if (loading) return <PageLoader />;
-            const { users } = data;
+            const users = data.users.results;
             const initialValues = {
               users: {}
             };

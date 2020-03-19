@@ -42,8 +42,10 @@ class ExportCard extends Component {
         query: EXPORT_PEOPLE_QUERY
       })
       .then(response => {
-        const { users } = response.data;
-        if (users) {
+        const {
+          users: { matches }
+        } = response.data;
+        if (matches) {
           downloadCsv(
             [
               [
@@ -60,7 +62,7 @@ class ExportCard extends Component {
                 "is_human",
                 "is_directory_hidden"
               ],
-              ...users.map(u => [
+              ...matches.map(u => [
                 u.id,
                 u.name,
                 u.email,

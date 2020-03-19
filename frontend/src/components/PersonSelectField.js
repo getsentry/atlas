@@ -97,8 +97,8 @@ export default class PersonSelectField extends Component {
           query: inputValue
         }
       })
-      .then(({ data: { users } }) => {
-        callback(users.filter(u => !this.props.exclude || this.props.exclude !== u.id));
+      .then(({ data: { users: { results } } }) => {
+        callback(results.filter(u => !this.props.exclude || this.props.exclude !== u.id));
       });
   };
 
