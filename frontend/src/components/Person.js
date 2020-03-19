@@ -163,9 +163,9 @@ class Person extends Component {
         {({ loading, error, data }) => {
           if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;
-          if (!data.users.length)
+          if (!data.users.results.length)
             return <ErrorMessage message="Couldn't find that person." />;
-          const thisPerson = data.users[0];
+          const thisPerson = data.users.results[0];
           const dob = thisPerson.dobMonth
             ? moment(
                 `${new Date().getFullYear()}-${thisPerson.dobMonth}-${thisPerson.dobDay}`,

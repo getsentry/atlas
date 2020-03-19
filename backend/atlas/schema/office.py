@@ -32,10 +32,10 @@ class OfficeNode(gql_optimizer.OptimizedDjangoObjectType):
 
     @gql_optimizer.resolver_hints(prefetch_related=("profiles", "profiles__user"))
     def resolve_num_people(self, info):
-        if not self.id:
-            return 0
         if hasattr(self, "num_people"):
             return self.num_people
+        if not self.id:
+            return 0
         qs = self.profiles.filter(is_human=True, is_directory_hidden=False)
         if (
             not hasattr(self, "_prefetched_objects_cache")

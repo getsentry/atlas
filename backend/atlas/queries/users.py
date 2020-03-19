@@ -2,12 +2,12 @@ from datetime import date, timedelta
 
 import graphene
 import graphene_django_optimizer as gql_optimizer
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.utils import timezone
 from graphql.error import GraphQLError
 
-from atlas.models import User
-from atlas.schema import UserNode
+from atlas.models import Department, User
+from atlas.schema import DepartmentNode, EmployeeTypeNode, UserNode
 
 
 class UserOrderBy(graphene.Enum):
@@ -20,9 +20,19 @@ class UserOrderBy(graphene.Enum):
     anniversary = "anniversary"
 
 
+class UserResultFacets(graphene.ObjectType):
+    employee_types = graphene.List(EmployeeTypeNode)
+    departments = graphene.List(DepartmentNode)
+
+
+class UserResult(graphene.ObjectType):
+    facets = graphene.Field(UserResultFacets)
+    results = graphene.List(UserNode)
+
+
 class Query(object):
-    users = graphene.List(
-        UserNode,
+    users = graphene.Field(
+        UserResult,
         id=graphene.UUID(),
         email=graphene.String(),
         query=graphene.String(),
@@ -185,4 +195,14 @@ class Query(object):
                 "profile__date_started__month", "profile__date_started__day"
             )
 
-        return gql_optimizer.query(qs, info)[offset:limit]
+        return {
+            # TODO(dcramer): only calculate facets if present
+            "facets": {
+                "departments": (
+                    Department.objects.filter(profiles__user__in=qs)
+                    .annotate(num_people=Count("id"))
+                    .distinct()
+                )
+            },
+            "results": gql_optimizer.query(qs, info)[offset:limit],
+        }

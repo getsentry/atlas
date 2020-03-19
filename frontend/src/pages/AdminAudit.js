@@ -24,7 +24,7 @@ export default () => (
           if (error) throw error;
           if (loading) return <PageLoader />;
           const { users } = data;
-          return users
+          return users.results
             .filter(u => {
               const employeeTypeId = u.employeeType ? u.employeeType.id : null;
               return (

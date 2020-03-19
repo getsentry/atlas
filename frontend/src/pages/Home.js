@@ -70,7 +70,7 @@ export default class Home extends Component {
                     if (error) return <ErrorMessage message="Error loading people." />;
                     if (loading) return <PageLoader />;
                     const { users } = data;
-                    if (!users.length) {
+                    if (!users.results.length) {
                       return (
                         <p>
                           {`It looks like there's been no newly added teammates in the last
@@ -78,7 +78,7 @@ export default class Home extends Component {
                         </p>
                       );
                     }
-                    return <PersonList people={users} withStartDate />;
+                    return <PersonList people={users.results} withStartDate />;
                   }}
                 </Query>
               </Card>
@@ -101,12 +101,12 @@ export default class Home extends Component {
                     if (error) return <ErrorMessage message="Error loading people." />;
                     if (loading) return <PageLoader />;
                     const { users } = data;
-                    if (!users.length) {
+                    if (!users.results.length) {
                       return (
                         <p>{`It looks like there's no recent or upcoming birthdays.`}</p>
                       );
                     }
-                    return <PersonList people={users} withBirthday />;
+                    return <PersonList people={users.results} withBirthday />;
                   }}
                 </Query>
               </Card>
@@ -131,12 +131,12 @@ export default class Home extends Component {
                     if (error) return <ErrorMessage message="Error loading people." />;
                     if (loading) return <PageLoader />;
                     const { users } = data;
-                    if (!users.length) {
+                    if (!users.results.length) {
                       return (
                         <p>{`It looks like there's no recent or upcoming anniversaries.`}</p>
                       );
                     }
-                    return <PersonList people={users} withAnniversary />;
+                    return <PersonList people={users.results} withAnniversary />;
                   }}
                 </Query>
               </Card>
