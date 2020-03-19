@@ -62,14 +62,48 @@ def test_users_shows_departments_facet(gql_client, default_user, other_user):
         {"id": str(default_user.profile.department_id), "numPeople": 1}
     ]
     assert len(result["results"]) == 1
-    assert result["results"] == [
-        {
-            "id": str(default_user.id),
-            "email": default_user.email,
-            "reports": [{"id": str(other_user.id)}],
-            "numReports": 1,
-        }
+
+
+def test_users_shows_employee_types_facet(gql_client, default_user, other_user):
+    executed = gql_client.execute(
+        """{users(id:"%s") {
+            results { id, email, reports { id }, numReports }
+            facets {
+                employeeTypes { id, numPeople }
+            }
+        }}"""
+        % (str(default_user.id)),
+        user=default_user,
+    )
+    result = executed["data"]["users"]
+    assert len(result["facets"]["employeeTypes"]) == 1
+    assert result["facets"]["employeeTypes"] == [
+        {"id": str(default_user.profile.employee_type), "numPeople": 1}
     ]
+    assert len(result["results"]) == 1
+
+
+def test_users_shows_offices_facet(
+    gql_client, default_user, default_office, other_user
+):
+    default_user.profile.office = default_office
+    default_user.profile.save()
+    executed = gql_client.execute(
+        """{users(id:"%s") {
+            results { id, email, reports { id }, numReports }
+            facets {
+                offices { id, numPeople }
+            }
+        }}"""
+        % (str(default_user.id)),
+        user=default_user,
+    )
+    result = executed["data"]["users"]
+    assert len(result["facets"]["offices"]) == 1
+    assert result["facets"]["offices"] == [
+        {"id": str(default_user.profile.office_id), "numPeople": 1}
+    ]
+    assert len(result["results"]) == 1
 
 
 def test_users_shows_reports(gql_client, default_user, other_user):

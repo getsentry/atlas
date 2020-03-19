@@ -6,8 +6,8 @@ from django.db.models import Count, Q
 from django.utils import timezone
 from graphql.error import GraphQLError
 
-from atlas.models import Department, User
-from atlas.schema import DepartmentNode, EmployeeTypeNode, UserNode
+from atlas.models import Department, Office, Profile, User
+from atlas.schema import DepartmentNode, EmployeeTypeNode, OfficeNode, UserNode
 
 
 class UserOrderBy(graphene.Enum):
@@ -22,12 +22,62 @@ class UserOrderBy(graphene.Enum):
 
 class UserResultFacets(graphene.ObjectType):
     employee_types = graphene.List(EmployeeTypeNode)
+    offices = graphene.List(OfficeNode)
     departments = graphene.List(DepartmentNode)
+
+    def resolve_departments(self, info):
+        qs = info.context.facet_qs["department"]
+        return (
+            Department.objects.filter(
+                profiles__is_human=True,
+                profiles__user__is_active=True,
+                profiles__is_directory_hidden=False,
+            )
+            .exclude(profiles=None)
+            .annotate(num_people=Count("id", filter=Q(profiles__user__in=qs)))
+            .distinct()
+        )
+
+    def resolve_offices(self, info):
+        qs = info.context.facet_qs["office"]
+        return (
+            Office.objects.filter(
+                profiles__is_human=True,
+                profiles__user__is_active=True,
+                profiles__is_directory_hidden=False,
+            )
+            .exclude(profiles=None)
+            .annotate(num_people=Count("id", filter=Q(profiles__user__in=qs)))
+            .distinct()
+        )
+
+    def resolve_employee_types(self, info):
+        qs = info.context.facet_qs["employee_type"]
+        return [
+            {"id": r["employee_type"], "num_people": r["num_people"]}
+            for r in Profile.objects.filter(
+                employee_type__isnull=False,
+                is_human=True,
+                user__is_active=True,
+                is_directory_hidden=False,
+            )
+            .values("employee_type")
+            .annotate(num_people=Count("id", filter=Q(user__in=qs)))
+            .distinct()
+        ]
 
 
 class UserResult(graphene.ObjectType):
     facets = graphene.Field(UserResultFacets)
     results = graphene.List(UserNode)
+
+    def resolve_results(self, info):
+        return self
+
+    def resolve_facets(self, info):
+        qs = self._clone()
+        qs.query.clear_limits()
+        return qs
 
 
 class Query(object):
@@ -101,18 +151,6 @@ class Query(object):
         if email:
             qs = qs.filter(email__iexact=email)
 
-        if office:
-            qs = qs.filter(profile__office=office)
-
-        if department:
-            qs = qs.filter(
-                Q(profile__department=department)
-                | Q(profile__department__tree__contains=[department])
-            )
-
-        if employee_type:
-            qs = qs.filter(profile__employee_type=employee_type)
-
         if reports_to:
             qs = qs.filter(profile__reports_to=reports_to)
 
@@ -180,6 +218,34 @@ class Query(object):
                 )
             )
 
+        facet_qs = {"office": qs, "department": qs, "employee_type": qs}
+
+        if office:
+            qs = qs.filter(profile__office=office)
+            for key in facet_qs.keys():
+                if key != "office":
+                    facet_qs[key] = facet_qs[key].filter(profile__office=office)
+
+        if department:
+            qs = qs.filter(
+                Q(profile__department=department)
+                | Q(profile__department__tree__contains=[department])
+            )
+            for key in facet_qs.keys():
+                if key != "department":
+                    facet_qs[key] = facet_qs[key].filter(
+                        Q(profile__department=department)
+                        | Q(profile__department__tree__contains=[department])
+                    )
+
+        if employee_type:
+            qs = qs.filter(profile__employee_type=employee_type)
+            for key in facet_qs.keys():
+                if key != "employee_type":
+                    facet_qs[key] = facet_qs[key].filter(
+                        profile__employee_type=employee_type
+                    )
+
         if order_by == "name" or not order_by:
             qs = qs.order_by("name")
         elif order_by == "dateStarted":
@@ -195,14 +261,6 @@ class Query(object):
                 "profile__date_started__month", "profile__date_started__day"
             )
 
-        return {
-            # TODO(dcramer): only calculate facets if present
-            "facets": {
-                "departments": (
-                    Department.objects.filter(profiles__user__in=qs)
-                    .annotate(num_people=Count("id"))
-                    .distinct()
-                )
-            },
-            "results": gql_optimizer.query(qs, info)[offset:limit],
-        }
+        info.context.facet_qs = facet_qs
+
+        return gql_optimizer.query(qs, info)[offset:limit]
