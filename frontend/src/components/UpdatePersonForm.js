@@ -479,7 +479,7 @@ class UpdatePersonForm extends Component {
                       type="text"
                       name="gamerTags[nintendo]"
                       label="Nintendo"
-                      help="Your Nintendo username."
+                      help="Your Nintendo friend code."
                       readonly={restrictedFields.has("gamerTags[nintendo]")}
                     />
                   </Card>
