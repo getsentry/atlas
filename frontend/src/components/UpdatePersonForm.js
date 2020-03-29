@@ -479,6 +479,7 @@ class UpdatePersonForm extends Component {
                       type="text"
                       name="gamerTags[nintendo]"
                       label="Nintendo"
+                      placeholder="SW-XXXX-XXXX-XXXX"
                       help="Your Nintendo friend code."
                       readonly={restrictedFields.has("gamerTags[nintendo]")}
                     />

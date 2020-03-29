@@ -448,15 +448,18 @@ def sync_user(  # NOQA
             elif getattr(profile, attribute_name) is not None:
                 profile_fields[attribute_name] = None
 
-    logger.info(
-        "user.sync id={} {}".format(
-            str(user.id),
-            " ".join(
-                f"{k}={v}"
-                for k, v in itertools.chain(user_fields.items(), profile_fields.items())
-            ),
+    if user_fields or profile_fields:
+        logger.info(
+            "user.sync id={} {}".format(
+                str(user.id),
+                " ".join(
+                    f"{k}={v}"
+                    for k, v in itertools.chain(
+                        user_fields.items(), profile_fields.items()
+                    )
+                ),
+            )
         )
-    )
     with transaction.atomic():
         if user_fields:
             User.objects.filter(id=user.id).update(**user_fields)
@@ -560,6 +563,11 @@ def sync_building(  # NOQA
             updates.append(k)
 
     if updates:
+        logger.info(
+            "office.sync id={} {}".format(
+                str(office.id), " ".join(f"{k}={fields[k]}" for k in updates)
+            )
+        )
         office.save(update_fields=updates)
 
     return BuildingSyncResult(office=office, created=created, updated=bool(updates))
