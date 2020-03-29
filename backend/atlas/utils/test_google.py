@@ -3,7 +3,7 @@ from django.conf import settings
 
 from atlas.models import Profile
 
-from .google import generate_profile_updates, sync_user
+from .google import generate_profile_updates, sync_user, update_profile
 
 
 @pytest.fixture
@@ -128,6 +128,7 @@ def test_generate_profile_updates_all_fields_with_all_fields(
     default_user.profile.pronouns = "SHE_HER"
     default_user.profile.has_onboarded = True
     default_user.profile.primary_phone = "+1 800-123-4567"
+    default_user.profile.nintendo = "SW-1234-1234-1234"
     default_user.profile.schedule = [
         "OFF",
         "INOFFICE",
@@ -160,7 +161,7 @@ def test_generate_profile_updates_all_fields_with_all_fields(
                 "Steam": None,
                 "Xbox": None,
                 "PlayStation": None,
-                "Nintendo": None,
+                "Nintendo": "SW-1234-1234-1234",
             },
             "Schedule": {
                 "Sunday": "OFF",
@@ -211,7 +212,7 @@ def test_sync_user_with_user_and_identity(
                 "Steam": None,
                 "Xbox": None,
                 "PlayStation": None,
-                "Nintendo": None,
+                "Nintendo": "SW-1234-1234-1234",
             },
             "Schedule": {
                 "Sunday": "OFF",
@@ -251,6 +252,7 @@ def test_sync_user_with_user_and_identity(
     assert user.profile.handle == "Jane"
     assert user.profile.pronouns == "SHE_HER"
     assert user.profile.bio == "My bio!"
+    assert user.profile.nintendo == "SW-1234-1234-1234"
 
     assert user.profile.schedule == [
         "OFF",
@@ -449,3 +451,29 @@ def test_sync_user_new_account_manager(responses, db):
     assert manager.name == "jim"
     assert manager.email == "jim@example.com"
     assert not Profile.objects.filter(user_id=manager.id).exists()
+
+
+def test_update_profile_nintendo_gamertag(
+    responses,
+    default_user,
+    default_identity,
+    default_superuser_identity,
+    default_superuser,
+    user_payload,
+):
+    responses.add(
+        responses.PATCH,
+        f"https://www.googleapis.com/admin/directory/v1/users/{default_identity.external_id}",
+        json=user_payload,
+    )
+
+    user_payload["customSchemas"]["GamerTags"]["Nintendo"] = "SW-1234-1234-1234"
+
+    update_profile(
+        default_superuser_identity, default_user, data={"nintendo": "SW-1234-1234-1234"}
+    )
+
+    assert (
+        responses.calls[0].request.body
+        == b'{"customSchemas": {"GamerTags": {"Nintendo": "SW-1234-1234-1234"}}}'
+    )
