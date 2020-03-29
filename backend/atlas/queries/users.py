@@ -89,6 +89,7 @@ class Query(object):
         employee_type=graphene.String(),
         include_self=graphene.Boolean(default_value=True),
         include_hidden=graphene.Boolean(default_value=False),
+        has_attributes=graphene.List(graphene.String),
         humans_only=graphene.Boolean(default_value=True),
         titles_only=graphene.Boolean(default_value=False),
         office=graphene.UUID(),
@@ -121,6 +122,7 @@ class Query(object):
         department: str = None,
         reports_to: str = None,
         referred_by: str = None,
+        has_attributes: list = None,
         offset: int = 0,
         date_started_before: date = None,
         date_started_after: date = None,
@@ -131,7 +133,7 @@ class Query(object):
         has_onboarded: bool = None,
         limit: int = 1000,
         order_by: str = None,
-        **kwargs
+        **kwargs,
     ):
         assert limit <= 1000
         assert offset >= 0
@@ -179,6 +181,14 @@ class Query(object):
             qs = qs.filter(profile__has_onboarded=True)
         elif has_onboarded is False:
             qs = qs.filter(profile__has_onboarded=False)
+
+        if has_attributes:
+            # TODO(dcramer): this is very simplistic and will not properly query many attributes
+            # it needs a whitelist, and it also needs to use the field mapping (in addition to handle camelCase conversion)
+            for attribute in has_attributes:
+                if "." in attribute:
+                    attribute = attribute.rsplit(".", 1)[-1]
+                qs = qs.filter(**{f"profile__{attribute}__isnull": False})
 
         if anniversary_before:
             qs = qs.filter(

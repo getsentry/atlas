@@ -369,7 +369,19 @@ class Person extends Component {
                         <Card>
                           <h3>#z-gamers</h3>
                           <DefinitionList>
-                            <dt>Steam</dt>
+                            <dt>
+                              <Link
+                                to={{
+                                  pathname: "/people",
+                                  query: {
+                                    columns: "gamerTags.steam",
+                                    hasAttributes: "gamerTags.steam"
+                                  }
+                                }}
+                              >
+                                Steam
+                              </Link>
+                            </dt>
                             <dd>
                               {thisPerson.gamerTags.steam ? (
                                 <a
@@ -381,7 +393,19 @@ class Person extends Component {
                                 <Empty />
                               )}
                             </dd>
-                            <dt>Xbox Live</dt>
+                            <dt>
+                              <Link
+                                to={{
+                                  pathname: "/people",
+                                  query: {
+                                    columns: "gamerTags.xbox",
+                                    hasAttributes: "gamerTags.xbox"
+                                  }
+                                }}
+                              >
+                                Xbox Live
+                              </Link>
+                            </dt>
                             <dd>
                               {thisPerson.gamerTags.xbox ? (
                                 thisPerson.gamerTags.xbox
@@ -389,7 +413,19 @@ class Person extends Component {
                                 <Empty />
                               )}
                             </dd>
-                            <dt>PlayStation</dt>
+                            <dt>
+                              <Link
+                                to={{
+                                  pathname: "/people",
+                                  query: {
+                                    columns: "gamerTags.playstation",
+                                    hasAttributes: "gamerTags.playstation"
+                                  }
+                                }}
+                              >
+                                PlayStation
+                              </Link>
+                            </dt>
                             <dd>
                               {thisPerson.gamerTags.playstation ? (
                                 thisPerson.gamerTags.playstation
@@ -397,7 +433,19 @@ class Person extends Component {
                                 <Empty />
                               )}
                             </dd>
-                            <dt>Nintendo</dt>
+                            <dt>
+                              <Link
+                                to={{
+                                  pathname: "/people",
+                                  query: {
+                                    columns: "gamerTags.nintendo",
+                                    hasAttributes: "gamerTags.nintendo"
+                                  }
+                                }}
+                              >
+                                Nintendo
+                              </Link>
+                            </dt>
                             <dd>
                               {thisPerson.gamerTags.nintendo ? (
                                 thisPerson.gamerTags.nintendo

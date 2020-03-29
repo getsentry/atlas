@@ -114,6 +114,9 @@ export default class People extends Component {
 
   render() {
     const { location } = this.context.router;
+    const columns = location.query.columns
+      ? location.query.columns.split(",")
+      : undefined;
     return (
       <Layout>
         <Content>
@@ -136,7 +139,7 @@ export default class People extends Component {
                 <IconLink
                   icon={<AccountTree />}
                   to={`/orgChart`}
-                  style={{ fontSize: "0.9em", marginBottom: "1rem" }}
+                  style={{ fontSize: "1.3em", marginBottom: "1rem" }}
                 />
               </Box>
             </Flex>
@@ -192,7 +195,7 @@ export default class People extends Component {
                     />
                   </Box>
                   <Box flex="1" mx={3}>
-                    <PeopleList users={results} />
+                    <PeopleList users={results} columns={columns} />
                   </Box>
                 </Flex>
               );

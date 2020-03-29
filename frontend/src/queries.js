@@ -198,6 +198,7 @@ export const SEARCH_PEOPLE_QUERY = gql`
     $department: UUID
     $includeSelf: Boolean
     $includeHidden: Boolean
+    $hasAttributes: [String]
     $orderBy: UserOrderBy
     $offset: Int
     $limit: Int
@@ -216,6 +217,7 @@ export const SEARCH_PEOPLE_QUERY = gql`
       department: $department
       includeSelf: $includeSelf
       includeHidden: $includeHidden
+      hasAttributes: $hasAttributes
       orderBy: $orderBy
       offset: $offset
       limit: $limit
@@ -245,6 +247,10 @@ export const SEARCH_PEOPLE_QUERY = gql`
           id
           name
         }
+        office {
+          id
+          name
+        }
         isHuman
         isDirectoryHidden
         title
@@ -261,8 +267,23 @@ export const SEARCH_PEOPLE_QUERY = gql`
           id
           name
         }
-        reportsTo {
+        gamerTags {
+          steam
+          xbox
+          playstation
+          nintendo
+        }
+        reports {
           id
+          name
+          email
+          title
+          photo {
+            data
+            width
+            height
+            mimeType
+          }
         }
       }
     }
