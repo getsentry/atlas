@@ -1,3 +1,5 @@
+import itertools
+import logging
 from base64 import urlsafe_b64decode
 from collections import defaultdict, namedtuple
 from datetime import date
@@ -12,6 +14,8 @@ from django.db import models, transaction
 
 from atlas.constants import BOOLEAN_PREFIXES, DEFAULT_VALUES, FIELD_MODEL_MAP
 from atlas.models import Department, Identity, Office, Photo, Profile, User
+
+logger = logging.getLogger("atlas")
 
 # GET https://www.googleapis.com/admin/directory/v1/users
 # ?domain=primary domain name&pageToken=token for next results page
@@ -444,6 +448,15 @@ def sync_user(  # NOQA
             elif getattr(profile, attribute_name) is not None:
                 profile_fields[attribute_name] = None
 
+    logger.info(
+        "user.sync id={} {}".format(
+            str(user.id),
+            " ".join(
+                f"{k}={v}"
+                for k, v in itertools.chain(user_fields.items(), profile_fields.items())
+            ),
+        )
+    )
     with transaction.atomic():
         if user_fields:
             User.objects.filter(id=user.id).update(**user_fields)

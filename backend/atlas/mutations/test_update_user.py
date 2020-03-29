@@ -276,3 +276,34 @@ def test_superuser_can_update_department(
 
     user = User.objects.get(id=default_user.id)
     assert user.profile.department_id == ga_department.id
+
+
+@patch("atlas.tasks.update_profile.delay")
+def test_user_can_update_nintendo_gamertag(mock_task, gql_client, default_user):
+    executed = gql_client.execute(
+        """
+    mutation($user: UUID!, $nintendo: String) {
+        updateUser(user: $user, data: { gamerTags: { nintendo: $nintendo } }) {
+            ok
+            errors
+            user { id, gamerTags { nintendo } }
+        }
+    }""",
+        user=default_user,
+        variables={"user": str(default_user.id), "nintendo": "SW-1234-1234-1234"},
+    )
+    assert not executed.get("errors")
+    resp = executed["data"]["updateUser"]
+    assert not resp["errors"]
+    assert resp["ok"] is True
+    assert resp["user"] == {
+        "id": str(default_user.id),
+        "gamerTags": {"nintendo": "SW-1234-1234-1234"},
+    }
+
+    mock_task.assert_called_once_with(
+        user_id=default_user.id, updates={"nintendo": "SW-1234-1234-1234"}
+    )
+
+    user = User.objects.get(id=default_user.id)
+    assert user.profile.nintendo == "SW-1234-1234-1234"

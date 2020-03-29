@@ -92,7 +92,7 @@ def default_user(db, design_department):
 
 @pytest.fixture
 def default_identity(db, default_user):
-    return factories.IdentityFactory.create(user=default_user)
+    return factories.IdentityFactory.create(user=default_user, external_id="100000000")
 
 
 @pytest.fixture
@@ -123,4 +123,6 @@ def default_superuser(db, ga_department):
 
 @pytest.fixture
 def default_superuser_identity(db, default_superuser):
-    return factories.IdentityFactory.create(user=default_superuser, admin=True)
+    return factories.IdentityFactory.create(
+        user=default_superuser, admin=True, external_id="100000001"
+    )
