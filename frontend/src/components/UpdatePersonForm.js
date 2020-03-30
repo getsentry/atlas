@@ -294,6 +294,7 @@ class UpdatePersonForm extends Component {
                       type="email"
                       name="email"
                       label="Email"
+                      className="rrweb-hidden"
                       readonly={restrictedFields.has("email")}
                       required
                     />
