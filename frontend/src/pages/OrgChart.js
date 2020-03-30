@@ -10,18 +10,20 @@ import PersonCard from "../components/PersonCard";
 export const LIST_ALL_PEOPLE_QUERY = gql`
   query listAllPeople {
     users(offset: 0, limit: 1000, titlesOnly: true, humansOnly: true) {
-      id
-      name
-      email
-      title
-      photo {
-        data
-        width
-        height
-        mimeType
-      }
-      reportsTo {
+      results {
         id
+        name
+        email
+        title
+        photo {
+          data
+          width
+          height
+          mimeType
+        }
+        reportsTo {
+          id
+        }
       }
     }
   }
@@ -63,7 +65,7 @@ export default () => (
         if (error) throw error;
         if (loading) return <PageLoader />;
         const { users } = data;
-        const tree = listToTree(users);
+        const tree = listToTree(users.results);
         return <OrgChart tree={tree} NodeComponent={Node} />;
       }}
     </Query>
