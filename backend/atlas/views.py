@@ -1,7 +1,6 @@
 import logging
 
 import sentry_sdk
-
 from graphene_file_upload.django import FileUploadGraphQLView
 
 logger = logging.getLogger("atlas")
@@ -23,4 +22,5 @@ class EnhancedGraphQLView(FileUploadGraphQLView):
                         sentry_sdk.capture_exception(e)
                 else:
                     logger.error(error)
+                    sentry_sdk.capture_message(error, "error")
         return result
