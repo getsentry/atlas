@@ -195,7 +195,7 @@ class Person extends Component {
                       </div>
                       <div className="section">
                         <div className="item">
-                          <a href={`mailto:${thisPerson.email}`}>
+                          <a href={`mailto:${thisPerson.email}`} className="rrweb-hidden">
                             <Email /> {thisPerson.email}
                           </a>
                         </div>

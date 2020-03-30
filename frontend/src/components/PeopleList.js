@@ -4,6 +4,7 @@ import PersonLink from "./PersonLink";
 
 export const validColumns = new Set([
   "department",
+  "email",
   "reportsTo",
   "office",
   "dateStarted",
@@ -65,7 +66,9 @@ export default function PeopleList({ users, columns = defaultColumns }) {
               <PersonLink user={u} />
             </td>
             {usedColumn.map(c => (
-              <td key={c}>{getColumnValue(u, c)}</td>
+              <td key={c} className={c === "email" ? "rrweb-hidden" : ""}>
+                {getColumnValue(u, c)}
+              </td>
             ))}
           </tr>
         ))}
