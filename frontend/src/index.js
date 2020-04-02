@@ -17,6 +17,7 @@ Sentry.init({
   dsn: config.sentryDsn,
   environment: config.environment,
   release: config.version,
+  tracesSampleRate: 1,
   integrations: [
     new Tracing({
       tracingOrigins: ["localhost", "atlas.getsentry.net", /^\//]
