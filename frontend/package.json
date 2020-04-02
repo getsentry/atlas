@@ -8,6 +8,7 @@
     "@material-ui/core": "^4.5.1",
     "@material-ui/icons": "^4.9.1",
     "@rebass/grid": "^6.0.0",
+    "@sentry/apm": "^5.15.4",
     "@sentry/browser": "^5.15.4",
     "@sentry/integrations": "^5.15.4",
     "@sentry/rrweb": "^0.1.0",
