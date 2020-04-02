@@ -47,30 +47,28 @@ export const PersonListCard = ({
           <small>{fromNowCurrentYear(user.dateStarted)}</small>
         </Box>
       )}
-      {withBirthday &&
-        (user.dobMonth && (
-          <Box style={{ textAlign: "right" }}>
+      {withBirthday && user.dobMonth && (
+        <Box style={{ textAlign: "right" }}>
+          {moment(
+            `${new Date().getFullYear()}-${user.dobMonth}-${user.dobDay}`,
+            "YYYY-MM-DD"
+          ).format("MMMM Do")}
+          <br />
+          <small>
             {moment(
               `${new Date().getFullYear()}-${user.dobMonth}-${user.dobDay}`,
               "YYYY-MM-DD"
-            ).format("MMMM Do")}
-            <br />
-            <small>
-              {moment(
-                `${new Date().getFullYear()}-${user.dobMonth}-${user.dobDay}`,
-                "YYYY-MM-DD"
-              ).fromNow()}
-            </small>
-          </Box>
-        ))}
-      {withStartDate &&
-        (user.dateStarted && (
-          <Box style={{ textAlign: "right" }}>
-            {moment(user.dateStarted, "YYYY-MM-DD").format("MMMM Do")}
-            <br />
-            <small>{fromNowCurrentYear(user.dateStarted)}</small>
-          </Box>
-        ))}
+            ).fromNow()}
+          </small>
+        </Box>
+      )}
+      {withStartDate && user.dateStarted && (
+        <Box style={{ textAlign: "right" }}>
+          {moment(user.dateStarted, "YYYY-MM-DD").format("MMMM Do")}
+          <br />
+          <small>{fromNowCurrentYear(user.dateStarted)}</small>
+        </Box>
+      )}
     </Flex>
   </Card>
 );

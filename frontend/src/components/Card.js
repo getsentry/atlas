@@ -20,8 +20,8 @@ export default styled(({ className, to, children, ...props }) => {
   padding-bottom: ${props => (props.withPadding ? (props.slim ? "0.5rem" : "1rem") : 0)};
 
   ${props =>
-    props.to &&
-    `
+      props.to &&
+      `
   & > a {
     color: inherit;
     display: block;
@@ -35,8 +35,7 @@ export default styled(({ className, to, children, ...props }) => {
     }
   }
   `}
-
-  ::after {
+    ::after {
     content: "";
     clear: both;
     display: table;
