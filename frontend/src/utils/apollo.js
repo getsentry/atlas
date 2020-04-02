@@ -26,7 +26,7 @@ const getToken = () => {
   return token;
 };
 
-function create(initialState) {
+export function createClient(initialState) {
   const authMiddleware = new ApolloLink((operation, forward) => {
     // add the authorization to the headers
     operation.setContext({
@@ -52,7 +52,7 @@ function create(initialState) {
 
 export function initApollo(initialState) {
   if (!apolloClient) {
-    apolloClient = create(initialState);
+    apolloClient = createClient(initialState);
   }
 
   return apolloClient;
