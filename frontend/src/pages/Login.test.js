@@ -7,8 +7,8 @@ import { LOGIN_MUTATION } from "../actions/auth";
 
 import apolloClient from "../utils/apollo";
 
-test("can render with redux with defaults", async () => {
-  apolloClient.addMock({
+test("can render and log-in successfully", async () => {
+  apolloClient.addMockedResponse({
     request: {
       query: LOGIN_MUTATION,
       variables: { googleAuthCode: "abcdef" }

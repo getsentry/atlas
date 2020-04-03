@@ -182,7 +182,7 @@ class Person extends Component {
                         <Avatar user={thisPerson} size={196} />
                       </div>
                       <div className="section">
-                        <h1>{thisPerson.name}</h1>
+                        <h1 data-testid="name">{thisPerson.name}</h1>
                         {thisPerson.handle && thisPerson.handle !== thisPerson.name && (
                           <h2>"{thisPerson.handle}"</h2>
                         )}
