@@ -1,6 +1,7 @@
 from datetime import date
 from unittest.mock import patch
 
+from atlas import factories
 from atlas.models import User
 
 
@@ -276,6 +277,38 @@ def test_superuser_can_update_department(
 
     user = User.objects.get(id=default_user.id)
     assert user.profile.department_id == ga_department.id
+
+
+@patch("atlas.tasks.update_profile.delay")
+def test_superuser_can_update_reports_to(
+    mock_task, gql_client, default_user, default_superuser, ga_department
+):
+    new_person = factories.UserFactory()
+
+    executed = gql_client.execute(
+        """
+    mutation($user: UUID!, $reportsTo: NullableUUID) {
+        updateUser(user: $user, data: {reportsTo: $reportsTo}) {
+            ok
+            errors
+            user { id }
+        }
+    }""",
+        variables={"user": str(default_user.id), "reportsTo": str(new_person.id)},
+        user=default_superuser,
+    )
+    assert not executed.get("errors")
+    resp = executed["data"]["updateUser"]
+    assert not resp["errors"]
+    assert resp["ok"] is True
+    assert resp["user"] == {"id": str(default_user.id)}
+
+    mock_task.assert_called_once_with(
+        user_id=default_user.id, updates={"reports_to": new_person.id}
+    )
+
+    user = User.objects.get(id=default_user.id)
+    assert user.profile.reports_to_id == new_person.id
 
 
 @patch("atlas.tasks.update_profile.delay")

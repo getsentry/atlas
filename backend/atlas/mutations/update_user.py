@@ -107,7 +107,6 @@ class UpdateUser(graphene.Mutation):
 
             if isinstance(value, Enum):
                 value = value.name
-
             if cur_value != value:
                 model_updates[model][field] = value
                 if isinstance(value, date):

@@ -216,6 +216,7 @@ class UpdatePersonForm extends Component {
                   }
                 });
                 if (data.organization) data.organization = data.organization.id;
+                if (data.department) data.department = data.department.id;
                 if (data.reportsTo) data.reportsTo = data.reportsTo.id;
                 if (data.referredBy) data.referredBy = data.referredBy.id;
                 apolloClient
