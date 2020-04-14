@@ -16,11 +16,20 @@ import dj_database_url
 import sentry_sdk
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DSN"),
-    integrations=[CeleryIntegration(), DjangoIntegration(), RedisIntegration()],
+    integrations=[
+        CeleryIntegration(),
+        DjangoIntegration(),
+        RedisIntegration(),
+        LoggingIntegration(
+            level=logging.INFO,  # Capture info and above as breadcrumbs
+            event_level=logging.ERROR,  # Send errors as events
+        ),
+    ],
     release=os.environ.get("BUILD_REVISION") or None,
     environment=(
         os.environ.get("SENTRY_ENVIRONMENT")
