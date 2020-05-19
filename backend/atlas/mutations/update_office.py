@@ -44,7 +44,7 @@ class UpdateOffice(graphene.Mutation):
                     updates[field] = value
 
             if updates:
-                Change.record("office", office.id, updates)
+                Change.record("office", office.id, updates, user=current_user)
                 office.save(update_fields=list(updates.keys()))
 
         return UpdateOffice(ok=True, office=office)

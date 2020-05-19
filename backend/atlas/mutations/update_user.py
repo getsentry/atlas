@@ -117,7 +117,7 @@ class UpdateUser(graphene.Mutation):
                 updates[field] = value
 
         with transaction.atomic():
-            change = Change.record("user", user.id, updates)
+            change = Change.record("user", user.id, updates, user=current_user)
             for model, values in model_updates.items():
                 if values:
                     if model is User:

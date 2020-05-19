@@ -1,5 +1,6 @@
 from uuid import UUID, uuid4
 
+from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 
@@ -13,6 +14,9 @@ class Change(models.Model):
     )
     object_id = models.UUIDField()
 
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True
+    )
     changes = JSONField()
     version = models.PositiveIntegerField()
 
@@ -20,7 +24,7 @@ class Change(models.Model):
         unique_together = (("object_type", "object_id", "version"),)
 
     @classmethod
-    def record(cls, object_type, object_id, changes):
+    def record(cls, object_type, object_id, changes, user=None):
         s_changes = {}
         for key, value in changes.items():
             if isinstance(value, models.Model):
@@ -35,6 +39,7 @@ class Change(models.Model):
             object_type=object_type,
             object_id=object_id,
             changes=s_changes,
+            user=user,
             version=(
                 (
                     cls.objects.filter(
