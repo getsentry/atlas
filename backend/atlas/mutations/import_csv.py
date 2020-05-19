@@ -163,8 +163,13 @@ def apply_changes(changes: List[Dict], current_user: User = None):
                 if field != "user":
                     value = field_change["new"]
                     if field == "department" and value:
+                        dept_value = value.split("-", 1)
+                        if len(dept_value) == 1:
+                            cost_center, name = None, dept_value[0]
+                        else:
+                            cost_center, name = dept_value
                         value, _ = Department.objects.get_or_create_by_natural_key(
-                            *value.split("-")
+                            cost_center, name
                         )
                     if field == "office" and value:
                         value, _ = Office.objects.get_or_create_by_natural_key(
