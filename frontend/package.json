@@ -11,7 +11,7 @@
     "@sentry/apm": "^5.15.5",
     "@sentry/browser": "^5.15.5",
     "@sentry/integrations": "^5.15.5",
-    "@sentry/rrweb": "^0.1.1",
+    "@sentry/rrweb": "^0.1.2",
     "apollo-boost": "^0.4.7",
     "apollo-link": "^1.2.13",
     "apollo-upload-client": "^12.1.0",
