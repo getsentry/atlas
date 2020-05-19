@@ -8,6 +8,7 @@ from django.db import models
 class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
     # a handle is what a person "Goes by" - its like a username but irl
     pronouns = models.TextField(null=True)
     employee_type = models.TextField(null=True)

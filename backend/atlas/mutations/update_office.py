@@ -1,7 +1,7 @@
 import graphene
 from django.db import transaction
 
-from atlas.models import Office
+from atlas.models import Change, Office
 from atlas.schema import Decimal, Nullable, OfficeNode
 
 
@@ -35,13 +35,16 @@ class UpdateOffice(graphene.Mutation):
             return UpdateOffice(ok=False, errors=["Invalid user"])
 
         with transaction.atomic():
-            update_fields = []
+            updates = {}
             for field, value in data.items():
                 if value == "":
                     value = None
                 if getattr(office, field) != value:
                     setattr(office, field, value)
-                    update_fields.append(field)
-            office.save(update_fields=update_fields)
+                    updates[field] = value
+
+            if updates:
+                Change.record("office", office.id, updates)
+                office.save(update_fields=list(updates.keys()))
 
         return UpdateOffice(ok=True, office=office)

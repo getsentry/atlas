@@ -69,8 +69,8 @@ def ga_department(db):
 def default_user(db, design_department):
     user = factories.UserFactory(
         id=UUID("449c76aa-ad6a-46a8-b32b-91d965e3f462"),
-        name="Reel Big Phish",
-        email="reel.big.phish@example.com",
+        name="Jane Doe",
+        email="jane@example.com",
     )
     user.set_password("phish.reel.big")
     user.save()

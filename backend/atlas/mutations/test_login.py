@@ -116,14 +116,15 @@ def test_login_new_user_google_auth(gql_client, responses):
 def test_successful_login_basic_creds(gql_client, default_user):
     executed = gql_client.execute(
         """
-    mutation {
-        login(email:"reel.big.phish@example.com", password:"phish.reel.big") {
+    mutation($email: String!) {
+        login(email:$email, password:"phish.reel.big") {
             ok
             errors
             token
             user {id, email, name}
         }
-    }"""
+    }""",
+        variables={"email": default_user.email},
     )
     resp = executed["data"]["login"]
     assert resp["errors"] is None
@@ -140,14 +141,15 @@ def test_successful_login_basic_creds(gql_client, default_user):
 def test_invalid_password(gql_client, default_user):
     executed = gql_client.execute(
         """
-    mutation {
-        login(email:"reel.big.phish@example.com", password:"pwrong") {
+    mutation($email: String!) {
+        login(email:$email, password:"pwrong") {
             ok
             errors
             token
             user {id, email, name}
         }
-    }"""
+    }""",
+        variables={"email": default_user.email},
     )
     resp = executed["data"]["login"]
     assert resp["errors"]

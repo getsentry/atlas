@@ -152,9 +152,7 @@ def test_users_shows_others_email(gql_client, default_user, other_user):
 
 def test_users_query_with_results(gql_client, default_user):
     executed = gql_client.execute(
-        BASE_QUERY,
-        variables={"query": "Reel Big", "includeSelf": True},
-        user=default_user,
+        BASE_QUERY, variables={"query": "Jane", "includeSelf": True}, user=default_user
     )
     assert len(executed["data"]["users"]["results"]) == 1
     assert executed["data"]["users"]["results"][0]["id"] == str(default_user.id)

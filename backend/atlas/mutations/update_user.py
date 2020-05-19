@@ -6,7 +6,7 @@ from django.conf import settings
 from django.db import models, transaction
 
 from atlas.constants import FIELD_MODEL_MAP, RESTRICTED_FIELDS, SUPERUSER_ONLY_FIELDS
-from atlas.models import Department, Office, Profile, User
+from atlas.models import Change, Department, Office, Profile, User
 from atlas.schema import UserInput, UserNode
 from atlas.tasks import update_profile
 
@@ -117,6 +117,7 @@ class UpdateUser(graphene.Mutation):
                 updates[field] = value
 
         with transaction.atomic():
+            change = Change.record("user", user.id, updates)
             for model, values in model_updates.items():
                 if values:
                     if model is User:
@@ -128,6 +129,8 @@ class UpdateUser(graphene.Mutation):
                     instance.save(update_fields=values.keys())
 
         if updates:
-            update_profile.delay(user_id=user.id, updates=updates)
+            update_profile.delay(
+                user_id=user.id, updates=updates, version=change.version
+            )
 
         return UpdateUser(ok=True, user=user)
