@@ -199,8 +199,12 @@ GOOGLE_FIELD_MAP = (
     ("nintendo", "GamerTags/Nintendo"),
 )
 
+# SchemaName, FieldName
+GOOGLE_VERSION_FIELD = ("System", "Version")
+
 # Excepts a child field for every day of the week:
 # Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+# XXX: This is SchemaName
 GOOGLE_SCHEDULE_FIELD = "Schedule"
 
 if not GOOGLE_CLIENT_ID:

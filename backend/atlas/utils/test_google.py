@@ -1,7 +1,7 @@
 import pytest
 from django.conf import settings
 
-from atlas.models import Profile
+from atlas.models import Change, Profile
 
 from .google import generate_profile_updates, sync_user, update_profile
 
@@ -451,6 +451,36 @@ def test_sync_user_new_account_manager(responses, db):
     assert manager.name == "jim"
     assert manager.email == "jim@example.com"
     assert not Profile.objects.filter(user_id=manager.id).exists()
+
+
+def test_sync_user_refuses_old_version_update(responses, default_user, user_payload):
+    last_change = Change.record("user", default_user.id, {})
+
+    user_payload["customSchemas"]["System"]["Version"] = last_change.version - 1
+
+    user_payload["name"] = {"fullName": "Joe Doe"}
+    result = sync_user(data=user_payload)
+    assert not result.created
+    assert not result.updated
+
+    user = result.user
+    assert user.id == default_user.id
+    assert user.name != "Joe Doe"
+
+
+def test_sync_user_accepts_same_version_update(responses, default_user, user_payload):
+    last_change = Change.record("user", default_user.id, {})
+
+    user_payload["customSchemas"]["System"]["Version"] = last_change.version
+
+    user_payload["name"] = {"fullName": "Joe Doe"}
+    result = sync_user(data=user_payload)
+    assert result.updated
+    assert not result.created
+
+    user = result.user
+    assert user.id == default_user.id
+    assert user.name == "Joe Doe"
 
 
 def test_update_profile_nintendo_gamertag(

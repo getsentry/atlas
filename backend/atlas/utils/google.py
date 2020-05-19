@@ -13,7 +13,7 @@ from django.conf import settings
 from django.db import models, transaction
 
 from atlas.constants import BOOLEAN_PREFIXES, DEFAULT_VALUES, FIELD_MODEL_MAP
-from atlas.models import Department, Identity, Office, Photo, Profile, User
+from atlas.models import Change, Department, Identity, Office, Photo, Profile, User
 
 logger = logging.getLogger("atlas")
 
@@ -145,7 +145,9 @@ class Cache(object):
         return result
 
 
-def generate_profile_updates(user: User, data: dict = None) -> dict:
+def generate_profile_updates(
+    user: User, data: dict = None, version: int = None
+) -> dict:
     profile = user.profile
 
     if data is None:
@@ -164,6 +166,12 @@ def generate_profile_updates(user: User, data: dict = None) -> dict:
                 data[field] = str(data[field])
 
     params = {}
+
+    if version is not None:
+        version_field = settings.GOOGLE_VERSION_FIELD
+        schema = params.setdefault("customSchemas", {}).setdefault(version_field[0])[
+            version_field[1]
+        ] = version
 
     if "office" in data:
         params["locations"] = [
@@ -269,8 +277,10 @@ def update_all_profiles(identity: Identity, users: List[str] = None) -> BatchSyn
     return BatchSyncResult(total=total, created=created, updated=updated, pruned=0)
 
 
-def update_profile(identity: Identity, user: User, data: dict = None) -> UserSyncResult:
-    params = generate_profile_updates(user, data)
+def update_profile(
+    identity: Identity, user: User, data: dict = None, version: int = None
+) -> UserSyncResult:
+    params = generate_profile_updates(user, data, version=version)
 
     user_identity = Identity.objects.get(provider="google", user=user)
     response = requests.patch(
@@ -313,6 +323,23 @@ def sync_user(  # NOQA
         user_identity, _ = Identity.objects.get_or_create(
             provider="google", external_id=data["id"], defaults={"user": user}
         )
+
+    local_version = Change.get_current_version("user", user.id)
+    version_field = settings.GOOGLE_VERSION_FIELD
+    remote_version = int(
+        data.get("customSchemas", {}).get(version_field[0], {}).get(version_field[1])
+        or 0
+    )
+    # we dont allow updates if the version of data received is _older_ than the current version
+    # _but_ we do allow udpates if they match (which means the version was not incremented, but something changed on Google's side)
+    # TODO(dcramer): we should bump the version when a remote update happens
+    if local_version > remote_version:
+        logger.warning(
+            "user.sync-refused id={} reason=version-mismatch local_version={} remote_version={}".format(
+                str(user.id), local_version, remote_version
+            )
+        )
+        return UserSyncResult(user=user, created=created, updated=False)
 
     profile = user.get_profile()
 

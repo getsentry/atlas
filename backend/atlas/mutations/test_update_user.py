@@ -2,7 +2,7 @@ from datetime import date
 from unittest.mock import patch
 
 from atlas import factories
-from atlas.models import User
+from atlas.models import Change, User
 
 
 @patch("atlas.tasks.update_profile.delay")
@@ -29,11 +29,15 @@ def test_user_sets_has_onboarded(mock_task, gql_client, default_user):
     assert resp["user"] == {"id": str(default_user.id)}
 
     mock_task.assert_called_once_with(
-        user_id=default_user.id, updates={"has_onboarded": True}
+        user_id=default_user.id, updates={"has_onboarded": True}, version=1
     )
 
     user = User.objects.get(id=default_user.id)
     assert user.profile.has_onboarded
+
+    change = Change.objects.get(object_id=user.id, object_type="user")
+    assert change.version == 1
+    assert change.changes == {"has_onboarded": True}
 
 
 @patch("atlas.tasks.update_profile.delay")
@@ -57,11 +61,15 @@ def test_user_can_update_handle(mock_task, gql_client, default_user):
     assert resp["user"] == {"id": str(default_user.id), "handle": "Zoolander"}
 
     mock_task.assert_called_once_with(
-        user_id=default_user.id, updates={"handle": "Zoolander"}
+        user_id=default_user.id, updates={"handle": "Zoolander"}, version=1
     )
 
     user = User.objects.get(id=default_user.id)
     assert user.profile.handle == "Zoolander"
+
+    change = Change.objects.get(object_id=user.id, object_type="user")
+    assert change.version == 1
+    assert change.changes == {"handle": "Zoolander"}
 
 
 @patch("atlas.tasks.update_profile.delay")
@@ -97,6 +105,7 @@ def test_user_can_update_schedule(mock_task, gql_client, default_user):
                 "OFF",
             ]
         },
+        version=1,
     )
 
     user = User.objects.get(id=default_user.id)
@@ -174,7 +183,7 @@ def test_superuser_can_update_other_user(
     assert user.profile.date_started == date(2017, 1, 1)
 
     mock_task.assert_called_once_with(
-        user_id=default_user.id, updates={"date_started": "2017-01-01"}
+        user_id=default_user.id, updates={"date_started": "2017-01-01"}, version=1
     )
 
 
@@ -272,7 +281,7 @@ def test_superuser_can_update_department(
     assert resp["user"] == {"id": str(default_user.id)}
 
     mock_task.assert_called_once_with(
-        user_id=default_user.id, updates={"department": ga_department.id}
+        user_id=default_user.id, updates={"department": ga_department.id}, version=1
     )
 
     user = User.objects.get(id=default_user.id)
@@ -304,7 +313,7 @@ def test_superuser_can_update_reports_to(
     assert resp["user"] == {"id": str(default_user.id)}
 
     mock_task.assert_called_once_with(
-        user_id=default_user.id, updates={"reports_to": new_person.id}
+        user_id=default_user.id, updates={"reports_to": new_person.id}, version=1
     )
 
     user = User.objects.get(id=default_user.id)
@@ -335,7 +344,7 @@ def test_user_can_update_nintendo_gamertag(mock_task, gql_client, default_user):
     }
 
     mock_task.assert_called_once_with(
-        user_id=default_user.id, updates={"nintendo": "SW-1234-1234-1234"}
+        user_id=default_user.id, updates={"nintendo": "SW-1234-1234-1234"}, version=1
     )
 
     user = User.objects.get(id=default_user.id)
