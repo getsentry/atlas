@@ -454,7 +454,7 @@ def test_sync_user_new_account_manager(responses, db):
 
 
 def test_sync_user_refuses_old_version_update(responses, default_user, user_payload):
-    last_change = Change.record("user", default_user.id, {})
+    last_change = Change.record(default_user, {})
 
     user_payload["customSchemas"]["System"]["Version"] = last_change.version - 1
 
@@ -469,7 +469,7 @@ def test_sync_user_refuses_old_version_update(responses, default_user, user_payl
 
 
 def test_sync_user_accepts_same_version_update(responses, default_user, user_payload):
-    last_change = Change.record("user", default_user.id, {})
+    last_change = Change.record(default_user, {})
 
     user_payload["customSchemas"]["System"]["Version"] = last_change.version
 

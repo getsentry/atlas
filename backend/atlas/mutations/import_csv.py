@@ -153,6 +153,7 @@ def apply_changes(changes: List[Dict], current_user: User = None):
     # TODO(dcramer): combine this with update_user behavior
     for change in changes:
         updates = {}
+        previous = {}
         model_updates = {User: {}, Profile: {}}
 
         with transaction.atomic():
@@ -176,15 +177,27 @@ def apply_changes(changes: List[Dict], current_user: User = None):
                     if isinstance(value, Enum):
                         value = value.name
 
-                    model_updates[FIELD_MODEL_MAP[field]][field] = value
-                    if isinstance(value, date):
-                        value = value.isoformat()
-                    elif isinstance(value, models.Model):
-                        value = value.pk
-                    updates[field] = value
+                    model = FIELD_MODEL_MAP[field]
+                    if model is User:
+                        cur_value = getattr(user, field)
+                    elif model is Profile:
+                        cur_value = getattr(profile, field)
+                    else:
+                        raise NotImplementedError
+
+                    if cur_value != value:
+                        model_updates[model][field] = value
+                        if isinstance(value, date):
+                            value = value.isoformat()
+                        elif isinstance(value, models.Model):
+                            value = value.pk
+                        updates[field] = value
+                        previous[field] = cur_value
 
             if updates:
-                change = Change.record("user", user.id, updates, user=current_user)
+                change = Change.record(
+                    user, updates, user=current_user, previous=previous
+                )
                 for model, values in model_updates.items():
                     if values:
                         if model is User:

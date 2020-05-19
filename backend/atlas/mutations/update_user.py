@@ -53,6 +53,7 @@ class UpdateUser(graphene.Mutation):
         profile = user.get_profile()
 
         updates = {}
+        previous = {}
         model_updates = {User: {}, Profile: {}}
 
         # for any update_user from self we signal it as onboarding successful
@@ -114,10 +115,11 @@ class UpdateUser(graphene.Mutation):
                 elif isinstance(value, models.Model):
                     value = value.pk
                 # track update for two-way sync
+                previous[field] = cur_value
                 updates[field] = value
 
         with transaction.atomic():
-            change = Change.record("user", user.id, updates, user=current_user)
+            change = Change.record(user, updates, user=current_user, previous=previous)
             for model, values in model_updates.items():
                 if values:
                     if model is User:

@@ -37,6 +37,7 @@ def process_item(current_user: User, data: UserInput) -> List[str]:
     user.profile = profile
 
     updates = {}
+    previous = {}
     model_updates = {User: {}, Profile: {}}
 
     flattened_data = data.copy()
@@ -78,10 +79,11 @@ def process_item(current_user: User, data: UserInput) -> List[str]:
             if isinstance(value, models.Model):
                 value = value.pk
             updates[field] = value
+            previous[field] = cur_attr
 
     if updates:
         with transaction.atomic():
-            change = Change.record("user", user.id, updates, user=current_user)
+            change = Change.record(user, updates, user=current_user, previous=previous)
             for model, values in model_updates.items():
                 if values:
                     if model is User:

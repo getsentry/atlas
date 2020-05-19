@@ -53,13 +53,40 @@ export const LIST_CHANGES_QUERY = gql`
       id
       objectType
       objectId
+      objectUser {
+        name
+        email
+        photo {
+          data
+          width
+          height
+          mimeType
+        }
+      }
+      objectOffice {
+        id
+        externalId
+        name
+      }
+      objectDepartment {
+        id
+        name
+        costCenter
+      }
       timestamp
       user {
         name
         email
+        photo {
+          data
+          width
+          height
+          mimeType
+        }
       }
       version
       changes
+      previous
     }
   }
 `;

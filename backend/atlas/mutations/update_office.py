@@ -40,11 +40,12 @@ class UpdateOffice(graphene.Mutation):
                 if value == "":
                     value = None
                 if getattr(office, field) != value:
-                    setattr(office, field, value)
                     updates[field] = value
 
             if updates:
-                Change.record("office", office.id, updates, user=current_user)
+                Change.record(office, updates, user=current_user)
+                for key, value in updates.items():
+                    setattr(office, key, value)
                 office.save(update_fields=list(updates.keys()))
 
         return UpdateOffice(ok=True, office=office)

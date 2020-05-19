@@ -7,6 +7,7 @@ import AdminLayout from "./pages/AdminLayout";
 import AdminAudit from "./pages/AdminAudit";
 import AdminBulkUpdatePeople from "./pages/AdminBulkUpdatePeople";
 import AdminChanges from "./pages/AdminChanges";
+import AdminChangeDetails from "./pages/AdminChangeDetails";
 import AdminCreateDepartment from "./pages/AdminCreateDepartment";
 import AdminDepartments from "./pages/AdminDepartments";
 import AdminDeleteDepartment from "./pages/AdminDeleteDepartment";
@@ -47,6 +48,7 @@ export default (
     <Route path="/people/:email/update" component={UpdateProfile} />
     <Route path="/admin" component={AdminLayout}>
       <Route path="/admin/changes" component={AdminChanges} />
+      <Route path="/admin/changes/:changeId" component={AdminChangeDetails} />
       <Route path="/admin/departments" component={AdminDepartments} />
       <Route path="/admin/departments/create" component={AdminCreateDepartment} />
       <Route path="/admin/departments/:departmentId" component={AdminUpdateDepartment} />
