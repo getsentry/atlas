@@ -1,4 +1,5 @@
 from .binary import *  # NOQA
+from .change import *  # NOQA
 from .decimal import *  # NOQA
 from .department import *  # NOQA
 from .departmentinput import *  # NOQA

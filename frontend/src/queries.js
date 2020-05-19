@@ -47,6 +47,23 @@ export const GET_OFFICE_QUERY = gql`
   }
 `;
 
+export const LIST_CHANGES_QUERY = gql`
+  query listChanges($id: UUID, $objectType: String, $objectId: UUID) {
+    changes(id: $id, objectType: $objectType, objectId: $objectId) {
+      id
+      objectType
+      objectId
+      timestamp
+      user {
+        name
+        email
+      }
+      version
+      changes
+    }
+  }
+`;
+
 export const LIST_DEPARTMENTS_QUERY = gql`
   query listDepartments(
     $id: UUID

@@ -1,10 +1,11 @@
 import graphene
 
-from . import departments, employeetypes, me, offices, users
+from . import changes, departments, employeetypes, me, offices, users
 
 
 class RootQuery(
     me.Query,
+    changes.Query,
     departments.Query,
     employeetypes.Query,
     offices.Query,
