@@ -1,7 +1,7 @@
 import io
 from datetime import date
 
-from atlas.models import User
+from atlas.models import Change, User
 
 MUTATION = """
 mutation importCsv ($file: Upload!, $apply: Boolean) {
@@ -116,6 +116,10 @@ def test_basic_updates(gql_client, default_superuser):
 
     user = User.objects.get(id=default_superuser.id)
     assert user.profile.title == "Bruhah"
+
+    change = Change.objects.get(object_id=default_superuser.id, object_type="user")
+    assert change.version == 1
+    assert change.changes == {"title": "Bruhah"}
 
 
 def test_updates_all_attributes(gql_client, default_superuser):

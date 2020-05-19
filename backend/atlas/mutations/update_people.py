@@ -6,7 +6,7 @@ import graphene
 from django.db import models, transaction
 
 from atlas.constants import FIELD_MODEL_MAP, RESTRICTED_FIELDS, SUPERUSER_ONLY_FIELDS
-from atlas.models import Office, Profile, User
+from atlas.models import Change, Office, Profile, User
 from atlas.schema import UserInput
 from atlas.tasks import update_profile
 
@@ -79,19 +79,20 @@ def process_item(current_user: User, data: UserInput) -> List[str]:
                 value = value.pk
             updates[field] = value
 
-    with transaction.atomic():
-        for model, values in model_updates.items():
-            if values:
-                if model is User:
-                    instance = user
-                elif model is Profile:
-                    instance = profile
-                for key, value in values.items():
-                    setattr(instance, key, value)
-                instance.save(update_fields=values.keys())
-
     if updates:
-        update_profile.delay(user_id=user.id, updates=updates)
+        with transaction.atomic():
+            change = Change.record("user", user.id, updates, user=current_user)
+            for model, values in model_updates.items():
+                if values:
+                    if model is User:
+                        instance = user
+                    elif model is Profile:
+                        instance = profile
+                    for key, value in values.items():
+                        setattr(instance, key, value)
+                    instance.save(update_fields=values.keys())
+
+        update_profile.delay(user_id=user.id, updates=updates, version=change.version)
 
 
 class BatchResult(graphene.ObjectType):

@@ -10,7 +10,7 @@ from django.db import models, transaction
 from graphene_file_upload.scalars import Upload
 
 from atlas.constants import FIELD_MODEL_MAP
-from atlas.models import Department, Office, Profile, User
+from atlas.models import Change, Department, Office, Profile, User
 from atlas.schema import EmployeeTypeEnum, UserNode
 from atlas.tasks import update_profile
 
@@ -141,7 +141,7 @@ class ImportCsv(graphene.Mutation):
 
         if apply:
             if changes:
-                apply_changes(changes)
+                apply_changes(changes, current_user)
             applied = True
         else:
             applied = False
@@ -149,7 +149,7 @@ class ImportCsv(graphene.Mutation):
         return ImportCsv(ok=True, changes=changes, applied=applied)
 
 
-def apply_changes(changes: List[Dict]):
+def apply_changes(changes: List[Dict], current_user: User = None):
     # TODO(dcramer): combine this with update_user behavior
     for change in changes:
         updates = {}
@@ -183,15 +183,19 @@ def apply_changes(changes: List[Dict]):
                         value = value.pk
                     updates[field] = value
 
-            for model, values in model_updates.items():
-                if values:
-                    if model is User:
-                        instance = user
-                    elif model is Profile:
-                        instance = profile
-                    for key, value in values.items():
-                        setattr(instance, key, value)
-                    instance.save(update_fields=values.keys())
+            if updates:
+                change = Change.record("user", user.id, updates, user=current_user)
+                for model, values in model_updates.items():
+                    if values:
+                        if model is User:
+                            instance = user
+                        elif model is Profile:
+                            instance = profile
+                        for key, value in values.items():
+                            setattr(instance, key, value)
+                        instance.save(update_fields=values.keys())
 
         if updates:
-            update_profile.delay(user_id=user.id, updates=updates)
+            update_profile.delay(
+                user_id=user.id, updates=updates, version=change.version
+            )
