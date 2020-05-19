@@ -21,25 +21,29 @@ export default class ErrorBoundary extends Component {
 
   constructor(...params) {
     super(...params);
-    this.state = { error: null, location: null };
+    this.state = { error: null, location: null, eventId: null };
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
     let { router } = nextContext;
     if (!isEqual(this.state.location, router.location)) {
-      this.setState({ error: null, location: null });
+      this.setState({ error: null, location: null, eventId: null });
     }
     super.componentWillReceiveProps &&
       super.componentWillReceiveProps(nextProps, nextContext);
   }
 
   componentDidCatch(error, errorInfo) {
-    this.setState({
-      error,
-      location: { ...(idx(this.context.router, _ => _.location) || {}) }
+    Sentry.withScope(scope => {
+      scope.setExtras(errorInfo);
+      const eventId = Sentry.captureException(error);
+      this.setState({
+        eventId,
+        error,
+        location: { ...(idx(this.context.router, _ => _.location) || {}) }
+      });
+      if (eventId) Sentry.showReportDialog();
     });
-    Sentry.captureException(error, { extra: errorInfo });
-    Sentry.lastEventId() && Sentry.showReportDialog();
   }
 
   render() {
