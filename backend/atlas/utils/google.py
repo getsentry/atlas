@@ -169,7 +169,7 @@ def generate_profile_updates(
 
     if version is not None:
         version_field = settings.GOOGLE_VERSION_FIELD
-        schema = params.setdefault("customSchemas", {}).setdefault(version_field[0])[
+        params.setdefault("customSchemas", {}).setdefault(version_field[0], {})[
             version_field[1]
         ] = version
 

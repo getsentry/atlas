@@ -61,6 +61,13 @@ def test_generate_profile_updates_is_human(responses, default_user):
     assert params == {"customSchemas": {"System": {"Is_Human": True}}}
 
 
+def test_generate_profile_updates_is_human_with_version(
+    responses, default_user, version=1
+):
+    params = generate_profile_updates(default_user, {"is_human": True}, version=1)
+    assert params == {"customSchemas": {"System": {"Is_Human": True, "Version": 1}}}
+
+
 def test_generate_profile_updates_all_fields(responses, default_user):
     default_user.profile.has_onboarded = False
     default_user.profile.department = None
