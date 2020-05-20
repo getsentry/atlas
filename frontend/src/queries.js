@@ -495,6 +495,9 @@ export const EXPORT_PEOPLE_QUERY = gql`
         reportsTo {
           email
         }
+        referredBy {
+          email
+        }
       }
     }
   }

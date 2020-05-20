@@ -15,6 +15,7 @@ mutation importCsv ($file: Upload!, $apply: Boolean) {
             department { previous, new }
             office { previous, new }
             reportsTo { previous, new }
+            referredBy { previous, new }
             employeeType { previous, new }
             isHuman { previous, new }
             dateStarted { previous, new }
@@ -124,8 +125,8 @@ def test_basic_updates(gql_client, default_superuser):
 
 def test_updates_all_attributes(gql_client, default_superuser):
     csv_file = io.BytesIO(
-        f"""id,name,email,employee_type,reports_to,department,title,office,is_human,date_started
-{str(default_superuser.id)},{default_superuser.name},{default_superuser.email},CONTRACT,blah@example.com,500-Cool,Bruhah,HQ,false,1/1/20
+        f"""id,name,email,employee_type,reports_to,referred_by,department,title,office,is_human,date_started
+{str(default_superuser.id)},{default_superuser.name},{default_superuser.email},CONTRACT,blah@example.com,blah@example.com,500-Cool,Bruhah,HQ,false,1/1/20
 """.strip().encode(
             "utf-8"
         )
@@ -143,6 +144,7 @@ def test_updates_all_attributes(gql_client, default_superuser):
     assert change["user"]["id"] == str(default_superuser.id)
     assert change["employeeType"]
     assert change["reportsTo"]
+    assert change["referredBy"]
     assert change["office"]
     assert change["title"]
     assert change["department"]
@@ -169,5 +171,7 @@ def test_updates_all_attributes(gql_client, default_superuser):
     assert user.profile.office.name == "HQ"
     assert user.profile.reports_to.name == "blah"
     assert user.profile.reports_to.email == "blah@example.com"
+    assert user.profile.referred_by.name == "blah"
+    assert user.profile.referred_by.email == "blah@example.com"
     assert user.profile.is_human is False
     assert user.profile.date_started == date(2020, 1, 1)

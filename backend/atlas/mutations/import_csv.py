@@ -23,6 +23,7 @@ CSV_FIELDS = set(
         "date_of_birth",
         "title",
         "reports_to",
+        "referred_by",
         "department",
         "office",
         "employee_type",
@@ -60,6 +61,7 @@ class CsvChange(graphene.ObjectType):
     department = graphene.Field(StringChange, required=False)
     office = graphene.Field(StringChange, required=False)
     reports_to = graphene.Field(StringChange, required=False)
+    referred_by = graphene.Field(StringChange, required=False)
     date_started = graphene.Field(DateChange, required=False)
     date_of_birth = graphene.Field(DateChange, required=False)
     employee_type = graphene.Field(EmployeeTypeChange, required=False)
@@ -175,7 +177,7 @@ def apply_changes(changes: List[Dict], current_user: User = None):
                         value, _ = Office.objects.get_or_create_by_natural_key(
                             *value.split("-")
                         )
-                    if field == "reports_to" and value:
+                    if field in ("reports_to", "referred_by") and value:
                         value, _ = User.objects.get_or_create_by_natural_key(
                             *value.split("-")
                         )
