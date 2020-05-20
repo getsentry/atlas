@@ -5,7 +5,6 @@ import { Route, IndexRoute } from "react-router";
 import App from "./pages/App";
 import AdminLayout from "./pages/AdminLayout";
 import AdminAudit from "./pages/AdminAudit";
-import AdminBulkUpdatePeople from "./pages/AdminBulkUpdatePeople";
 import AdminChanges from "./pages/AdminChanges";
 import AdminChangeDetails from "./pages/AdminChangeDetails";
 import AdminCreateDepartment from "./pages/AdminCreateDepartment";
@@ -57,7 +56,6 @@ export default (
         component={AdminDeleteDepartment}
       />
       <Route path="/admin/people/audit" component={AdminAudit} />
-      <Route path="/admin/people/bulk-update" component={AdminBulkUpdatePeople} />
       <Route path="/admin/people/import-export" component={AdminImportExportPeople} />
     </Route>
     <Route path="*" component={NotFoundError} />
