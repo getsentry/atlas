@@ -182,7 +182,9 @@ class Query(object):
             qs = qs.filter(profile__referred_by=referred_by)
 
         if query:
-            qs = qs.filter(name__istartswith=query)
+            qs = qs.filter(
+                Q(name__istartswith=query) | Q(profile__handle__istartswith=query)
+            )
 
         if not include_self:
             qs = qs.exclude(id=current_user.id)
