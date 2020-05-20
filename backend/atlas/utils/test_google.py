@@ -19,6 +19,7 @@ def user_payload():
                 "Date_of_Birth": "1900-08-12",
                 "Date_of_Hire": "2010-04-26",
                 "Handle": "Jane",
+                "Team": "Workflow",
                 "Pronouns": "SHE_HER",
                 "Bio": "My bio!",
                 "Referred_By": None,
@@ -68,7 +69,7 @@ def test_generate_profile_updates_is_human_with_version(
     assert params == {"customSchemas": {"System": {"Is_Human": True, "Version": 1}}}
 
 
-def test_generate_profile_updates_all_fields(responses, default_user):
+def test_generate_profile_updates_all_fields(responses, default_user, default_team):
     default_user.profile.has_onboarded = False
     default_user.profile.department = None
     default_user.profile.save()
@@ -80,6 +81,7 @@ def test_generate_profile_updates_all_fields(responses, default_user):
                 "Date_of_Birth": "1900-08-12",
                 "Date_of_Hire": "2010-04-26",
                 "Handle": None,
+                "Team": default_team.name,
                 "Pronouns": None,
                 "Bio": None,
                 "Referred_By": None,
@@ -122,12 +124,18 @@ def test_generate_profile_updates_all_fields(responses, default_user):
 
 
 def test_generate_profile_updates_all_fields_with_all_fields(
-    responses, default_superuser, default_user, default_office, ga_department
+    responses,
+    default_superuser,
+    default_user,
+    default_office,
+    ga_department,
+    default_team,
 ):
     default_user.profile.reports_to = default_superuser
     default_user.profile.referred_by = default_superuser
     default_user.profile.office = default_office
     default_user.profile.department = ga_department
+    default_user.profile.team = default_team
     default_user.profile.twitter = "@getsentry"
     default_user.profile.employee_type = "FULL_TIME"
     default_user.profile.handle = "Jane"
@@ -154,6 +162,7 @@ def test_generate_profile_updates_all_fields_with_all_fields(
                 "Date_of_Birth": "1900-08-12",
                 "Date_of_Hire": "2010-04-26",
                 "Handle": "Jane",
+                "Team": default_team.name,
                 "Pronouns": "SHE_HER",
                 "Bio": "My bio!",
                 "Referred_By": default_superuser.email,
@@ -209,6 +218,7 @@ def test_sync_user_with_user_and_identity(
                 "Date_of_Birth": "1900-08-12",
                 "Date_of_Hire": "2010-04-26",
                 "Handle": "Jane",
+                "Team": None,
                 "Pronouns": "SHE_HER",
                 "Bio": "My bio!",
                 "Referred_By": None,
@@ -284,6 +294,7 @@ def test_sync_user_new_account(responses, default_superuser):
                 "Date_of_Birth": "1900-08-12",
                 "Date_of_Hire": "2010-04-26",
                 "Handle": "Jane",
+                "Team": None,
                 "Pronouns": "SHE_HER",
                 "Bio": "My bio!",
                 "Referred_By": None,

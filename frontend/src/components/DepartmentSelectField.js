@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 import apolloClient from "../utils/apollo";
 import colors from "../colors";
 import FieldWrapper from "./FieldWrapper";
-import { SELECT_DEPARTMENT_QUERY } from "../queries";
+import { SELECT_DEPARTMENTS_QUERY } from "../queries";
 
 const DepartmentTree = styled(({ className, department: { costCenter, name, tree } }) => {
   return (
@@ -88,7 +88,7 @@ export default class DepartmentSelectField extends Component {
   loadMatches = (inputValue, callback) => {
     apolloClient
       .query({
-        query: SELECT_DEPARTMENT_QUERY,
+        query: SELECT_DEPARTMENTS_QUERY,
         variables: {
           query: inputValue
         }

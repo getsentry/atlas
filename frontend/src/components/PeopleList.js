@@ -4,6 +4,7 @@ import PersonLink from "./PersonLink";
 
 export const validColumns = new Set([
   "department",
+  "team",
   "email",
   "reportsTo",
   "office",
@@ -17,7 +18,7 @@ export const validColumns = new Set([
   "gamerTags.xbox"
 ]);
 
-export const defaultColumns = ["department", "office", "dateStarted"];
+export const defaultColumns = ["department", "team", "office", "dateStarted"];
 
 const getColumnTitle = function(column) {
   switch (column) {
@@ -34,6 +35,8 @@ const getColumnValue = function(user, column) {
   switch (column) {
     case "department":
       return user.department && user.department.name;
+    case "team":
+      return user.team && user.team.name;
     case "office":
       return user.office && user.office.name;
     default:

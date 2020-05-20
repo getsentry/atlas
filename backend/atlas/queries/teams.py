@@ -1,29 +1,27 @@
-from uuid import UUID
-
 import graphene
 import graphene_django_optimizer as gql_optimizer
 from graphql.error import GraphQLError
 
-from atlas.models import Change
-from atlas.schema import ChangeNode
+from atlas.models import Team
+from atlas.schema import TeamNode
 
 
 class Query(object):
-    changes = graphene.List(
-        ChangeNode,
+    teams = graphene.List(
+        TeamNode,
         id=graphene.UUID(),
-        object_type=graphene.String(),
-        object_id=graphene.UUID(),
+        query=graphene.String(),
+        people_only=graphene.Boolean(default_value=False),
         offset=graphene.Int(),
         limit=graphene.Int(),
     )
 
-    def resolve_changes(
+    def resolve_teams(
         self,
         info,
         id: str = None,
-        object_type: str = None,
-        object_id: UUID = None,
+        query: str = None,
+        people_only: bool = False,
         offset: int = 0,
         limit: int = 1000,
         **kwargs
@@ -35,20 +33,21 @@ class Query(object):
         if not current_user.is_authenticated:
             raise GraphQLError("You must be authenticated")
 
-        if not current_user.is_superuser:
-            raise GraphQLError("You must be superuser")
-
-        qs = Change.objects.all().distinct()
+        qs = Team.objects.all().distinct()
 
         if id:
             qs = qs.filter(id=id)
 
-        if object_type:
-            qs = qs.filter(object_type=object_type)
+        if people_only:
+            qs = qs.filter(
+                profiles__is_human=True,
+                profiles__user__is_active=True,
+                profiles__is_directory_hidden=False,
+            ).exclude(profiles=None)
 
-            if object_id:
-                qs = qs.filter(object_id=object_id)
+        if query:
+            qs = qs.filter(name__istartswith=query)
 
-        qs = qs.order_by("-timestamp")
+        qs = qs.order_by("name")
 
         return gql_optimizer.query(qs, info)[offset:limit]

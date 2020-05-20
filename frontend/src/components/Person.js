@@ -256,6 +256,23 @@ class Person extends Component {
                             <dd>
                               <DepartmentTree department={thisPerson.department} />
                             </dd>
+                            <dt>Team</dt>
+                            <dd>
+                              {thisPerson.team ? (
+                                <Link
+                                  to={{
+                                    pathname: "/people",
+                                    query: {
+                                      team: thisPerson.team.name
+                                    }
+                                  }}
+                                >
+                                  {thisPerson.team.name}
+                                </Link>
+                              ) : (
+                                <Empty />
+                              )}
+                            </dd>
                             <dt>Start Date</dt>
                             <dd>
                               {thisPerson.dateStarted ? (

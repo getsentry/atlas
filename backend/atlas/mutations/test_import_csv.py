@@ -13,6 +13,7 @@ mutation importCsv ($file: Upload!, $apply: Boolean) {
             user { id }
             title { previous, new }
             department { previous, new }
+            team { previous, new }
             office { previous, new }
             reportsTo { previous, new }
             referredBy { previous, new }

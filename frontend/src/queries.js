@@ -126,7 +126,17 @@ export const GET_DEPARTMENT_QUERY = gql`
   }
 `;
 
-export const SELECT_DEPARTMENT_QUERY = gql`
+export const LIST_TEAMS_QUERY = gql`
+  query listTeams($id: UUID, $query: String, $peopleOnly: Boolean, $limit: Int) {
+    teams(id: $id, query: $query, peopleOnly: $peopleOnly, limit: $limit) {
+      id
+      name
+      numPeople
+    }
+  }
+`;
+
+export const SELECT_DEPARTMENTS_QUERY = gql`
   query listDepartmentsForSelect($query: String!) {
     departments(query: $query, limit: 10) {
       id
@@ -171,6 +181,7 @@ export const LIST_PEOPLE_QUERY = gql`
     $birthdayAfter: Date
     $query: String
     $department: UUID
+    $team: String
     $includeSelf: Boolean
     $includeHidden: Boolean
     $orderBy: UserOrderBy
@@ -189,6 +200,7 @@ export const LIST_PEOPLE_QUERY = gql`
       birthdayAfter: $birthdayAfter
       query: $query
       department: $department
+      team: $team
       includeSelf: $includeSelf
       includeHidden: $includeHidden
       orderBy: $orderBy
@@ -201,6 +213,9 @@ export const LIST_PEOPLE_QUERY = gql`
         email
         department {
           id
+          name
+        }
+        team {
           name
         }
         isHuman
@@ -240,6 +255,7 @@ export const SEARCH_PEOPLE_QUERY = gql`
     $birthdayAfter: Date
     $query: String
     $department: UUID
+    $team: String
     $includeSelf: Boolean
     $includeHidden: Boolean
     $hasAttributes: [String]
@@ -259,6 +275,7 @@ export const SEARCH_PEOPLE_QUERY = gql`
       birthdayAfter: $birthdayAfter
       query: $query
       department: $department
+      team: $team
       includeSelf: $includeSelf
       includeHidden: $includeHidden
       hasAttributes: $hasAttributes
@@ -289,6 +306,9 @@ export const SEARCH_PEOPLE_QUERY = gql`
         email
         department {
           id
+          name
+        }
+        team {
           name
         }
         office {
@@ -350,6 +370,9 @@ export const GET_PERSON_QUERY = gql`
             id
             name
           }
+        }
+        team {
+          name
         }
         dobMonth
         dobDay
@@ -478,9 +501,11 @@ export const EXPORT_PEOPLE_QUERY = gql`
         name
         email
         department {
-          id
           name
           costCenter
+        }
+        team {
+          name
         }
         office {
           externalId
@@ -524,6 +549,10 @@ export const IMPORT_CSV_MUTATION = gql`
           new
         }
         department {
+          previous
+          new
+        }
+        team {
           previous
           new
         }

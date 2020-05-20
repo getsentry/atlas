@@ -10,7 +10,7 @@ from django.db import models, transaction
 from graphene_file_upload.scalars import Upload
 
 from atlas.constants import FIELD_MODEL_MAP
-from atlas.models import Change, Department, Office, Profile, User
+from atlas.models import Change, Department, Office, Profile, Team, User
 from atlas.schema import EmployeeTypeEnum, UserNode
 from atlas.tasks import update_profile
 
@@ -25,6 +25,7 @@ CSV_FIELDS = set(
         "reports_to",
         "referred_by",
         "department",
+        "team",
         "office",
         "employee_type",
         "is_human",
@@ -59,6 +60,7 @@ class CsvChange(graphene.ObjectType):
     name = graphene.Field(StringChange, required=False)
     title = graphene.Field(StringChange, required=False)
     department = graphene.Field(StringChange, required=False)
+    team = graphene.Field(StringChange, required=False)
     office = graphene.Field(StringChange, required=False)
     reports_to = graphene.Field(StringChange, required=False)
     referred_by = graphene.Field(StringChange, required=False)
@@ -175,6 +177,10 @@ def apply_changes(changes: List[Dict], current_user: User = None):
                         )
                     if field == "office" and value:
                         value, _ = Office.objects.get_or_create_by_natural_key(
+                            *value.split("-")
+                        )
+                    if field == "team" and value:
+                        value, _ = Team.objects.get_or_create_by_natural_key(
                             *value.split("-")
                         )
                     if field in ("reports_to", "referred_by") and value:

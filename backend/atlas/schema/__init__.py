@@ -8,5 +8,6 @@ from .nullable import *  # NOQA
 from .office import *  # NOQA
 from .phonenumber import *  # NOQA
 from .photo import *  # NOQA
+from .team import *  # NOQA
 from .user import *  # NOQA
 from .userinput import *  # NOQA

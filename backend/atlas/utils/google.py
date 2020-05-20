@@ -13,7 +13,16 @@ from django.conf import settings
 from django.db import models, transaction
 
 from atlas.constants import BOOLEAN_PREFIXES, DEFAULT_VALUES, FIELD_MODEL_MAP
-from atlas.models import Change, Department, Identity, Office, Photo, Profile, User
+from atlas.models import (
+    Change,
+    Department,
+    Identity,
+    Office,
+    Photo,
+    Profile,
+    Team,
+    User,
+)
 
 logger = logging.getLogger("atlas")
 
@@ -119,6 +128,13 @@ class Cache(object):
         user, created = User.objects.get_or_create_by_natural_key(email=email)
         self.items[User][email] = user
         return user, created
+
+    def get_team(self, name: str) -> Team:
+        if name in self.items[Team]:
+            return self.items[Team][name]
+        team, created = Team.objects.get_or_create_by_natural_key(name)
+        self.items[Team][name] = team
+        return team
 
     def get_office(self, external_id: str) -> Office:
         if external_id in self.items[Office]:
@@ -238,7 +254,9 @@ def generate_profile_updates(
                 value = data[key]
 
             if key == "referred_by" and value:
-                value = User.objects.get(id=data["referred_by"]).email
+                value = User.objects.get(id=value).email
+            if key == "team" and value:
+                value = Team.objects.get(id=value).name
 
             schema = params.setdefault("customSchemas", {})
             field_bits = field_path.split("/")
@@ -448,6 +466,8 @@ def sync_user(  # NOQA
                 value = bool(value)
             elif attribute_name == "referred_by" and value is not None:
                 value, _ = cache.get_user(email=value)
+            elif attribute_name == "team" and value is not None:
+                value = cache.get_team(name=value)
             if getattr(profile, attribute_name) != value:
                 profile_fields[attribute_name] = value
         if settings.GOOGLE_SCHEDULE_FIELD in schemas:

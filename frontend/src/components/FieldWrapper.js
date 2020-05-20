@@ -2,7 +2,9 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Field, ErrorMessage } from "formik";
 import AsyncSelect from "react-select/async";
+import AsyncCreatableSelect from "react-select/async-creatable";
 import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
 
 import colors from "../colors";
 
@@ -28,24 +30,36 @@ const selectStyles = {
   }
 };
 
-const SelectField = ({ field, form, options, ...fieldOptions }) => (
-  <Select
-    {...field}
-    {...fieldOptions}
-    styles={selectStyles}
-    options={options}
-    name={field.name}
-    isClearable={!fieldOptions.required}
-    isDisabled={fieldOptions.disabled}
-    value={options ? options.find(option => option.value === field.value) : ""}
-    onChange={option => form.setFieldValue(field.name, option ? option.value : "")}
-    onBlur={field.onBlur}
-  />
-);
+const SelectField = ({ field, form, options, creatable = false, ...fieldOptions }) => {
+  const Component = creatable ? CreatableSelect : Select;
 
-const AsyncSelectField = ({ field, form, loadOptions, ...fieldOptions }) => {
   return (
-    <AsyncSelect
+    <Component
+      {...field}
+      {...fieldOptions}
+      styles={selectStyles}
+      options={options}
+      name={field.name}
+      isClearable={!fieldOptions.required}
+      isDisabled={fieldOptions.disabled}
+      value={options ? options.find(option => option.value === field.value) : ""}
+      onChange={option => form.setFieldValue(field.name, option ? option.value : "")}
+      onBlur={field.onBlur}
+    />
+  );
+};
+
+const AsyncSelectField = ({
+  field,
+  form,
+  loadOptions,
+  creatable = false,
+  ...fieldOptions
+}) => {
+  const Component = creatable ? AsyncCreatableSelect : AsyncSelect;
+
+  return (
+    <Component
       {...field}
       {...fieldOptions}
       styles={selectStyles}
@@ -58,7 +72,7 @@ const AsyncSelectField = ({ field, form, loadOptions, ...fieldOptions }) => {
       onChange={option =>
         form.setFieldValue(
           field.name,
-          fieldOptions.getOptionValue ? fieldOptions.getOptionValue(option) : option.value
+          fieldOptions.getOptionValue ? fieldOptions.getOptionValue(option) : option
         )
       }
       onBlur={field.onBlur}

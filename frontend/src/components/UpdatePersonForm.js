@@ -12,6 +12,7 @@ import { DAY_SCHEDULE } from "../components/DaySchedule";
 import DepartmentSelectField from "../components/DepartmentSelectField";
 import FieldWrapper from "../components/FieldWrapper";
 import PersonSelectField from "../components/PersonSelectField";
+import TeamSelectField from "../components/TeamSelectField";
 import { PRONOUNS } from "../components/Pronouns";
 import apolloClient from "../utils/apollo";
 
@@ -22,6 +23,7 @@ const UserSchema = yup.object().shape({
   pronouns: yup.string(),
   title: yup.string().nullable(),
   department: yup.string().nullable(),
+  team: yup.string().nullable(),
   office: yup.string().nullable(),
   primaryPhone: yup.string().nullable(),
   dateStarted: yup.date().nullable(),
@@ -34,7 +36,7 @@ const UserSchema = yup.object().shape({
 export const PERSON_QUERY = gql`
   query getPersonForUpdate($email: String!) {
     offices {
-      id
+      externalId
       name
     }
     employeeTypes {
@@ -57,6 +59,9 @@ export const PERSON_QUERY = gql`
             name
             costCenter
           }
+        }
+        team {
+          name
         }
         title
         dateOfBirth
@@ -90,7 +95,7 @@ export const PERSON_QUERY = gql`
           nintendo
         }
         office {
-          id
+          externalId
           name
         }
         reportsTo {
@@ -139,6 +144,7 @@ class UpdatePersonForm extends Component {
       [
         "title",
         "department",
+        "team",
         "dateStarted",
         "dateOfBirth",
         "office",
@@ -170,6 +176,12 @@ class UpdatePersonForm extends Component {
             pronouns: user.pronouns || "NONE",
             title: user.title || "",
             department: user.department,
+            team: user.team
+              ? {
+                  value: user.team.name,
+                  label: user.team.name
+                }
+              : "",
             dateOfBirth: user.dateOfBirth || "",
             dateStarted: user.dateStarted || "",
             primaryPhone: user.primaryPhone || "",
@@ -179,7 +191,7 @@ class UpdatePersonForm extends Component {
             isDirectoryHidden: user.isDirectoryHidden,
             employeeType: user.employeeType ? user.employeeType.id : "",
             isSuperuser: user.isSuperuser || false,
-            office: user.office ? user.office.id : "",
+            office: user.office ? user.office.externalId : "",
             social: {
               twitter: user.social.twitter || "",
               linkedin: user.social.linkedin || "",
@@ -217,6 +229,7 @@ class UpdatePersonForm extends Component {
                 });
                 if (data.organization) data.organization = data.organization.id;
                 if (data.department) data.department = data.department.id;
+                if (data.team) data.team = data.team.value;
                 if (data.reportsTo) data.reportsTo = data.reportsTo.id;
                 if (data.referredBy) data.referredBy = data.referredBy.id;
                 apolloClient
@@ -344,6 +357,11 @@ class UpdatePersonForm extends Component {
                         label="Department"
                         readonly={restrictedFields.has("department")}
                       />
+                      <TeamSelectField
+                        name="team"
+                        label="Team"
+                        readonly={restrictedFields.has("team")}
+                      />
                       <FieldWrapper
                         type="select"
                         name="office"
@@ -351,7 +369,12 @@ class UpdatePersonForm extends Component {
                         readonly={restrictedFields.has("office")}
                         options={[
                           ["", "(no office)"],
-                          ...offices.map(o => [o.id, o.name])
+                          ...offices.map(o => [
+                            o.externalId,
+                            o.externalId !== o.name
+                              ? `${o.externalId} (${o.name})`
+                              : o.externalId
+                          ])
                         ]}
                       />
                       <FieldWrapper

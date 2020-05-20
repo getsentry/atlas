@@ -41,6 +41,9 @@ class Profile(models.Model):
         on_delete=models.SET_NULL,
         related_name="profiles",
     )
+    team = models.ForeignKey(
+        "atlas.Team", null=True, on_delete=models.SET_NULL, related_name="profiles"
+    )
     primary_phone = models.TextField(null=True)
     linkedin = models.TextField(null=True)
     twitter = models.TextField(null=True)

@@ -6,8 +6,14 @@ from django.db.models import Count, Q
 from django.utils import timezone
 from graphql.error import GraphQLError
 
-from atlas.models import Department, Office, Profile, User
-from atlas.schema import DepartmentNode, EmployeeTypeNode, OfficeNode, UserNode
+from atlas.models import Department, Office, Profile, Team, User
+from atlas.schema import (
+    DepartmentNode,
+    EmployeeTypeNode,
+    OfficeNode,
+    TeamNode,
+    UserNode,
+)
 
 
 class UserOrderBy(graphene.Enum):
@@ -24,11 +30,25 @@ class UserResultFacets(graphene.ObjectType):
     employee_types = graphene.List(EmployeeTypeNode)
     offices = graphene.List(OfficeNode)
     departments = graphene.List(DepartmentNode)
+    teams = graphene.List(TeamNode)
 
     def resolve_departments(self, info):
         qs = info.context.facet_qs["department"]
         return (
             Department.objects.filter(
+                profiles__is_human=True,
+                profiles__user__is_active=True,
+                profiles__is_directory_hidden=False,
+            )
+            .exclude(profiles=None)
+            .annotate(num_people=Count("id", filter=Q(profiles__user__in=qs)))
+            .distinct()
+        )
+
+    def resolve_teams(self, info):
+        qs = info.context.facet_qs["team"]
+        return (
+            Team.objects.filter(
                 profiles__is_human=True,
                 profiles__user__is_active=True,
                 profiles__is_directory_hidden=False,
@@ -94,6 +114,7 @@ class Query(object):
         titles_only=graphene.Boolean(default_value=False),
         office=graphene.UUID(),
         department=graphene.UUID(),
+        team=graphene.String(),
         reports_to=graphene.UUID(),
         referred_by=graphene.UUID(),
         date_started_before=graphene.types.datetime.Date(),
@@ -120,6 +141,7 @@ class Query(object):
         titles_only: bool = False,
         office: str = None,
         department: str = None,
+        team: str = None,
         reports_to: str = None,
         referred_by: str = None,
         has_attributes: list = None,
@@ -247,6 +269,9 @@ class Query(object):
                         Q(profile__department=department)
                         | Q(profile__department__tree__contains=[department])
                     )
+
+        if team:
+            qs = qs.filter(profile__team__name__iexact=team)
 
         if employee_type:
             qs = qs.filter(profile__employee_type=employee_type)

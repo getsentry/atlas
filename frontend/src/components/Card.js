@@ -4,13 +4,23 @@ import styled from "@emotion/styled";
 
 import colors from "../colors";
 
-export default styled(({ className, to, children, ...props }) => {
-  return (
-    <div className={className} {...props}>
-      {to ? <Link to={to}>{children}</Link> : children}
-    </div>
-  );
-})`
+export default styled(
+  ({
+    className,
+    to,
+    children,
+    noMargin = false,
+    withPadding = false,
+    slim = false,
+    ...props
+  }) => {
+    return (
+      <div className={className} {...props}>
+        {to ? <Link to={to}>{children}</Link> : children}
+      </div>
+    );
+  }
+)`
   background: ${colors.cardBackground};
   color: ${colors.cardText};
   padding: ${props => (props.slim ? "0.5rem" : "1rem")} 1rem 0;

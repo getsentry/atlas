@@ -10,8 +10,11 @@ import AdminChangeDetails from "./pages/AdminChangeDetails";
 import AdminCreateDepartment from "./pages/AdminCreateDepartment";
 import AdminDepartments from "./pages/AdminDepartments";
 import AdminDeleteDepartment from "./pages/AdminDeleteDepartment";
+import AdminDeleteTeam from "./pages/AdminDeleteTeam";
 import AdminImportExportPeople from "./pages/AdminImportExportPeople";
+import AdminTeams from "./pages/AdminTeams";
 import AdminUpdateDepartment from "./pages/AdminUpdateDepartment";
+import AdminUpdateTeam from "./pages/AdminUpdateTeam";
 import HealthCheck from "./pages/HealthCheck";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -55,6 +58,9 @@ export default (
         path="/admin/departments/:departmentId/delete"
         component={AdminDeleteDepartment}
       />
+      <Route path="/admin/teams" component={AdminTeams} />
+      <Route path="/admin/teams/:teamId" component={AdminUpdateTeam} />
+      <Route path="/admin/teams/:teamId/delete" component={AdminDeleteTeam} />
       <Route path="/admin/people/audit" component={AdminAudit} />
       <Route path="/admin/people/import-export" component={AdminImportExportPeople} />
     </Route>

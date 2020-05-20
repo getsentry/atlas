@@ -38,7 +38,7 @@ export const PersonListCard = ({
   <Card to={`/people/${user.email}`} withPadding noMargin slim>
     <Flex>
       <Box flex="1">
-        <PersonLink user={user} />
+        <PersonLink user={user} noLink />
       </Box>
       {withAnniversary && (
         <Box style={{ textAlign: "right" }}>

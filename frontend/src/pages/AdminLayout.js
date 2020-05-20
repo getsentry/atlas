@@ -49,6 +49,10 @@ export default ({ children }) => (
             </NavigationLink>
           </Card>
           <Card withPadding>
+            <h2>Teams</h2>
+            <NavigationLink to="/admin/teams">All Teams</NavigationLink>
+          </Card>
+          <Card withPadding>
             <h2>Changes</h2>
             <NavigationLink to="/admin/changes">All Changes</NavigationLink>
           </Card>

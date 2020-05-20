@@ -34,14 +34,14 @@ const PersonLinkContainer = styled.article`
   }
 `;
 
-export default function({ className, user, avatarSize = 32 }) {
+export default function({ className, user, avatarSize = 32, noLink = false }) {
   if (!user) return <em className={className}>n/a</em>;
   return (
     <PersonLinkContainer className={className}>
       <Avatar user={user} size={avatarSize} mr="5px" />
       <aside>
         <h4>
-          <Link to={`/people/${user.email}`}>{user.name}</Link>
+          {noLink ? user.name : <Link to={`/people/${user.email}`}>{user.name}</Link>}
         </h4>
 
         {user.title && <small>{user.title}</small>}
