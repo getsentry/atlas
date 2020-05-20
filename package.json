@@ -11,7 +11,7 @@
     "start": "concurrently \"npm:start-backend\" \"npm:start-frontend\"",
     "start-backend": "atlas runserver",
     "start-frontend": "cd frontend && npm start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cd frontend && npm test"
   },
   "repository": {
     "type": "git",

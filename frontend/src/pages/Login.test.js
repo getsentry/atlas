@@ -41,7 +41,8 @@ test("can render and log-in successfully", async () => {
   );
 
   fireEvent.click(screen.getByText("Sign in with Google"));
-  // TODO(dcramer): why are we having to tick twice?
+  // TODO(dcramer): why are we having to tick multiple times?
+  await tick();
   await tick();
   await tick();
   const state = store.getState();

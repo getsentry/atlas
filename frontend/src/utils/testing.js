@@ -49,6 +49,7 @@ export const mocks = {
     reportsTo: null,
     office: null,
     department: null,
+    team: null,
     bio: null,
     dobMonth: null,
     dobDay: null,

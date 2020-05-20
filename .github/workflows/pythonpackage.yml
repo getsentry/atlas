@@ -46,4 +46,4 @@ jobs:
         env:
           SENTRY_ENVIRONMENT: test
         run: |
-          cd frontend && npm test
+          npm test
