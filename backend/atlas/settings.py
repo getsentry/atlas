@@ -21,6 +21,7 @@ from sentry_sdk.integrations.redis import RedisIntegration
 
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DSN"),
+    debug=os.environ.get("DEBUG"),
     integrations=[
         CeleryIntegration(),
         DjangoIntegration(),
