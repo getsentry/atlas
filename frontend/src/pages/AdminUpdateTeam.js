@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Query } from "react-apollo";
 import { ErrorMessage } from "formik";
 
-import Button, { ButtonLink } from "../components/Button";
+import { ButtonLink } from "../components/Button";
 import Card from "../components/Card";
 import DefinitionList from "../components/DefinitionList";
 import { LIST_TEAMS_QUERY } from "../queries";
