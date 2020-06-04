@@ -1,3 +1,4 @@
+import hashlib
 import logging
 
 import sentry_sdk
@@ -6,12 +7,21 @@ from graphene_file_upload.django import FileUploadGraphQLView
 logger = logging.getLogger("atlas")
 
 
+def get_operation_name(params):
+    operation_name = params.get("operationName")
+    if operation_name:
+        return operation_name
+    return "unnamed operation ({})".format(hashlib.sha1(params["query"]).hexdigest())
+
+
 class EnhancedGraphQLView(FileUploadGraphQLView):
     # https://github.com/graphql-python/graphene-django/issues/124
-    def execute_graphql_request(self, *args, **kwargs):
+    def execute_graphql_request(self, request, params, *args, **kwargs):
         """Extract any exceptions and send them to Sentry"""
-
-        result = super().execute_graphql_request(*args, **kwargs)
+        operation_name = get_operation_name(params)
+        with sentry_sdk.configure_scope() as scope:
+            scope.transaction = operation_name
+        result = super().execute_graphql_request(request, params, *args, **kwargs)
         if result and result.errors:
             for error in result.errors:
                 if hasattr(error, "original_error"):
