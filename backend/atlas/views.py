@@ -18,19 +18,18 @@ class EnhancedGraphQLView(FileUploadGraphQLView):
     # https://github.com/graphql-python/graphene-django/issues/124
     def execute_graphql_request(self, request, params, *args, **kwargs):
         """Extract any exceptions and send them to Sentry"""
-        operation_name = get_operation_name(params)
-        with sentry_sdk.configure_scope() as scope:
-            scope.transaction = operation_name
-        result = super().execute_graphql_request(request, params, *args, **kwargs)
-        if result and result.errors:
-            for error in result.errors:
-                if hasattr(error, "original_error"):
-                    try:
-                        raise error.original_error
-                    except Exception as e:
-                        logger.exception(e)
-                        sentry_sdk.capture_exception(e)
-                else:
-                    logger.error(error)
-                    sentry_sdk.capture_message(error, "error")
+        with sentry_sdk.push_scope() as scope:
+            scope.transaction = get_operation_name(params)
+            result = super().execute_graphql_request(request, params, *args, **kwargs)
+            if result and result.errors:
+                for error in result.errors:
+                    if hasattr(error, "original_error"):
+                        try:
+                            raise error.original_error
+                        except Exception as e:
+                            logger.exception(e)
+                            sentry_sdk.capture_exception(e)
+                    else:
+                        logger.error(error)
+                        sentry_sdk.capture_message(error, "error")
         return result
