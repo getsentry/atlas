@@ -37,8 +37,7 @@ sentry_sdk.init(
         or "development"
     ),
     traces_sample_rate=1.0,
-    traceparent_v2=True,
-    _experiments={"fast_serialize": True},
+    _experiments={"fast_serialize": True, "auto_enabling_integrations": True},
 )
 
 LOGGING = {
