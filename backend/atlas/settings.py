@@ -39,6 +39,8 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
     _experiments={"fast_serialize": True, "auto_enabling_integrations": True},
 )
+with sentry_sdk.configure_scope() as scope:
+    scope.set_tag("role", "backend")
 
 LOGGING = {
     "version": 1,
