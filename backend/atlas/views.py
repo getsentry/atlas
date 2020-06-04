@@ -19,7 +19,7 @@ class EnhancedGraphQLView(FileUploadGraphQLView):
     def execute_graphql_request(self, request, params, *args, **kwargs):
         """Extract any exceptions and send them to Sentry"""
         with sentry_sdk.push_scope() as scope:
-            scope.transaction = get_operation_name(params)
+            scope.transaction = "{} {}".format(request.path, get_operation_name(params))
             result = super().execute_graphql_request(request, params, *args, **kwargs)
             if result and result.errors:
                 for error in result.errors:
