@@ -43,7 +43,7 @@ class JWSTokenAuthenticationMiddleware(object):
 
         with sentry_sdk.configure_scope() as scope:
             scope.user = (
-                {"id": request.user.id, "email": request.user.email}
+                {"id": str(request.user.id), "email": request.user.email}
                 if request.user.is_authenticated
                 else {}
             )
