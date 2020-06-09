@@ -465,7 +465,7 @@ def sync_user(  # NOQA
                 value = DEFAULT_VALUES[attribute_name]
             elif attribute_name.startswith(BOOLEAN_PREFIXES):
                 value = bool(value)
-            elif attribute_name == "pronouns":
+            elif attribute_name == "pronouns" and value:
                 value = (
                     getattr(Pronouns, value).value
                     if getattr(Pronouns, value, None)
