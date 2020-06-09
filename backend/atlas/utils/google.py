@@ -23,6 +23,7 @@ from atlas.models import (
     Team,
     User,
 )
+from atlas.schema import Pronouns
 
 logger = logging.getLogger("atlas")
 
@@ -464,6 +465,12 @@ def sync_user(  # NOQA
                 value = DEFAULT_VALUES[attribute_name]
             elif attribute_name.startswith(BOOLEAN_PREFIXES):
                 value = bool(value)
+            elif attribute_name == "pronouns":
+                value = (
+                    getattr(Pronouns, value).value
+                    if getattr(Pronouns, value, None)
+                    else None
+                )
             elif attribute_name == "referred_by" and value is not None:
                 value, _ = cache.get_user(email=value)
             elif attribute_name == "team" and value is not None:

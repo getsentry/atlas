@@ -422,6 +422,30 @@ def test_sync_user_new_account_renamed_department_existing_cost_center(
     assert user.profile.department.cost_center == design_department.cost_center
 
 
+def test_sync_user_invalid_pronouns(
+    responses, default_superuser, user_payload, design_department
+):
+    user_payload["customSchemas"]["Profile"]["Pronouns"] = "he / him"
+    result = sync_user(data=user_payload)
+    assert result.created
+    assert result.updated
+
+    user = result.user
+    assert user.profile.pronouns is None
+
+
+def test_sync_user_valid_pronouns(
+    responses, default_superuser, user_payload, design_department
+):
+    user_payload["customSchemas"]["Profile"]["Pronouns"] = "HE_HIM"
+    result = sync_user(data=user_payload)
+    assert result.created
+    assert result.updated
+
+    user = result.user
+    assert user.profile.pronouns == "HE_HIM"
+
+
 def test_sync_user_new_account_updated_department_without_cost_center(
     responses, default_superuser, design_department, user_payload
 ):
