@@ -11,7 +11,10 @@ def get_operation_name(params):
     operation_name = params.get("operationName")
     if operation_name:
         return operation_name
-    return "unnamed operation ({})".format(hashlib.sha1(params["query"]).hexdigest())
+    query = params.get("query")
+    if not query:
+        return "invalid query"
+    return "unnamed operation ({})".format(hashlib.sha1(query).hexdigest())
 
 
 class EnhancedGraphQLView(FileUploadGraphQLView):
