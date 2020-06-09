@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Flex, Box } from "@rebass/grid/emotion";
+import { Box } from "@rebass/grid/emotion";
 import moment from "moment";
 
 import Card from "./Card";
@@ -16,6 +16,12 @@ const PersonListContainer = styled.section`
     list-style: none;
     padding: 0;
   }
+`;
+
+const PersonListCardWrapper = styled.div`
+  display: grid;
+  grid-gap: 8px;
+  grid-template-columns: minmax(0, 1fr) max-content;
 `;
 
 function age(dateStarted) {
@@ -36,8 +42,8 @@ export const PersonListCard = ({
   withStartDate
 }) => (
   <Card to={`/people/${user.email}`} withPadding noMargin slim>
-    <Flex>
-      <Box flex="1">
+    <PersonListCardWrapper>
+      <Box>
         <PersonLink user={user} noLink />
       </Box>
       {withAnniversary && (
@@ -69,7 +75,7 @@ export const PersonListCard = ({
           <small>{fromNowCurrentYear(user.dateStarted)}</small>
         </Box>
       )}
-    </Flex>
+    </PersonListCardWrapper>
   </Card>
 );
 

@@ -52,8 +52,8 @@ export default class Home extends Component {
               </form>
             </Card>
           </Box>
-          <Flex>
-            <Box width={1 / 2} px={3}>
+          <Flex flexWrap="wrap">
+            <Box width={[1, 1 / 2]} px={3}>
               <Card>
                 <h2>Newest Sentries</h2>
                 <Query
@@ -111,7 +111,7 @@ export default class Home extends Component {
                 </Query>
               </Card>
             </Box>
-            <Box width={1 / 2} px={3}>
+            <Box width={[1, 1 / 2]} px={3}>
               <Card>
                 <h2>Anniversaries</h2>
                 <Query
