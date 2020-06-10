@@ -446,6 +446,34 @@ def test_sync_user_valid_pronouns(
     assert user.profile.pronouns == "HE_HIM"
 
 
+def test_sync_user_invalid_schedule(
+    responses, default_superuser, user_payload, design_department
+):
+    user_payload["customSchemas"][settings.GOOGLE_SCHEDULE_FIELD] = {
+        "Monday": "In Office"
+    }
+    result = sync_user(data=user_payload)
+    assert result.created
+    assert result.updated
+
+    user = result.user
+    assert user.profile.schedule == ["", "", "", "", "", "", ""]
+
+
+def test_sync_user_valid_schedule(
+    responses, default_superuser, user_payload, design_department
+):
+    user_payload["customSchemas"][settings.GOOGLE_SCHEDULE_FIELD] = {
+        "Monday": "INOFFICE"
+    }
+    result = sync_user(data=user_payload)
+    assert result.created
+    assert result.updated
+
+    user = result.user
+    assert user.profile.schedule == ["", "INOFFICE", "", "", "", "", ""]
+
+
 def test_sync_user_new_account_updated_department_without_cost_center(
     responses, default_superuser, design_department, user_payload
 ):

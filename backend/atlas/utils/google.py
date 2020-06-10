@@ -23,7 +23,9 @@ from atlas.models import (
     Team,
     User,
 )
-from atlas.schema import Pronouns
+from atlas.schema import DaySchedule, Pronouns
+
+ENUMS = {"pronouns": Pronouns}
 
 logger = logging.getLogger("atlas")
 
@@ -61,6 +63,14 @@ def find(iterable, func):
         if func(n):
             return n
     return None
+
+
+def coerce_day_schedule(value):
+    if not value:
+        return ""
+    if not hasattr(DaySchedule, value):
+        return ""
+    return value
 
 
 def refresh_token(identity: Identity) -> Identity:
@@ -465,10 +475,10 @@ def sync_user(  # NOQA
                 value = DEFAULT_VALUES[attribute_name]
             elif attribute_name.startswith(BOOLEAN_PREFIXES):
                 value = bool(value)
-            elif attribute_name == "pronouns" and value:
+            elif attribute_name in ENUMS and value:
                 value = (
-                    getattr(Pronouns, value).value
-                    if getattr(Pronouns, value, None)
+                    getattr(ENUMS[attribute_name], value).value
+                    if getattr(ENUMS[attribute_name], value, None)
                     else None
                 )
             elif attribute_name == "referred_by" and value is not None:
@@ -480,13 +490,13 @@ def sync_user(  # NOQA
         if settings.GOOGLE_SCHEDULE_FIELD in schemas:
             value = schemas[settings.GOOGLE_SCHEDULE_FIELD]
             profile_fields["schedule"] = [
-                value.get("Sunday") or "",
-                value.get("Monday") or "",
-                value.get("Tuesday") or "",
-                value.get("Wednesday") or "",
-                value.get("Thursday") or "",
-                value.get("Friday") or "",
-                value.get("Saturday") or "",
+                coerce_day_schedule(value.get("Sunday")),
+                coerce_day_schedule(value.get("Monday")),
+                coerce_day_schedule(value.get("Tuesday")),
+                coerce_day_schedule(value.get("Wednesday")),
+                coerce_day_schedule(value.get("Thursday")),
+                coerce_day_schedule(value.get("Friday")),
+                coerce_day_schedule(value.get("Saturday")),
             ]
         if data["customSchemas"] != profile.config:
             profile_fields["config"] = data["customSchemas"]
