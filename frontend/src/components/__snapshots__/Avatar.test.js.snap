@@ -3,7 +3,7 @@
 exports[`renders custom photo 1`] = `
 <div>
   <div
-    class="css-1u4jd23"
+    class="css-f2brsg"
   >
     <img
       alt=""
@@ -18,7 +18,7 @@ exports[`renders custom photo 1`] = `
 exports[`renders react-avatar 1`] = `
 <div>
   <div
-    class="css-1u4jd23"
+    class="css-f2brsg"
   >
     <div
       class=" sb-avatar"

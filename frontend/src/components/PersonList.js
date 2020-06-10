@@ -21,7 +21,7 @@ const PersonListContainer = styled.section`
 const PersonListCardWrapper = styled.div`
   display: grid;
   grid-gap: 8px;
-  grid-template-columns: minmax(0, 1fr) max-content;
+  grid-template-columns: minmax(200px, 1fr) max-content;
 `;
 
 function age(dateStarted) {
