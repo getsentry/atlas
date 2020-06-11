@@ -65,11 +65,14 @@ def find(iterable, func):
     return None
 
 
-def coerce_day_schedule(value):
+def coerce_enum(value, enum, default=None):
     if not value:
-        return ""
-    if not hasattr(DaySchedule, value):
-        return ""
+        return default
+    if not hasattr(enum, value):
+        logger.warning(
+            "google-update.invalid-enum", extra={"enum": enum.__name__, "value": value}
+        )
+        return default
     return value
 
 
@@ -475,12 +478,8 @@ def sync_user(  # NOQA
                 value = DEFAULT_VALUES[attribute_name]
             elif attribute_name.startswith(BOOLEAN_PREFIXES):
                 value = bool(value)
-            elif attribute_name in ENUMS and value:
-                value = (
-                    getattr(ENUMS[attribute_name], value).value
-                    if getattr(ENUMS[attribute_name], value, None)
-                    else None
-                )
+            elif attribute_name in ENUMS:
+                value = coerce_enum(value, ENUMS[attribute_name])
             elif attribute_name == "referred_by" and value is not None:
                 value, _ = cache.get_user(email=value)
             elif attribute_name == "team" and value is not None:
@@ -490,13 +489,13 @@ def sync_user(  # NOQA
         if settings.GOOGLE_SCHEDULE_FIELD in schemas:
             value = schemas[settings.GOOGLE_SCHEDULE_FIELD]
             profile_fields["schedule"] = [
-                coerce_day_schedule(value.get("Sunday")),
-                coerce_day_schedule(value.get("Monday")),
-                coerce_day_schedule(value.get("Tuesday")),
-                coerce_day_schedule(value.get("Wednesday")),
-                coerce_day_schedule(value.get("Thursday")),
-                coerce_day_schedule(value.get("Friday")),
-                coerce_day_schedule(value.get("Saturday")),
+                coerce_enum(value.get("Sunday"), DaySchedule, ""),
+                coerce_enum(value.get("Monday"), DaySchedule, ""),
+                coerce_enum(value.get("Tuesday"), DaySchedule, ""),
+                coerce_enum(value.get("Wednesday"), DaySchedule, ""),
+                coerce_enum(value.get("Thursday"), DaySchedule, ""),
+                coerce_enum(value.get("Friday"), DaySchedule, ""),
+                coerce_enum(value.get("Saturday"), DaySchedule, ""),
             ]
         if data["customSchemas"] != profile.config:
             profile_fields["config"] = data["customSchemas"]
