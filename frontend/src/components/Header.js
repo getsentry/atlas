@@ -85,7 +85,7 @@ const Header = props => {
   return (
     <HeaderContainer>
       <Flex alignItems="center" style={{ height: "100%" }}>
-        <Box width={300} px={3}>
+        <Box css={{ maxWidth: "300px" }} px={3}>
           <h1>
             <Link to="/">Atlas</Link>
           </h1>

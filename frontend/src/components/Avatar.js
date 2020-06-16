@@ -25,6 +25,7 @@ export default styled(({ className, user, size }) => {
   margin-right: ${props =>
     props.mr ? (props.mr !== true ? props.mr : "0.5rem") : "auto"};
   margin-bottom: ${props => (props.mb ? (props.mb !== true ? props.mb : "0.5rem") : "0")};
+  flex-shrink: 0;
 
   img,
   .sb-avatar,
