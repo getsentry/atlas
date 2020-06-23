@@ -67,8 +67,9 @@ export default class Home extends Component {
                   }}
                 >
                   {({ loading, error, data }) => {
-                    if (error) return <ErrorMessage message="Error loading people." />;
                     if (loading) return <PageLoader />;
+                    if (error || !data.users)
+                      return <ErrorMessage message="Error loading people." />;
                     const { users } = data;
                     if (!users.results.length) {
                       return (
@@ -98,8 +99,9 @@ export default class Home extends Component {
                   }}
                 >
                   {({ loading, error, data }) => {
-                    if (error) return <ErrorMessage message="Error loading people." />;
                     if (loading) return <PageLoader />;
+                    if (error || !data.users)
+                      return <ErrorMessage message="Error loading people." />;
                     const { users } = data;
                     if (!users.results.length) {
                       return (
@@ -128,8 +130,9 @@ export default class Home extends Component {
                   }}
                 >
                   {({ loading, error, data }) => {
-                    if (error) return <ErrorMessage message="Error loading people." />;
                     if (loading) return <PageLoader />;
+                    if (error || !data.users)
+                      return <ErrorMessage message="Error loading people." />;
                     const { users } = data;
                     if (!users.results.length) {
                       return (
