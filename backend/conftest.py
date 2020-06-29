@@ -55,6 +55,13 @@ def default_team(db):
 
 
 @pytest.fixture
+def performance_team(db):
+    return factories.TeamFactory.create(
+        id=UUID("f33ebcbf-3fd5-4e0b-9786-a64807c1d232"), name="Performance"
+    )
+
+
+@pytest.fixture
 def creative_department(design_department):
     return factories.DepartmentFactory(
         id=UUID("955ed539-750a-400c-8e88-cf60f471f16b"),
