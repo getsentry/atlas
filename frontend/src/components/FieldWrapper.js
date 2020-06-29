@@ -8,7 +8,7 @@ import CreatableSelect from "react-select/creatable";
 
 import colors from "../colors";
 
-const selectStyles = {
+export const selectStyles = {
   option: (provided, state) => {
     let background;
     let color;
