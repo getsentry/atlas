@@ -1,8 +1,14 @@
 import React from "react";
+import moment from "moment";
 
+import Birthday from "./Birthday";
 import PersonLink from "./PersonLink";
 
+import { getColumnTitle } from "../utils/strings";
+
 export const validColumns = new Set([
+  "anniversary",
+  "birthday",
   "department",
   "team",
   "email",
@@ -20,17 +26,6 @@ export const validColumns = new Set([
 
 export const defaultColumns = ["department", "team", "office", "dateStarted"];
 
-const getColumnTitle = function(column) {
-  switch (column) {
-    case "dateStarted":
-      return "Start Date";
-    default:
-      let columnPieces = column.split(".");
-      let columnName = columnPieces[columnPieces.length - 1];
-      return columnName.substr(0, 1).toUpperCase() + columnName.substr(1);
-  }
-};
-
 const getColumnValue = function(user, column) {
   switch (column) {
     case "department":
@@ -39,6 +34,10 @@ const getColumnValue = function(user, column) {
       return user.team && user.team.name;
     case "office":
       return user.office && user.office.name;
+    case "birthday":
+      return <Birthday dobMonth={user.dobMonth} dobDay={user.dobDay} />;
+    case "anniversary":
+      return moment(user.dateStarted, "YYYY-MM-DD").format("MMMM Do");
     default:
       let value = user;
       column.split(".").forEach(c => {

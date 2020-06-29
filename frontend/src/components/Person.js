@@ -10,6 +10,7 @@ import { Flex, Box } from "@rebass/grid/emotion";
 import Markdown from "react-markdown";
 
 import Avatar from "./Avatar";
+import Birthday from "./Birthday";
 import colors from "../colors";
 import Card from "./Card";
 import Content from "./Content";
@@ -166,12 +167,6 @@ class Person extends Component {
           if (!data.users.results.length)
             return <ErrorMessage message="Couldn't find that person." />;
           const thisPerson = data.users.results[0];
-          const dob = thisPerson.dobMonth
-            ? moment(
-                `${new Date().getFullYear()}-${thisPerson.dobMonth}-${thisPerson.dobDay}`,
-                "YYYY-MM-DD"
-              )
-            : null;
           return (
             <PersonContainer>
               <Content>
@@ -292,7 +287,13 @@ class Person extends Component {
                               )}
                             </dd>
                             <dt>Birthday</dt>
-                            <dd>{dob ? dob.format("MMMM Do") : <Empty />}</dd>
+                            <dd>
+                              <Birthday
+                                dobMonth={thisPerson.dobMonth}
+                                dobDay={thisPerson.dobDay}
+                                emptyValue={<Empty />}
+                              />
+                            </dd>
                             <dt>Referred By</dt>
                             <dd>
                               {thisPerson.referredBy ? (

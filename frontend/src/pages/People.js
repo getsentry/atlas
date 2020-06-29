@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
+import Select from "react-select";
 import { Link } from "react-router";
 import { Query } from "react-apollo";
 import { Flex, Box } from "@rebass/grid/emotion";
@@ -10,16 +11,22 @@ import colors from "../colors";
 import Card from "../components/Card";
 import Content from "../components/Content";
 import IconLink from "../components/IconLink";
+import { selectStyles } from "../components/FieldWrapper";
 import Layout from "../components/Layout";
 import PeopleList from "../components/PeopleList";
 import PageLoader from "../components/PageLoader";
 import { SEARCH_PEOPLE_QUERY } from "../queries";
+import { getColumnTitle } from "../utils/strings";
 
 export const peopleQueryVars = {
   offset: 0,
   limit: 100,
   orderBy: "name"
 };
+
+const DEFAULT_ORDER_BY = "name";
+
+const ORDER_BY_OPTIONS = ["name", "dateStarted", "anniversary", "birthday"];
 
 const Filter = styled(({ className, location, name, title, allLabel, choices }) => {
   const value = location.query[name];
@@ -100,11 +107,25 @@ export default class People extends Component {
     router: PropTypes.object
   };
 
+  constructor(...params) {
+    super(...params);
+    const query = this.context.router.location.query;
+
+    this.state = {
+      query: query.query || "",
+      orderBy: DEFAULT_ORDER_BY
+    };
+  }
+
   onSearch = e => {
-    e.preventDefault();
+    e && e.preventDefault();
     this.context.router.push({
       pathname: this.context.router.location.pathname,
-      query: { ...this.context.router.location.query, query: this.state.query }
+      query: {
+        ...this.context.router.location.query,
+        query: this.state.query,
+        orderBy: this.state.orderBy
+      }
     });
   };
 
@@ -112,11 +133,28 @@ export default class People extends Component {
     this.setState({ query: e.target.value });
   };
 
+  onChangeOrderBy = ({ value }) => {
+    this.context.router.push({
+      pathname: this.context.router.location.pathname,
+      query: {
+        ...this.context.router.location.query,
+        query: this.state.query,
+        orderBy: value
+      }
+    });
+  };
+
   render() {
     const { location } = this.context.router;
     const columns = location.query.columns
       ? location.query.columns.split(",")
       : undefined;
+
+    const orderByOptions = ORDER_BY_OPTIONS.map(a => ({
+      value: a,
+      label: getColumnTitle(a)
+    }));
+
     return (
       <Layout>
         <Content>
@@ -134,6 +172,19 @@ export default class People extends Component {
                     onChange={this.onChangeQuery}
                   />
                 </form>
+              </Box>
+              <Box mr={3} width={200}>
+                <div style={{ marginBottom: "1rem" }}>
+                  <Select
+                    styles={selectStyles}
+                    name="orderBy"
+                    options={orderByOptions}
+                    value={orderByOptions.find(
+                      o => o.value == this.state.orderBy || DEFAULT_ORDER_BY
+                    )}
+                    onChange={this.onChangeOrderBy}
+                  />
+                </div>
               </Box>
               <Box mr={3}>
                 <IconLink
