@@ -37,42 +37,48 @@ query listUsers(
 
 
 @pytest.fixture
-def other_user(default_user):
+def other_user(default_user, performance_team, ga_department):
     user = User.objects.create(name="Fizz Buzz", email="fizz.buzz@example.com")
     Profile.objects.create(
-        user=user, reports_to=default_user, title="Dummy", date_started=date.today()
+        user=user,
+        reports_to=default_user,
+        title="Dummy",
+        date_started=date.today(),
+        team=performance_team,
+        department=ga_department,
     )
     return user
 
 
-def test_users_shows_departments_facet(gql_client, default_user, other_user):
+def test_users_shows_departments_facet(
+    gql_client, default_user, other_user, design_department, ga_department
+):
     executed = gql_client.execute(
-        """{users(id:"%s") {
-            results { id, email, reports { id }, numReports }
+        """{users {
+            results { id }
             facets {
                 departments { id, numPeople }
             }
-        }}"""
-        % (str(default_user.id)),
+        }}""",
         user=default_user,
     )
     result = executed["data"]["users"]
-    assert len(result["facets"]["departments"]) == 1
+    assert len(result["facets"]["departments"]) == 2
     assert result["facets"]["departments"] == [
-        {"id": str(default_user.profile.department_id), "numPeople": 1}
+        {"id": str(design_department.id), "numPeople": 1},
+        {"id": str(ga_department.id), "numPeople": 1},
     ]
-    assert len(result["results"]) == 1
+    assert len(result["results"]) == 2
 
 
 def test_users_shows_employee_types_facet(gql_client, default_user, other_user):
     executed = gql_client.execute(
-        """{users(id:"%s") {
-            results { id, email, reports { id }, numReports }
+        """{users {
+            results { id }
             facets {
                 employeeTypes { id, numPeople }
             }
-        }}"""
-        % (str(default_user.id)),
+        }}""",
         user=default_user,
     )
     result = executed["data"]["users"]
@@ -80,7 +86,7 @@ def test_users_shows_employee_types_facet(gql_client, default_user, other_user):
     assert result["facets"]["employeeTypes"] == [
         {"id": str(default_user.profile.employee_type), "numPeople": 1}
     ]
-    assert len(result["results"]) == 1
+    assert len(result["results"]) == 2
 
 
 def test_users_shows_offices_facet(
@@ -89,13 +95,12 @@ def test_users_shows_offices_facet(
     default_user.profile.office = default_office
     default_user.profile.save()
     executed = gql_client.execute(
-        """{users(id:"%s") {
-            results { id, email, reports { id }, numReports }
+        """{users {
+            results { id }
             facets {
                 offices { id, numPeople }
             }
-        }}"""
-        % (str(default_user.id)),
+        }}""",
         user=default_user,
     )
     result = executed["data"]["users"]
@@ -103,7 +108,7 @@ def test_users_shows_offices_facet(
     assert result["facets"]["offices"] == [
         {"id": str(default_user.profile.office_id), "numPeople": 1}
     ]
-    assert len(result["results"]) == 1
+    assert len(result["results"]) == 2
 
 
 def test_users_shows_reports(gql_client, default_user, other_user):
@@ -252,3 +257,21 @@ def test_users_query_anniversary(gql_client, default_user):
     assert not executed.get("errors")
     assert len(executed["data"]["users"]["results"]) == 1
     assert executed["data"]["users"]["results"][0]["id"] == str(default_user.id)
+
+
+def test_users_by_team(gql_client, default_user, other_user):
+    executed = gql_client.execute(
+        BASE_QUERY, variables={"orderBy": "team"}, user=default_user
+    )
+    assert len(executed["data"]["users"]["results"]) == 2
+    assert executed["data"]["users"]["results"][0]["id"] == str(other_user.id)
+    assert executed["data"]["users"]["results"][1]["id"] == str(default_user.id)
+
+
+def test_users_by_department(gql_client, default_user, other_user):
+    executed = gql_client.execute(
+        BASE_QUERY, variables={"orderBy": "department"}, user=default_user
+    )
+    assert len(executed["data"]["users"]["results"]) == 2
+    assert executed["data"]["users"]["results"][0]["id"] == str(default_user.id)
+    assert executed["data"]["users"]["results"][1]["id"] == str(other_user.id)

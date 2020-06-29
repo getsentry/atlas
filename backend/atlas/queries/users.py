@@ -24,6 +24,8 @@ class UserOrderBy(graphene.Enum):
     dateStarted = "dateStarted"
     birthday = "birthday"
     anniversary = "anniversary"
+    department = "department"
+    team = "team"
 
 
 class UserResultFacets(graphene.ObjectType):
@@ -42,6 +44,7 @@ class UserResultFacets(graphene.ObjectType):
             )
             .exclude(profiles=None)
             .annotate(num_people=Count("id", filter=Q(profiles__user__in=qs)))
+            .order_by("name")
             .distinct()
         )
 
@@ -55,6 +58,7 @@ class UserResultFacets(graphene.ObjectType):
             )
             .exclude(profiles=None)
             .annotate(num_people=Count("id", filter=Q(profiles__user__in=qs)))
+            .order_by("name")
             .distinct()
         )
 
@@ -68,6 +72,7 @@ class UserResultFacets(graphene.ObjectType):
             )
             .exclude(profiles=None)
             .annotate(num_people=Count("id", filter=Q(profiles__user__in=qs)))
+            .order_by("name")
             .distinct()
         )
 
@@ -83,6 +88,7 @@ class UserResultFacets(graphene.ObjectType):
             )
             .values("employee_type")
             .annotate(num_people=Count("id", filter=Q(user__in=qs)))
+            .order_by("employee_type")
             .distinct()
         ]
 
@@ -296,6 +302,14 @@ class Query(object):
         elif order_by == "anniversary":
             qs = qs.filter(profile__date_started__isnull=False).order_by(
                 "profile__date_started__month", "profile__date_started__day"
+            )
+        elif order_by == "department":
+            qs = qs.filter(profile__date_started__isnull=False).order_by(
+                "profile__department__name"
+            )
+        elif order_by == "team":
+            qs = qs.filter(profile__date_started__isnull=False).order_by(
+                "profile__team__name"
             )
 
         info.context.facet_qs = facet_qs

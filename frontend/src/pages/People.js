@@ -26,7 +26,14 @@ export const peopleQueryVars = {
 
 const DEFAULT_ORDER_BY = "name";
 
-const ORDER_BY_OPTIONS = ["name", "dateStarted", "anniversary", "birthday"];
+const ORDER_BY_OPTIONS = [
+  "name",
+  "dateStarted",
+  "department",
+  "team",
+  "anniversary",
+  "birthday"
+];
 
 const Filter = styled(({ className, location, name, title, allLabel, choices }) => {
   const value = location.query[name];
