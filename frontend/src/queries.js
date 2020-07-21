@@ -517,6 +517,7 @@ export const EXPORT_PEOPLE_QUERY = gql`
         isDirectoryHidden
         title
         dateStarted
+        dateOfBirth
         reportsTo {
           email
         }

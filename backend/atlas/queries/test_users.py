@@ -1,8 +1,7 @@
 from datetime import date
 
-import pytest
-
 from atlas.models import Profile, User
+import pytest
 
 BASE_QUERY = """
 query listUsers(
@@ -127,6 +126,25 @@ def test_users_shows_reports(gql_client, default_user, other_user):
             "email": default_user.email,
             "reports": [{"id": str(other_user.id)}],
             "numReports": 1,
+        }
+    ]
+
+
+def test_users_shows_date_of_birth(gql_client, default_user, other_user):
+    executed = gql_client.execute(
+        """{users(id:"%s") {
+            results { dateOfBirth }
+        }}"""
+        % (str(default_user.id)),
+        user=default_user,
+    )
+    result = executed["data"]["users"]
+    assert len(result["results"]) == 1
+    assert result["results"] == [
+        {
+            "dateOfBirth": default_user.profile.date_of_birth.replace(
+                year=1900
+            ).isoformat()
         }
     ]
 

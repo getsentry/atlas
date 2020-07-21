@@ -1,13 +1,12 @@
 from datetime import date
 from uuid import UUID
 
-import graphene.test
-import pytest
-from django.conf import settings
-from django.contrib.auth.models import AnonymousUser
-
 from atlas import factories
 from atlas.root_schema import schema
+from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
+import graphene.test
+import pytest
 
 
 def pytest_configure(config):
@@ -93,7 +92,7 @@ def default_user(db, design_department, default_team):
         user=user,
         title="Dummy",
         date_started=date(2010, 4, 26),
-        date_of_birth=date(1900, 8, 12),
+        date_of_birth=date(1920, 8, 12),
         department=design_department,
         team=default_team,
         office=None,
