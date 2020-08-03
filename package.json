@@ -4,7 +4,7 @@
   "description": "## Install",
   "main": "index.js",
   "dependencies": {
-    "concurrently": "^4.1.0"
+    "concurrently": "^5.2.0"
   },
   "devDependencies": {},
   "scripts": {
