@@ -1,5 +1,15 @@
 import React, { Component } from "react";
 import styled from "@emotion/styled";
+import { Box, Flex } from "@rebass/grid/emotion";
+import IconLink from "./IconLink";
+import {
+  FindReplace,
+  RecentActors,
+  TableChart,
+  ZoomIn,
+  ZoomOut
+} from "@material-ui/icons";
+import Card from "./Card";
 
 const ChildSet = styled.ul`
   margin: 0;
@@ -38,6 +48,8 @@ const ChildSet = styled.ul`
   }
 `;
 
+const ZOOM_FACTOR = 0.05;
+
 export default class OrgChart extends Component {
   constructor(props) {
     super(props);
@@ -47,11 +59,15 @@ export default class OrgChart extends Component {
   }
 
   zoomIn = () => {
-    this.setState({ zoom: this.state.zoom + 0.05 });
+    this.setState({ zoom: this.state.zoom + ZOOM_FACTOR });
   };
 
   zoomOut = () => {
-    this.setState({ zoom: this.state.zoom - 0.05 });
+    this.setState({ zoom: this.state.zoom - ZOOM_FACTOR });
+  };
+
+  resetZoom = () => {
+    this.setState({ zoom: 1 });
   };
 
   renderNode = node => {
@@ -79,6 +95,43 @@ export default class OrgChart extends Component {
 
     return (
       <div className={this.props.className}>
+        <Card>
+          <Flex mx={-3} alignItems="left">
+            <Box width={250} mx={3}>
+              <h1>Org Chart</h1>
+            </Box>
+            <Box mr={3}>
+              <IconLink
+                icon={<ZoomIn />}
+                onClick={() => this.zoomIn()}
+                style={{ fontSize: "1.3em", marginBottom: "1rem" }}
+              />
+            </Box>
+            <Box mr={3}>
+              <IconLink
+                icon={<FindReplace />}
+                onClick={() => {
+                  this.resetZoom();
+                }}
+                style={{ fontSize: "1.3em", marginBottom: "1rem" }}
+              />
+            </Box>
+            <Box mr={3}>
+              <IconLink
+                icon={<ZoomOut />}
+                onClick={this.zoomOut}
+                style={{ fontSize: "1.3em", marginBottom: "1rem" }}
+              />
+            </Box>
+            <Box mr={3}>
+              <IconLink
+                icon={<TableChart />}
+                to={`/people`}
+                style={{ fontSize: "1.3em", marginBottom: "1rem" }}
+              />
+            </Box>
+          </Flex>
+        </Card>
         <div className="reactOrgChart" style={{ zoom: this.state.zoom }}>
           {this.renderChildren(tree)}
         </div>

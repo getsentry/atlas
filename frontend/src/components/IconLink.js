@@ -4,7 +4,14 @@ import styled from "@emotion/styled";
 
 import colors from "../colors";
 
-export default styled(({ to, icon, children, className, style }) => {
+export default styled(({ children, className, icon, onClick, style, to }) => {
+  if (onClick) {
+    return (
+      <Link className={className} style={style} onClick={onClick}>
+        {icon} {children}
+      </Link>
+    );
+  }
   return (
     <Link to={to} className={className} style={style}>
       {icon} {children}
