@@ -39,19 +39,22 @@ export default () => (
         if (error) throw error;
         if (loading) return <PageLoader />;
         const { users } = data;
-        const tree = arrayToTree(
-          users.results.map(x => ({
-            ...x,
+        const formattedUsers = users.results.map(x => {
+          const avatar =
+            (x.photo && x.photo.data && `data:image/jpeg;base64,${x.photo.data}`) ||
+            avatarPersonnel;
+
+          return {
+            id: x.id,
             entity: {
               ...x,
-              avatar:
-                (x.photo && x.photo.data && `data:image/jpeg;base64,${x.photo.data}`) ||
-                avatarPersonnel
+              avatar
             },
             parentId: x.reportsTo && x.reportsTo.id
-          })),
-          { dataField: null }
-        );
+          };
+        });
+        const tree = arrayToTree(formattedUsers, { dataField: null });
+
         return (
           <Container>
             <OrgChart tree={tree[0]} borderColor={colors.primary400} />
