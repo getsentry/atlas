@@ -126,3 +126,6 @@ typings/
 
 # Junk
 .DS_Store
+
+# IDE
+.idea/
