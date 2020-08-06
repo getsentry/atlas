@@ -4,7 +4,7 @@
   "description": "## Install",
   "main": "index.js",
   "dependencies": {
-    "concurrently": "^5.2.0"
+    "concurrently": "^5.2.0",
   },
   "devDependencies": {},
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/getsentry/atlas#readme",
   "volta": {
-    "node": "10.16.0",
-    "yarn": "1.16.0"
+    "node": "12.17.0",
+    "yarn": "1.22.4"
   }
 }

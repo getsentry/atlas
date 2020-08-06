@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:12
 
 ENV PATH /usr/src/app/bin:/usr/src/app/node_modules/.bin:$PATH
 ENV NODE_ENV production
