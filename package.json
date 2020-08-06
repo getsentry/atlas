@@ -4,9 +4,17 @@
   "description": "## Install",
   "main": "index.js",
   "dependencies": {
-    "concurrently": "^5.2.0",
+    "concurrently": "^5.2.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-react-app": "^4.0.0",
+    "eslint-plugin-flowtype": "^3.7.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-react-hooks": "^1.6.0"
+  },
   "scripts": {
     "start": "concurrently \"npm:start-backend\" \"npm:start-frontend\"",
     "start-backend": "atlas runserver",
