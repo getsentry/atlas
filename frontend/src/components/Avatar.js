@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Avatar as ReactAvatar } from "react-avatar";
+import ReactAvatar from "react-avatar";
 
 export default styled(({ className, user, size }) => {
   return (
