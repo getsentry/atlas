@@ -187,7 +187,7 @@ export default class People extends Component {
                     name="orderBy"
                     options={orderByOptions}
                     value={orderByOptions.find(
-                      o => o.value == this.state.orderBy || DEFAULT_ORDER_BY
+                      o => o.value === this.state.orderBy || DEFAULT_ORDER_BY
                     )}
                     onChange={this.onChangeOrderBy}
                   />
