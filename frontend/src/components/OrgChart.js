@@ -55,10 +55,7 @@ export default class OrgChart extends Component {
   };
 
   renderNode = node => {
-    return React.createElement(
-      this.props.NodeComponent,
-      {node},
-    );
+    return React.createElement(this.props.NodeComponent, { node });
   };
 
   renderChildren = children => {
