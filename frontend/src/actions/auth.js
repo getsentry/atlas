@@ -48,7 +48,7 @@ export const CURRENT_USER_QUERY = gql`
 `;
 
 const loadSession = () => {
-  return dispatch => {
+  return (dispatch) => {
     return loadScript(
       document,
       "script",
@@ -66,16 +66,16 @@ const loadSession = () => {
           ux_mode: "popup",
           redirect_uri: config.googleRedirectUri,
           scope: config.googleScopes,
-          access_type: "offline"
+          access_type: "offline",
         };
         if (!gapi.auth2.getAuthInstance()) {
           console.info("[auth] Initializing session");
           gapi.auth2
             .init(params)
-            .then(res => {
+            .then((res) => {
               dispatch({
                 type: LOAD_GAPI,
-                payload: gapi.auth2.getAuthInstance()
+                payload: gapi.auth2.getAuthInstance(),
               });
               const curToken = getCookie("token");
               if (curToken && res.isSignedIn && res.isSignedIn.get()) {
@@ -84,7 +84,7 @@ const loadSession = () => {
                 return dispatch(logout());
               }
             })
-            .catch(err => {
+            .catch((err) => {
               dispatch(logout());
               throw err;
             });
@@ -92,7 +92,7 @@ const loadSession = () => {
           console.info("[auth] Session already initialized");
           dispatch({
             type: LOAD_GAPI,
-            payload: gapi.auth2.getAuthInstance()
+            payload: gapi.auth2.getAuthInstance(),
           });
         }
       });
@@ -104,7 +104,7 @@ const loadSession = () => {
 const login = () => {
   return (dispatch, getState) => {
     const {
-      auth: { googleAuthInstance }
+      auth: { googleAuthInstance },
     } = getState();
     // API hasnt been loaded, so force it now
     if (!googleAuthInstance) {
@@ -115,22 +115,22 @@ const login = () => {
     console.info("[auth] Authentication with Google");
     googleAuthInstance
       .grantOfflineAccess({
-        hd: config.googleDomain
+        hd: config.googleDomain,
         // redirect_uri: "http://localhost:8080",
         // ux_mode: "popup"
       })
-      .then(data => {
+      .then((data) => {
         // this gets us the code, which we'll send to the server
         // in order to generate an authorized session
         console.info("[auth] Verifying authentication with Atlas");
         apolloClient
           .mutate({
             mutation: LOGIN_MUTATION,
-            variables: { googleAuthCode: data.code }
+            variables: { googleAuthCode: data.code },
           })
-          .then(response => {
+          .then((response) => {
             const {
-              login: { ok, token, user }
+              login: { ok, token, user },
             } = response.data;
             if (ok) {
               console.info(`[auth] Successfully authenticated as ${user.email}`);
@@ -139,20 +139,20 @@ const login = () => {
                 type: LOGIN,
                 payload: {
                   token,
-                  user
-                }
+                  user,
+                },
               });
             } else {
               console.info(`[auth] Authentication failed: unknown reason`);
               throw new Error("Unable to authenticate");
             }
           })
-          .catch(err => {
+          .catch((err) => {
             console.error(`[auth] Authentication failed: ${err}`);
             throw err;
           });
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(`[auth] Authentication failed: ${err}`);
         throw err;
       });
@@ -160,13 +160,13 @@ const login = () => {
 };
 
 // gets the token from the cookie and saves it in the store
-const reauth = token => {
+const reauth = (token) => {
   return (dispatch, getState) => {
     apolloClient
       .query({
-        query: CURRENT_USER_QUERY
+        query: CURRENT_USER_QUERY,
       })
-      .then(response => {
+      .then((response) => {
         const { me } = response.data;
         if (me) {
           console.info(`[auth] Successfully authenticated as ${me.email}`);
@@ -174,14 +174,14 @@ const reauth = token => {
             type: LOGIN,
             payload: {
               token,
-              user: me
-            }
+              user: me,
+            },
           });
         } else {
           return dispatch(logout());
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(`[auth] Authentication failed: ${err}`);
         throw err;
       });
@@ -190,7 +190,7 @@ const reauth = token => {
 
 // removing the token
 const logout = () => {
-  return dispatch => {
+  return (dispatch) => {
     if (getCookie("token")) {
       console.info(`[auth] Logging out`);
       removeCookie("token");
@@ -203,5 +203,5 @@ export default {
   loadSession,
   login,
   reauth,
-  logout
+  logout,
 };

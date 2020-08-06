@@ -7,11 +7,11 @@ export default class Modal extends Component {
     children: PropTypes.node,
     title: PropTypes.string.isRequired,
     subtext: PropTypes.string,
-    maxWidth: PropTypes.number
+    maxWidth: PropTypes.number,
   };
 
   static defaultProps = {
-    maxWidth: 800
+    maxWidth: 800,
   };
 
   render() {
@@ -19,7 +19,7 @@ export default class Modal extends Component {
       <div
         style={{
           margin: "auto",
-          maxWidth: this.props.maxWidth
+          maxWidth: this.props.maxWidth,
         }}
       >
         <div style={{ textAlign: "center", marginTop: 20 }}>
@@ -32,7 +32,7 @@ export default class Modal extends Component {
             color: colors.black,
             borderRadius: "4px",
             background: colors.white,
-            padding: 20
+            padding: 20,
           }}
         >
           {this.props.subtext ? (

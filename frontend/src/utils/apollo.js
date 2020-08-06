@@ -10,12 +10,12 @@ let apolloClient = null;
 const defaultOptions = {
   watchQuery: {
     fetchPolicy: "no-cache",
-    errorPolicy: "ignore"
+    errorPolicy: "ignore",
   },
   query: {
     fetchPolicy: "no-cache",
-    errorPolicy: "all"
-  }
+    errorPolicy: "all",
+  },
 };
 
 const getToken = () => {
@@ -31,8 +31,8 @@ export function createClient(initialState) {
     // add the authorization to the headers
     operation.setContext({
       headers: {
-        authorization: getToken()
-      }
+        authorization: getToken(),
+      },
     });
 
     return forward(operation);
@@ -40,13 +40,13 @@ export function createClient(initialState) {
 
   const httpLink = createUploadLink({
     uri: config.apiEndpoint, // Server URL (must be absolute)
-    credentials: "same-origin" // Additional fetch() options like `credentials` or `headers`
+    credentials: "same-origin", // Additional fetch() options like `credentials` or `headers`
   });
 
   return new ApolloClient({
     link: concat(authMiddleware, httpLink),
     cache: new InMemoryCache().restore(initialState || {}),
-    defaultOptions
+    defaultOptions,
   });
 }
 

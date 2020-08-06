@@ -11,12 +11,12 @@ import * as errors from "../errors";
 
 export default class ErrorBoundary extends Component {
   static contextTypes = {
-    router: PropTypes.object
+    router: PropTypes.object,
   };
 
   static propTypes = {
     children: PropTypes.node,
-    location: PropTypes.object
+    location: PropTypes.object,
   };
 
   constructor(...params) {
@@ -34,13 +34,13 @@ export default class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    Sentry.withScope(scope => {
+    Sentry.withScope((scope) => {
       scope.setExtras(errorInfo);
       const eventId = Sentry.captureException(error);
       this.setState({
         eventId,
         error,
-        location: { ...(idx(this.context.router, _ => _.location) || {}) }
+        location: { ...(idx(this.context.router, (_) => _.location) || {}) },
       });
       if (eventId) Sentry.showReportDialog();
     });

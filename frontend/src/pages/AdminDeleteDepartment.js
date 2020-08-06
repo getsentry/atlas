@@ -11,7 +11,7 @@ import FieldWrapper from "../components/FieldWrapper";
 import apolloClient from "../utils/apollo";
 
 const DepartmentSchema = yup.object().shape({
-  name: yup.string().nullable()
+  name: yup.string().nullable(),
 });
 
 export const DEPARTMENT_SELECT_QUERY = gql`
@@ -53,16 +53,16 @@ export default class extends Component {
       .query({
         query: DEPARTMENT_SELECT_QUERY,
         variables: {
-          query: inputValue
-        }
+          query: inputValue,
+        },
       })
       .then(({ data: { departments } }) => {
         callback(
           departments
-            .filter(d => d.id !== this.props.params.departmentId)
-            .map(u => ({
+            .filter((d) => d.id !== this.props.params.departmentId)
+            .map((u) => ({
               value: u.id,
-              label: u.name
+              label: u.name,
             }))
         );
       });
@@ -83,7 +83,7 @@ export default class extends Component {
               validationSchema={DepartmentSchema}
               onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
                 let data = {};
-                Object.keys(values).forEach(k => {
+                Object.keys(values).forEach((k) => {
                   let curVal = values[k];
                   if (curVal && curVal.hasOwnProperty("value")) {
                     curVal = curVal.value;
@@ -95,8 +95,8 @@ export default class extends Component {
                     mutation: DEPARTMENT_DELETE_MUTATION,
                     variables: {
                       department: department.id,
-                      ...data
-                    }
+                      ...data,
+                    },
                   })
                   .then(
                     ({ data: { deleteDepartment }, errors }) => {
@@ -107,11 +107,11 @@ export default class extends Component {
                         setStatus({ error: "" + deleteDepartment.errors[0] });
                       } else {
                         this.context.router.push({
-                          pathname: `/admin/departments`
+                          pathname: `/admin/departments`,
                         });
                       }
                     },
-                    err => {
+                    (err) => {
                       if (err.graphQLErrors && err.graphQLErrors.length) {
                         // do something useful
                         setStatus({ error: "" + err });

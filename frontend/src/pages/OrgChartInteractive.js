@@ -39,7 +39,7 @@ export default () => (
         if (error) throw error;
         if (loading) return <PageLoader />;
         const { users } = data;
-        const formattedUsers = users.results.map(x => {
+        const formattedUsers = users.results.map((x) => {
           const avatar =
             (x.photo && x.photo.data && `data:image/jpeg;base64,${x.photo.data}`) ||
             avatarPersonnel;
@@ -48,9 +48,9 @@ export default () => (
             id: x.id,
             entity: {
               ...x,
-              avatar
+              avatar,
             },
-            parentId: x.reportsTo && x.reportsTo.id
+            parentId: x.reportsTo && x.reportsTo.id,
           };
         });
         const tree = arrayToTree(formattedUsers, { dataField: null });

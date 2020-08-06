@@ -8,11 +8,11 @@ export default class PageLoader extends Component {
   static propTypes = {
     isLoading: PropTypes.bool,
     error: PropTypes.object,
-    loadingText: PropTypes.string
+    loadingText: PropTypes.string,
   };
 
   static defaultProps = {
-    isLoading: true
+    isLoading: true,
   };
 
   render() {

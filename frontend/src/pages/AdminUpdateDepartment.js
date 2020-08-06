@@ -12,7 +12,7 @@ import apolloClient from "../utils/apollo";
 import { GET_DEPARTMENT_QUERY, UPDATE_DEPARTMENT_MUTATION } from "../queries";
 
 const DepartmentSchema = yup.object().shape({
-  name: yup.string().nullable()
+  name: yup.string().nullable(),
 });
 
 export default class extends Component {
@@ -34,7 +34,7 @@ export default class extends Component {
             id: department.id,
             name: department.name,
             costCenter: department.costCenter,
-            parent: department.parent
+            parent: department.parent,
           };
           return (
             <Formik
@@ -42,7 +42,7 @@ export default class extends Component {
               validationSchema={DepartmentSchema}
               onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
                 let data = {};
-                Object.keys(values).forEach(k => {
+                Object.keys(values).forEach((k) => {
                   let initialVal = initialValues[k];
                   let curVal = values[k];
                   if (curVal !== initialVal) {
@@ -55,8 +55,8 @@ export default class extends Component {
                     mutation: UPDATE_DEPARTMENT_MUTATION,
                     variables: {
                       department: department.id,
-                      data
-                    }
+                      data,
+                    },
                   })
                   .then(
                     ({ data: { updateDepartment }, errors }) => {
@@ -67,11 +67,11 @@ export default class extends Component {
                         setStatus({ error: "" + updateDepartment.errors[0] });
                       } else {
                         this.context.router.push({
-                          pathname: `/admin/departments`
+                          pathname: `/admin/departments`,
                         });
                       }
                     },
-                    err => {
+                    (err) => {
                       if (err.graphQLErrors && err.graphQLErrors.length) {
                         // do something useful
                         setStatus({ error: "" + err });

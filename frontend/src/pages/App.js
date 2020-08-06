@@ -11,7 +11,7 @@ function MissingConfiguration({ keys }) {
       <h1>Missing Configuration</h1>
       <p>You are missing configuration for the following required parameters:</p>
       <ul>
-        {keys.map(k => (
+        {keys.map((k) => (
           <li key={k}>{k}</li>
         ))}
       </ul>
@@ -21,7 +21,7 @@ function MissingConfiguration({ keys }) {
 
 export default class App extends Component {
   render() {
-    const missingConfig = requiredKeys.filter(c => !config[c]);
+    const missingConfig = requiredKeys.filter((c) => !config[c]);
     if (missingConfig.length) {
       return <MissingConfiguration keys={missingConfig} />;
     }

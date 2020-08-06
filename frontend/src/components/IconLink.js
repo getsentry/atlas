@@ -16,15 +16,15 @@ export default styled(({ to, icon, children, className, style }) => {
   justify-content: center;
   vertical-align: middle;
 
-  color: ${props => props.color || "hsla(0, 0%, 100%, 0.7)"};
+  color: ${(props) => props.color || "hsla(0, 0%, 100%, 0.7)"};
   transition: color 0.3s;
 
   &:hover {
-    color: ${props => props.colorHover || props.color || colors.white};
+    color: ${(props) => props.colorHover || props.color || colors.white};
   }
 
   .MuiSvgIcon-root {
     font-size: 1.2em !important;
-    ${props => props.children && "margin-right: 0.25em"};
+    ${(props) => props.children && "margin-right: 0.25em"};
   }
 `;

@@ -1,4 +1,4 @@
-export const convertValue = value => {
+export const convertValue = (value) => {
   if (value === false) {
     return "false";
   } else if (value === true) {
@@ -13,7 +13,7 @@ export const convertValue = value => {
 };
 
 export const downloadCsv = (rows, filename) => {
-  let data = rows.map(row => row.map(convertValue).join(",")).join("\r\n");
+  let data = rows.map((row) => row.map(convertValue).join(",")).join("\r\n");
 
   if (navigator.msSaveBlob) {
     navigator.msSaveBlob(data, filename);

@@ -11,7 +11,7 @@ test("can render and log-in successfully", async () => {
   apolloClient.addMockedResponse({
     request: {
       query: LOGIN_MUTATION,
-      variables: { googleAuthCode: "abcdef" }
+      variables: { googleAuthCode: "abcdef" },
     },
     result: {
       data: {
@@ -25,11 +25,11 @@ test("can render and log-in successfully", async () => {
             name: "jane",
             isSuperuser: false,
             hasOnboarded: true,
-            photo: null
-          }
-        }
-      }
-    }
+            photo: null,
+          },
+        },
+      },
+    },
   });
 
   const router = mockRouter();

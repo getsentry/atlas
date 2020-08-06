@@ -8,14 +8,14 @@ export default class GlobalLoader extends Component {
     color: PropTypes.string,
     startPosition: PropTypes.number,
     stopDelayMs: PropTypes.number,
-    options: PropTypes.object
+    options: PropTypes.object,
   };
 
   static defaultProps = {
     color: "#29D",
     startPosition: 0,
     stopDelayMs: 50,
-    height: 3
+    height: 3,
   };
 
   timer = null;

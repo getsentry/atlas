@@ -11,7 +11,7 @@ import apolloClient from "../utils/apollo";
 import { CREATE_DEPARTMENT_MUTATION } from "../queries";
 
 const DepartmentSchema = yup.object().shape({
-  name: yup.string().nullable()
+  name: yup.string().nullable(),
 });
 
 export default class extends Component {
@@ -25,7 +25,7 @@ export default class extends Component {
         validationSchema={DepartmentSchema}
         onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
           let data = {};
-          Object.keys(values).forEach(k => {
+          Object.keys(values).forEach((k) => {
             let initialVal = initialValues[k];
             let curVal = values[k];
             if (curVal !== initialVal) {
@@ -36,8 +36,8 @@ export default class extends Component {
             .mutate({
               mutation: CREATE_DEPARTMENT_MUTATION,
               variables: {
-                data
-              }
+                data,
+              },
             })
             .then(
               ({ data: { createDepartment }, errors }) => {
@@ -48,11 +48,11 @@ export default class extends Component {
                   setStatus({ error: "" + createDepartment.errors[0] });
                 } else {
                   this.context.router.push({
-                    pathname: `/admin/departments`
+                    pathname: `/admin/departments`,
                   });
                 }
               },
-              err => {
+              (err) => {
                 if (err.graphQLErrors && err.graphQLErrors.length) {
                   // do something useful
                   setStatus({ error: "" + err });

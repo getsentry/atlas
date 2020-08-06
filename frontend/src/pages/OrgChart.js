@@ -31,7 +31,7 @@ export const LIST_ALL_PEOPLE_QUERY = gql`
   }
 `;
 
-const listToTree = list => {
+const listToTree = (list) => {
   var map = {},
     node,
     roots = [],
@@ -53,7 +53,7 @@ const listToTree = list => {
       roots.push(node);
     }
   }
-  return roots.filter(n => n.children.length);
+  return roots.filter((n) => n.children.length);
 };
 
 const Node = ({ node }) => {

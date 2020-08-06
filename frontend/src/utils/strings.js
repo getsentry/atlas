@@ -1,4 +1,4 @@
-export const getColumnTitle = function(column) {
+export const getColumnTitle = function (column) {
   switch (column) {
     case "dateStarted":
       return "Start Date";

@@ -17,7 +17,7 @@ export function render(ui, { initialState, store = initStore(initialState) } = {
     // adding `store` to the returned utilities to allow us
     // to reference it in our tests (just try to avoid using
     // this to test implementation details).
-    store
+    store,
   };
 }
 
@@ -33,7 +33,7 @@ export function mockRouter(...params) {
     isActive: jest.fn(),
     createHref: jest.fn(),
     location: { query: {} },
-    ...params
+    ...params,
   };
 }
 
@@ -68,24 +68,24 @@ export const mocks = {
       thursday: null,
       friday: null,
       saturday: null,
-      sunday: null
+      sunday: null,
     },
     social: {
       linkedin: null,
       twitter: null,
-      github: null
+      github: null,
     },
     gamerTags: {
       playstation: null,
       xbox: null,
       steam: null,
-      nintendo: null
+      nintendo: null,
     },
     reports: [],
     peers: [],
     referredBy: null,
-    ...params
-  })
+    ...params,
+  }),
 };
 
 export class RouterContext extends Component {
@@ -102,18 +102,18 @@ export class RouterContext extends Component {
       createHref: PropTypes.func.isRequired,
       location: PropTypes.shape({
         query: PropTypes.object,
-        pathname: PropTypes.string
-      })
-    })
+        pathname: PropTypes.string,
+      }),
+    }),
   };
 
   static defaultProps = {
-    router: mockRouter()
+    router: mockRouter(),
   };
 
   getChildContext() {
     return {
-      router: this.props.router
+      router: this.props.router,
     };
   }
 
@@ -123,5 +123,5 @@ export class RouterContext extends Component {
 }
 
 export function tick() {
-  return new Promise(resolve => setTimeout(resolve));
+  return new Promise((resolve) => setTimeout(resolve));
 }

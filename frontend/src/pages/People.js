@@ -21,7 +21,7 @@ import { getColumnTitle } from "../utils/strings";
 export const peopleQueryVars = {
   offset: 0,
   limit: 100,
-  orderBy: "name"
+  orderBy: "name",
 };
 
 const DEFAULT_ORDER_BY = "name";
@@ -32,7 +32,7 @@ const ORDER_BY_OPTIONS = [
   "department",
   "team",
   "anniversary",
-  "birthday"
+  "birthday",
 ];
 
 const Filter = styled(({ className, location, name, title, allLabel, choices }) => {
@@ -47,22 +47,22 @@ const Filter = styled(({ className, location, name, title, allLabel, choices }) 
               pathname: location.pathname,
               query: {
                 ...(location.query || {}),
-                [name]: undefined
-              }
+                [name]: undefined,
+              },
             }}
           >
             {allLabel}
           </Link>
         </li>
-        {choices.map(c => (
+        {choices.map((c) => (
           <li key={c.id} className={value === c.id ? "active" : ""}>
             <Link
               to={{
                 pathname: location.pathname,
                 query: {
                   ...(location.query || {}),
-                  [name]: c.id
-                }
+                  [name]: c.id,
+                },
               }}
             >
               <Flex>
@@ -111,7 +111,7 @@ const SearchInput = styled.input`
 
 export default class People extends Component {
   static contextTypes = {
-    router: PropTypes.object
+    router: PropTypes.object,
   };
 
   constructor(...params) {
@@ -120,23 +120,23 @@ export default class People extends Component {
 
     this.state = {
       query: query.query || "",
-      orderBy: DEFAULT_ORDER_BY
+      orderBy: DEFAULT_ORDER_BY,
     };
   }
 
-  onSearch = e => {
+  onSearch = (e) => {
     e && e.preventDefault();
     this.context.router.push({
       pathname: this.context.router.location.pathname,
       query: {
         ...this.context.router.location.query,
         query: this.state.query,
-        orderBy: this.state.orderBy
-      }
+        orderBy: this.state.orderBy,
+      },
     });
   };
 
-  onChangeQuery = e => {
+  onChangeQuery = (e) => {
     this.setState({ query: e.target.value });
   };
 
@@ -146,8 +146,8 @@ export default class People extends Component {
       query: {
         ...this.context.router.location.query,
         query: this.state.query,
-        orderBy: value
-      }
+        orderBy: value,
+      },
     });
   };
 
@@ -157,9 +157,9 @@ export default class People extends Component {
       ? location.query.columns.split(",")
       : undefined;
 
-    const orderByOptions = ORDER_BY_OPTIONS.map(a => ({
+    const orderByOptions = ORDER_BY_OPTIONS.map((a) => ({
       value: a,
-      label: getColumnTitle(a)
+      label: getColumnTitle(a),
     }));
 
     return (
@@ -187,7 +187,7 @@ export default class People extends Component {
                     name="orderBy"
                     options={orderByOptions}
                     value={orderByOptions.find(
-                      o => o.value === this.state.orderBy || DEFAULT_ORDER_BY
+                      (o) => o.value === this.state.orderBy || DEFAULT_ORDER_BY
                     )}
                     onChange={this.onChangeOrderBy}
                   />
@@ -212,8 +212,8 @@ export default class People extends Component {
               const {
                 users: {
                   results,
-                  facets: { departments, offices, employeeTypes }
-                }
+                  facets: { departments, offices, employeeTypes },
+                },
               } = data;
               return (
                 <Flex mx={-3}>
@@ -223,10 +223,10 @@ export default class People extends Component {
                       title="Office"
                       name="office"
                       allLabel="All Offices"
-                      choices={offices.map(d => ({
+                      choices={offices.map((d) => ({
                         id: d.id,
                         value: d.name,
-                        count: d.numPeople
+                        count: d.numPeople,
                       }))}
                     />
                     <Filter
@@ -234,10 +234,10 @@ export default class People extends Component {
                       title="Department"
                       name="department"
                       allLabel="All Departments"
-                      choices={departments.map(d => ({
+                      choices={departments.map((d) => ({
                         id: d.id,
                         value: d.name,
-                        count: d.numPeople
+                        count: d.numPeople,
                       }))}
                     />
                     <Filter
@@ -245,10 +245,10 @@ export default class People extends Component {
                       title="Type"
                       name="employeeType"
                       allLabel="All People"
-                      choices={employeeTypes.map(d => ({
+                      choices={employeeTypes.map((d) => ({
                         id: d.id,
                         value: d.name,
-                        count: d.numPeople
+                        count: d.numPeople,
                       }))}
                     />
                   </Box>

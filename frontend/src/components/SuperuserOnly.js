@@ -6,5 +6,5 @@ function SuperuserOnly({ children, user }) {
 }
 
 export default connect(({ auth }) => ({
-  user: auth.user
+  user: auth.user,
 }))(SuperuserOnly);

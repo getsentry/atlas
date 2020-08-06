@@ -6,7 +6,7 @@ import Modal from "./Modal";
 
 export default class InternalError extends Component {
   static propTypes = {
-    error: PropTypes.object.isRequired
+    error: PropTypes.object.isRequired,
   };
 
   render() {
@@ -37,7 +37,7 @@ export default class InternalError extends Component {
           style={{
             fontSize: "0.8em",
             borderTop: "1px solid #eee",
-            paddingTop: 20
+            paddingTop: 20,
           }}
         >
           <p>{"The exception reported was:"}</p>

@@ -30,16 +30,14 @@ function age(dateStarted) {
 }
 
 function fromNowCurrentYear(date) {
-  return moment(date, "YYYY-MM-DD")
-    .year(moment().year())
-    .fromNow();
+  return moment(date, "YYYY-MM-DD").year(moment().year()).fromNow();
 }
 
 export const PersonListCard = ({
   user,
   withAnniversary,
   withBirthday,
-  withStartDate
+  withStartDate,
 }) => (
   <Card to={`/people/${user.email}`} withPadding noMargin slim>
     <PersonListCardWrapper>
@@ -82,7 +80,7 @@ export const PersonListCard = ({
 export default ({ people, withAnniversary, withBirthday, withStartDate }) => (
   <PersonListContainer>
     <ul>
-      {people.map(p => (
+      {people.map((p) => (
         <li key={p.id}>
           <PersonListCard
             user={p}

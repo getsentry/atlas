@@ -4,17 +4,17 @@ export const requiredKeys = [
   "googleRedirectUri",
   "googleDomain",
   "googleMapsKey",
-  "apiEndpoint"
+  "apiEndpoint",
 ];
 
 function defaultKeys() {
   let out = {};
-  requiredKeys.forEach(k => (out[k] = ""));
+  requiredKeys.forEach((k) => (out[k] = ""));
   return out;
 }
 
 export default {
   repoUrl: "http://github.com/getsentry/atlas/issues",
   ...defaultKeys(),
-  ...(process.env.ATLAS_CONFIG || window.ATLAS_CONFIG || {})
+  ...(process.env.ATLAS_CONFIG || window.ATLAS_CONFIG || {}),
 };

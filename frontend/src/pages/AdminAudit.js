@@ -17,7 +17,7 @@ export default () => (
         query={LIST_PEOPLE_QUERY}
         variables={{
           humansOnly: false,
-          limit: 1000
+          limit: 1000,
         }}
       >
         {({ loading, error, data }) => {
@@ -25,7 +25,7 @@ export default () => (
           if (loading) return <PageLoader />;
           const { users } = data;
           return users.results
-            .filter(u => {
+            .filter((u) => {
               const employeeTypeId = u.employeeType ? u.employeeType.id : null;
               return (
                 (u.isHuman &&
@@ -41,7 +41,7 @@ export default () => (
                   !u.reportsTo)
               );
             })
-            .map(u => (
+            .map((u) => (
               <div style={{ marginBottom: "0.5rem" }} key={u.id}>
                 <Flex>
                   <Box flex="1">

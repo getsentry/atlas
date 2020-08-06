@@ -12,10 +12,10 @@ export function mockApolloClient() {
 
     const client = new ApolloClient({
       cache: new InMemoryCache({ addTypename: false }),
-      link
+      link,
     });
 
-    client.addMockedResponse = mock => link.addMockedResponse(mock);
+    client.addMockedResponse = (mock) => link.addMockedResponse(mock);
 
     return client;
   });
@@ -33,30 +33,30 @@ export function mockGoogleAuth() {
     load: (name, callback) => {
       if (name === "auth2") {
         window.gapi.auth2 = {
-          init: params =>
+          init: (params) =>
             new Promise((resolve, reject) => {
               authInstance = {
-                grantOfflineAccess: params =>
+                grantOfflineAccess: (params) =>
                   new Promise((resolve, reject) => {
                     resolve({
-                      code: "abcdef"
+                      code: "abcdef",
                     });
-                  })
+                  }),
               };
 
               resolve({
                 isSignedIn: {
-                  get: () => true
-                }
+                  get: () => true,
+                },
               });
             }),
-          getAuthInstance: () => authInstance
+          getAuthInstance: () => authInstance,
         };
         callback();
       } else {
         throw new Error("Invalid library");
       }
-    }
+    },
   };
 }
 
@@ -74,8 +74,8 @@ export function mockReactRouter() {
         goBack: jest.fn(),
         push: jest.fn(),
         replace: jest.fn(),
-        listen: jest.fn(() => {})
-      }
+        listen: jest.fn(() => {}),
+      },
     };
   });
 }
@@ -101,7 +101,7 @@ export function mockSentry() {
       lastEventId: jest.fn(),
       getCurrentHub: jest.spyOn(SentryBrowser, "getCurrentHub"),
       withScope: jest.spyOn(SentryBrowser, "withScope"),
-      Severity: SentryBrowser.Severity
+      Severity: SentryBrowser.Severity,
     };
   });
 }

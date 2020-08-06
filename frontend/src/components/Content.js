@@ -6,6 +6,6 @@ const ContentContainer = styled.main`
   flex-grow: 1;
 `;
 
-export default props => {
+export default (props) => {
   return <ContentContainer {...props} />;
 };

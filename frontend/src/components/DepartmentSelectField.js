@@ -16,7 +16,7 @@ const DepartmentTree = styled(({ className, department: { costCenter, name, tree
       </span>
       {tree && !!tree.length && (
         <ul>
-          {tree.map(n => {
+          {tree.map((n) => {
             return (
               <li>
                 {!!n.costCenter && `${n.costCenter} - `}
@@ -67,20 +67,20 @@ export default class DepartmentSelectField extends Component {
     readonly: PropTypes.bool,
     name: PropTypes.string,
     label: PropTypes.string,
-    exclude: PropTypes.string
+    exclude: PropTypes.string,
   };
 
   static defaultProps = {
     name: "department",
-    label: "Department"
+    label: "Department",
   };
 
-  formatOptionLabel = department => {
+  formatOptionLabel = (department) => {
     if (!department) return null;
     return <DepartmentTree key={department.id} department={department} />;
   };
 
-  getOptionValue = department => {
+  getOptionValue = (department) => {
     // TODO(dcramer): id love to only use the actual primary key
     return department;
   };
@@ -90,12 +90,12 @@ export default class DepartmentSelectField extends Component {
       .query({
         query: SELECT_DEPARTMENTS_QUERY,
         variables: {
-          query: inputValue
-        }
+          query: inputValue,
+        },
       })
       .then(({ data: { departments } }) => {
         callback(
-          departments.filter(u => !this.props.exclude || this.props.exclude !== u.id)
+          departments.filter((u) => !this.props.exclude || this.props.exclude !== u.id)
         );
       });
   };

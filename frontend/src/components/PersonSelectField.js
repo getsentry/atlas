@@ -72,19 +72,19 @@ export default class PersonSelectField extends Component {
     readonly: PropTypes.bool,
     name: PropTypes.string,
     label: PropTypes.string,
-    exclude: PropTypes.string
+    exclude: PropTypes.string,
   };
 
   static defaultProps = {
     name: "person",
-    label: "Person"
+    label: "Person",
   };
 
-  formatOptionLabel = user => {
+  formatOptionLabel = (user) => {
     return <PersonChoice user={user} />;
   };
 
-  getOptionValue = user => {
+  getOptionValue = (user) => {
     // TODO(dcramer): id love to only use the actual primary key
     return user;
   };
@@ -94,17 +94,17 @@ export default class PersonSelectField extends Component {
       .query({
         query: SELECT_PEOPLE_QUERY,
         variables: {
-          query: inputValue
-        }
+          query: inputValue,
+        },
       })
       .then(
         ({
           data: {
-            users: { results }
-          }
+            users: { results },
+          },
         }) => {
           callback(
-            results.filter(u => !this.props.exclude || this.props.exclude !== u.id)
+            results.filter((u) => !this.props.exclude || this.props.exclude !== u.id)
           );
         }
       );

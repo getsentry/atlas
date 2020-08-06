@@ -75,5 +75,5 @@ export default {
   yellow: $yellow,
   green: $green,
   teal: $teal,
-  cyan: $cyan
+  cyan: $cyan,
 };

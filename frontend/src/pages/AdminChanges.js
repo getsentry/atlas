@@ -28,14 +28,14 @@ export default () => (
           <Query
             query={LIST_CHANGES_QUERY}
             variables={{
-              limit: 1000
+              limit: 1000,
             }}
           >
             {({ loading, error, data }) => {
               if (error) throw error;
               if (loading) return <PageLoader />;
               const { changes } = data;
-              return changes.map(c => (
+              return changes.map((c) => (
                 <tr>
                   <td>
                     <ChangeHeading change={c} avatarSize={16} />

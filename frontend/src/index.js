@@ -20,10 +20,10 @@ Sentry.init({
   tracesSampleRate: 1,
   integrations: [
     new Integrations.Tracing({
-      tracingOrigins: ["localhost", "atlas.getsentry.net", /^\//]
+      tracingOrigins: ["localhost", "atlas.getsentry.net", /^\//],
     }),
-    new SentryRRWeb()
-  ]
+    new SentryRRWeb(),
+  ],
 });
 Sentry.setTag("role", "frontend");
 

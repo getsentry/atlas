@@ -16,14 +16,14 @@ export default () => (
       <Query
         query={LIST_TEAMS_QUERY}
         variables={{
-          limit: 1000
+          limit: 1000,
         }}
       >
         {({ loading, error, data }) => {
           if (error) throw error;
           if (loading) return <PageLoader />;
           const { teams } = data;
-          return teams.map(d => (
+          return teams.map((d) => (
             <div style={{ marginBottom: "0.5rem" }}>
               <Flex>
                 <Box flex="1">

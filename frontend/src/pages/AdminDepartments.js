@@ -16,14 +16,14 @@ export default () => (
       <Query
         query={LIST_DEPARTMENTS_QUERY}
         variables={{
-          limit: 1000
+          limit: 1000,
         }}
       >
         {({ loading, error, data }) => {
           if (error) throw error;
           if (loading) return <PageLoader />;
           const { departments } = data;
-          return departments.map(d => (
+          return departments.map((d) => (
             <div style={{ marginBottom: "0.5rem" }}>
               <Flex>
                 <Box flex="1">

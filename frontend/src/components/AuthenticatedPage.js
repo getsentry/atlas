@@ -9,7 +9,7 @@ class AuthenticatedPage extends Component {
   constructor(...params) {
     super(...params);
     this.state = {
-      loading: true
+      loading: true,
     };
   }
 
@@ -17,7 +17,7 @@ class AuthenticatedPage extends Component {
 
   static getDerivedStateFromProps(props, state) {
     return {
-      loading: !props.authenticated
+      loading: !props.authenticated,
     };
   }
 
@@ -27,7 +27,7 @@ class AuthenticatedPage extends Component {
     if (this.props.authenticated === false) {
       this.context.router.push({
         pathname: "/login",
-        query: { next: this.buildUrl() }
+        query: { next: this.buildUrl() },
       });
     }
   }
@@ -36,7 +36,7 @@ class AuthenticatedPage extends Component {
     if (this.props.authenticated === false) {
       this.context.router.push({
         pathname: "/login",
-        query: { next: this.buildUrl() }
+        query: { next: this.buildUrl() },
       });
     }
   }
@@ -56,9 +56,9 @@ class AuthenticatedPage extends Component {
 
 export default connect(
   ({ auth }) => ({
-    authenticated: auth.authenticated
+    authenticated: auth.authenticated,
   }),
   {
-    loadSession: actions.loadSession
+    loadSession: actions.loadSession,
   }
 )(AuthenticatedPage);
