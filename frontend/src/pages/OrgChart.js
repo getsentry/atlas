@@ -1,7 +1,10 @@
 import React from "react";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
+import styled from "@emotion/styled";
+import { Link } from "react-router";
 
+import Button from "../components/Button";
 import OrgChart from "../components/OrgChart";
 import Layout from "../components/Layout";
 import PageLoader from "../components/PageLoader";
@@ -66,8 +69,20 @@ export default () => (
         if (loading) return <PageLoader />;
         const { users } = data;
         const tree = listToTree(users.results);
-        return <OrgChart tree={tree} NodeComponent={Node} />;
+        return (
+          <>
+            <NavContainer>
+              <Link to="/orgChartInteractive">Interactive Org Chart</Link>
+            </NavContainer>
+            <OrgChart tree={tree} NodeComponent={Node} />
+          </>
+        );
       }}
     </Query>
   </Layout>
 );
+
+const NavContainer = styled.div`
+  /* Line nav up with the first org chart element */
+  margin: 20px 40px;
+`;
