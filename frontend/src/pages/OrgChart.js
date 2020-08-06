@@ -4,7 +4,6 @@ import gql from "graphql-tag";
 import styled from "@emotion/styled";
 import { Link } from "react-router";
 
-import Button from "../components/Button";
 import OrgChart from "../components/OrgChart";
 import Layout from "../components/Layout";
 import PageLoader from "../components/PageLoader";
