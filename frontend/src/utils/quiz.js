@@ -21,7 +21,6 @@ export const createGame = (users, sparseMatrix = {}) => {
       const userAppearedWithAnswer = (userData.appeared || 0) + 1;
       const userAccidentallyPicked = (userData.guessed || 0) + 1;
 
-      // TODO these are probabilities;
       accumulator[user.id] =
         (userAccidentallyPicked * userAccidentallyPicked) /
           (userAppearedWithAnswer - userAccidentallyPicked + 1) +
@@ -49,7 +48,7 @@ export const updateGame = (sparseMatrix, optionIDs, answer, picked) => {
     sparseMatrix[answer] = {};
   }
 
-  optionIDs.map(option => {
+  optionIDs.forEach(option => {
     const optionFound = sparseMatrix[answer][option];
     if (!optionFound) {
       sparseMatrix[answer][option] = {
