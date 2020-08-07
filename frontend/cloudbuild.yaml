@@ -1,22 +1,24 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  entrypoint: 'bash'
-  args: [
-    '-c',
-    'docker pull us.gcr.io/$PROJECT_ID/$atlas-backend:latest || true',
-  ]
-- name: 'gcr.io/cloud-builders/docker'
-  args: [
-    'build',
-    '--cache-from', 'us.gcr.io/$PROJECT_ID/atlas-frontend:latest',
-    '--build-arg', 'BUILD_REVISION=$COMMIT_SHA',
-    '-t', 'us.gcr.io/$PROJECT_ID/atlas-frontend:$COMMIT_SHA',
-    '-t', 'us.gcr.io/$PROJECT_ID/atlas-frontend:latest',
-    '.'
-  ]
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args: ["-c", "docker pull us.gcr.io/$PROJECT_ID/$atlas-backend:latest || true"]
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "--cache-from",
+        "us.gcr.io/$PROJECT_ID/atlas-frontend:latest",
+        "--build-arg",
+        "BUILD_REVISION=$COMMIT_SHA",
+        "-t",
+        "us.gcr.io/$PROJECT_ID/atlas-frontend:$COMMIT_SHA",
+        "-t",
+        "us.gcr.io/$PROJECT_ID/atlas-frontend:latest",
+        ".",
+      ]
 images:
-- 'us.gcr.io/$PROJECT_ID/atlas-frontend:$COMMIT_SHA'
-- 'us.gcr.io/$PROJECT_ID/atlas-frontend:latest'
+  - "us.gcr.io/$PROJECT_ID/atlas-frontend:$COMMIT_SHA"
+  - "us.gcr.io/$PROJECT_ID/atlas-frontend:latest"
 options:
-    substitution_option: 'ALLOW_LOOSE'
-logsBucket: 'gs://sentryio-cloudbuild-logs/getsentry/'
+  substitution_option: "ALLOW_LOOSE"
+logsBucket: "gs://sentryio-cloudbuild-logs/getsentry/"

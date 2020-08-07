@@ -17,6 +17,7 @@ import AdminUpdateDepartment from "./pages/AdminUpdateDepartment";
 import AdminUpdateTeam from "./pages/AdminUpdateTeam";
 import HealthCheck from "./pages/HealthCheck";
 import Home from "./pages/Home";
+import Flashcards from "./pages/Flashcards";
 import Login from "./pages/Login";
 import Office from "./pages/Office";
 import Offices from "./pages/Offices";
@@ -25,6 +26,7 @@ import OrgChart from "./pages/OrgChart";
 import OrgChartInteractive from "./pages/OrgChartInteractive";
 import People from "./pages/People";
 import Profile from "./pages/Profile";
+import Quiz from "./pages/Quiz";
 import UpdateOffice from "./pages/UpdateOffice";
 import UpdateProfile from "./pages/UpdateProfile";
 
@@ -40,6 +42,7 @@ export default (
   <Route path="/" component={App}>
     <IndexRoute component={Home} />
     <Route path="/healthz" component={HealthCheck} />
+    <Route path="/flashcards" component={Flashcards} />
     <Route path="/login" component={Login} />
     <Route path="/offices" component={Offices} />
     <Route path="/offices/:externalId" component={Office} />
@@ -50,6 +53,7 @@ export default (
     <Route path="/people" component={People} />
     <Route path="/people/:email" component={Profile} />
     <Route path="/people/:email/update" component={UpdateProfile} />
+    <Route path="/quiz" component={Quiz} />
     <Route path="/admin" component={AdminLayout}>
       <Route path="/admin/changes" component={AdminChanges} />
       <Route path="/admin/changes/:changeId" component={AdminChangeDetails} />

@@ -17,4 +17,4 @@ steps:
           )
         done
         wait
-logsBucket: 'gs://sentryio-cloudbuild-logs/getsentry/'
+logsBucket: "gs://sentryio-cloudbuild-logs/getsentry/"
