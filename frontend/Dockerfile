@@ -9,7 +9,7 @@ ENV BUILD_REVISION $BUILD_REVISION
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 COPY . .
 
