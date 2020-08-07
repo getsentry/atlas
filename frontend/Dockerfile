@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:10
 
 ENV PATH /usr/src/app/bin:/usr/src/app/node_modules/.bin:$PATH
 ENV NODE_ENV production
@@ -9,7 +9,7 @@ ENV BUILD_REVISION $BUILD_REVISION
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 COPY . .
 
