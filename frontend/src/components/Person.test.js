@@ -15,8 +15,8 @@ test("can render valid profile as non-superuser", async () => {
       variables: {
         email: "jane@example.com",
         humansOnly: false,
-        includeHidden: false
-      }
+        includeHidden: false,
+      },
     },
     result: {
       data: {
@@ -25,12 +25,12 @@ test("can render valid profile as non-superuser", async () => {
             mocks.User({
               email: "jane@example.com",
               name: "Jane Doe",
-              isSuperuser: false
-            })
-          ]
-        }
-      }
-    }
+              isSuperuser: false,
+            }),
+          ],
+        },
+      },
+    },
   });
 
   const router = mockRouter();
@@ -41,7 +41,7 @@ test("can render valid profile as non-superuser", async () => {
     name: "Jane Doe",
     isSuperuser: false,
     hasOnboarded: true,
-    photo: null
+    photo: null,
   };
 
   render(
@@ -51,9 +51,9 @@ test("can render valid profile as non-superuser", async () => {
     {
       initialState: {
         auth: {
-          user: currentUser
-        }
-      }
+          user: currentUser,
+        },
+      },
     }
   );
 

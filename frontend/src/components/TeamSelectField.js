@@ -18,12 +18,12 @@ export default class TeamSelectField extends Component {
     readonly: PropTypes.bool,
     name: PropTypes.string,
     label: PropTypes.string,
-    exclude: PropTypes.string
+    exclude: PropTypes.string,
   };
 
   static defaultProps = {
     name: "team",
-    label: "Team"
+    label: "Team",
   };
 
   loadMatches = (inputValue, callback) => {
@@ -31,16 +31,16 @@ export default class TeamSelectField extends Component {
       .query({
         query: LIST_TEAMS_QUERY,
         variables: {
-          query: inputValue
-        }
+          query: inputValue,
+        },
       })
       .then(({ data: { teams } }) => {
         callback(
           teams
-            .filter(u => !this.props.exclude || this.props.exclude !== u.id)
-            .map(team => ({
+            .filter((u) => !this.props.exclude || this.props.exclude !== u.id)
+            .map((team) => ({
               label: team.name,
-              value: team.name
+              value: team.name,
             }))
         );
       });

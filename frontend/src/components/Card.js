@@ -23,15 +23,16 @@ export default styled(
 )`
   background: ${colors.cardBackground};
   color: ${colors.cardText};
-  padding: ${props => (props.slim ? "0.5rem" : "1rem")} 1rem 0;
-  margin: 0 0 ${props => (props.noMargin ? 0 : "1.5rem")};
+  padding: ${(props) => (props.slim ? "0.5rem" : "1rem")} 1rem 0;
+  margin: 0 0 ${(props) => (props.noMargin ? 0 : "1.5rem")};
   overflow: visible;
   border-radius: 4px;
-  padding-bottom: ${props => (props.withPadding ? (props.slim ? "0.5rem" : "1rem") : 0)};
+  padding-bottom: ${(props) =>
+    props.withPadding ? (props.slim ? "0.5rem" : "1rem") : 0};
 
-  ${props =>
-      props.to &&
-      `
+  ${(props) =>
+    props.to &&
+    `
   & > a {
     color: inherit;
     display: block;
@@ -45,7 +46,7 @@ export default styled(
     }
   }
   `}
-    ::after {
+  ::after {
     content: "";
     clear: both;
     display: table;

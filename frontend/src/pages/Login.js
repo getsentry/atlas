@@ -51,17 +51,17 @@ class Login extends Component {
   constructor(...params) {
     super(...params);
     this.state = {
-      loading: true
+      loading: true,
     };
   }
 
   static contextTypes = {
-    router: PropTypes.object
+    router: PropTypes.object,
   };
 
   static getDerivedStateFromProps(props, state) {
     return {
-      loading: state.loading && props.gapi === null
+      loading: state.loading && props.gapi === null,
     };
   }
 
@@ -76,7 +76,7 @@ class Login extends Component {
         : "/onboarding";
       if (nextUri.indexOf("/") !== 0) nextUri = "";
       this.context.router.push({
-        pathname: nextUri
+        pathname: nextUri,
       });
     }
   }
@@ -117,7 +117,7 @@ export default connect(
   ({ auth }) => ({
     gapi: auth.gapi,
     authenticated: auth.authenticated,
-    user: auth.user
+    user: auth.user,
   }),
   { loadSession: actions.loadSession, login: actions.login }
 )(Login);

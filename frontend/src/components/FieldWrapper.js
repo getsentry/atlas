@@ -25,9 +25,9 @@ export const selectStyles = {
     return {
       ...provided,
       background,
-      color
+      color,
     };
-  }
+  },
 };
 
 const SelectField = ({ field, form, options, creatable = false, ...fieldOptions }) => {
@@ -42,8 +42,8 @@ const SelectField = ({ field, form, options, creatable = false, ...fieldOptions 
       name={field.name}
       isClearable={!fieldOptions.required}
       isDisabled={fieldOptions.disabled}
-      value={options ? options.find(option => option.value === field.value) : ""}
-      onChange={option => form.setFieldValue(field.name, option ? option.value : "")}
+      value={options ? options.find((option) => option.value === field.value) : ""}
+      onChange={(option) => form.setFieldValue(field.name, option ? option.value : "")}
       onBlur={field.onBlur}
     />
   );
@@ -69,7 +69,7 @@ const AsyncSelectField = ({
       isDisabled={fieldOptions.disabled}
       name={field.name}
       defaultOptions
-      onChange={option =>
+      onChange={(option) =>
         form.setFieldValue(
           field.name,
           fieldOptions.getOptionValue ? fieldOptions.getOptionValue(option) : option
@@ -100,7 +100,7 @@ export default styled(
       placeholder,
       hidden,
       required: required || false,
-      ...fieldOptions
+      ...fieldOptions,
     };
     if (type === "select") {
       if (fieldProps.loadOptions) {
@@ -135,5 +135,5 @@ export default styled(
     );
   }
 )`
-  ${props => !props.noMargin && "margin-bottom: 1rem"};
+  ${(props) => !props.noMargin && "margin-bottom: 1rem"};
 `;

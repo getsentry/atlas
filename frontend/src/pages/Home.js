@@ -21,18 +21,18 @@ const SearchInput = styled.input`
 
 export default class Home extends Component {
   static contextTypes = {
-    router: PropTypes.object
+    router: PropTypes.object,
   };
 
-  onSearch = e => {
+  onSearch = (e) => {
     e.preventDefault();
     this.context.router.push({
       pathname: "/people",
-      query: { query: this.state.query }
+      query: { query: this.state.query },
     });
   };
 
-  onChangeQuery = e => {
+  onChangeQuery = (e) => {
     this.setState({ query: e.target.value });
   };
 
@@ -60,10 +60,8 @@ export default class Home extends Component {
                   query={LIST_PEOPLE_QUERY}
                   variables={{
                     limit: 5,
-                    dateStartedAfter: moment()
-                      .subtract(1, "months")
-                      .format("YYYY-MM-DD"),
-                    orderBy: "dateStarted"
+                    dateStartedAfter: moment().subtract(1, "months").format("YYYY-MM-DD"),
+                    orderBy: "dateStarted",
                   }}
                 >
                   {({ loading, error, data }) => {
@@ -89,13 +87,9 @@ export default class Home extends Component {
                   query={LIST_PEOPLE_QUERY}
                   variables={{
                     limit: 5,
-                    birthdayAfter: moment()
-                      .subtract(14, "days")
-                      .format("YYYY-MM-DD"),
-                    birthdayBefore: moment()
-                      .add(14, "days")
-                      .format("YYYY-MM-DD"),
-                    orderBy: "birthday"
+                    birthdayAfter: moment().subtract(14, "days").format("YYYY-MM-DD"),
+                    birthdayBefore: moment().add(14, "days").format("YYYY-MM-DD"),
+                    orderBy: "birthday",
                   }}
                 >
                   {({ loading, error, data }) => {
@@ -120,13 +114,9 @@ export default class Home extends Component {
                   query={LIST_PEOPLE_QUERY}
                   variables={{
                     limit: 5,
-                    anniversaryAfter: moment()
-                      .subtract(14, "days")
-                      .format("YYYY-MM-DD"),
-                    anniversaryBefore: moment()
-                      .add(14, "days")
-                      .format("YYYY-MM-DD"),
-                    orderBy: "anniversary"
+                    anniversaryAfter: moment().subtract(14, "days").format("YYYY-MM-DD"),
+                    anniversaryBefore: moment().add(14, "days").format("YYYY-MM-DD"),
+                    orderBy: "anniversary",
                   }}
                 >
                   {({ loading, error, data }) => {

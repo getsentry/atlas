@@ -49,7 +49,7 @@ export default class OrgChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      zoom: 1
+      zoom: 1,
     };
   }
 
@@ -65,15 +65,15 @@ export default class OrgChart extends Component {
     this.setState({ zoom: 1 });
   };
 
-  renderNode = node => {
+  renderNode = (node) => {
     return React.createElement(this.props.NodeComponent, { node });
   };
 
-  renderChildren = children => {
+  renderChildren = (children) => {
     if (!children.length) return null;
     return (
       <ChildSet>
-        {children.map(child => {
+        {children.map((child) => {
           return (
             <li key={child.id}>
               {this.renderNode(child)}

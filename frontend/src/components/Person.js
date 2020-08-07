@@ -118,7 +118,7 @@ const DepartmentTree = styled(({ className, department }) => {
     );
   return (
     <ul className={className}>
-      {department.tree.map(n => {
+      {department.tree.map((n) => {
         return <li>{n.name}</li>;
       })}
       <li>{department.name}</li>
@@ -147,7 +147,7 @@ const DepartmentTree = styled(({ className, department }) => {
 
 class Person extends Component {
   static propTypes = {
-    email: PropTypes.string.isRequired
+    email: PropTypes.string.isRequired,
   };
 
   render() {
@@ -158,7 +158,7 @@ class Person extends Component {
         variables={{
           email: this.props.email,
           humansOnly: false,
-          includeHidden: currentUser.isSuperuser
+          includeHidden: currentUser.isSuperuser,
         }}
       >
         {({ loading, error, data }) => {
@@ -258,8 +258,8 @@ class Person extends Component {
                                   to={{
                                     pathname: "/people",
                                     query: {
-                                      team: thisPerson.team.name
-                                    }
+                                      team: thisPerson.team.name,
+                                    },
                                   }}
                                 >
                                   {thisPerson.team.name}
@@ -393,8 +393,8 @@ class Person extends Component {
                                   pathname: "/people",
                                   query: {
                                     columns: "gamerTags.steam",
-                                    hasAttributes: "gamerTags.steam"
-                                  }
+                                    hasAttributes: "gamerTags.steam",
+                                  },
                                 }}
                               >
                                 Steam
@@ -417,8 +417,8 @@ class Person extends Component {
                                   pathname: "/people",
                                   query: {
                                     columns: "gamerTags.xbox",
-                                    hasAttributes: "gamerTags.xbox"
-                                  }
+                                    hasAttributes: "gamerTags.xbox",
+                                  },
                                 }}
                               >
                                 Xbox Live
@@ -437,8 +437,8 @@ class Person extends Component {
                                   pathname: "/people",
                                   query: {
                                     columns: "gamerTags.playstation",
-                                    hasAttributes: "gamerTags.playstation"
-                                  }
+                                    hasAttributes: "gamerTags.playstation",
+                                  },
                                 }}
                               >
                                 PlayStation
@@ -457,8 +457,8 @@ class Person extends Component {
                                   pathname: "/people",
                                   query: {
                                     columns: "gamerTags.nintendo",
-                                    hasAttributes: "gamerTags.nintendo"
-                                  }
+                                    hasAttributes: "gamerTags.nintendo",
+                                  },
                                 }}
                               >
                                 Nintendo
@@ -507,5 +507,5 @@ class Person extends Component {
 }
 
 export default connect(({ auth }) => ({
-  user: auth.user
+  user: auth.user,
 }))(Person);

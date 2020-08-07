@@ -14,12 +14,12 @@ import apolloClient from "../utils/apollo";
 
 const DEFAULT_COORDS = {
   lat: 37.4224764,
-  lng: -122.0842499
+  lng: -122.0842499,
 };
 
 const OfficeSchema = yup.object().shape({
   name: yup.string().required("Required"),
-  location: yup.string().nullable()
+  location: yup.string().nullable(),
 });
 
 export const OFFICE_QUERY = gql`
@@ -57,7 +57,7 @@ export const OFFICE_MUTATION = gql`
 
 export default class UpdateOfficeForm extends Component {
   static propTypes = {
-    externalId: PropTypes.string.isRequired
+    externalId: PropTypes.string.isRequired,
   };
 
   static contextTypes = { router: PropTypes.object.isRequired };
@@ -68,7 +68,7 @@ export default class UpdateOfficeForm extends Component {
     }
   };
 
-  queryLocation = location => {
+  queryLocation = (location) => {
     const geocoder = new window.google.maps.Geocoder();
     geocoder.geocode({ address: location }, (results, status) => {
       if (status === "OK") {
@@ -84,7 +84,7 @@ export default class UpdateOfficeForm extends Component {
           marker,
           lat: position.lat(),
           lng: position.lng(),
-          hasAdjustedLatLng: true
+          hasAdjustedLatLng: true,
         });
       }
     });
@@ -94,13 +94,13 @@ export default class UpdateOfficeForm extends Component {
     const marker = new window.google.maps.Marker({
       map: map,
       position: position,
-      draggable: true
+      draggable: true,
     });
-    marker.addListener("dragend", value => {
+    marker.addListener("dragend", (value) => {
       this.setState({
         lat: value.latLng.lat(),
         lng: value.latLng.lng(),
-        hasAdjustedLatLng: true
+        hasAdjustedLatLng: true,
       });
     });
     return marker;
@@ -121,7 +121,7 @@ export default class UpdateOfficeForm extends Component {
             location: office.location,
             description: office.description,
             postalCode: office.postalCode,
-            regionCode: office.regionCode
+            regionCode: office.regionCode,
           };
           let hasLocation = office.lat && office.lng;
           let officeCoords = hasLocation
@@ -138,7 +138,7 @@ export default class UpdateOfficeForm extends Component {
                 validationSchema={OfficeSchema}
                 onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
                   const data = {
-                    ...values
+                    ...values,
                   };
                   if (this.state.hasAdjustedLatLng) {
                     data.lat = this.state.lat;
@@ -149,25 +149,25 @@ export default class UpdateOfficeForm extends Component {
                       mutation: OFFICE_MUTATION,
                       variables: {
                         office: office.id,
-                        data
-                      }
+                        data,
+                      },
                     })
                     .then(
                       ({
                         data: {
-                          updateOffice: { ok, errors }
-                        }
+                          updateOffice: { ok, errors },
+                        },
                       }) => {
                         setSubmitting(false);
                         if (!ok) {
                           setStatus({ error: "" + errors[0] });
                         } else {
                           this.context.router.push({
-                            pathname: `/offices/${office.externalId}`
+                            pathname: `/offices/${office.externalId}`,
                           });
                         }
                       },
-                      err => {
+                      (err) => {
                         if (err.graphQLErrors && err.graphQLErrors.length) {
                           // do something useful
                           setStatus({ error: "" + err });
@@ -231,13 +231,13 @@ export default class UpdateOfficeForm extends Component {
                       <Map
                         options={{
                           center: officeCoords,
-                          zoom: 15
+                          zoom: 15,
                         }}
-                        onMapLoad={map => {
+                        onMapLoad={(map) => {
                           this.setState(
                             {
                               map,
-                              marker: hasLocation && this.createMarker(map, officeCoords)
+                              marker: hasLocation && this.createMarker(map, officeCoords),
                             },
                             () => {
                               !hasLocation &&

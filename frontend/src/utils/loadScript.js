@@ -19,7 +19,7 @@ export default (d, s, id, jsSrc) => {
       () => reject(new Error(`Timed out loading ${id}`)),
       5000
     );
-    js.onload = function() {
+    js.onload = function () {
       clearTimeout(timeoutTimer);
       resolve(js);
     };

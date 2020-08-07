@@ -12,7 +12,7 @@ import apolloClient from "../utils/apollo";
 import { LIST_TEAMS_QUERY } from "../queries";
 
 const TeamSchema = yup.object().shape({
-  name: yup.string().nullable()
+  name: yup.string().nullable(),
 });
 
 export const TEAM_DELETE_MUTATION = gql`
@@ -32,16 +32,16 @@ export default class extends Component {
       .query({
         query: LIST_TEAMS_QUERY,
         variables: {
-          query: inputValue
-        }
+          query: inputValue,
+        },
       })
       .then(({ data: { teams } }) => {
         callback(
           teams
-            .filter(d => d.id !== this.props.params.teamId)
-            .map(u => ({
+            .filter((d) => d.id !== this.props.params.teamId)
+            .map((u) => ({
               value: u.id,
-              label: u.name
+              label: u.name,
             }))
         );
       });
@@ -67,7 +67,7 @@ export default class extends Component {
                 apolloClient
                   .mutate({
                     mutation: TEAM_DELETE_MUTATION,
-                    variables: data
+                    variables: data,
                   })
                   .then(
                     ({ data: { deleteTeam }, errors }) => {
@@ -78,11 +78,11 @@ export default class extends Component {
                         setStatus({ error: "" + deleteTeam.errors[0] });
                       } else {
                         this.context.router.push({
-                          pathname: `/admin/teams`
+                          pathname: `/admin/teams`,
                         });
                       }
                     },
-                    err => {
+                    (err) => {
                       if (err.graphQLErrors && err.graphQLErrors.length) {
                         // do something useful
                         setStatus({ error: "" + err });

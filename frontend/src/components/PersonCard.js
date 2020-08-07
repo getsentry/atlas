@@ -6,9 +6,9 @@ import Avatar from "./Avatar";
 import Card from "./Card";
 
 const PersonCardContainer = styled(Card)(
-  props => css`
+  (props) => css`
     ${props.horizontal &&
-      `
+    `
   display: inline-block;
   `}
 
@@ -33,7 +33,7 @@ const PersonCardContainer = styled(Card)(
     aside {
       overflow: hidden;
       ${props.horizontal &&
-        `
+      `
       flex-grow: 1;
       display: inline-block;
     `}
@@ -56,7 +56,7 @@ const PersonCardContainer = styled(Card)(
   `
 );
 
-export default function({ user, ...props }) {
+export default function ({ user, ...props }) {
   if (!user) return <em>n/a</em>;
   let avatarProps = props.horizontal ? { mr: "5px" } : { mb: true };
   return (

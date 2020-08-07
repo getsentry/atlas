@@ -13,37 +13,37 @@ import PersonLink from "../components/PersonLink";
 
 import { EXPORT_PEOPLE_QUERY, IMPORT_CSV_MUTATION } from "../queries";
 
-const formatDepartment = department => {
+const formatDepartment = (department) => {
   if (!department) return "";
   if (department.costCenter) return `${department.costCenter}-${department.name}`;
   return department.name;
 };
 
-const formatOffice = office => {
+const formatOffice = (office) => {
   if (!office) return "";
   return office.externalId;
 };
 
-const mapChangedAttributes = change => {
+const mapChangedAttributes = (change) => {
   return Object.keys(change)
-    .map(key => {
+    .map((key) => {
       if (key.indexOf("_") === 0) return null;
       if (key === "user") return null;
       if (!change[key]) return null;
       return [key, change[key]];
     })
-    .filter(c => c !== null);
+    .filter((c) => c !== null);
 };
 
 class ExportCard extends Component {
   export = () => {
     apolloClient
       .query({
-        query: EXPORT_PEOPLE_QUERY
+        query: EXPORT_PEOPLE_QUERY,
       })
-      .then(response => {
+      .then((response) => {
         const {
-          users: { results }
+          users: { results },
         } = response.data;
         if (results) {
           downloadCsv(
@@ -62,9 +62,9 @@ class ExportCard extends Component {
                 "office",
                 "employee_type",
                 "is_human",
-                "is_directory_hidden"
+                "is_directory_hidden",
               ],
-              ...results.map(u => [
+              ...results.map((u) => [
                 u.id,
                 u.name,
                 u.email,
@@ -78,8 +78,8 @@ class ExportCard extends Component {
                 formatOffice(u.office),
                 u.employeeType ? u.employeeType.id : "",
                 u.isHuman,
-                u.isDirectoryHidden
-              ])
+                u.isDirectoryHidden,
+              ]),
             ],
             `people-${new Date().getTime()}.csv`
           );
@@ -87,7 +87,7 @@ class ExportCard extends Component {
           throw new Error("Error exporting people");
         }
       })
-      .catch(err => {
+      .catch((err) => {
         throw err;
       });
   };
@@ -112,7 +112,7 @@ const Errors = ({ errors }) => (
     <h2>Unhandled Error</h2>
     <p>Whoops! It looks like there was an issue handling your upload.</p>
     <ul>
-      {errors.map(e => (
+      {errors.map((e) => (
         <li key={e}>{e}</li>
       ))}
     </ul>
@@ -125,7 +125,7 @@ const Errors = ({ errors }) => (
 
 const PreviewHeader = ({ onApply, saving, changes }) => {
   let numChanges = 0;
-  changes.forEach(c => (numChanges += mapChangedAttributes(c).length));
+  changes.forEach((c) => (numChanges += mapChangedAttributes(c).length));
   return (
     <Card withPadding>
       <Flex>
@@ -169,13 +169,13 @@ class ImportManager extends Component {
     this.state = {
       saving: false,
       errors: [],
-      applied: false
+      applied: false,
     };
   }
 
   applyChanges = () => {
     this.setState({
-      saving: true
+      saving: true,
     });
     apolloClient
       .mutate({
@@ -183,31 +183,31 @@ class ImportManager extends Component {
         variables: {
           file: this.props.files[0],
           ignoreEmptyCells: this.props.ignoreEmptyCells,
-          apply: true
-        }
+          apply: true,
+        },
       })
-      .then(response => {
+      .then((response) => {
         const { importCsv } = response.data;
         if (importCsv.ok) {
           this.setState({
             saving: false,
             changes: importCsv.changes,
-            applied: importCsv.applied
+            applied: importCsv.applied,
           });
         } else {
           this.setState({
             saving: false,
             applied: false,
             changes: [],
-            errors: importCsv.errors
+            errors: importCsv.errors,
           });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         this.setState({
           errors: ["Unknown"],
           saving: false,
-          applied: false
+          applied: false,
         });
         throw err;
       });
@@ -238,7 +238,7 @@ class ImportManager extends Component {
       return (
         <div>
           <h2>Result</h2>
-          {changes.map(change => {
+          {changes.map((change) => {
             return <ChangeRow change={change} key={change.user.id} />;
           })}
         </div>
@@ -251,7 +251,7 @@ class ImportManager extends Component {
     return (
       <div>
         <PreviewHeader saving={saving} onApply={this.applyChanges} changes={changes} />
-        {changes.map(change => {
+        {changes.map((change) => {
           return <ChangeRow change={change} key={change.user.id} />;
         })}
       </div>
@@ -268,18 +268,18 @@ export default class ImportExportPeople extends Component {
       importing: false,
       changes: null,
       ignoreEmptyCells: true,
-      files: []
+      files: [],
     };
   }
 
   componentDidMount() {
     let dropbox = this.dropboxRef.current;
     if (dropbox) {
-      dropbox.addEventListener("dragenter", e => e.preventDefault(), false);
-      dropbox.addEventListener("dragover", e => e.preventDefault(), false);
+      dropbox.addEventListener("dragenter", (e) => e.preventDefault(), false);
+      dropbox.addEventListener("dragover", (e) => e.preventDefault(), false);
       dropbox.addEventListener(
         "drop",
-        e => {
+        (e) => {
           e.preventDefault();
           const dt = e.dataTransfer;
           const files = dt.files;
@@ -290,36 +290,36 @@ export default class ImportExportPeople extends Component {
     }
   }
 
-  importFiles = files => {
+  importFiles = (files) => {
     this.setState({
       importing: true,
       changes: null,
-      files
+      files,
     });
     apolloClient
       .mutate({
         mutation: IMPORT_CSV_MUTATION,
-        variables: { file: files[0], ignoreEmptyCells: this.state.ignoreEmptyCells }
+        variables: { file: files[0], ignoreEmptyCells: this.state.ignoreEmptyCells },
       })
-      .then(response => {
+      .then((response) => {
         const { importCsv } = response.data;
         if (importCsv.ok) {
           this.setState({
-            changes: importCsv.changes
+            changes: importCsv.changes,
           });
         } else {
           this.setState({
             importing: false,
             changes: null,
-            errors: importCsv.errors
+            errors: importCsv.errors,
           });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         this.setState({
           errors: ["Unknown"],
           changes: null,
-          importing: false
+          importing: false,
         });
         throw err;
       });
@@ -376,7 +376,7 @@ export default class ImportExportPeople extends Component {
                     opacity: 0,
                     overflow: "hidden",
                     position: "absolute",
-                    zIndex: -1
+                    zIndex: -1,
                   }}
                   onChange={({ target: { files } }) => this.importFiles(files)}
                 />

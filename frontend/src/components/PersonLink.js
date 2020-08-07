@@ -34,7 +34,7 @@ const PersonLinkContainer = styled.article`
   }
 `;
 
-export default function({ className, user, avatarSize = 32, noLink = false }) {
+export default function ({ className, user, avatarSize = 32, noLink = false }) {
   if (!user) return <em className={className}>n/a</em>;
   return (
     <PersonLinkContainer className={className}>

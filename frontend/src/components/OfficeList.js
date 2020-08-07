@@ -42,7 +42,7 @@ export default function OfficeList() {
                 </tr>
               </thead>
               <tbody>
-                {offices.map(o => (
+                {offices.map((o) => (
                   <tr key={o.id}>
                     <td>
                       <div>

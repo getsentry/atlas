@@ -20,14 +20,14 @@ export default ({ params }) => (
         query={LIST_CHANGES_QUERY}
         variables={{
           limit: 1,
-          id: params.changeId
+          id: params.changeId,
         }}
       >
         {({ loading, error, data }) => {
           if (error) throw error;
           if (loading) return <PageLoader />;
           const {
-            changes: [change]
+            changes: [change],
           } = data;
 
           const previousValues = change.previous ? JSON.parse(change.previous) : {};
@@ -58,7 +58,7 @@ export default ({ params }) => (
               </DefinitionList>
               <h2>Updates</h2>
               <DefinitionList>
-                {Object.keys(newValues).map(key => (
+                {Object.keys(newValues).map((key) => (
                   <React.Fragment key={key}>
                     <dt>{key}</dt>
                     <dd>

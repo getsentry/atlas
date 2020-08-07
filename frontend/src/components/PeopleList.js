@@ -21,12 +21,12 @@ export const validColumns = new Set([
   "gamerTags.nintendo",
   "gamerTags.playstation",
   "gamerTags.steam",
-  "gamerTags.xbox"
+  "gamerTags.xbox",
 ]);
 
 export const defaultColumns = ["department", "team", "office", "dateStarted"];
 
-const getColumnValue = function(user, column) {
+const getColumnValue = function (user, column) {
   switch (column) {
     case "department":
       return user.department && user.department.name;
@@ -40,7 +40,7 @@ const getColumnValue = function(user, column) {
       return moment(user.dateStarted, "YYYY-MM-DD").format("MMMM Do");
     default:
       let value = user;
-      column.split(".").forEach(c => {
+      column.split(".").forEach((c) => {
         if (!value) return;
         value = value[c];
       });
@@ -49,25 +49,25 @@ const getColumnValue = function(user, column) {
 };
 
 export default function PeopleList({ users, columns = defaultColumns }) {
-  let usedColumn = columns.filter(c => validColumns.has(c));
+  let usedColumn = columns.filter((c) => validColumns.has(c));
 
   return (
     <table>
       <thead>
         <tr>
           <th>Name</th>
-          {usedColumn.map(c => (
+          {usedColumn.map((c) => (
             <th key={c}>{getColumnTitle(c)}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {users.map(u => (
+        {users.map((u) => (
           <tr key={u.id}>
             <td>
               <PersonLink user={u} />
             </td>
-            {usedColumn.map(c => (
+            {usedColumn.map((c) => (
               <td key={c} className={c === "email" ? "rrweb-hidden" : ""}>
                 {getColumnValue(u, c)}
               </td>

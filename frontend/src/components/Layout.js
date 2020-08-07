@@ -234,12 +234,12 @@ export default class Layout extends Component {
   static propTypes = {
     title: PropTypes.string,
     noHeader: PropTypes.bool,
-    noAuth: PropTypes.bool
+    noAuth: PropTypes.bool,
   };
 
   static defaultProps = {
     noHeader: false,
-    noAuth: false
+    noAuth: false,
   };
 
   renderBody() {

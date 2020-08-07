@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 export default styled.dl`
   margin: 0 0 0.5rem;
-  padding-left: ${props => props.prefixWidth || 140}px;
+  padding-left: ${(props) => props.prefixWidth || 140}px;
 
   &::after {
     content: "";
@@ -13,8 +13,8 @@ export default styled.dl`
   dt {
     float: left;
     clear: left;
-    margin-left: -${props => props.prefixWidth || 140}px;
-    width: ${props => (props.prefixWidth ? props.prefixWidth - 20 : 120)}px;
+    margin-left: -${(props) => props.prefixWidth || 140}px;
+    width: ${(props) => (props.prefixWidth ? props.prefixWidth - 20 : 120)}px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

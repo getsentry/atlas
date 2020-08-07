@@ -81,7 +81,7 @@ const HeaderContainer = styled.header`
   }
 `;
 
-const Header = props => {
+const Header = (props) => {
   return (
     <HeaderContainer>
       <Flex alignItems="center" style={{ height: "100%" }}>
@@ -101,7 +101,7 @@ const Header = props => {
 export default connect(
   ({ auth }) => ({
     authenticated: auth.authenticated,
-    user: auth.user
+    user: auth.user,
   }),
   { logout: actions.logout }
 )(Header);

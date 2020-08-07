@@ -30,7 +30,7 @@ const UserSchema = yup.object().shape({
   dateOfBirth: yup.date().nullable(),
   isHuman: yup.bool().nullable(),
   isDirectoryHidden: yup.bool().nullable(),
-  isSuperuser: yup.bool().nullable()
+  isSuperuser: yup.bool().nullable(),
 });
 
 export const PERSON_QUERY = gql`
@@ -131,7 +131,7 @@ export const PERSON_MUTATION = gql`
 class UpdatePersonForm extends Component {
   static propTypes = {
     email: PropTypes.string.isRequired,
-    onboarding: PropTypes.bool
+    onboarding: PropTypes.bool,
   };
 
   static contextTypes = { router: PropTypes.object.isRequired };
@@ -150,11 +150,11 @@ class UpdatePersonForm extends Component {
         "office",
         "employeeType",
         "referredBy",
-        "reportsTo"
-      ].forEach(k => restrictedFields.add(k));
+        "reportsTo",
+      ].forEach((k) => restrictedFields.add(k));
     }
     if (!currentUser.isSuperuser) {
-      ["isHuman", "isDirectoryHidden", "isSuperuser"].forEach(k =>
+      ["isHuman", "isDirectoryHidden", "isSuperuser"].forEach((k) =>
         restrictedFields.add(k)
       );
     }
@@ -165,7 +165,7 @@ class UpdatePersonForm extends Component {
           //if (error) return <ErrorMessage message="Error loading person." />;
           if (loading) return <div>Loading</div>;
           const user = users.results.find(
-            u => u.email.toLowerCase() === this.props.email.toLowerCase()
+            (u) => u.email.toLowerCase() === this.props.email.toLowerCase()
           );
           if (!user) return <ErrorMessage message="Couldn't find that person." />;
           const initialValues = {
@@ -179,7 +179,7 @@ class UpdatePersonForm extends Component {
             team: user.team
               ? {
                   value: user.team.name,
-                  label: user.team.name
+                  label: user.team.name,
                 }
               : "",
             dateOfBirth: user.dateOfBirth || "",
@@ -195,13 +195,13 @@ class UpdatePersonForm extends Component {
             social: {
               twitter: user.social.twitter || "",
               linkedin: user.social.linkedin || "",
-              github: user.social.github || ""
+              github: user.social.github || "",
             },
             gamerTags: {
               steam: user.gamerTags.steam || "",
               xbox: user.gamerTags.xbox || "",
               playstation: user.gamerTags.playstation || "",
-              nintendo: user.gamerTags.nintendo || ""
+              nintendo: user.gamerTags.nintendo || "",
             },
             schedule: {
               sunday: user.schedule.sunday || "NONE",
@@ -210,8 +210,8 @@ class UpdatePersonForm extends Component {
               wednesday: user.schedule.wednesday || "NONE",
               thursday: user.schedule.thursday || "NONE",
               friday: user.schedule.friday || "NONE",
-              saturday: user.schedule.saturday || "NONE"
-            }
+              saturday: user.schedule.saturday || "NONE",
+            },
           };
           return (
             <Formik
@@ -219,7 +219,7 @@ class UpdatePersonForm extends Component {
               validationSchema={UserSchema}
               onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
                 let data = {};
-                Object.keys(values).forEach(k => {
+                Object.keys(values).forEach((k) => {
                   if (restrictedFields.has(k)) return;
                   let initialVal = initialValues[k];
                   let curVal = values[k];
@@ -237,8 +237,8 @@ class UpdatePersonForm extends Component {
                     mutation: PERSON_MUTATION,
                     variables: {
                       user: user.id,
-                      data
-                    }
+                      data,
+                    },
                   })
                   .then(
                     ({ data: { updateUser }, errors }) => {
@@ -249,11 +249,11 @@ class UpdatePersonForm extends Component {
                         setStatus({ error: "" + updateUser.errors[0] });
                       } else {
                         this.context.router.push({
-                          pathname: `/people/${user.email}`
+                          pathname: `/people/${user.email}`,
                         });
                       }
                     },
-                    err => {
+                    (err) => {
                       if (err.graphQLErrors && err.graphQLErrors.length) {
                         // do something useful
                         setStatus({ error: "" + err });
@@ -336,7 +336,7 @@ class UpdatePersonForm extends Component {
                         label="Employee Type"
                         options={[
                           ["", "(none)"],
-                          ...employeeTypes.map(o => [o.id, o.name])
+                          ...employeeTypes.map((o) => [o.id, o.name]),
                         ]}
                         readonly={restrictedFields.has("employeeType")}
                       />
@@ -369,12 +369,12 @@ class UpdatePersonForm extends Component {
                         readonly={restrictedFields.has("office")}
                         options={[
                           ["", "(no office)"],
-                          ...offices.map(o => [
+                          ...offices.map((o) => [
                             o.externalId,
                             o.externalId !== o.name
                               ? `${o.externalId} (${o.name})`
-                              : o.externalId
-                          ])
+                              : o.externalId,
+                          ]),
                         ]}
                       />
                       <FieldWrapper
@@ -551,5 +551,5 @@ class UpdatePersonForm extends Component {
 }
 
 export default connect(({ auth }) => ({
-  user: auth.user
+  user: auth.user,
 }))(UpdatePersonForm);

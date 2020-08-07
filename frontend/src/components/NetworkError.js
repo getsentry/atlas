@@ -6,7 +6,7 @@ import Modal from "./Modal";
 export default class NetworkError extends Component {
   static propTypes = {
     error: PropTypes.object.isRequired,
-    url: PropTypes.string
+    url: PropTypes.string,
   };
 
   getHost(url) {

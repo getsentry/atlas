@@ -10,7 +10,7 @@ const SAVE_DELAY = 200;
 class FormikEffects extends Component {
   static propTypes = {
     onChange: PropTypes.func.isRequired,
-    formik: PropTypes.object
+    formik: PropTypes.object,
   };
 
   onChange = debounce(this.props.onChange, SAVE_DELAY);

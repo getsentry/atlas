@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 import colors from "../colors";
 
-export const buttonStyles = props => css`
+export const buttonStyles = (props) => css`
   display: inline-block;
   font-weight: 400;
   text-align: center;
@@ -35,7 +35,7 @@ export const buttonStyles = props => css`
     color: ${colors.white};
   }
   ${props.priority === "danger" &&
-    `
+  `
     color: ${colors.red};
     border-color: ${colors.red};
 

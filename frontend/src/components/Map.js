@@ -6,12 +6,12 @@ import config from "../config";
 export default class Map extends Component {
   static propTypes = {
     width: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
-    height: PropTypes.oneOf([PropTypes.number, PropTypes.string])
+    height: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
   };
 
   static defaultProps = {
     width: 500,
-    height: 500
+    height: 500,
   };
 
   constructor(props) {
