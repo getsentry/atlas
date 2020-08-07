@@ -5,18 +5,17 @@ import Select from "react-select";
 import { Link } from "react-router";
 import { Query } from "react-apollo";
 import { Flex, Box } from "@rebass/grid/emotion";
-import { AccountTree } from "@material-ui/icons";
 
 import colors from "../colors";
 import Card from "../components/Card";
 import Content from "../components/Content";
-import IconLink from "../components/IconLink";
 import { selectStyles } from "../components/FieldWrapper";
 import Layout from "../components/Layout";
 import PeopleList from "../components/PeopleList";
 import PageLoader from "../components/PageLoader";
 import { SEARCH_PEOPLE_QUERY } from "../queries";
 import { getColumnTitle } from "../utils/strings";
+import PeopleViewSelectors from "../components/PeopleViewSelectors";
 
 export const peopleQueryVars = {
   offset: 0,
@@ -193,13 +192,7 @@ export default class People extends Component {
                   />
                 </div>
               </Box>
-              <Box mr={3}>
-                <IconLink
-                  icon={<AccountTree />}
-                  to={`/orgChart`}
-                  style={{ fontSize: "1.3em", marginBottom: "1rem" }}
-                />
-              </Box>
+              <PeopleViewSelectors current={"people"} />
             </Flex>
           </Card>
           <Query
