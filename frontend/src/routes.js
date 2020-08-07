@@ -26,6 +26,7 @@ import OrgChart from "./pages/OrgChart";
 import OrgChartInteractive from "./pages/OrgChartInteractive";
 import People from "./pages/People";
 import Profile from "./pages/Profile";
+import Quiz from "./pages/Quiz";
 import UpdateOffice from "./pages/UpdateOffice";
 import UpdateProfile from "./pages/UpdateProfile";
 
@@ -52,6 +53,7 @@ export default (
     <Route path="/people" component={People} />
     <Route path="/people/:email" component={Profile} />
     <Route path="/people/:email/update" component={UpdateProfile} />
+    <Route path="/quiz" component={Quiz} />
     <Route path="/admin" component={AdminLayout}>
       <Route path="/admin/changes" component={AdminChanges} />
       <Route path="/admin/changes/:changeId" component={AdminChangeDetails} />
