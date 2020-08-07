@@ -12,7 +12,7 @@ export default function FlashCard(props) {
     background: colors.cardBackgroundHover,
     width: "300px",
     height: "300px",
-    margin: "0 auto"
+    margin: "0 auto",
   };
 
   return (

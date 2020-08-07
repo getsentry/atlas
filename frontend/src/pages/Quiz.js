@@ -28,7 +28,7 @@ export default class Quiz extends Component {
       answer: {},
       isFlipped: false,
       streak: 0,
-      correct: false
+      correct: false,
     };
   }
 
@@ -44,7 +44,7 @@ export default class Quiz extends Component {
     this.setState({ index: index + 1 });
   };
 
-  manuallySelectOption = id => {
+  manuallySelectOption = (id) => {
     const { isFlipped } = this.state;
     if (isFlipped) return;
     this.setState({ index: id });
@@ -67,12 +67,12 @@ export default class Quiz extends Component {
     const probabilities = oddsTable[answer.id] || {};
     const lures = pickNWeighted(probabilities, OPTION_COUNT - 1);
 
-    const options = lures.map(y => usersMap[y]);
+    const options = lures.map((y) => usersMap[y]);
     options.push(answer);
 
     this.setState({
       answer,
-      options: shuffle(options)
+      options: shuffle(options),
     });
   };
 
@@ -92,7 +92,7 @@ export default class Quiz extends Component {
       isFlipped: true,
       sparseMatrix: newSparseMatrix,
       correct,
-      streak: correct ? streak + 1 : 0
+      streak: correct ? streak + 1 : 0,
     });
   };
 
@@ -105,7 +105,7 @@ export default class Quiz extends Component {
       futureIndex: nextIndex,
       index: 0,
       isFlipped: false,
-      correct: false
+      correct: false,
     });
 
     this.loadGame();
@@ -117,8 +117,8 @@ export default class Quiz extends Component {
         query: LIST_PEOPLE_QUERY,
         variables: {
           humansOnly: false,
-          limit: 1000
-        }
+          limit: 1000,
+        },
       })
       .then(({ error, data }) => {
         if (error) {
@@ -132,14 +132,14 @@ export default class Quiz extends Component {
           users,
           usersMap,
           future: shuffle(listOfIntegers(users.length)),
-          futureIndex: 0
+          futureIndex: 0,
         });
 
         this.loadGame();
       });
   };
 
-  handleKeys = event => {
+  handleKeys = (event) => {
     switch (event.keyCode) {
       case 13:
         return this.handleEnter();
@@ -169,7 +169,7 @@ export default class Quiz extends Component {
       isFlipped,
       loading,
       options,
-      streak
+      streak,
     } = this.state;
 
     if (error) return <ErrorMessage message="Error loading quiz." />;

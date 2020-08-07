@@ -48,12 +48,12 @@ export const updateGame = (sparseMatrix, optionIDs, answer, picked) => {
     sparseMatrix[answer] = {};
   }
 
-  optionIDs.forEach(option => {
+  optionIDs.forEach((option) => {
     const optionFound = sparseMatrix[answer][option];
     if (!optionFound) {
       sparseMatrix[answer][option] = {
         appeared: 0,
-        guessed: 0
+        guessed: 0,
       };
     }
     sparseMatrix[answer][option].appeared += 1;
@@ -95,11 +95,11 @@ export const pickNWeighted = (probabilities, n) => {
   return [key].concat(pickNWeighted(tail, n - 1));
 };
 
-export const getUserMap = users => {
+export const getUserMap = (users) => {
   return users.reduce((accumulator, user) => {
     accumulator[user.id] = {
       id: user.id,
-      name: user.name
+      name: user.name,
     };
     return accumulator;
   }, {});

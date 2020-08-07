@@ -11,7 +11,7 @@ export default function QuizCard(props) {
     background: colors.cardBackgroundHover,
     width: "300px",
     height: "300px",
-    margin: "0 10px"
+    margin: "0 10px",
   };
 
   const { index, onClick, options, person, isFlipped, streak, correct } = props;

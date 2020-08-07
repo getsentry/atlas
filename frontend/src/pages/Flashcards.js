@@ -23,7 +23,7 @@ export default class Flashcards extends Component {
       users: [],
       history: [],
       future: [],
-      futureIndex: 0
+      futureIndex: 0,
     };
   }
 
@@ -39,7 +39,7 @@ export default class Flashcards extends Component {
       history,
       futureIndex: 0,
       future: shuffle(listOfIntegers(future.length)),
-      isFlipped: false
+      isFlipped: false,
     });
   };
 
@@ -53,14 +53,14 @@ export default class Flashcards extends Component {
         futureIndex: 0,
         future: reshuffle(future),
         history,
-        isFlipped: false
+        isFlipped: false,
       });
     }
 
     this.setState({
       history,
       futureIndex: nextIndex,
-      isFlipped: false
+      isFlipped: false,
     });
   };
 
@@ -74,8 +74,8 @@ export default class Flashcards extends Component {
         query: LIST_PEOPLE_QUERY,
         variables: {
           humansOnly: false,
-          limit: 1000
-        }
+          limit: 1000,
+        },
       })
       .then(({ error, data }) => {
         if (error) {
@@ -90,12 +90,12 @@ export default class Flashcards extends Component {
           users,
           future,
           futureIndex,
-          history: future.slice(0, futureIndex + 1)
+          history: future.slice(0, futureIndex + 1),
         });
       });
   };
 
-  handleKeys = event => {
+  handleKeys = (event) => {
     switch (event.keyCode) {
       case 37:
         return this.previousCard();
@@ -136,7 +136,7 @@ export default class Flashcards extends Component {
           </Card>
           <Card>
             <Flex style={{ overflowX: "hidden" }}>
-              {listOfIntegers(DISPLAY_COUNT).map(i => {
+              {listOfIntegers(DISPLAY_COUNT).map((i) => {
                 return (
                   <FlashCard
                     person={users[history.slice(i - DISPLAY_COUNT)[0]]}

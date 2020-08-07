@@ -3,7 +3,7 @@
  * element from becoming the first. Therefore it won't do anything when
  * a.length < 3.
  */
-export const reshuffle = a => {
+export const reshuffle = (a) => {
   if (!a.length) return a;
   for (let i = a.length - 2; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -20,7 +20,7 @@ export const reshuffle = a => {
  * TODO the initial shuffle should be truly random.
  * True random shuffle.
  */
-export const shuffle = a => {
+export const shuffle = (a) => {
   if (!a.length) return a;
   for (let i = a.length - 2; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -33,7 +33,7 @@ export const shuffle = a => {
   return a;
 };
 
-export const listOfIntegers = length => {
+export const listOfIntegers = (length) => {
   return Array(length)
     .fill()
     .map((_, i) => i);
