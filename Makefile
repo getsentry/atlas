@@ -9,8 +9,8 @@ setup-git:
 
 install-requirements:
 	cd backend && poetry install
-	cd frontend && npm ci
-	npm ci
+	cd frontend && npm install
+	npm install
 
 generate-requirements:
 	cd backend && poetry run pip freeze > $@
