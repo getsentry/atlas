@@ -50,6 +50,7 @@ const Navigation = ({ authenticated, logout, user }) => {
         <Box pr={2} flex="1">
           <Link to="/people">People</Link>
           <Link to="/offices">Offices</Link>
+          <Link to="/quiz">Quiz</Link>
         </Box>
         <Box pl={2}>
           {authenticated && (
