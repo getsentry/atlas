@@ -17,6 +17,7 @@ import AdminUpdateDepartment from "./pages/AdminUpdateDepartment";
 import AdminUpdateTeam from "./pages/AdminUpdateTeam";
 import HealthCheck from "./pages/HealthCheck";
 import Home from "./pages/Home";
+import Flashcards from "./pages/Flashcards";
 import Login from "./pages/Login";
 import Office from "./pages/Office";
 import Offices from "./pages/Offices";
@@ -40,6 +41,7 @@ export default (
   <Route path="/" component={App}>
     <IndexRoute component={Home} />
     <Route path="/healthz" component={HealthCheck} />
+    <Route path="/flashcards" component={Flashcards} />
     <Route path="/login" component={Login} />
     <Route path="/offices" component={Offices} />
     <Route path="/offices/:externalId" component={Office} />
