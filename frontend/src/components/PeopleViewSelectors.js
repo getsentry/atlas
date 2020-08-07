@@ -9,28 +9,28 @@ export default function PeopleViewSelectors(props) {
   if (props.current !== "people") {
     boxes.push({
       icon: <TableChart />,
-      link: "/people"
+      link: "/people",
     });
   }
 
   if (props.current !== "orgChart") {
     boxes.push({
       icon: <AccountTree />,
-      link: "/orgChart"
+      link: "/orgChart",
     });
   }
 
   if (props.current !== "flashcards") {
     boxes.push({
       icon: <RecentActors />,
-      link: "/flashcards"
+      link: "/flashcards",
     });
   }
 
   if (props.current !== "quiz") {
     boxes.push({
       icon: <SportsEsports />,
-      link: "/quiz"
+      link: "/quiz",
     });
   }
 
