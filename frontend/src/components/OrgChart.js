@@ -2,14 +2,9 @@ import React, { Component } from "react";
 import styled from "@emotion/styled";
 import { Box, Flex } from "@rebass/grid/emotion";
 import IconLink from "./IconLink";
-import {
-  FindReplace,
-  RecentActors,
-  TableChart,
-  ZoomIn,
-  ZoomOut
-} from "@material-ui/icons";
+import { FindReplace, ZoomIn, ZoomOut } from "@material-ui/icons";
 import Card from "./Card";
+import PeopleViewSelectors from "./PeopleViewSelectors";
 
 const ChildSet = styled.ul`
   margin: 0;
@@ -123,13 +118,7 @@ export default class OrgChart extends Component {
                 style={{ fontSize: "1.3em", marginBottom: "1rem" }}
               />
             </Box>
-            <Box mr={3}>
-              <IconLink
-                icon={<TableChart />}
-                to={`/people`}
-                style={{ fontSize: "1.3em", marginBottom: "1rem" }}
-              />
-            </Box>
+            <PeopleViewSelectors current={"orgChart"} />
           </Flex>
         </Card>
         <div className="reactOrgChart" style={{ zoom: this.state.zoom }}>
