@@ -19,6 +19,15 @@ from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 
+
+def traces_sampler(sampling_context):
+    # TODO(dcramer): this is awful and i should not have to go this level of internals
+    path = sampling_context.get("wsgi_environ", {}).get("PATH_INFO", "")
+    if path.startswith("/healthz"):
+        return 0
+    return 1.0
+
+
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DSN"),
     debug=os.environ.get("DEBUG"),
@@ -37,7 +46,7 @@ sentry_sdk.init(
         or os.environ.get("NODE_ENV")
         or "development"
     ),
-    traces_sample_rate=1.0,
+    traces_sampler=traces_sampler,
     _experiments={"fast_serialize": True, "auto_enabling_integrations": True},
 )
 with sentry_sdk.configure_scope() as scope:
