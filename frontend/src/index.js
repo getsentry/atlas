@@ -3,7 +3,7 @@ import { Router, browserHistory } from "react-router";
 import { render } from "react-dom";
 import { Provider } from "react-redux";
 import * as Sentry from "@sentry/browser";
-import { Integrations } from "@sentry/apm";
+import { Integrations as TracingIntegrations } from "@sentry/tracing";
 import SentryRRWeb from "@sentry/rrweb";
 import { ApolloProvider } from "react-apollo";
 
@@ -17,9 +17,15 @@ Sentry.init({
   dsn: config.sentryDsn,
   environment: config.environment,
   release: config.version,
-  tracesSampleRate: 1,
+  tracesSampler: (samplingContext) => {
+    const name = samplingContext.transactionContext.name;
+    if (name.indexOf("/healthz") === 0) {
+      return 0;
+    }
+    return 1.0;
+  },
   integrations: [
-    new Integrations.Tracing({
+    new TracingIntegrations.BrowserTracing({
       tracingOrigins: ["localhost", "atlas.getsentry.net", /^\//],
     }),
     new SentryRRWeb(),
