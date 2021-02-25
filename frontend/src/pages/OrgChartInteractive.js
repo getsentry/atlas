@@ -53,15 +53,15 @@ export default () => (
             parentId: x.reportsTo && x.reportsTo.id,
           };
         });
-        let tree = arrayToTree(formattedUsers, { dataField: null });
+        let trees = arrayToTree(formattedUsers, { dataField: null });
 
-        if (tree.length > 1) {
-          tree = tree.filter((tree) => tree.children.length > 0);
+        if (trees.length > 1) {
+          trees = trees.filter((tree) => tree.children.length > 0);
         }
 
         return (
           <Container>
-            <OrgChart tree={tree[0]} borderColor={colors.primary400} />
+            <OrgChart tree={trees[0]} borderColor={colors.primary400} />
           </Container>
         );
       }}
