@@ -53,7 +53,11 @@ export default () => (
             parentId: x.reportsTo && x.reportsTo.id,
           };
         });
-        const tree = arrayToTree(formattedUsers, { dataField: null });
+        let tree = arrayToTree(formattedUsers, { dataField: null });
+
+        if (tree.length > 1) {
+          tree = tree.filter((tree) => tree.children.length > 0);
+        }
 
         return (
           <Container>
