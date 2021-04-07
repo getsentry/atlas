@@ -1,6 +1,7 @@
 develop: install-requirements setup-git
 
 upgrade: install-requirements
+	cd backend && poetry run atlas migrate
 
 setup-git:
 	pre-commit install
