@@ -109,6 +109,8 @@ def test_login_new_user_google_auth(gql_client, responses):
     user = User.objects.get(id=resp["user"]["id"])
     assert user.name == "Jane Smith"
     assert user.email == "jsmith@example.com"
+    profile = user.profile
+    assert profile.title == "CTO"
 
     assert isinstance(resp["token"], str)
 

@@ -22,13 +22,13 @@ def parse_token(token: str) -> Optional[str]:
     try:
         payload = s.loads(token)
     except BadSignature:
-        logger.warning("auth: bad signature")
+        logger.warning("auth.bad-signature")
         return None
     if "uid" not in payload:
-        logger.warning("auth: missing uid")
+        logger.warning("auth.missing-uid")
         return None
     if "sh" not in payload:
-        logger.warning("auth: missing security hash")
+        logger.warning("auth.missing-security-hash")
         return None
     return payload
 

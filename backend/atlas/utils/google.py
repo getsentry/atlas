@@ -328,7 +328,11 @@ def update_profile(
 
 
 def sync_user(  # NOQA
-    data: dict, user: User = None, user_identity: Identity = None, cache: Cache = None
+    data: dict,
+    user: User = None,
+    user_identity: Identity = None,
+    cache: Cache = None,
+    ignore_versions: bool = False,
 ) -> UserSyncResult:
     if cache is None:
         cache = Cache()
@@ -365,7 +369,7 @@ def sync_user(  # NOQA
     # we dont allow updates if the version of data received is _older_ than the current version
     # _but_ we do allow udpates if they match (which means the version was not incremented, but something changed on Google's side)
     # TODO(dcramer): we should bump the version when a remote update happens
-    if local_version > remote_version:
+    if local_version > remote_version and not ignore_versions:
         logger.warning(
             "user.sync-refused id={} reason=version-mismatch local_version={} remote_version={}".format(
                 str(user.id), local_version, remote_version
@@ -637,13 +641,19 @@ def sync_building(  # NOQA
 
 
 def sync_domain(
-    identity: Identity, domain: str, users: List[str] = None, offices: List[str] = None
+    identity: Identity,
+    domain: str,
+    users: List[str] = None,
+    offices: List[str] = None,
+    ignore_versions: bool = False,
 ) -> DomainSyncResult:
     cache = Cache()
 
     building_result = sync_buildings(identity, domain, offices=offices, cache=cache)
 
-    user_result = sync_users(identity, domain, users=users, cache=cache)
+    user_result = sync_users(
+        identity, domain, users=users, cache=cache, ignore_versions=ignore_versions
+    )
 
     return DomainSyncResult(
         total_users=user_result.total,
@@ -704,7 +714,11 @@ def sync_buildings(
 
 
 def sync_users(
-    identity: Identity, domain: str, users: List[str] = None, cache: Cache = None
+    identity: Identity,
+    domain: str,
+    users: List[str] = None,
+    cache: Cache = None,
+    ignore_versions: bool = False,
 ) -> BatchSyncResult:
     total, created, updated = 0, 0, 0
     known = set()
@@ -732,7 +746,9 @@ def sync_users(
             with sentry_sdk.Hub.current.start_span(
                 op="google.sync-user", description=str(row["id"])
             ), transaction.atomic():
-                user, is_created, is_updated = sync_user(row, cache=cache)
+                user, is_created, is_updated = sync_user(
+                    row, cache=cache, ignore_versions=ignore_versions
+                )
                 with sentry_sdk.Hub.current.start_span(
                     op="google.sync-user-photo", description=str(row["id"])
                 ):

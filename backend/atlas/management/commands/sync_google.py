@@ -10,6 +10,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("--domain", type=str, default=settings.GOOGLE_DOMAIN)
         parser.add_argument("--push", action="store_true", default=False)
+        parser.add_argument("--ignore-versions", action="store_true", default=False)
         parser.add_argument("users", nargs="*", metavar="EMAIL")
 
     def handle(self, *args, **options):
@@ -30,7 +31,10 @@ class Command(BaseCommand):
             )
         else:
             result = google.sync_domain(
-                identity=identity, domain=domain, users=options["users"]
+                identity=identity,
+                domain=domain,
+                users=options["users"],
+                ignore_versions=options["ignore_versions"],
             )
         self.stdout.write(self.style.MIGRATE_HEADING("Done!"))
 
