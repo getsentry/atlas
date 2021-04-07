@@ -20,11 +20,11 @@ def get_user(header):
     try:
         user = User.objects.get(id=payload["uid"])
     except (TypeError, KeyError, User.DoesNotExist):
-        logging.error("auth.invalid-uid")
+        logging.error("auth.invalid-uid", exc_info=True)
         return AnonymousUser()
 
     if security_hash(user) != payload["sh"]:
-        logging.error("auth.invalid-security-hash")
+        logging.error("auth.invalid-security-hash uid={}".format(payload["uid"]))
         return AnonymousUser()
 
     return user

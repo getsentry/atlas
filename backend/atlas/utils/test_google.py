@@ -538,6 +538,23 @@ def test_sync_user_refuses_old_version_update(responses, default_user, user_payl
     assert user.name != "Joe Doe"
 
 
+def test_sync_user_updates_old_version_update_with_ignore_versions(
+    responses, default_user, user_payload
+):
+    last_change = Change.record(default_user, {})
+
+    user_payload["customSchemas"]["System"]["Version"] = last_change.version - 1
+
+    user_payload["name"] = {"fullName": "Joe Doe"}
+    result = sync_user(data=user_payload, ignore_versions=True)
+    assert not result.created
+    assert result.updated
+
+    user = result.user
+    assert user.id == default_user.id
+    assert user.name == "Joe Doe"
+
+
 def test_sync_user_accepts_same_version_update(responses, default_user, user_payload):
     last_change = Change.record(default_user, {})
 
