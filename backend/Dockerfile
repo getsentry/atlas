@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.7-slim-stretch
+FROM python:3.8-slim-stretch
 
 # add our user and group first to make sure their IDs get assigned consistently
 RUN groupadd -r app && useradd -r -m -g app app
