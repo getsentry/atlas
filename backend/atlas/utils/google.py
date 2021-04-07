@@ -70,7 +70,7 @@ def coerce_enum(value, enum, default=None):
         return default
     if not hasattr(enum, value):
         logger.warning(
-            "google-update.invalid-enum", extra={"enum": enum.__name__, "value": value}
+            "google-update.invalid-enum enum={} value={}".format(enum.__name__, value)
         )
         return default
     return value

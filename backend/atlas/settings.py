@@ -35,10 +35,7 @@ sentry_sdk.init(
         CeleryIntegration(),
         DjangoIntegration(),
         RedisIntegration(),
-        LoggingIntegration(
-            level=logging.INFO,  # Capture info and above as breadcrumbs
-            event_level=logging.ERROR,  # Send errors as events
-        ),
+        LoggingIntegration(level=logging.INFO, event_level=logging.WARN),
     ],
     release=os.environ.get("BUILD_REVISION") or None,
     environment=(
