@@ -197,11 +197,13 @@ def generate_profile_updates(
 
     params = {}
 
-    if version is not None:
-        version_field = settings.GOOGLE_VERSION_FIELD
-        params.setdefault("customSchemas", {}).setdefault(version_field[0], {})[
-            version_field[1]
-        ] = version
+    if version is None:
+        version = Change.get_current_version("user", user.id)
+
+    version_field = settings.GOOGLE_VERSION_FIELD
+    params.setdefault("customSchemas", {}).setdefault(version_field[0], {})[
+        version_field[1]
+    ] = version
 
     if "office" in data:
         params["locations"] = [

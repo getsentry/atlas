@@ -59,7 +59,7 @@ def user_payload():
 
 def test_generate_profile_updates_is_human(responses, default_user):
     params = generate_profile_updates(default_user, {"is_human": True})
-    assert params == {"customSchemas": {"System": {"Is_Human": True}}}
+    assert params == {"customSchemas": {"System": {"Is_Human": True, "Version": 0}}}
 
 
 def test_generate_profile_updates_is_human_with_version(
@@ -97,6 +97,7 @@ def test_generate_profile_updates_all_fields(responses, default_user, default_te
                 "Is_Human": True,
                 "Has_Onboarded": False,
                 "Is_Directory_Hidden": False,
+                "Version": 0,
             },
             "Schedule": {
                 "Sunday": settings.DEFAULT_SCHEDULE[0],
@@ -171,6 +172,7 @@ def test_generate_profile_updates_all_fields_with_all_fields(
                 "Is_Human": True,
                 "Has_Onboarded": True,
                 "Is_Directory_Hidden": False,
+                "Version": 0,
             },
             "Social": {"GitHub": None, "LinkedIn": None, "Twitter": "@getsentry"},
             "GamerTags": {
@@ -592,5 +594,5 @@ def test_update_profile_nintendo_gamertag(
 
     assert (
         responses.calls[0].request.body
-        == b'{"customSchemas": {"GamerTags": {"Nintendo": "SW-1234-1234-1234"}}}'
+        == b'{"customSchemas": {"System": {"Version": 0}, "GamerTags": {"Nintendo": "SW-1234-1234-1234"}}}'
     )
