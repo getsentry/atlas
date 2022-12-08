@@ -19,7 +19,6 @@ const LoginContainer = styled.div`
 `;
 
 const Button = styled.button`
-  font-family: "Roboto";
   border: 1px solid ${GOOGLE_BLUE};
   background: ${GOOGLE_BLUE};
   color: #fff;
