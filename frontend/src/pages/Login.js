@@ -27,6 +27,7 @@ const Button = styled.button`
   align-items: center;
   border-radius: 2px;
   cursor: pointer;
+  font-weight: bold;
   &:active,
   &:hover {
     background: #3367d6;
