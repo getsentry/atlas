@@ -20,7 +20,7 @@ pipelines:
                   fetch_materials: true
                   jobs:
                       preliminary-checks:
-                          elastic_profile_id: internal-sentry
+                          elastic_profile_id: atlas
                           timeout: 1800
                           tasks:
                               - script: |
@@ -39,7 +39,7 @@ pipelines:
                       type: manual
                   jobs:
                       atlas-canary:
-                          elastic_profile_id: internal-sentry
+                          elastic_profile_id: atlas
                           timeout: 1800 # 30 mins
                           tasks:
                               - script: |
@@ -80,7 +80,7 @@ pipelines:
                       type: manual
                   jobs:
                       atlas-primary:
-                          elastic_profile_id: internal-sentry
+                          elastic_profile_id: atlas
                           timeout: 1800 # 30 mins
                           tasks:
                               - script: |
