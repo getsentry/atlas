@@ -10,7 +10,7 @@ pipelines:
             GKE_REGION: us-central1
             GKE_CLUSTER_ZONE: b
             GKE_BASTION_ZONE: b
-        group: internal-sentry
+        group: atlas
         lock_behavior: unlockWhenFinished
         materials:
             atlas_repo:
