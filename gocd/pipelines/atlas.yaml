@@ -1,0 +1,117 @@
+format_version: 10
+pipelines:
+    atlas:
+        environment_variables:
+            GCP_PROJECT: internal-sentry
+            GKE_CLUSTER: zdpwkxst
+            GKE_REGION: us-central1
+            GKE_CLUSTER_ZONE: b
+            GKE_BASTION_ZONE: b
+        group: internal-sentry
+        lock_behavior: unlockWhenFinished
+        materials:
+            atlas_repo:
+                git: git@github.com:getsentry/atlas.git
+                shallow_clone: true
+                branch: master
+                destination: atlas
+        stages:
+            - preliminary-checks:
+                  fetch_materials: true
+                  jobs:
+                      preliminary-checks:
+                          elastic_profile_id: internal-sentry
+                          timeout: 1800
+                          tasks:
+                              - script: |
+                                    /devinfra/scripts/checks/googlecloud/checkcloudbuild.py \
+                                    ${GO_REVISION_ATLAS_REPO} \
+                                    "${GCP_PROJECT}" \
+                                    "us.gcr.io/internal-sentry/atlas-backend"
+                              - script: |
+                                    /devinfra/scripts/checks/googlecloud/checkcloudbuild.py \
+                                    ${GO_REVISION_ATLAS_REPO} \
+                                    "${GCP_PROJECT}" \
+                                    "us.gcr.io/internal-sentry/atlas-frontend"
+            - atlas-canary:
+                  fetch_materials: true
+                  approval:
+                      type: manual
+                  jobs:
+                      atlas-canary:
+                          elastic_profile_id: internal-sentry
+                          timeout: 1800 # 30 mins
+                          tasks:
+                              - script: |
+                                    USE_GKE_GCLOUD_AUTH_PLUGIN=True \
+                                        gcloud --project "$GCP_PROJECT" \
+                                        container clusters get-credentials "$GKE_CLUSTER" \
+                                        --zone "${GKE_REGION}-${GKE_CLUSTER_ZONE}"
+                              - script: |
+                                    tmpdir=$(mktemp -d) \
+                                    && ssh-keygen -q -t ed25519 -N '' -f "${tmpdir}/google_compute_engine" \
+                                    && gcloud compute ssh "dicd-gkehop-${GKE_CLUSTER}" \
+                                      --ssh-key-file="${tmpdir}/google_compute_engine" \
+                                      --tunnel-through-iap \
+                                      "--project=${GCP_PROJECT}" \
+                                      "--zone=${GKE_REGION}-${GKE_BASTION_ZONE}" \
+                                      -- -4 -L8888:127.0.0.1:8888 -N -q -f
+                              - script: |
+                                    /devinfra/scripts/k8s/k8sdeploy.py \
+                                    --context="gke_${GCP_PROJECT}_${GKE_REGION}-${GKE_CLUSTER_ZONE}_${GKE_CLUSTER}" \
+                                    --label-selector="service=atlas,env=canary" \
+                                    --image="us.gcr.io/internal-sentry/atlas-frontend:${GO_REVISION_ATLAS_REPO}" \
+                                    --container-name="frontend"
+                              - script: |
+                                    /devinfra/scripts/k8s/k8sdeploy.py \
+                                    --context="gke_${GCP_PROJECT}_${GKE_REGION}-${GKE_CLUSTER_ZONE}_${GKE_CLUSTER}" \
+                                    --label-selector="service=atlas,env=canary" \
+                                    --image="us.gcr.io/internal-sentry/atlas-backend:${GO_REVISION_ATLAS_REPO}" \
+                                    --container-name="backend"
+                              - script: |
+                                    /devinfra/scripts/k8s/k8sdeploy.py \
+                                    --context="gke_${GCP_PROJECT}_${GKE_REGION}-${GKE_CLUSTER_ZONE}_${GKE_CLUSTER}" \
+                                    --label-selector="service=atlas,env=canary" \
+                                    --image="us.gcr.io/internal-sentry/atlas-backend:${GO_REVISION_ATLAS_REPO}" \
+                                    --container-name="worker"
+            - atlas-primary:
+                  fetch_materials: true
+                  approval:
+                      type: manual
+                  jobs:
+                      atlas-primary:
+                          elastic_profile_id: internal-sentry
+                          timeout: 1800 # 30 mins
+                          tasks:
+                              - script: |
+                                    USE_GKE_GCLOUD_AUTH_PLUGIN=True \
+                                        gcloud --project "$GCP_PROJECT" \
+                                        container clusters get-credentials "$GKE_CLUSTER" \
+                                        --zone "${GKE_REGION}-${GKE_CLUSTER_ZONE}"
+                              - script: |
+                                    tmpdir=$(mktemp -d) \
+                                    && ssh-keygen -q -t ed25519 -N '' -f "${tmpdir}/google_compute_engine" \
+                                    && gcloud compute ssh "dicd-gkehop-${GKE_CLUSTER}" \
+                                      --ssh-key-file="${tmpdir}/google_compute_engine" \
+                                      --tunnel-through-iap \
+                                      "--project=${GCP_PROJECT}" \
+                                      "--zone=${GKE_REGION}-${GKE_BASTION_ZONE}" \
+                                      -- -4 -L8888:127.0.0.1:8888 -N -q -f
+                              - script: |
+                                    /devinfra/scripts/k8s/k8sdeploy.py \
+                                    --context="gke_${GCP_PROJECT}_${GKE_REGION}-${GKE_CLUSTER_ZONE}_${GKE_CLUSTER}" \
+                                    --label-selector="service=atlas" \
+                                    --image="us.gcr.io/internal-sentry/atlas-frontend:${GO_REVISION_ATLAS_REPO}" \
+                                    --container-name="frontend"
+                              - script: |
+                                    /devinfra/scripts/k8s/k8sdeploy.py \
+                                    --context="gke_${GCP_PROJECT}_${GKE_REGION}-${GKE_CLUSTER_ZONE}_${GKE_CLUSTER}" \
+                                    --label-selector="service=atlas" \
+                                    --image="us.gcr.io/internal-sentry/atlas-backend:${GO_REVISION_ATLAS_REPO}" \
+                                    --container-name="backend"
+                              - script: |
+                                    /devinfra/scripts/k8s/k8sdeploy.py \
+                                    --context="gke_${GCP_PROJECT}_${GKE_REGION}-${GKE_CLUSTER_ZONE}_${GKE_CLUSTER}" \
+                                    --label-selector="service=atlas" \
+                                    --image="us.gcr.io/internal-sentry/atlas-backend:${GO_REVISION_ATLAS_REPO}" \
+                                    --container-name="worker"
