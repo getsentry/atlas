@@ -24,7 +24,7 @@
     "graphql-tag": "^2.10.1",
     "idx": "^2.5.6",
     "js-cookie": "^2.2.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "performant-array-to-tree": "1.7.1",
     "react": "^16.8.6",
