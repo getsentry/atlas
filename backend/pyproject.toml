@@ -10,7 +10,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-django = "^2.1"
+django = "^2.2"
 psycopg2-binary = "^2.7"
 itsdangerous = "^1.1"
 graphene-django = "^2.2"
