@@ -60,19 +60,19 @@ pipelines:
                                       "--zone=${GKE_REGION}-${GKE_BASTION_ZONE}" \
                                       -- -4 -L8888:127.0.0.1:8888 -N -q -f
                               - script: |
-                                    /devinfra/scripts/k8s/k8sdeploy.py \
+                                    /devinfra/scripts/k8s/k8s-deploy.py \
                                     --context="gke_${GCP_PROJECT}_${GKE_REGION}-${GKE_CLUSTER_ZONE}_${GKE_CLUSTER}" \
                                     --label-selector="service=atlas,env=canary" \
                                     --image="us.gcr.io/internal-sentry/atlas-frontend:${GO_REVISION_ATLAS_REPO}" \
                                     --container-name="frontend"
                               - script: |
-                                    /devinfra/scripts/k8s/k8sdeploy.py \
+                                    /devinfra/scripts/k8s/k8s-deploy.py \
                                     --context="gke_${GCP_PROJECT}_${GKE_REGION}-${GKE_CLUSTER_ZONE}_${GKE_CLUSTER}" \
                                     --label-selector="service=atlas,env=canary" \
                                     --image="us.gcr.io/internal-sentry/atlas-backend:${GO_REVISION_ATLAS_REPO}" \
                                     --container-name="backend"
                               - script: |
-                                    /devinfra/scripts/k8s/k8sdeploy.py \
+                                    /devinfra/scripts/k8s/k8s-deploy.py \
                                     --context="gke_${GCP_PROJECT}_${GKE_REGION}-${GKE_CLUSTER_ZONE}_${GKE_CLUSTER}" \
                                     --label-selector="service=atlas,env=canary" \
                                     --image="us.gcr.io/internal-sentry/atlas-backend:${GO_REVISION_ATLAS_REPO}" \
@@ -101,19 +101,19 @@ pipelines:
                                       "--zone=${GKE_REGION}-${GKE_BASTION_ZONE}" \
                                       -- -4 -L8888:127.0.0.1:8888 -N -q -f
                               - script: |
-                                    /devinfra/scripts/k8s/k8sdeploy.py \
+                                    /devinfra/scripts/k8s/k8s-deploy.py \
                                     --context="gke_${GCP_PROJECT}_${GKE_REGION}-${GKE_CLUSTER_ZONE}_${GKE_CLUSTER}" \
                                     --label-selector="service=atlas" \
                                     --image="us.gcr.io/internal-sentry/atlas-frontend:${GO_REVISION_ATLAS_REPO}" \
                                     --container-name="frontend"
                               - script: |
-                                    /devinfra/scripts/k8s/k8sdeploy.py \
+                                    /devinfra/scripts/k8s/k8s-deploy.py \
                                     --context="gke_${GCP_PROJECT}_${GKE_REGION}-${GKE_CLUSTER_ZONE}_${GKE_CLUSTER}" \
                                     --label-selector="service=atlas" \
                                     --image="us.gcr.io/internal-sentry/atlas-backend:${GO_REVISION_ATLAS_REPO}" \
                                     --container-name="backend"
                               - script: |
-                                    /devinfra/scripts/k8s/k8sdeploy.py \
+                                    /devinfra/scripts/k8s/k8s-deploy.py \
                                     --context="gke_${GCP_PROJECT}_${GKE_REGION}-${GKE_CLUSTER_ZONE}_${GKE_CLUSTER}" \
                                     --label-selector="service=atlas" \
                                     --image="us.gcr.io/internal-sentry/atlas-backend:${GO_REVISION_ATLAS_REPO}" \
